@@ -41,7 +41,7 @@ export class NodeVisitor extends Loggable {
 
   visit(node: ts.Node) {
     this.log('visit', { kind: String(node.kind) })
-    this.nodeTypes.find((type: string) => {
+    this.nodeTypes.used.find((type: string) => {
       // TODO: use nodeTest??
       const testFunName = `is${type}`
       const testFun = this[testFunName]
