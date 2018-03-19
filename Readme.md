@@ -57,7 +57,8 @@ const {
 } = types
 
 // everything relating to class and function declarations
-const used = [].concat(cat.declaration.function).concat(cat.declaration.class)
+// pretty sweet with the awesome new spread operator!
+const used = [...cat.declaration.function, ...cat.declaration.class]
 
 const visitors = {
   // each function named same as a used type
@@ -119,10 +120,20 @@ Each visitor function is called with `(node, state, options)`
 
 The core visitor logic:
 
+- loop through all the node types registered for the main visitor
+- for each one test the node type using f.ex `ts.isFunctionDeclaration(node)`
+- if it passes, call the visitor callback, such as `FunctionDeclaration` if one is present
+- when done iterating, proceed to recurse each child node
+
 ```js
   visit(node: ts.Node) {
+    const visitorTypeIterator = this.visitorTypeIterator || 'map'
     this.log('visit', { kind: String(node.kind) })
-    this.nodeTypes.used.find((type: string) => {
+
+    // allow creation of custom iterator
+    const iterate = isFunction(this.createVisitorTypeIterator) ? this.createVisitorTypeIterator(this.nodeTypes.used) : this.nodeTypes.used[visitorTypeIterator]
+
+    iterate((type: string) => {
       const testFunName = `is${type}`
       const testFun = this[testFunName]
       if (testFun(node)) {

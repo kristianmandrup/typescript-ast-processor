@@ -4,11 +4,13 @@ import {
 } from './util'
 
 import {
-  isStr
+  isStr,
+  isEmpty
 } from './util'
 
 export class NodeTest {
   create(node: any, testMap: any) {
+    if (isEmpty(testMap)) return
     return (nodePropName: string) => {
       const testFun = testMap[nodePropName]
       return this.test(node, nodePropName, testFun)
