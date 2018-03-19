@@ -1,0 +1,6 @@
+declare module 'jest-plugin-fs'
+declare module 'jest-plugin-context'
+declare module 'jest-plugin-set'
+declare module 'typescript-eslint-parser'
+declare module 'eslint-traverser'
+declare module 'json-query'

@@ -1,0 +1,50 @@
+{
+  "name": "typescript-ast-traverser",
+  "version": "0.1.0",
+  "description": "Traverse a TypeScript AST using visitors, collect data and take action",
+  "main": "dist",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "typescript",
+    "exported",
+    "refs"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kristianmandrup/typescript-ast-traverser.git"
+  },
+  "author": "Kristian Mandrup <kmandrup@gmail.com>",
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "/__tests__/.*\\.(ts|tsx|js)$"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "astravel": "^0.4.1",
+    "eslint-traverser": "^1.5.2",
+    "estree-walker": "^0.5.1",
+    "json-query": "^2.2.2",
+    "typescript": "^2.7.2",
+    "typescript-eslint-parser": "^14.0.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^5.0.1",
+    "@types/jest": "^22.1.4",
+    "@types/node": "^9.4.7",
+    "fs-extra": "^5.0.0",
+    "jest": "^22.4.2",
+    "jest-cli": "^23.0.0-alpha.0",
+    "jest-plugin-context": "^2.7.0",
+    "jest-plugin-fs": "^2.7.0",
+    "ts-jest": "^22.4.1"
+  }
+}
