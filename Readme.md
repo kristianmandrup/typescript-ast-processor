@@ -1,5 +1,7 @@
 # Find exported refs in TypeScript
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/kristianmandrup/typescript-ast-traverser.svg)](https://greenkeeper.io/)
+
 Based on:
 
 - [TypeScript: Using-the-Compiler-API](https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API)
