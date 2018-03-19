@@ -45,21 +45,35 @@ export class NodeVisitor extends Loggable {
     this.createVisitorTypeIterator = options.createVisitorTypeIterator
   }
 
-  visit(node: ts.Node) {
-    const visitorTypeIterator = this.visitorTypeIterator || 'map'
-    this.log('visit', { kind: String(node.kind) })
 
-    // allow creation of custom iterator
-    const iterate = isFunction(this.createVisitorTypeIterator) ? this.createVisitorTypeIterator(this.nodeTypes.used) : this.nodeTypes.used[visitorTypeIterator]
-
-    iterate((type: string) => {
+  /**
+   * Test node type and visit registered node type handler
+   */
+  createIterationHandler(node: any) {
+    return (type: string) => {
       const testFunName = `is${type}`
       const testFun = this[testFunName]
       if (testFun(node)) {
         const handlerFun = this[type]
         return handlerFun(node, this.state, this.options)
       }
-    })
+    }
+  }
+
+  get types() {
+    return this.nodeTypes.used
+  }
+
+  get iterationFunction() {
+    const visitorTypeIterator = this.visitorTypeIterator || 'map'
+    return isFunction(this.createVisitorTypeIterator) ?
+      this.createVisitorTypeIterator(this.types) : this.types[visitorTypeIterator]
+  }
+
+  visit(node: ts.Node) {
+    this.log('visit', { kind: String(node.kind) })
+    // allow creation of custom iterator
+    this.iterationFunction(this.createIterationHandler(node))
     this.recurseChildNodes(node)
   }
 

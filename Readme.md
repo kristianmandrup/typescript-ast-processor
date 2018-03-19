@@ -127,20 +127,9 @@ The core visitor logic:
 
 ```js
   visit(node: ts.Node) {
-    const visitorTypeIterator = this.visitorTypeIterator || 'map'
     this.log('visit', { kind: String(node.kind) })
-
     // allow creation of custom iterator
-    const iterate = isFunction(this.createVisitorTypeIterator) ? this.createVisitorTypeIterator(this.nodeTypes.used) : this.nodeTypes.used[visitorTypeIterator]
-
-    iterate((type: string) => {
-      const testFunName = `is${type}`
-      const testFun = this[testFunName]
-      if (testFun(node)) {
-        const handlerFun = this[type]
-        return handlerFun(node, this.state, this.options)
-      }
-    })
+    this.iterationFunction(this.createIterationHandler(node))
     this.recurseChildNodes(node)
   }
 
@@ -153,7 +142,7 @@ The core visitor logic:
 
 As nodes are visited, the visitor functions activated can have access to callbacks that call a collector function with the visited node for data to be collected.
 
-The collectors should have access to a shared object, like a datastore in a typical frontend app. You could use any of the same patterns.
+The collectors should have access to a shared object, like a datastore in a typical frontend app. You could use any of the same patterns (`redux` or anything similar comes to mind...).
 
 ## Instrumentor
 
