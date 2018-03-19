@@ -2,8 +2,12 @@ export function isFunction(val: any) {
   return typeof val === 'function'
 }
 
-export function callFun(maybeFun: Function) {
-  return isFunction(maybeFun) && maybeFun()
+export function isStr(val: any) {
+  return typeof val === 'string'
+}
+
+export function callFun(maybeFun: Function, ...args: any[]) {
+  return isFunction(maybeFun) && maybeFun(...args)
 }
 
 export function enumKeys(E: any) {

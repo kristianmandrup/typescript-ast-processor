@@ -1,7 +1,10 @@
 import * as ts from 'typescript'
 import {
-  callFun,
-  isFunction
+  callFun
+} from './util'
+
+import {
+  isStr
 } from './util'
 
 export class NodeTest {
@@ -13,8 +16,13 @@ export class NodeTest {
   }
 
   test(node: any, nodePropName: string, testFun: string | Function) {
-    const tsTestFun = isFunction(testFun) ? testFun : ts[`is${testFun}`]
+    let realTestFun: Function
+    if (isStr(testFun)) {
+      let testFunName = String(testFun)
+      testFunName = /^is/.test(testFunName) ? testFunName : `is${testFunName}`
+      realTestFun = ts[testFunName]
+    }
     const nodeToTest = nodePropName === '$' ? node : node[nodePropName]
-    return callFun(() => tsTestFun(nodeToTest))
+    return callFun(() => realTestFun(nodeToTest))
   }
 }

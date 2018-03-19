@@ -20,7 +20,14 @@ export class BaseFactory extends Loggable {
   }
 
   aNamed(details: any, fnHandler?: Function) {
-    const { type, name, test, filters, cbs } = details
+    let {
+      type,
+      name,
+      test,
+      // filters, // passed on to fnHandler
+      cbs
+    } = details
+
     return {
       [type]: (node: ts.MethodSignature, opts: any) => {
         const nodeTest = this.nodeTest.create(node, test)
@@ -31,15 +38,15 @@ export class BaseFactory extends Loggable {
           const nodeName = node.name.getText()
           if (nodeName !== name) return
 
-          if (fnHandler && !fnHandler({ name, filters, node, cbs })) return
+          if (fnHandler && !fnHandler(details)) return
 
           if (cbs) {
             const info = { type, name: nodeName }
             opts = Object.assign(opts, { info })
             const check = cbs.check
             if (!check || check && check(node, opts)) {
-              callFun(() => cbs.onVisit(node, opts, cbs))
-              callFun(() => cbs.collect(node, opts, cbs))
+              callFun(cbs.onVisit, [node, opts, cbs])
+              callFun(cbs.collect, [node, opts, cbs])
             }
           }
         }
