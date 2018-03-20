@@ -137,7 +137,9 @@ const visitorList = [
 
 // In essence:
 // [{
-//   FunctionDeclaration: factoryBuiltVisitorFunction
+//   functionHello: factoryBuiltVisitorFunction,
+//   classPoliteGreeter: factoryBuiltVisitorFunction,
+//   classGreeter: factoryBuiltVisitorFunction
 // }]
 
 const visitors = Object.assign(visitors, {
@@ -183,7 +185,35 @@ The collectors should have access to a shared object, like a datastore in a typi
 
 They should (possibly?) be registered with same names as visitors, so that data flows from visitor -> collector -> instrumentor.
 
-For data aggregation, we can have multiple collectors call an aggregator (like cells to a molecule) with their data (can be multi-level hierarchy).
+We can have multiple collectors collect data into a data aggregator. For complex cases, this can be setup to aggregate in multiple levels.
+
+```js
+function functionHello(node, opts = {}) {
+  this.data = {
+    hello: {
+      name: node.name.getText()
+    }
+  }
+}
+
+// ... define other collector functions
+```
+
+Now register collector functions with main collector (ie. data aggregator) of parser
+on registration, each collector function will become the collect function of a `DataCollector` instance, so that `this.data` will reference the `data` of
+the collector instance (Disclaimer: Not working yet).
+
+```js
+parser.collector.register({
+  functionHello
+  classPoliteGreeter
+  classGreeter
+})
+```
+
+Notice how the collector names match the visitor labels registered. We recommend starting by defining/creating and registering the data collectors and then create matching visitors as needed.
+
+When this is all configurred and working, you can move on to instrumentation!
 
 ### Instrumentor
 
