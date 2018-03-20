@@ -176,7 +176,9 @@ As nodes are visited, the visitor functions activated can have access to callbac
 
 The collectors should have access to a shared object, like a datastore in a typical frontend app. You could use any of the same patterns (`redux` or anything similar comes to mind...).
 
-We haven't done any work yet on collectors... Feel free to chip in with your ideas and contributions!
+They should (possibly?) be registered with same names as visitors, so that data flows from visitor -> collector -> instrumentor.
+
+For data aggregation, we can have multiple collectors call an aggregator (like cells to a molecule) with their data (can be multi-level hierarchy).
 
 ### Instrumentor
 
@@ -184,9 +186,15 @@ When the visitation of the AST is complete and all data has been collected, the 
 
 Currently we have included a little "wizardry" from `TypeWiz`.
 
+The instrumentor should only instrument using a single (root) data aggregator or single data source. The main instrumentor is initialized with reference to the main data collector in `Parser`.
+
 ### Replacer
 
 A `Replacer` (as in `TypeWiz`) can be used to replace code in a source file directly in response to the instrumentation.
+
+### Customization
+
+We highly advice using the [tsutils](https://github.com/ajafff/tsutils) API to make it easier to gather information and work with the underlying typescript AST.
 
 ## ESLint traverser
 

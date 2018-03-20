@@ -1,6 +1,6 @@
-import { BaseCollector } from './base'
+import { DataCollector } from '../base'
 
-export class FunctionCollector extends BaseCollector {
+export class FunctionCollector extends DataCollector {
   collect(node: any) {
     const info = {
       start: node.pos,
@@ -8,7 +8,7 @@ export class FunctionCollector extends BaseCollector {
       name: node.escapedText,
       parameters: node.parameters
     }
-    console.log({
+    this.log('collected', {
       info
     })
   }

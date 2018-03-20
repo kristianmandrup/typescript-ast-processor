@@ -1,12 +1,9 @@
 import * as ts from 'typescript'
-import { AstDataCollector } from '../base';
-import { SrcFile } from '../../src-file';
+import { DataCollector } from '../base';
 
-export class ParamsCollector extends AstDataCollector {
-  fileName: string
-  constructor(public srcFile: SrcFile) {
-    super()
-    this.fileName = srcFile.fileName
+export class ParamsCollector extends DataCollector {
+  constructor(options: any) {
+    super(options)
   }
 
   collect(param: ts.ParameterDeclaration) {

@@ -4,14 +4,23 @@ import {
   Replacement
 } from './replacement';
 import { SrcFile } from '../src-file';
+import { Loggable } from '../loggable';
+import { DataCollector } from '../collector';
 
-export class BaseInstrumentor {
+export class Instrumentor extends Loggable {
   replacements = [] as Replacement[]
 
   // ??
   declaration = 'declare function $_$twiz(name: string, value: any, pos: number, filename: string, opts: any): void;\n';
+  fileName: string
+  srcFile: SrcFile
+  collector: DataCollector
 
-  constructor(public srcFile: SrcFile) {
+  constructor(options: any) {
+    super(options)
+    this.srcFile = options.srcFile
+    this.fileName = options.srcFile.fileName
+    this.collector = options.collector
   }
 
   get source() {

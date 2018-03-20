@@ -1,12 +1,26 @@
 import * as ts from 'typescript'
+import { Loggable } from '../loggable';
+import { SrcFile } from '../src-file';
 
-export class AstDataCollector {
+export class DataCollector extends Loggable {
+  parent: DataCollector
   data: any = {}
+  fileName: string
+  srcFile: SrcFile
 
-  constructor() {
+  constructor(options: any) {
+    super(options)
+    this.srcFile = options.srcFile
+    this.fileName = options.srcFile.fileName
 
+    this.parent = options.parent
   }
 
   collect(node: ts.Node, state: any = {}) {
+  }
+
+  // define a way to transfer the data of data collector into aggregator
+  collectInto(dataAggregator: any) {
+
   }
 }
