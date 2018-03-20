@@ -3,10 +3,32 @@ import {
   FunctionTester,
   ClassTester
 } from './tester';
+import {
+  toList
+} from '../node/util'
+
+const defaults = {
+  registry: {
+    function: 'FunctionDeclaration',
+    call: 'FunctionCall',
+    method: 'MethodDeclaration',
+    property: 'PropertyDeclaration',
+    variable: 'VariableDeclaration',
+    const: ['VariableDeclaration', 'Const'],
+    let: ['VariableDeclaration', 'Let'],
+    import: 'ImportDeclaration',
+    export: 'ExportDeclaration',
+    getter: 'GetAccessor',
+    setter: 'SetAccessor',
+    methodLike: 'MethodOrAccessor',
+    class: 'ClassDeclaration'
+  }
+}
 
 export class VisitorFactory extends BaseFactory {
   classTest: ClassTester
   functionTest: FunctionTester
+  factory: {} // contains all registered factory methods
 
   constructor(options: any = {}) {
     super(options)
@@ -14,122 +36,22 @@ export class VisitorFactory extends BaseFactory {
     this.functionTest = new FunctionTester(options)
   }
 
-  aFunction(name: string, opts: any = {}, cb: Function) {
-    return this.aNamed({
-      type: 'FunctionDeclaration',
-      name,
-      filters: opts.filters, // additional filters
-      cbs: opts.cbs // add onVisit and collect callbacks here
-    }, cb)
+  registerAllFactories(registry: any) {
+    registry = registry || defaults.registry
+    Object.keys(registry).map(key => {
+      this.registerFactory(key, toList(registry[key]))
+    })
   }
 
-  aFunctionCall(name: string, opts: any = {}, cb: Function) {
-    return this.aNamed({
-      type: 'FunctionCall',
-      name,
-      filters: opts.filters, // additional filters
-      cbs: opts.cbs // add onVisit and collect callbacks here
-    }, cb)
-  }
-
-  aMethod(name: string, opts: any = {}, cb: Function) {
-    return this.aNamed({
-      type: 'MethodDeclaration',
-      name,
-      filters: opts.filters, // additional filters
-      cbs: opts.cbs // add onVisit and collect callbacks here
-    }, cb)
-  }
-
-  aProperty(name: string, opts: any = {}, cb: Function) {
-    return this.aNamed({
-      type: 'PropertyDeclaration',
-      name,
-      filters: opts.filters, // additional filters
-      cbs: opts.cbs // add onVisit and collect callbacks here
-    }, cb)
-  }
-
-  aVariable(name: string, opts: any = {}, cb: Function) {
-    return this.aNamed({
-      type: 'VariableDeclaration',
-      name,
-      filters: opts.filters, // additional filters
-      cbs: opts.cbs // add onVisit and collect callbacks here
-    }, cb)
-
-  }
-
-  aConst(name: string, opts: any = {}, cb: Function) {
-    return this.aNamed({
-      type: 'Const',
-      name,
-      filters: opts.filters, // additional filters
-      cbs: opts.cbs // add onVisit and collect callbacks here
-    }, cb)
-
-  }
-
-  aLet(name: string, opts: any = {}, cb: Function) {
-    return this.aNamed({
-      type: 'Let',
-      name,
-      filters: opts.filters, // additional filters
-      cbs: opts.cbs // add onVisit and collect callbacks here
-    }, cb)
-  }
-
-  anImport(name: string, opts: any = {}, cb: Function) {
-    return this.aNamed({
-      type: 'ImportDeclaration',
-      name,
-      filters: opts.filters, // additional filters
-      cbs: opts.cbs // add onVisit and collect callbacks here
-    }, cb)
-  }
-
-  anExport(name: string, opts: any = {}, cb: Function) {
-    return this.aNamed({
-      type: 'ExportDeclaration',
-      name,
-      filters: opts.filters, // additional filters
-      cbs: opts.cbs // add onVisit and collect callbacks here
-    }, cb)
-  }
-
-  aGetter(name: string, opts: any = {}, cb: Function) {
-    return this.aNamed({
-      type: 'GetAccessor',
-      name,
-      filters: opts.filters, // additional filters
-      cbs: opts.cbs // add onVisit and collect callbacks here
-    }, cb)
-  }
-
-  aSetter(name: string, opts: any = {}, cb: Function) {
-    return this.aNamed({
-      type: 'SetAccessor',
-      name,
-      filters: opts.filters, // additional filters
-      cbs: opts.cbs // add onVisit and collect callbacks here
-    }, cb)
-  }
-
-  aMethodOrAccessor(name: string, opts: any = {}, cb: Function) {
-    return this.aNamed({
-      type: 'MethodOrAccessor',
-      name,
-      filters: opts.filters, // additional filters
-      cbs: opts.cbs // add onVisit and collect callbacks here
-    }, cb)
-  }
-
-  aClass(name: string, opts: any = {}, cb: Function) {
-    return this.aNamed({
-      type: 'ClassDeclaration',
-      name,
-      filters: opts.filters, // additional filters
-      cbs: opts.cbs // add onVisit and collect callbacks here
-    }, cb)
+  registerFactory(name: string, types: string[]) {
+    // opts may contain test object and cbs object
+    this.factory[name] = (name: string, opts: any = {}, cb: Function) => {
+      return this.named({
+        types,
+        name,
+        opts,
+        cb
+      })
+    }
   }
 }

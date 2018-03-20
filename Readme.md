@@ -56,9 +56,8 @@ const {
   categories as cat
 } = types
 
-// everything relating to class and function declarations
-// pretty sweet with the awesome new spread operator!
-const used = [...cat.declaration.function, ...cat.declaration.class]
+// can be used for debugging which node type checkers are available in different categories
+console.log(JSON.stringify(categories.declarations))
 
 const visitors = {
   // each function named same as a used type
@@ -73,22 +72,41 @@ class MyVisitor extends NodeVisitor {
   // add functions to handle each of the relevant declarations from used list
   constructor(options: any) {
     super(options)
+  }
 
-    // bind all functions in visitors object to class instance
-    rebind(visitors, this)
+  visit(node: any) {
+    // add logging to get an output of all the isXYZ tests that the node passes
+
+    this.log(this.whatIs(node))
+    // you can also be more specific, by passing a category key as 2nd argument
+    this.log(this.whatIs(node, 'categories.declaration'))
+
+    super.visit(node)
   }
 }
 
 
 function createVisitor(options: any) {
-  return new MyVisitor(options)
+  const visitor = new MyVisitor({
+    visitors // to register all visitors
+  })
+  // you can use the typer to list categories of type checkers available in typescript
+  const typeMap = visitor.typer.outputTypeCheckers(
+    'declaration',
+    'statement.conditional'
+  ).join('\n')
+  console.log({
+    typeMap
+  })
+
+  return visitor
 }
 
 createTSAstTraverser({
   nodeTypes: {
     used
   },
-  createVisitor
+  createVisitor // use custom visitor factory in main traverser factory
 })
 ```
 
@@ -101,9 +119,15 @@ const visitorList = [
   // will generate a named function called FunctionDeclaration
   // with visitation logic to only allow nodes pass who are named 'hello'
   // (ie. any FunctionDeclaration that has an Identifier child node with name: 'hello')
-  visitorFactories.aFunction({name: 'hello'}),
+  factory.function({name: 'hello'}),
 
   // more factories... much more complex visitation guard logic is easy to build as well
+  factory.class({name: 'PoliteGreeter', test: {
+    extends: 'Greeter',
+  }}),
+  factory.class({name: 'Greeter', test: {
+    abstract: true
+  }}),
 ]
 
 // In essence:
@@ -120,22 +144,25 @@ Each visitor function is called with `(node, state, options)`
 
 The core visitor logic:
 
-- loop through all the node types registered for the main visitor
-- for each one test the node type using f.ex `ts.isFunctionDeclaration(node)`
-- if it passes, call the visitor callback, such as `FunctionDeclaration` if one is present
+- iterate through all registered visitors and call each one
+- each visitor will have one or more type checks as guards f.ex `ts.isFunctionDeclaration(node)` and possibly more guards such as name check and more detailed inspection guards (checking for modifiers, flags etc)
 - when done iterating, proceed to recurse each child node
 
 ```js
+class NodeVisitor {
+  // ...
+
   visit(node: ts.Node) {
-    this.log('visit', { kind: String(node.kind) })
+    this.log('visit', this.nodeDisplayInfo(node))
     // allow creation of custom iterator
-    this.iterationFunction(this.createIterationHandler(node))
+    this.visitorIterator(this.createVisitorCaller(node))
     this.recurseChildNodes(node)
   }
 
   recurseChildNodes(node: ts.Node) {
     node.forEachChild((child: ts.Node) => this.visit(child))
   }
+}
 ```
 
 ## Collector
@@ -144,13 +171,17 @@ As nodes are visited, the visitor functions activated can have access to callbac
 
 The collectors should have access to a shared object, like a datastore in a typical frontend app. You could use any of the same patterns (`redux` or anything similar comes to mind...).
 
+We haven't done any work yet on collectors... Feel free to chip in with your ideas and contributions!
+
 ## Instrumentor
 
 When the visitation of the AST is complete and all data has been collected, the collected state should be sent to an Instrumentor instance to instrument changes or actions to be taken in response. This could be acting on the code or AST directly or even calling micro services to offload the responsibility!
 
+Currently we have included a little "wizardry" from `TypeWiz`.
+
 ### Replacer
 
-A `Replacer` (like in `TypeWiz`) can be used to replace code in a source file directly in response to the instrumentation.
+A `Replacer` (as in `TypeWiz`) can be used to replace code in a source file directly in response to the instrumentation.
 
 ## ESLint traverser
 

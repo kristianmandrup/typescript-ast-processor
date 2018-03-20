@@ -19,26 +19,39 @@ export class BaseFactory extends Loggable {
     return nodeName !== name
   }
 
-  aNamed(details: any, fnHandler?: Function) {
+  named(details: any, fnHandler?: Function) {
     let {
-      type,
+      label,
+      types,
       name,
-      test,
-      // filters, // passed on to fnHandler
-      cbs
+      options,
     } = details
 
+    const {
+      test, // object containing defs of tests (guards) to perform
+      cbs
+    } = options
+
+    label = label || types.join('_')
+    if (!label) {
+      this.error('named: Missing label for factory method', details)
+    }
+
     return {
-      [type]: (node: ts.MethodSignature, opts: any) => {
-        const nodeTest = this.nodeTest.create(node, test)
-        const testKeys = Object.keys(test)
-        if (nodeTest && !testKeys.every(nodeTest)) return
+      [label]: (node: ts.MethodSignature, opts: any) => {
         if (!this.isNamed(node, name)) return
 
+        // create test
+        const nodeTest = this.nodeTest.create(node, test)
+        const testKeys = Object.keys(test)
+        // perform nodeTest for every key (nodeProp) of propMap
+        if (nodeTest && !testKeys.every(nodeTest)) return
+
+        // custom test cb
         if (fnHandler && !fnHandler(details)) return
 
         if (cbs) {
-          const info = { type, name }
+          const info = { label, name }
           opts = Object.assign(opts, { info })
           const check = cbs.check
           if (!check || check && check(node, opts)) {

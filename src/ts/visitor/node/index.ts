@@ -6,9 +6,8 @@ import {
 } from './details';
 import { What } from './what';
 import { NodeTest } from './test';
-import {
-  isFunction
-} from './util'
+import { VisitorFactory } from '../factory';
+import { Typer } from './typer';
 
 export interface IExtraOptions {
   arrow?: boolean;
@@ -17,63 +16,83 @@ export interface IExtraOptions {
 
 export class NodeVisitor extends Loggable {
   fileName: string
-  nodeTypes: any = {
-    all: []
-  }
   state: {}
   modifer: CheckModifier
   flag: CheckFlag
   what: What
   nodeTest: NodeTest
-  visitorTypeIterator: string
-  createVisitorTypeIterator: Function
+  visitorIteratorMethodName: string
 
-  static nodeTypes = {
-    all: Object.keys(ts).filter(key => /^is[A-Z]/.test(key)).map(key => key.substr(2))
-  }
+  typer: Typer
+  factory: VisitorFactory
+  visitorRegistry: any = {} // object
 
   constructor(options: any) {
     super(options)
     this.fileName = options.fileName
-    this.nodeTypes.all = NodeVisitor.nodeTypes.all
-    this.nodeTypes.used = options.nodeTypes || this.nodeTypes.all
     this.modifer = new CheckModifier()
     this.flag = new CheckFlag()
     this.what = new What(this.nodeTypes)
     this.nodeTest = new NodeTest()
-    this.visitorTypeIterator = options.visitorTypeIterator
-    this.createVisitorTypeIterator = options.createVisitorTypeIterator
+    this.typer = new Typer(this.nodeTypes)
+    this.factory = new VisitorFactory(options)
+    this.visitorIteratorMethodName = options.visitorIteratorMethodName || 'map'
+    this.visitorRegistry = options.visitors || {}
+
+    const createVisitorIterator = options.createVisitorIterator || this.createVisitorIterator
+    this.createVisitorIterator = createVisitorIterator.bind(this)
   }
 
+  get whatIs() {
+    return this.what.is
+  }
+
+  get nodeTypes() {
+    return this.typer.nodeTypes
+  }
+
+  typesOfPath(dotPath: string) {
+    return this.typer.typesOfPath(dotPath)
+  }
+
+  registerTypeHandlers(registry: any) {
+    Object.assign(this.visitorRegistry, registry)
+  }
+
+  get visitorNames() {
+    return Object.keys(this.visitorRegistry)
+  }
+
+  createVisitorIterator(registry?: any) {
+    return this.visitorNames[this.visitorIteratorMethodName]
+  }
 
   /**
    * Test node type and visit registered node type handler
    */
-  createIterationHandler(node: any) {
-    return (type: string) => {
-      const testFunName = `is${type}`
-      const testFun = this[testFunName]
-      if (testFun(node)) {
-        const handlerFun = this[type]
-        return handlerFun(node, this.state, this.options)
-      }
+  createVisitorCaller(node: any) {
+    return (label: string) => {
+      const handlerFun = this.visitorRegistry[label]
+      return handlerFun(node, this.state, this.options)
     }
   }
 
   get types() {
-    return this.nodeTypes.used
+    return {}
   }
 
-  get iterationFunction() {
-    const visitorTypeIterator = this.visitorTypeIterator || 'map'
-    return isFunction(this.createVisitorTypeIterator) ?
-      this.createVisitorTypeIterator(this.types) : this.types[visitorTypeIterator]
+  get visitorIterator() {
+    return this.createVisitorIterator(this.visitorRegistry)
+  }
+
+  nodeDisplayInfo(node: any) {
+    return { kind: String(node.kind) }
   }
 
   visit(node: ts.Node) {
-    this.log('visit', { kind: String(node.kind) })
+    this.log('visit', this.nodeDisplayInfo(node))
     // allow creation of custom iterator
-    this.iterationFunction(this.createIterationHandler(node))
+    this.visitorIterator(this.createVisitorCaller(node))
     this.recurseChildNodes(node)
   }
 

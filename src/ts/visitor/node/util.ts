@@ -6,6 +6,18 @@ export function isStr(val: any) {
   return typeof val === 'string'
 }
 
+export function isArray(val: any) {
+  return Array.isArray(val)
+}
+
+export function isObject(obj: any) {
+  return obj === Object(obj);
+}
+
+export function toList(val: any) {
+  return isArray(val) ? val : [val]
+}
+
 // on string or object
 export function isEmpty(val: any) {
   const testObj = isStr(val) || Array.isArray(val) ? val : Object.keys(val)
