@@ -1,14 +1,22 @@
+export {
+  ClassTester
+} from './class'
+export {
+  FunctionLikeTester
+} from './function'
+export {
+  BaseTester
+} from './base'
+
 import * as ts from 'typescript'
 import {
-  callFun
-} from '../util'
-
-import {
+  callFun,
   isStr,
   isEmpty,
   nodeTypeCheckName
-} from '../util'
-import { NodeDetailsTester } from './details/node-tester';
+} from '../../util'
+
+import { NodeDetailsTester } from '../details/node-tester';
 
 export class NodeTester {
   details: NodeDetailsTester

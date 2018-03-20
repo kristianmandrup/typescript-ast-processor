@@ -25,32 +25,25 @@ export class CheckModifier extends BaseDetailsTester {
       isSubclass(node: any) {
         return has(node, ts.SyntaxKind.ExtendsKeyword)
       },
-
       // alias
       isExtends(node: any) {
         return has(node, ts.SyntaxKind.ExtendsKeyword)
       },
-
       isAbstract(node: any) {
         return has(node, ts.SyntaxKind.AbstractKeyword)
       },
-
       isPrivate(node: any) {
         return has(node, ts.SyntaxKind.PrivateKeyword)
       },
-
       isProtected(node: any) {
         return has(node, ts.SyntaxKind.ProtectedKeyword)
       },
-
       isPublic(node: any) {
         return has(node, ts.SyntaxKind.PublicKeyword)
       },
-
       isStatic(node: any) {
         return has(node, ts.SyntaxKind.StaticKeyword)
       },
-
       isAsync(node: any) {
         return has(node, ts.SyntaxKind.AsyncKeyword)
       },

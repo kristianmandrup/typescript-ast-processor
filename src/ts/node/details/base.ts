@@ -10,6 +10,15 @@ export class BaseDetailsTester extends Loggable {
     super(options)
   }
 
+  hasAll(node: any, names: string[]) {
+    return names.every(name => this.is(node, name))
+  }
+
+  hasAny(node: any, names: string[]) {
+    return names.find(name => this.is(node, name))
+  }
+
+
   is(node: any, name: string) {
     name = nodeTypeCheckName(name)
     const fun = this.checkers[name]

@@ -2,7 +2,7 @@ import * as ts from 'typescript'
 import { Loggable } from '../loggable';
 import { SrcFile } from '../src-file';
 import * as utils from 'tsutils'
-import { NodeTester } from '../node';
+import { NodeTester } from '../node/tester';
 
 export function createCollector(name: string, collectorFn: Function, options: any) {
   const collector = createDataCollector(options)

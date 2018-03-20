@@ -1,8 +1,8 @@
 import { BaseFactory } from './base'
 import {
-  FunctionTester,
+  FunctionLikeTester,
   ClassTester
-} from './tester';
+} from '../../node/tester';
 import {
   toList
 } from '../../util'
@@ -18,10 +18,11 @@ const defaults = {
     let: ['VariableDeclaration', 'Let'],
     import: 'ImportDeclaration',
     export: 'ExportDeclaration',
-    getter: 'GetAccessor',
-    setter: 'SetAccessor',
+    getter: ['GetAccessor', 'MethodOrAccessor'],
+    setter: ['SetAccessor', 'MethodOrAccessor'],
     methodLike: 'MethodOrAccessor',
-    class: 'ClassDeclaration'
+    class: 'ClassDeclaration',
+    namespace: 'NamespaceExportDeclaration'
   }
 }
 
@@ -31,13 +32,13 @@ export function createVisitorFactory(options: any) {
 
 export class VisitorFactory extends BaseFactory {
   classTest: ClassTester
-  functionTest: FunctionTester
+  functionTest: FunctionLikeTester
   factory: {} // contains all registered factory methods
 
   constructor(options: any = {}) {
     super(options)
     this.classTest = new ClassTester(options)
-    this.functionTest = new FunctionTester(options)
+    this.functionTest = new FunctionLikeTester(options)
   }
 
   registerAllFactories(registry: any) {
