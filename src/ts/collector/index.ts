@@ -5,10 +5,12 @@ import {
 export {
   DataCollector
 }
-
 import {
   createCollector
 } from './base'
+import {
+  isEmpty
+} from '../visitor/node/util'
 
 export class RootDataCollector extends DataCollector {
   registry: any = {}
@@ -16,12 +18,10 @@ export class RootDataCollector extends DataCollector {
 
   constructor(options: any) {
     super(options)
-
     this.collectorOpts = Object.assign(this.options, { parent: this })
   }
 
   createCollector(name: string, collectorFn: Function) {
-
     return createCollector(name, collectorFn, this.collectorOpts)
   }
 
@@ -33,8 +33,18 @@ export class RootDataCollector extends DataCollector {
     Object.assign(this.registry, registry)
   }
 
-  register() {
-    this.collectorNames.map(name => {
+  addOne(name: string, collectorFn: Function) {
+    this.registry[name] = collectorFn
+    return this
+  }
+
+  registerOne(name: string, collectorFn: Function) {
+    this.addOne(name, collectorFn).registerNamed()
+  }
+
+  registerNamed(...names: string[]) {
+    names = isEmpty(names) ? this.collectorNames : names
+    names.map(name => {
       if (this.isCollectorInstance(name)) {
         this.registry[name] = this.createCollector(name, this.registry[name])
       }

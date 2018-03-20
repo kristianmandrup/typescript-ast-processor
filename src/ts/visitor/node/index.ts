@@ -19,7 +19,7 @@ export class NodeVisitor extends Loggable {
 
   typer: Typer
   factory: VisitorFactory
-  visitorRegistry: any = {} // object
+  registry: any = {} // object
 
   constructor(options: any) {
     super(options)
@@ -29,7 +29,7 @@ export class NodeVisitor extends Loggable {
     this.typer = new Typer(this.nodeTypes)
     this.factory = new VisitorFactory(options)
     this.visitorIteratorMethodName = options.visitorIteratorMethodName || 'map'
-    this.visitorRegistry = options.visitors || {}
+    this.registry = options.visitors || {}
 
     const createVisitorIterator = options.createVisitorIterator || this.createVisitorIterator
     this.createVisitorIterator = createVisitorIterator.bind(this)
@@ -47,12 +47,17 @@ export class NodeVisitor extends Loggable {
     return this.typer.typesOfPath(dotPath)
   }
 
-  registerTypeHandlers(registry: any) {
-    Object.assign(this.visitorRegistry, registry)
+  registerVisitors(registry: any) {
+    Object.assign(this.registry, registry)
   }
 
+  registerVisitor(name: string, visitor: Function) {
+    this.registry[name] = visitor
+  }
+
+
   get visitorNames() {
-    return Object.keys(this.visitorRegistry)
+    return Object.keys(this.registry)
   }
 
   createVisitorIterator(registry?: any) {
@@ -64,7 +69,7 @@ export class NodeVisitor extends Loggable {
    */
   createVisitorCaller(node: any) {
     return (label: string) => {
-      const handlerFun = this.visitorRegistry[label]
+      const handlerFun = this.registry[label]
       return handlerFun(node, this.state, this.options)
     }
   }
@@ -74,7 +79,7 @@ export class NodeVisitor extends Loggable {
   }
 
   get visitorIterator() {
-    return this.createVisitorIterator(this.visitorRegistry)
+    return this.createVisitorIterator(this.registry)
   }
 
   nodeDisplayInfo(node: any) {

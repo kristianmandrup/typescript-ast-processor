@@ -81,11 +81,9 @@ class MyVisitor extends NodeVisitor {
 
   visit(node: any) {
     // add logging to get an output of all the isXYZ tests that the node passes
-
     this.log(this.whatIs(node))
     // you can also be more specific, by passing a category key as 2nd argument
     this.log(this.whatIs(node, 'categories.declaration'))
-
     super.visit(node)
   }
 }
@@ -103,7 +101,6 @@ function createVisitor(options: any) {
   console.log({
     typeMap
   })
-
   return visitor
 }
 
@@ -213,6 +210,16 @@ parser.collector.register({
 
 Notice how the collector names match the visitor labels registered. We recommend starting by defining/creating and registering the data collectors and then create matching visitors as needed.
 
+A convenient shorthand now available, is to register both with the same label, directly on the `Parser` instance:
+
+```js
+parser.register('functionHello', {
+  visitor: visitors.functionHello,
+  collector: collectors.functionHello,
+})
+```
+
+You could easily generalize this even further to make it more efficient to configure!
 When this is all configurred and working, you can move on to instrumentation!
 
 ### Instrumentor

@@ -3,14 +3,14 @@ import {
 } from 'typescript'
 import { SrcFile } from './src-file';
 import { NodeVisitor } from './visitor'
-import { DataCollector, RootDataCollector } from './collector';
+import { RootDataCollector } from './collector';
 import { Instrumentor } from './instrumentor/base';
 
 export class Parser {
   options: any
   srcFile: SrcFile
   visitor: NodeVisitor
-  collector: DataCollector
+  collector: RootDataCollector
   instrumentor: Instrumentor
 
   constructor(srcFile: SrcFile) {
@@ -23,6 +23,11 @@ export class Parser {
     this
       .intializeVisitor()
       .intializeInstrumentor()
+  }
+
+  register(label: string, functionMap: any) {
+    this.collector.registerOne(label, functionMap.collector)
+    this.visitor.registerVisitor(label, functionMap.visitor)
   }
 
   intializeVisitor() {
