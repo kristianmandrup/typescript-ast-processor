@@ -201,7 +201,7 @@ function functionHello(node, opts = {}) {
 
 Now register collector functions with main collector (ie. data aggregator) of parser
 on registration, each collector function will become the collect function of a `DataCollector` instance, so that `this.data` will reference the `data` of
-the collector instance (Disclaimer: Not working yet).
+the collector instance.
 
 ```js
 parser.collector.register({

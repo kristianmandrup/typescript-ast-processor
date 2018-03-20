@@ -6,23 +6,45 @@ export {
   DataCollector
 }
 
+import {
+  createCollector
+} from './base'
+
 export class RootDataCollector extends DataCollector {
-  collectorRegistry: any = {}
+  registry: any = {}
 
   constructor(options: any) {
     super(options)
   }
 
-  registerCollectors(registry: any) {
-    Object.assign(this.collectorRegistry, registry)
+  createCollector(name: string, collectorFn: Function) {
+    return createCollector(name, collectorFn, this.options)
   }
 
+  isCollectorInstance(name: string) {
+    return this.registry[name] instanceof DataCollector
+  }
+
+  addCollectors(registry: any) {
+    Object.assign(this.registry, registry)
+  }
+
+  register() {
+    this.collectorNames.map(name => {
+      if (this.isCollectorInstance(name)) {
+        this.registry[name] = this.createCollector(name, this.registry[name])
+      }
+    })
+    return this.registry
+  }
+
+
   get collectorNames() {
-    return Object.keys(this.collectorRegistry)
+    return Object.keys(this.registry)
   }
 
   dataCollector(name: string) {
-    return this.collectorRegistry[name]
+    return this.registry[name]
   }
 
   collectData(names = this.collectorNames) {
