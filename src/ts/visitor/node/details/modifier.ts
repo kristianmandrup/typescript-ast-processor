@@ -2,8 +2,9 @@ import * as ts from 'typescript'
 import {
   enumKeys
 } from '../util'
+import { BaseDetailsTester } from './base';
 
-export class CheckModifier {
+export class CheckModifier extends BaseDetailsTester {
   has(node: ts.Node, modifier: any) {
     if (!node.modifiers) return
     return node.modifiers.find((modf: any) => modf.kind === modifier)
@@ -15,35 +16,47 @@ export class CheckModifier {
     })
   }
 
-  isExported(node: any) {
-    return this.has(node, ts.SyntaxKind.ExportKeyword)
-  }
+  get checkers() {
+    const has = this.has.bind(this)
+    return {
+      isExported(node: any) {
+        return has(node, ts.SyntaxKind.ExportKeyword)
+      },
+      isSubclass(node: any) {
+        return has(node, ts.SyntaxKind.ExtendsKeyword)
+      },
 
-  isSubclass(node: any) {
-    return this.has(node, ts.SyntaxKind.ExtendsKeyword)
-  }
+      // alias
+      isExtends(node: any) {
+        return has(node, ts.SyntaxKind.ExtendsKeyword)
+      },
 
-  isAbstract(node: any) {
-    return this.has(node, ts.SyntaxKind.AbstractKeyword)
-  }
+      isAbstract(node: any) {
+        return has(node, ts.SyntaxKind.AbstractKeyword)
+      },
 
-  isPrivate(node: any) {
-    return this.has(node, ts.SyntaxKind.PrivateKeyword)
-  }
+      isPrivate(node: any) {
+        return has(node, ts.SyntaxKind.PrivateKeyword)
+      },
 
-  isProtected(node: any) {
-    return this.has(node, ts.SyntaxKind.ProtectedKeyword)
-  }
+      isProtected(node: any) {
+        return has(node, ts.SyntaxKind.ProtectedKeyword)
+      },
 
-  isPublic(node: any) {
-    return this.has(node, ts.SyntaxKind.PublicKeyword)
-  }
+      isPublic(node: any) {
+        return has(node, ts.SyntaxKind.PublicKeyword)
+      },
 
-  isStatic(node: any) {
-    return this.has(node, ts.SyntaxKind.StaticKeyword)
-  }
+      isStatic(node: any) {
+        return has(node, ts.SyntaxKind.StaticKeyword)
+      },
 
-  isAsync(node: any) {
-    return this.has(node, ts.SyntaxKind.AsyncKeyword)
+      isAsync(node: any) {
+        return has(node, ts.SyntaxKind.AsyncKeyword)
+      },
+      isImplements(node: any) {
+        return has(node, ts.SyntaxKind.ImplementsKeyword)
+      }
+    }
   }
 }

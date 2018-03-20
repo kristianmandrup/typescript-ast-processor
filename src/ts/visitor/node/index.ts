@@ -1,11 +1,7 @@
 import * as ts from 'typescript'
 import { Loggable } from '../../loggable';
-import {
-  CheckModifier,
-  CheckFlag
-} from './details';
 import { What } from './what';
-import { NodeTest } from './test';
+import { NodeTester } from './tester';
 import { VisitorFactory } from '../factory';
 import { Typer } from './typer';
 
@@ -17,10 +13,8 @@ export interface IExtraOptions {
 export class NodeVisitor extends Loggable {
   fileName: string
   state: {}
-  modifer: CheckModifier
-  flag: CheckFlag
   what: What
-  nodeTest: NodeTest
+  nodeTester: NodeTester
   visitorIteratorMethodName: string
 
   typer: Typer
@@ -30,10 +24,8 @@ export class NodeVisitor extends Loggable {
   constructor(options: any) {
     super(options)
     this.fileName = options.fileName
-    this.modifer = new CheckModifier()
-    this.flag = new CheckFlag()
     this.what = new What(this.nodeTypes)
-    this.nodeTest = new NodeTest()
+    this.nodeTester = new NodeTester(options)
     this.typer = new Typer(this.nodeTypes)
     this.factory = new VisitorFactory(options)
     this.visitorIteratorMethodName = options.visitorIteratorMethodName || 'map'

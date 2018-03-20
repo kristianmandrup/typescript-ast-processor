@@ -1,20 +1,20 @@
 import * as ts from 'typescript'
 import { Loggable } from '../../loggable';
-import { NodeTest } from '../node/test';
+import { NodeTester } from '../node/tester';
 import {
   callFun
 } from '../node/util'
 
 export class BaseFactory extends Loggable {
-  nodeTest: NodeTest
+  nodeTester: NodeTester
 
   constructor(options: any) {
     super(options)
-    this.nodeTest = new NodeTest()
+    this.nodeTester = new NodeTester(options)
   }
 
   isNamed(node: any, name: string) {
-    if (!this.nodeTest.test(node, 'name', 'Identifier')) return false
+    if (!this.nodeTester.test(node, 'name', 'Identifier')) return false
     const nodeName = node.name.getText()
     return nodeName !== name
   }
@@ -42,7 +42,7 @@ export class BaseFactory extends Loggable {
         if (!this.isNamed(node, name)) return
 
         // create test
-        const nodeTest = this.nodeTest.create(node, test)
+        const nodeTest = this.nodeTester.create(node, test)
         const testKeys = Object.keys(test)
         // perform nodeTest for every key (nodeProp) of propMap
         if (nodeTest && !testKeys.every(nodeTest)) return

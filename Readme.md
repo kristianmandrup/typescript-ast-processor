@@ -27,17 +27,22 @@ Please help contribute to make it happen!!!
 
 - [astravel](https://github.com/kristianmandrup/astravel) ESTree compatible AST traveser using a visitor pattern
 
+## TS utils and code style
+
+- [tsutils](https://github.com/ajafff/tsutils)
+- [tslint-consistent-codestyle](https://github.com/ajafff/tslint-consistent-codestyle)
+
 ## Design
 
-## Loader
+### Loader
 
 A `Loader` instance can be used to load a source file.
 
-## SrcFile
+### SrcFile
 
 A `SrcFile` represents a loaded typescript src file, including filename, compiler options used, source text etc.
 
-## Parser
+### Parser
 
 A `SrcFile` instance can be parsed, using a parser. This initiates traversal of the TypeScript AST.
 
@@ -110,7 +115,7 @@ createTSAstTraverser({
 })
 ```
 
-## Visitor factories
+### Visitor factories
 
 It can be rather complex to build your own visitor functions... this is where Visitor factories come in. The factories should make it much easier to build complex visitors!
 
@@ -165,7 +170,7 @@ class NodeVisitor {
 }
 ```
 
-## Collector
+### Collector
 
 As nodes are visited, the visitor functions activated can have access to callbacks that call a collector function with the visited node for data to be collected.
 
@@ -173,7 +178,7 @@ The collectors should have access to a shared object, like a datastore in a typi
 
 We haven't done any work yet on collectors... Feel free to chip in with your ideas and contributions!
 
-## Instrumentor
+### Instrumentor
 
 When the visitation of the AST is complete and all data has been collected, the collected state should be sent to an Instrumentor instance to instrument changes or actions to be taken in response. This could be acting on the code or AST directly or even calling micro services to offload the responsibility!
 
