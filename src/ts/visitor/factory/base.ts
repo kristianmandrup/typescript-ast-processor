@@ -4,13 +4,16 @@ import { NodeTester } from '../node/tester';
 import {
   callFun
 } from '../node/util'
+import { DataCollector } from '../../collector';
 
 export class BaseFactory extends Loggable {
   nodeTester: NodeTester
+  collector: DataCollector
 
   constructor(options: any) {
     super(options)
     this.nodeTester = new NodeTester(options)
+    this.collector = options.collector
   }
 
   isNamed(node: any, name: string) {
@@ -55,11 +58,19 @@ export class BaseFactory extends Loggable {
           opts = Object.assign(opts, { info })
           const check = cbs.check
           if (!check || check && check(node, opts)) {
-            callFun(cbs.onVisit, [node, opts, cbs])
-            callFun(cbs.collect, [node, opts, cbs])
+            // call custom onVisit callback if
+            callFun(cbs.onVisit, node, opts, cbs)
+
+            // call collector
+            callFun(cbs.collect, node, opts, cbs)
           }
+        }
+        if (this.collector) {
+          const mathcingCollector = this.collector[label]
+          callFun(mathcingCollector, node, opts)
         }
       }
     }
   }
 }
+

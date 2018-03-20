@@ -17,17 +17,28 @@ export class Parser {
     this.srcFile = srcFile
     const options = srcFile.options
     this.options = options
-
-    const createVisitor = options.createVisitor || this.createVisitor
-    this.visitor = createVisitor(options)
-
     const createCollector = options.createCollector || this.createCollector
     this.collector = createCollector(options)
-
-    const createInstrumentor = options.createInstrumentor || this.createInstrumentor
-    const instrumentorOpts = Object.assign(options, { collector: this.collector })
-    this.instrumentor = createInstrumentor(instrumentorOpts)
+    this.options.collector = this.collector
+    this
+      .intializeVisitor()
+      .intializeInstrumentor()
   }
+
+  intializeVisitor() {
+    const { options } = this
+    const createVisitor = options.createVisitor || this.createVisitor
+    this.visitor = createVisitor(options)
+    return this
+  }
+
+  intializeInstrumentor() {
+    const { options } = this
+    const createInstrumentor = options.createInstrumentor || this.createInstrumentor
+    this.instrumentor = createInstrumentor(options)
+    return this
+  }
+
 
   createInstrumentor(options: any) {
     return new Instrumentor(options || this.options)

@@ -21,7 +21,7 @@ export class NodeTester {
   // returns a test function that knows how to test a single node prop by name
   create(node: any, testMap: any) {
     if (isEmpty(testMap)) return
-    return (nodePropName: string) => {
+    return (nodePropName: string, index?: number, arr?: string[]): boolean => {
       const testFun = testMap[nodePropName]
       return this.test(node, nodePropName, testFun)
     }
@@ -36,10 +36,10 @@ export class NodeTester {
       tester,
       name
     } = testOpts
-    this.details.is(node, name) || callFun(tester, node)
+    return this.details.is(node, name) || callFun(tester, node)
   }
 
-  test(node: any, nodePropName: string, testFun: any) {
+  test(node: any, nodePropName: string, testFun: any): boolean {
     const testName = String(testFun)
     const realTestFun: Function = isStr(testFun) ? this.resolveTestFun(testName) : testFun
     // test on the node itself or one of its members

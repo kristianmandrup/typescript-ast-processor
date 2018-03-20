@@ -170,6 +170,11 @@ class NodeVisitor {
 }
 ```
 
+### Data collection
+
+The visitor factory is passed a collector, with all the registered data collectors.
+A visitor created via a (named) factory will try to call a matching collector (ie. matching label) with the node matched by the visitor.
+
 ### Collector
 
 As nodes are visited, the visitor functions activated can have access to callbacks that call a collector function with the visited node for data to be collected.
@@ -186,7 +191,9 @@ When the visitation of the AST is complete and all data has been collected, the 
 
 Currently we have included a little "wizardry" from `TypeWiz`.
 
-The instrumentor should only instrument using a single (root) data aggregator or single data source. The main instrumentor is initialized with reference to the main data collector in `Parser`.
+The instrumentor should only instrument using a single (root) data aggregator or single data source.
+
+The main instrumentor is initialized with reference to the main data collector in `Parser`.
 
 ### Replacer
 
