@@ -1,7 +1,7 @@
 import * as ts from 'typescript'
 import {
   enumKeys
-} from '../util'
+} from '../../util'
 import { BaseDetailsTester } from './base';
 
 export class CheckModifier extends BaseDetailsTester {

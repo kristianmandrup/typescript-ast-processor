@@ -3,7 +3,7 @@ import { BaseDetailsTester } from './base'
 import {
   onGuard,
   assignKeyDefined
-} from '../../node/util'
+} from '../../util'
 
 export class CheckViaUtils extends BaseDetailsTester {
   constructor(options: any) {

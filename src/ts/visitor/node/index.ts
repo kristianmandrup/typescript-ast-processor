@@ -1,9 +1,13 @@
 import * as ts from 'typescript'
 import { Loggable } from '../../loggable';
-import { What } from './what';
-import { NodeTester } from './tester';
+import { What } from '../../node/what';
+import { NodeTester } from '../../node/tester';
 import { VisitorFactory } from '../factory';
-import { Typer } from './typer';
+import { Typer } from '../../node/typer';
+
+export function createNodeVisitor(options: any) {
+  return new NodeVisitor(options)
+}
 
 export interface IExtraOptions {
   arrow?: boolean;

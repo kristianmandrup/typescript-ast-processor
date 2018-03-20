@@ -1,7 +1,7 @@
 import * as ts from 'typescript'
 import {
   enumKeys
-} from '../util'
+} from '../../util'
 import { BaseDetailsTester } from './base';
 
 const excludeFlags = [
@@ -27,6 +27,12 @@ export class CheckFlag extends BaseDetailsTester {
     return fun && fun(node)
   }
 
+  /**
+   * let
+   * const
+   * namespaced
+   * nestedNamespaced
+   */
   get checkers() {
     const has = this.has.bind(this)
     return {

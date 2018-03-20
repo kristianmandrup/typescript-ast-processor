@@ -5,7 +5,7 @@ import {
 } from './tester';
 import {
   toList
-} from '../node/util'
+} from '../../util'
 
 const defaults = {
   registry: {
@@ -23,6 +23,10 @@ const defaults = {
     methodLike: 'MethodOrAccessor',
     class: 'ClassDeclaration'
   }
+}
+
+export function createVisitorFactory(options: any) {
+  return new VisitorFactory(options)
 }
 
 export class VisitorFactory extends BaseFactory {

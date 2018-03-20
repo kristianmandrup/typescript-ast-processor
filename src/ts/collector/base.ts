@@ -2,6 +2,7 @@ import * as ts from 'typescript'
 import { Loggable } from '../loggable';
 import { SrcFile } from '../src-file';
 import * as utils from 'tsutils'
+import { NodeTester } from '../node';
 
 export function createCollector(name: string, collectorFn: Function, options: any) {
   const collector = createDataCollector(options)
@@ -22,6 +23,7 @@ export class DataCollector extends Loggable {
   srcFile: SrcFile
   utils: any
   name: string
+  tester: NodeTester
 
   constructor(options: any = {}) {
     super(options)
@@ -30,6 +32,7 @@ export class DataCollector extends Loggable {
     this.utils = utils
     this.parent = options.parent // ref to higher level data aggregator
     this.name = options.name || 'unnamed'
+    this.tester = new NodeTester(options)
   }
 
   collect(node: ts.Node, state: any = {}) {

@@ -10,7 +10,7 @@ import {
 } from './base'
 import {
   isEmpty
-} from '../visitor/node/util'
+} from '../util'
 
 export class RootDataCollector extends DataCollector {
   registry: any = {}

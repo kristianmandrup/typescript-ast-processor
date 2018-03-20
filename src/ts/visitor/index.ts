@@ -1,3 +1,8 @@
 export {
-  NodeVisitor
+  NodeVisitor,
+  createNodeVisitor
 } from './node'
+export {
+  createVisitorFactory,
+  VisitorFactory
+} from './factory'

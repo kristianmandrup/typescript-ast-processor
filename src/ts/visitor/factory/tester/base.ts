@@ -31,7 +31,7 @@ export class BaseTester extends BaseFactory {
     leafTest = leafTest || `is${type}`
 
     const defaultMemberTest = (member: ts.Node) => {
-      return this.nodeTest.test(member, memberKey, leafTest)
+      return this.nodeTester.test(member, memberKey, leafTest)
     }
     memberTest = memberTest || defaultMemberTest
 

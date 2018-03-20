@@ -1,5 +1,6 @@
 export {
-  VisitorFactory
+  VisitorFactory,
+  createVisitorFactory
 } from './factory'
 
 export {

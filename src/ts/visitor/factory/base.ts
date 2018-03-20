@@ -1,9 +1,9 @@
 import * as ts from 'typescript'
 import { Loggable } from '../../loggable';
-import { NodeTester } from '../node/tester';
+import { NodeTester } from '../../node/tester';
 import {
   callFun
-} from '../node/util'
+} from '../../util'
 import { DataCollector } from '../../collector';
 
 export class BaseFactory extends Loggable {

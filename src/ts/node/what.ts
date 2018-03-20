@@ -4,7 +4,7 @@ import {
   isArray,
   isObject,
   isFunction
-} from './util'
+} from '../util'
 import { Typer } from './typer';
 
 export class What {

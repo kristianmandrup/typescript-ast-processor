@@ -1,13 +1,13 @@
 import * as ts from 'typescript'
 import {
   callFun
-} from './util'
+} from '../util'
 
 import {
   isStr,
   isEmpty,
   nodeTypeCheckName
-} from './util'
+} from '../util'
 import { NodeDetailsTester } from './details/node-tester';
 
 export class NodeTester {

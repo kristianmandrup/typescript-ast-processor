@@ -117,19 +117,22 @@ createTSAstTraverser({
 It can be rather complex to build your own visitor functions... this is where Visitor factories come in. The factories should make it much easier to build complex visitors!
 
 ```js
+const { factory } = parser.visitor
+
 const visitorList = [
   // will generate a named function called FunctionDeclaration
   // with visitation logic to only allow nodes pass who are named 'hello'
   // (ie. any FunctionDeclaration that has an Identifier child node with name: 'hello')
   factory.function({name: 'hello'}),
 
-  // more factories... much more complex visitation guard logic is easy to build as well
+  // more factories... much more complex visitation guard logic is easy to build as well using test object (see below)
   factory.class({name: 'PoliteGreeter', test: {
     extends: 'Greeter',
   }}),
   factory.class({name: 'Greeter', test: {
     abstract: true
   }}),
+  // ...
 ]
 
 // In essence:
@@ -143,6 +146,38 @@ const visitors = Object.assign(visitors, {
   ...visitorList // well you get the idea
 })
 ```
+
+When creating a visitor through a factory, you can pass the following options to the `test` object to conveniently create many more guards/test.
+
+Note: You can use the node tester as well in your data collectors.
+
+Flags:
+
+- `let`
+- `const`
+- `namespaced`
+- `nestedNamespaced`
+
+Modifers
+
+- `exported`
+- `subclass` (alias to `extend`)
+- `extends`
+- `abstract`
+- `private`
+- `protected`
+- `public`
+- `static`
+- `async`
+- `implements`
+
+Utils
+
+- all `isXYZ` and `hasXYZ` from [tsutils](https://github.com/ajafff/tsutils) are supported
+
+When figuring out what to test for or what data to collect, use [AST explorer](https://astexplorer.net/)
+
+## Visitor flow
 
 Each visitor function is called with `(node, state, options)`
 

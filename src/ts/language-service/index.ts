@@ -12,6 +12,10 @@ import {
 } from './service-host'
 import { watchFiles } from './watch-files';
 
+export {
+  watch
+}
+
 function watch(rootFileNames: string[], options: CompilerOptions) {
   const files: MapLike<{ version: number }> = {};
 

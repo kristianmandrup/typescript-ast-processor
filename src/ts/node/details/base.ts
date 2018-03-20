@@ -1,7 +1,7 @@
-import { Loggable } from '../../../loggable'
+import { Loggable } from '../../loggable'
 import {
   nodeTypeCheckName
-} from '../util'
+} from '../../util'
 
 export class BaseDetailsTester extends Loggable {
   checkers: any = {}

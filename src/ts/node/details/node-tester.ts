@@ -8,7 +8,7 @@ import { CheckViaUtils } from './utils'
 
 import {
   assignKeyDefined
-} from '../../node/util'
+} from '../../util'
 
 
 export class NodeDetailsTester {
