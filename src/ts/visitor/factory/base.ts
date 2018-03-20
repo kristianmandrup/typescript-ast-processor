@@ -16,13 +16,17 @@ export class BaseFactory extends Loggable {
     this.collector = options.collector
   }
 
-  isNamed(node: any, name: string) {
-    if (!this.nodeTester.test(node, 'name', 'Identifier')) return false
-    const nodeName = node.name.getText()
-    return nodeName !== name
+  nameMatch(nodeName: string, name: string | RegExp) {
+    return name instanceof RegExp ? name.test(nodeName) : name === nodeName
   }
 
-  named(details: any, fnHandler?: Function) {
+  isNamed(node: any, name: string | RegExp) {
+    if (!this.nodeTester.test(node, 'name', 'Identifier')) return false
+    const nodeName = node.name.getText()
+    return this.nameMatch(nodeName, name)
+  }
+
+  generic(details: any, fnHandler?: Function) {
     let {
       label,
       types,
@@ -42,7 +46,7 @@ export class BaseFactory extends Loggable {
 
     return {
       [label]: (node: ts.MethodSignature, state: any = {}, opts: any = {}) => {
-        if (!this.isNamed(node, name)) return
+        if (name && !this.isNamed(node, name)) return
 
         // create test
         const nodeTest = this.nodeTester.create(node, test)

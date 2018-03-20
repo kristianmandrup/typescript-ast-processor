@@ -50,7 +50,7 @@ export class VisitorFactory extends BaseFactory {
   registerFactory(name: string, types: string[]) {
     // opts may contain test object and cbs object
     this.factory[name] = (name: string, opts: any = {}, cb: Function) => {
-      return this.named({
+      return this.generic({
         types,
         name,
         opts,

@@ -129,7 +129,7 @@ const visitorList = [
   factory.class({name: 'PoliteGreeter', test: {
     extends: 'Greeter',
   }}),
-  factory.class({name: 'Greeter', test: {
+  factory.class({name: /Greeter$/, test: {
     abstract: true
   }}),
   // ...
@@ -207,7 +207,7 @@ class NodeVisitor {
 ### Data collection
 
 The visitor factory is passed a collector, with all the registered data collectors.
-A visitor created via a (named) factory will try to call a matching collector (ie. matching label) with the node matched by the visitor.
+A visitor created via a factory will try to call a matching collector (ie. matching label) with the node matched by the visitor.
 
 ### Collector
 
