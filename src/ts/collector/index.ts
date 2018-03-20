@@ -12,13 +12,17 @@ import {
 
 export class RootDataCollector extends DataCollector {
   registry: any = {}
+  collectorOpts: any
 
   constructor(options: any) {
     super(options)
+
+    this.collectorOpts = Object.assign(this.options, { parent: this })
   }
 
   createCollector(name: string, collectorFn: Function) {
-    return createCollector(name, collectorFn, this.options)
+
+    return createCollector(name, collectorFn, this.collectorOpts)
   }
 
   isCollectorInstance(name: string) {

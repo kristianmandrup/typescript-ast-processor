@@ -41,7 +41,7 @@ export class BaseFactory extends Loggable {
     }
 
     return {
-      [label]: (node: ts.MethodSignature, opts: any) => {
+      [label]: (node: ts.MethodSignature, state: any = {}, opts: any = {}) => {
         if (!this.isNamed(node, name)) return
 
         // create test
@@ -50,8 +50,8 @@ export class BaseFactory extends Loggable {
         // perform nodeTest for every key (nodeProp) of propMap
         if (nodeTest && !testKeys.every(nodeTest)) return
 
-        // custom test cb
-        if (fnHandler && !fnHandler(details)) return
+        // custom cb
+        if (fnHandler && !fnHandler(details, node, state, opts)) return
 
         if (cbs) {
           const info = { label, name }
@@ -59,15 +59,15 @@ export class BaseFactory extends Loggable {
           const check = cbs.check
           if (!check || check && check(node, opts)) {
             // call custom onVisit callback if
-            callFun(cbs.onVisit, node, opts, cbs)
+            callFun(cbs.onVisit, node, opts)
 
             // call collector
-            callFun(cbs.collect, node, opts, cbs)
+            callFun(cbs.collect, node, state)
           }
         }
         if (this.collector) {
           const mathcingCollector = this.collector[label]
-          callFun(mathcingCollector, node, opts)
+          callFun(mathcingCollector, node, state)
         }
       }
     }

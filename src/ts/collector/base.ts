@@ -28,7 +28,7 @@ export class DataCollector extends Loggable {
     this.srcFile = options.srcFile
     this.fileName = options.srcFile.fileName
     this.utils = utils
-    this.parent = options.parent
+    this.parent = options.parent // ref to higher level data aggregator
     this.name = options.name || 'unnamed'
   }
 

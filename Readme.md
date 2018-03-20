@@ -188,7 +188,7 @@ They should (possibly?) be registered with same names as visitors, so that data 
 We can have multiple collectors collect data into a data aggregator. For complex cases, this can be setup to aggregate in multiple levels.
 
 ```js
-function functionHello(node, opts = {}) {
+function functionHello(node, state = {}) {
   this.data = {
     hello: {
       name: node.name.getText()
