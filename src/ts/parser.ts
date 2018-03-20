@@ -30,6 +30,14 @@ export class Parser {
     this.visitor.registerVisitor(label, functionMap.visitor)
   }
 
+  registerMap(nestedFunctionMap: any) {
+    Object.keys(nestedFunctionMap).map(label => {
+      const functionMap = nestedFunctionMap[label]
+      this.register(label, functionMap)
+    })
+  }
+
+
   intializeVisitor() {
     const { options } = this
     const createVisitor = options.createVisitor || this.createVisitor

@@ -219,7 +219,23 @@ parser.register('functionHello', {
 })
 ```
 
-You could easily generalize this even further to make it more efficient to configure!
+You could easily generalize this even further to make it more efficient to configure.
+This is now possible via `registerMap`:
+
+```js
+const nestedMap = {
+  functionHello: {
+    visitor: (...) => {},
+    collector: (...) => {},
+  },
+  classGreeter: {
+    visitor: (...) => {},
+    collector: (...) => {},
+  }
+}
+parser.registerMap(nestedMap)
+```
+
 When this is all configurred and working, you can move on to instrumentation!
 
 ### Instrumentor
