@@ -5,9 +5,9 @@ import { ClassMembersTester } from './members';
 export class ClassTester extends BaseTester {
   members: ClassMembersTester
 
-  constructor(options: any) {
-    super(options)
-    this.members = new ClassMembersTester(options)
+  constructor(node: any, options: any) {
+    super(node, options)
+    this.members = new ClassMembersTester(node, options)
   }
 
   test(details: any) {
@@ -26,7 +26,7 @@ export class ClassTester extends BaseTester {
   }
 
   testImplements(implementsInterfaces: string[]) {
-    return true
+    this.$node.details.is(this.node, 'implements')
   }
 
   testExtends(extendsClass: string) {

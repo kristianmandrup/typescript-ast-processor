@@ -1,6 +1,7 @@
 import * as ts from 'typescript'
 import {
-  enumKeys
+  enumKeys,
+  callFun
 } from '../../util'
 import { BaseDetailsTester } from './base';
 
@@ -24,7 +25,7 @@ export class CheckFlag extends BaseDetailsTester {
 
   is(node: any, name: string) {
     const fun = this[`is${name}`]
-    return fun && fun(node)
+    return callFun(fun, node)
   }
 
   /**

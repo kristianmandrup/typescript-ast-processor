@@ -37,8 +37,6 @@ export class VisitorFactory extends BaseFactory {
 
   constructor(options: any = {}) {
     super(options)
-    this.classTest = new ClassTester(options)
-    this.functionTest = new FunctionLikeTester(options)
   }
 
   registerAllFactories(registry: any) {

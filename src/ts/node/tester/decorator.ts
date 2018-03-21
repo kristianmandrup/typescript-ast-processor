@@ -2,8 +2,8 @@ import * as ts from 'typescript'
 import { BaseTester } from './base'
 
 export class DecoratorTester extends BaseTester {
-  constructor(options: any) {
-    super(options)
+  constructor(node: any, options: any) {
+    super(node, options)
   }
 
   test(decorator: any) {

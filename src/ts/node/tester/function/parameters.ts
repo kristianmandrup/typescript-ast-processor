@@ -1,13 +1,12 @@
-import * as ts from 'typescript'
 import { BaseTester } from '../base'
 import { ParameterTester } from './parameter';
 
 export class ParametersTester extends BaseTester {
   parameter: ParameterTester
 
-  constructor(options: any) {
-    super(options)
-    this.parameter = new ParameterTester(options)
+  constructor(node: any, options: any) {
+    super(node, options)
+    this.parameter = new ParameterTester(node, options)
   }
 
   test(parameters: any) {

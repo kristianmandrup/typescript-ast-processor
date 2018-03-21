@@ -27,9 +27,16 @@ Please help contribute to make it happen!!!
 
 - [astravel](https://github.com/kristianmandrup/astravel) ESTree compatible AST traveser using a visitor pattern
 
-## TS utils and code style
+## More TS utils
 
 - [tsutils](https://github.com/ajafff/tsutils)
+- [ts-simple-ast](https://github.com/dsherret/ts-simple-ast) easy AST refactoring and parsing
+- [node-typescript-parser](https://buehler.github.io/node-typescript-parser/) and [repo](https://github.com/buehler/node-typescript-parser) - generate human understandable AST
+- [ts-emitter](https://github.com/KnisterPeter/ts-emitter) emit AST back to source code
+- [typescript-ESTree](https://github.com/RReverser/typescript-estree) convert TypeScript AST to ESTree compatible AST
+
+### TS Lint
+
 - [tslint-consistent-codestyle](https://github.com/ajafff/tslint-consistent-codestyle)
 
 ## Design
@@ -175,7 +182,7 @@ Utils
 
 - all `isXYZ` and `hasXYZ` from [tsutils](https://github.com/ajafff/tsutils) are supported
 
-When figuring out what to test for or what data to collect, use [AST explorer](https://astexplorer.net/)
+When figuring out what to test for or what data to collect, use [AST explorer](https://astexplorer.net/) or [ts-ast-viewer](http://ts-ast-viewer.com/)
 
 ## Visitor flow
 
@@ -286,6 +293,62 @@ The main instrumentor is initialized with reference to the main data collector i
 ### Replacer
 
 A `Replacer` (as in `TypeWiz`) can be used to replace code in a source file directly in response to the instrumentation.
+
+## Tool integration
+
+We will try to make it easy to integrate other tools, so that this design is intent bases without making assumptions about underlying use or implementation.
+
+A very promising lib is [ts-simple-ast](https://github.com/dsherret/ts-simple-ast) providing easy AST parsing, refactoring and working with source files.
+
+Detailed docs can be found [here](https://dsherret.github.io/ts-simple-ast/)
+
+*ts-simple-ast* looks like a much more convenient way to interact with the TypeScript AST API than using it directly.
+
+```js
+import Project from "ts-simple-ast";
+
+// initialize
+const project = new Project();
+
+// add source files
+project.addExistingSourceFiles("src/**/*.ts");
+const myClassFile = project.createSourceFile("src/MyClass.ts", "export class MyClass {}");
+const myEnumFile = project.createSourceFile("src/MyEnum.ts", {
+    enums: [{
+        name: "MyEnum",
+        isExported: true,
+        members: [{ name: "member" }]
+    }]
+});
+
+// get information from ast
+const myClass = myClassFile.getClassOrThrow("MyClass");
+myClass.getName();          // returns: "MyClass"
+myClass.hasExportKeyword(); // returns: false
+myClass.isDefaultExport();  // returns: true
+
+// manipulate ast
+const myInterface = myClassFile.addInterface({
+    name: "IMyInterface",
+    isExported: true,
+    properties: [{
+        name: "myProp",
+        type: "number"
+    }]
+});
+
+myClass.rename("NewName");
+myClass.addImplements(myInterface.getName());
+myClass.addProperty({
+    name: "myProp",
+    initializer: "5"
+});
+
+project.getSourceFileOrThrow("src/ExistingFile.ts").delete();
+
+// asynchronously save all the changes above
+project.save();
+```
 
 ### Customization
 

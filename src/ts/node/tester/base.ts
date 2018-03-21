@@ -1,62 +1,28 @@
 import * as ts from 'typescript'
-import { BaseFactory } from '../base';
+import { NodeDetailsTester } from '../details/node-tester';
+import { Loggable } from '../../loggable';
+import { NodeTester } from '.';
 
-export class BaseTester extends BaseFactory {
-  constructor(options: any) {
+export interface INodeTester {
+  tester: NodeTester
+  details: NodeDetailsTester
+}
+
+export class BaseTester extends Loggable {
+  $node: INodeTester
+  node: any
+
+  constructor(node: any, options: any) {
     super(options)
+    this.node = node
+    this.$node = {
+      tester: new NodeTester(options),
+      details: new NodeDetailsTester(options)
+    }
   }
 
-  nodeMemberTest(node: ts.Node, testDef: any = {}): any {
-    return this._nodeListMemberTest(node, testDef)
-  }
-
-  protected _nodeListMemberTest(node: ts.Node, testDef: any = {}): any {
-    let {
-      nodeKey,
-      method = 'find',
-      type,
-      memberTest,
-      memberKey,
-      leafTest
-    } = testDef
-
-    const nodeProp = node[nodeKey]
-    if (!Array.isArray(nodeProp)) {
-      return this._nodeSingularMemberTest(node, testDef)
-    }
-
-    // validate is valid/supported Array search method
-    if (!['every', 'find'].includes(method)) return
-
-    leafTest = leafTest || `is${type}`
-
-    const defaultMemberTest = (member: ts.Node) => {
-      return this.nodeTester.test(member, memberKey, leafTest)
-    }
-    memberTest = memberTest || defaultMemberTest
-
-    const testMethod = (member: ts.Node) => {
-      return memberTest(member)
-    }
-    const searchFun: any = nodeProp[method]
-    return searchFun(testMethod)
-  }
-
-  protected _nodeSingularMemberTest(node: ts.Node, testDef: any = {}) {
-    let {
-      key,
-      type,
-      method
-    } = testDef
-
-    const nodeProp = node[key]
-    if (!nodeProp) return
-    if (Array.isArray(nodeProp)) {
-      return this._nodeListMemberTest(node, testDef)
-    }
-    const tsTypeFunName: string = `is${type}`
-    const searchFun = method ? method : ts[tsTypeFunName]
-    return searchFun(nodeProp)
+  testName(name: string) {
+    this.node.name.getText()
   }
 }
 

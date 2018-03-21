@@ -8,9 +8,9 @@ import { ParametersTester } from '../function/parameters';
 export class FunctionLikeTester extends BaseTester {
   parameters: ParametersTester
 
-  constructor(options: any) {
-    super(options)
-    this.parameters = new ParametersTester(options)
+  constructor(node: any, options: any) {
+    super(node, options)
+    this.parameters = new ParametersTester(node, options)
   }
 
   test(details: any) {
@@ -24,10 +24,6 @@ export class FunctionLikeTester extends BaseTester {
       this.testModifiers(modifiers) &&
       this.testParameters(parameters) &&
       this.testReturnType(returnType)
-  }
-
-  testName(name: string) {
-    return true
   }
 
   testReturnType(returnType: any) {

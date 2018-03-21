@@ -5,9 +5,9 @@ import { DecoratorTester } from './decorator';
 export class DecoratorsTester extends BaseTester {
   decorator: DecoratorTester
 
-  constructor(options: any) {
-    super(options)
-    this.decorator = new DecoratorTester(options)
+  constructor(node: any, options: any) {
+    super(node, options)
+    this.decorator = new DecoratorTester(node, options)
   }
 
   test(decorators: any) {

@@ -5,9 +5,9 @@ import { FunctionLikeTester } from '../function';
 export class ClassMembersTester extends BaseTester {
   member: FunctionLikeTester
 
-  constructor(options: any) {
-    super(options)
-    this.member = new FunctionLikeTester(options)
+  constructor(node: any, options: any) {
+    super(node, options)
+    this.member = new FunctionLikeTester(node, options)
   }
 
   test(members: any) {
