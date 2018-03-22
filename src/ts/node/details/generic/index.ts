@@ -2,6 +2,10 @@ import {
   CheckModifier
 } from './modifier'
 import {
+  NodeType
+} from './node-type'
+
+import {
   CheckFlag
 } from './flag';
 import { CheckViaUtils } from './utils'
@@ -11,7 +15,8 @@ import {
 
 export {
   CheckModifier,
-  CheckFlag
+  CheckFlag,
+  NodeType
 }
 
 export class NodeDetailsTester {

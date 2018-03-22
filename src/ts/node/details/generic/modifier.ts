@@ -105,6 +105,21 @@ export class CheckModifier extends BaseDetailsTester {
     }
   }
 
+  get conditional() {
+    const has = this.has.bind(this)
+    return {
+      if(node: any) {
+        return has(node, ts.SyntaxKind.IfKeyword)
+      },
+      else(node: any) {
+        return has(node, ts.SyntaxKind.ElseKeyword)
+      },
+      switch(node: any) {
+        return has(node, ts.SyntaxKind.SwitchKeyword)
+      }
+    }
+  }
+
   get identifier() {
     const has = this.has.bind(this)
     return {
