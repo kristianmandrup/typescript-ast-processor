@@ -28,6 +28,7 @@ export class SrcFile extends Source {
   fileName: string
   sourceFile: ts.SourceFile
   sourceText: string
+  _parser: Parser
 
   constructor(options: any) {
     super(options)
@@ -90,9 +91,9 @@ export class SrcFile extends Source {
     return sourceText ? sourceText : this.readSourceText(fileName)
   }
 
-
   get parser() {
-    return new Parser(this)
+    this._parser = this._parser || new Parser(this)
+    return this._parser
   }
 
   parse(sourceFile?: ts.SourceFile) {

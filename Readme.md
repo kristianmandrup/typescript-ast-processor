@@ -45,13 +45,57 @@ Please help contribute to make it happen!!!
 
 A `Loader` instance can be used to load a source file.
 
+```js
+import { createLoader } from 'typescript-ast-traverser`
+const compilerOpts = {
+  // ...
+}
+const languageVersion = ts.ScriptTarget.ES2017
+const loader = createLoader({
+  compiler: compilerOpts,
+  languageVersion
+})
+```
+
 ### SrcFile
 
 A `SrcFile` represents a loaded typescript src file, including filename, compiler options used, source text etc.
 
+```js
+// configure loader
+
+// load a source file
+loader.loadSourceFile(fileName)
+
+// run visitors on AST of loaded src file
+loader.parse()
+```
+
 ### Parser
 
 A `SrcFile` instance can be parsed, using a parser. This initiates traversal of the TypeScript AST.
+
+```js
+const fileName = 'my/srcfile.ts'
+const nestedMap = {
+  functionHello: {
+    visitor: (...) => {},
+    collector: (...) => {},
+  },
+  classGreeter: {
+    visitor: (...) => {},
+    collector: (...) => {},
+  }
+}
+const { parser } = loader
+parser.registerMap(nestedMap)
+
+// run registered visitors on AST
+loader.loadSourceFile(fileName).parse()
+const { collector, instrumentor } = parser
+collector.collectData()
+instrumentor.instrument()
+```
 
 ### Visitor
 
@@ -154,35 +198,11 @@ const visitors = Object.assign(visitors, {
 })
 ```
 
-When creating a visitor through a factory, you can pass the following options to the `test` object to conveniently create many more guards/test.
-
-Note: You can use the node tester as well in your data collectors.
-
-Flags:
-
-- `let`
-- `const`
-- `namespaced`
-- `nestedNamespaced`
-
-Modifers
-
-- `exported`
-- `subclass` (alias to `extend`)
-- `extends`
-- `abstract`
-- `private`
-- `protected`
-- `public`
-- `static`
-- `async`
-- `implements`
-
-Utils
-
-- all `isXYZ` and `hasXYZ` from [tsutils](https://github.com/ajafff/tsutils) are supported
+## Testing node details
 
 When figuring out what to test for or what data to collect, use [AST explorer](https://astexplorer.net/) or [ts-ast-viewer](http://ts-ast-viewer.com/)
+
+For more details, see testers in `node/tester/details`
 
 ## Visitor flow
 
