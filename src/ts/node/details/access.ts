@@ -1,12 +1,9 @@
-import {
-  callFun
-} from '../../util'
-import { CheckModifier } from '.';
+import { CheckModifier } from './generic'
 import { BaseDetailsTester } from './base';
 
 export class AccessTester extends BaseDetailsTester {
   constructor(options: any) {
     super(options)
-    this.checkers = new CheckModifier(options).memberAccess
+    this.checkers = new CheckModifier(options).access
   }
 }

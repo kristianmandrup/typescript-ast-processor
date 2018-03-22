@@ -1,17 +1,9 @@
-import { CheckFlag } from './flag'
-import {
-  callFun
-} from '../../util'
+import { CheckFlag } from './generic'
+import { BaseDetailsTester } from './base';
 
-export class NamespaceTester {
-  namespaceFlags: any
-
+export class NamespaceTester extends BaseDetailsTester {
   constructor(options: any) {
-    this.namespaceFlags = new CheckFlag(options).namespace
-  }
-
-  test(node: any, flag: string) {
-    const namespaceCheck = this.namespaceFlags[flag]
-    return callFun(namespaceCheck, node)
+    super(options)
+    this.checkers = new CheckFlag(options).namespace
   }
 }

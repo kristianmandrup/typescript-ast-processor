@@ -2,8 +2,8 @@ import * as ts from 'typescript'
 import {
   enumKeys,
   callFun
-} from '../../util'
-import { BaseDetailsTester } from './base';
+} from '../../../util'
+import { BaseDetailsTester } from '../base';
 
 const excludeFlags = [
   'HasComputedFlags',

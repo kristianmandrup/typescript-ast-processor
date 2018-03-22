@@ -1,9 +1,9 @@
 import * as utils from 'tsutils'
-import { BaseDetailsTester } from './base'
+import { BaseDetailsTester } from '../base'
 import {
   onGuard,
   assignKeyDefined
-} from '../../util'
+} from '../../../util'
 
 export class CheckViaUtils extends BaseDetailsTester {
   constructor(options: any) {

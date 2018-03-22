@@ -1,7 +1,7 @@
 import * as ts from 'typescript'
 import { BaseTester } from '../base'
 import { FunctionLikeTester } from '../function';
-import { AccessTester } from '../../details/access-tester';
+import { AccessTester } from '../../details/access';
 
 export class ClassMembersTester extends BaseTester {
   member: FunctionLikeTester

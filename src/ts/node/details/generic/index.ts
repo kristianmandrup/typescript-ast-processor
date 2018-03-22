@@ -1,15 +1,18 @@
 import {
-  CheckModifier,
+  CheckModifier
 } from './modifier'
 import {
   CheckFlag
 } from './flag';
 import { CheckViaUtils } from './utils'
-
 import {
   assignKeyDefined
-} from '../../util'
+} from '../../../util'
 
+export {
+  CheckModifier,
+  CheckFlag
+}
 
 export class NodeDetailsTester {
   modifer: CheckModifier

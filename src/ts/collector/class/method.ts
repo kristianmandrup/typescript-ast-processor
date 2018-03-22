@@ -1,6 +1,6 @@
 import { DataCollector } from '../base'
 
-export class FunctionCollector extends DataCollector {
+export class MethodCollector extends DataCollector {
   collect(node: any) {
   }
 }

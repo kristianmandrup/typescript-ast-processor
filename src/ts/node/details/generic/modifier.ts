@@ -1,8 +1,8 @@
 import * as ts from 'typescript'
 import {
   enumKeys
-} from '../../util'
-import { BaseDetailsTester } from './base';
+} from '../../../util'
+import { BaseDetailsTester } from '../base';
 
 export class CheckModifier extends BaseDetailsTester {
   has(node: ts.Node, modifier: any) {
@@ -35,7 +35,7 @@ export class CheckModifier extends BaseDetailsTester {
     }
   }
 
-  get memberAccess() {
+  get access() {
     const has = this.has.bind(this)
     return {
       private(node: any) {
