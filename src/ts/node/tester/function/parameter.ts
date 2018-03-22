@@ -8,6 +8,6 @@ export class ParameterTester extends BaseTester {
 
   test(parameter: any) {
     const { type, name } = parameter
-    return true
+    return this.testType(type) && this.testName(name)
   }
 }

@@ -1,13 +1,16 @@
 import * as ts from 'typescript'
 import { BaseTester } from './base'
 
-export class DecoratorTester extends BaseTester {
+export interface IItemTester {
+  test(item: any): boolean
+}
+
+export class ItemTester extends BaseTester implements IItemTester {
   constructor(node: any, options: any) {
     super(node, options)
   }
 
-  test(decorator: any) {
-    const { name, type } = decorator
+  test(item: any): boolean {
     return true
   }
 }

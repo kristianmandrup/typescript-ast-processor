@@ -21,8 +21,20 @@ export class BaseTester extends Loggable {
     }
   }
 
-  testName(name: string) {
-    this.node.name.getText()
+  testName(name: string): boolean {
+    return this.node.name.getText()
+  }
+
+  testType(type: string): boolean {
+    return !!(!type || this.validatePrimitiveType(type) && this.$node.details.is(this.node, type))
+  }
+
+  validatePrimitiveType(type: string): boolean {
+    return this.primitiveTypes.includes(type)
+  }
+
+  get primitiveTypes() {
+    return ['boolean', 'string', 'number', 'array', 'void']
   }
 }
 

@@ -49,6 +49,33 @@ export class CheckModifier extends BaseDetailsTester {
       },
       isImplements(node: any) {
         return has(node, ts.SyntaxKind.ImplementsKeyword)
+      },
+      isVoid(node: any) {
+        return has(node, ts.SyntaxKind.VoidKeyword)
+      },
+      isString(node: any) {
+        return has(node, ts.SyntaxKind.StringKeyword)
+      },
+      isNumber(node: any) {
+        return has(node, ts.SyntaxKind.NumberKeyword)
+      },
+      isSymbol(node: any) {
+        return has(node, ts.SyntaxKind.SymbolKeyword)
+      },
+      isArray(node: any) {
+        return has(node, ts.SyntaxKind.ArrayType)
+      },
+      isUnion(node: any) {
+        return has(node, ts.SyntaxKind.UnionType)
+      },
+      isArrow(node: any) {
+        return has(node, ts.SyntaxKind.ArrowFunction)
+      },
+      isAwait(node: any) {
+        return has(node, ts.SyntaxKind.ArrowFunction)
+      },
+      isBoolean(node: any) {
+        return has(node, ts.SyntaxKind.BooleanKeyword)
       }
     }
   }

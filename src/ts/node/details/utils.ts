@@ -16,11 +16,12 @@ export class CheckViaUtils extends BaseDetailsTester {
 
     this.checkers = Object.keys(utils).reduce((acc: any, key: string) => {
       const fun = this.validKey(key) ? utils[key] : undefined
-      return assignKeyDefined(acc, key, fun)
+      if (fun) {
+        acc[key] = fun
+      }
+      return acc
     }, this.checkers)
   }
-
-
 
   validKey(key: string) {
     return /^is/.test(key) || /^has/.test(key)
