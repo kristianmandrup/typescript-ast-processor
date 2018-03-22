@@ -10,6 +10,11 @@ export class BaseDetailsTester extends Loggable {
     super(options)
   }
 
+  test(node: any, names: any, method: string = 'any') {
+    method = method === 'all' ? 'hasAll' : 'hasAny'
+    return this[method](node, names)
+  }
+
   hasAll(node: any, names: string[]) {
     return names.every(name => this.is(node, name))
   }

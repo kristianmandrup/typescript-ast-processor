@@ -1,13 +1,16 @@
 import * as ts from 'typescript'
 import { BaseTester } from '../base'
 import { FunctionLikeTester } from '../function';
+import { AccessTester } from '../../details/access-tester';
 
 export class ClassMembersTester extends BaseTester {
   member: FunctionLikeTester
+  accessTester: AccessTester
 
   constructor(node: any, options: any) {
     super(node, options)
     this.member = new FunctionLikeTester(node, options)
+    this.accessTester = new AccessTester(options)
   }
 
   test(members: any) {
@@ -24,7 +27,8 @@ export class ClassMembersTester extends BaseTester {
   }
 
   testAccessors(accessors: any) {
-    const { count, names, types } = accessors
+    const { count, names, types, list } = accessors
+    this.accessTester.test(this.node, names, list.for)
     return true
   }
 

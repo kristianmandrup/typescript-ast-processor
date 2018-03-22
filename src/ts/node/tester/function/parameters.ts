@@ -15,7 +15,7 @@ export class ParametersTester extends BaseTester {
       types,
       list
     } = parameters
-    const method = list.for == 'one' ? 'find' : 'every'
+    const method = list.for == 'any' ? 'find' : 'every'
 
     return this.testDecorators(decorators) &&
       this.testTypes(types) &&
