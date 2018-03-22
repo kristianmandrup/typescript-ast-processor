@@ -16,67 +16,110 @@ export class CheckModifier extends BaseDetailsTester {
     })
   }
 
-  get checkers() {
+  get class() {
     const has = this.has.bind(this)
     return {
-      isExported(node: any) {
-        return has(node, ts.SyntaxKind.ExportKeyword)
-      },
-      isSubclass(node: any) {
+      subclass(node: any) {
         return has(node, ts.SyntaxKind.ExtendsKeyword)
       },
       // alias
-      isExtends(node: any) {
+      extends(node: any) {
         return has(node, ts.SyntaxKind.ExtendsKeyword)
       },
-      isAbstract(node: any) {
-        return has(node, ts.SyntaxKind.AbstractKeyword)
-      },
-      isPrivate(node: any) {
-        return has(node, ts.SyntaxKind.PrivateKeyword)
-      },
-      isProtected(node: any) {
-        return has(node, ts.SyntaxKind.ProtectedKeyword)
-      },
-      isPublic(node: any) {
-        return has(node, ts.SyntaxKind.PublicKeyword)
-      },
-      isStatic(node: any) {
-        return has(node, ts.SyntaxKind.StaticKeyword)
-      },
-      isAsync(node: any) {
-        return has(node, ts.SyntaxKind.AsyncKeyword)
-      },
-      isImplements(node: any) {
+      implements(node: any) {
         return has(node, ts.SyntaxKind.ImplementsKeyword)
       },
-      isVoid(node: any) {
+      abstract(node: any) {
+        return has(node, ts.SyntaxKind.AbstractKeyword)
+      },
+    }
+  }
+
+  get memberAccess() {
+    const has = this.has.bind(this)
+    return {
+      private(node: any) {
+        return has(node, ts.SyntaxKind.PrivateKeyword)
+      },
+      protected(node: any) {
+        return has(node, ts.SyntaxKind.ProtectedKeyword)
+      },
+      public(node: any) {
+        return has(node, ts.SyntaxKind.PublicKeyword)
+      },
+      static(node: any) {
+        return has(node, ts.SyntaxKind.StaticKeyword)
+      }
+    }
+  }
+
+  get type() {
+    const has = this.has.bind(this)
+    return {
+      void(node: any) {
         return has(node, ts.SyntaxKind.VoidKeyword)
       },
-      isString(node: any) {
+      string(node: any) {
         return has(node, ts.SyntaxKind.StringKeyword)
       },
-      isNumber(node: any) {
+      number(node: any) {
         return has(node, ts.SyntaxKind.NumberKeyword)
       },
-      isSymbol(node: any) {
+      symbol(node: any) {
         return has(node, ts.SyntaxKind.SymbolKeyword)
       },
-      isArray(node: any) {
+      array(node: any) {
         return has(node, ts.SyntaxKind.ArrayType)
       },
-      isUnion(node: any) {
+      union(node: any) {
         return has(node, ts.SyntaxKind.UnionType)
       },
-      isArrow(node: any) {
-        return has(node, ts.SyntaxKind.ArrowFunction)
+      boolean(node: any) {
+        return has(node, ts.SyntaxKind.BooleanKeyword)
       },
+      any(node: any) {
+        return has(node, ts.SyntaxKind.AnyKeyword)
+      },
+
+    }
+  }
+
+  get call() {
+    const has = this.has.bind(this)
+    return {
       isAwait(node: any) {
         return has(node, ts.SyntaxKind.ArrowFunction)
       },
-      isBoolean(node: any) {
-        return has(node, ts.SyntaxKind.BooleanKeyword)
+    }
+  }
+
+  get function() {
+    const has = this.has.bind(this)
+    return {
+      isAsync(node: any) {
+        return has(node, ts.SyntaxKind.AsyncKeyword)
+      },
+      isArrow(node: any) {
+        return has(node, ts.SyntaxKind.ArrowFunction)
       }
+    }
+  }
+
+  get identifier() {
+    const has = this.has.bind(this)
+    return {
+      exported(node: any) {
+        return has(node, ts.SyntaxKind.ExportKeyword)
+      }
+    }
+  }
+
+  get checkers() {
+    return {
+      ...this.class,
+      ...this.call,
+      ...this.function,
+      ...this.identifier
     }
   }
 }

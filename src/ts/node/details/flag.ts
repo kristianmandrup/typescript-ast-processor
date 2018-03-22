@@ -28,6 +28,31 @@ export class CheckFlag extends BaseDetailsTester {
     return callFun(fun, node)
   }
 
+  get variable() {
+    const has = this.has.bind(this)
+    return {
+      let(node: any): boolean {
+        return has(node, ts.NodeFlags.Let)
+      },
+      const(node: any) {
+        return has(node, ts.NodeFlags.Const)
+      }
+    }
+  }
+
+  get namespace() {
+    const has = this.has.bind(this)
+    return {
+      in(node: any) {
+        return has(node, ts.NodeFlags.Namespace)
+      },
+      nested(node: any) {
+        return has(node, ts.NodeFlags.NestedNamespace)
+      }
+    }
+  }
+
+
   /**
    * let
    * const
@@ -35,23 +60,11 @@ export class CheckFlag extends BaseDetailsTester {
    * nestedNamespaced
    */
   get checkers() {
-    const has = this.has.bind(this)
     return {
-      isLet(node: any): boolean {
-        return has(node, ts.NodeFlags.Let)
-      },
-      isConst(node: any) {
-        return has(node, ts.NodeFlags.Const)
-      },
-      isNamespaced(node: any) {
-        return has(node, ts.NodeFlags.Namespace)
-      },
-      isNestedNamespaced(node: any) {
-        return has(node, ts.NodeFlags.NestedNamespace)
-      }
+      ...this.variable,
+      ...this.namespace
     }
   }
-
 
   modifierFlagsOf(node: ts.Node): ts.ModifierFlags {
     return ts.getCombinedModifierFlags(node)
