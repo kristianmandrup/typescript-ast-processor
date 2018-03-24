@@ -12,7 +12,7 @@ export {
   NamespaceTester
 } from './namespace'
 export {
-  ClassTester
+  ClassDetailsTester
 } from './class'
 export {
   VariableTester

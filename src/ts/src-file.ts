@@ -16,7 +16,7 @@ const defaults = {
 
 import { Parser } from './parser';
 
-export function createSrcFile(options: any) {
+export function createSrcFile(options: any = {}) {
   return new SrcFile(options)
 }
 
@@ -30,7 +30,7 @@ export class SrcFile extends Source {
   sourceText: string
   _parser: Parser
 
-  constructor(options: any) {
+  constructor(options: any = {}) {
     super(options)
     this.compilerOpts = options.compiler || defaults.compilerOpts
     this.languageVersion = this.scriptTargetFor(options.languageVersion)

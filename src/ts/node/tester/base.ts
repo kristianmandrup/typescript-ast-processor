@@ -1,5 +1,5 @@
 import * as ts from 'typescript'
-import { NodeDetailsTester } from '../details/node-tester';
+import { NodeDetailsTester } from '../details/generic';
 import { Loggable } from '../../loggable';
 import { NodeTester } from '.';
 
@@ -19,6 +19,13 @@ export class BaseTester extends Loggable {
       tester: new NodeTester(options),
       details: new NodeDetailsTester(options)
     }
+  }
+
+  arrayTestMethod(name: string) {
+    if (['one', 'any'].includes(name)) return 'find'
+    if (name === 'all') return 'every'
+    if (name === 'some') return 'some'
+    throw new Error(`Invalid test name ${name}`)
   }
 
   testName(name: string): boolean {

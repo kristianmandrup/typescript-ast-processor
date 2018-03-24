@@ -1,6 +1,6 @@
 import { Loggable } from '../../loggable'
 import {
-  nodeTypeCheckName
+  callFun
 } from '../../util'
 
 export class BaseDetailsTester extends Loggable {
@@ -8,6 +8,10 @@ export class BaseDetailsTester extends Loggable {
 
   constructor(options: any) {
     super(options)
+  }
+
+  nodeTypeCheckName(name: string) {
+    return name[0].toLowerCase() + name.slice(1)
   }
 
   test(node: any, names: any, method: string = 'any') {
@@ -23,11 +27,20 @@ export class BaseDetailsTester extends Loggable {
     return names.find(name => this.is(node, name))
   }
 
-
   is(node: any, name: string) {
-    name = nodeTypeCheckName(name)
+    // console.log('is', {
+    //   node,
+    //   name,
+    //   checkers: this.checkers,
+    //   abstract: this.checkers[name]
+    // })
+    name = this.nodeTypeCheckName(name)
     const fun = this.checkers[name]
-    return fun && fun(node)
+    // console.log({
+    //   name,
+    //   fun
+    // })
+    return callFun(fun, node)
   }
 }
 

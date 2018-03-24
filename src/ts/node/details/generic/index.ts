@@ -2,8 +2,8 @@ import {
   CheckModifier
 } from './modifier'
 import {
-  NodeType
-} from './node-type'
+  Loop
+} from './loop'
 
 import {
   CheckFlag
@@ -16,26 +16,30 @@ import {
 export {
   CheckModifier,
   CheckFlag,
-  NodeType
+  Loop
 }
 
 export class NodeDetailsTester {
   modifer: CheckModifier
   flag: CheckFlag
   utils: CheckViaUtils
-  checkers: any
+  _checkers: any
 
   constructor(options: any) {
-    this.checkers = {
-      utils: new CheckViaUtils(options),
-      modifer: new CheckModifier(options),
+    this._checkers = {
+      // utils: new CheckViaUtils(options),
+      modifier: new CheckModifier(options),
       flag: new CheckFlag(options),
     }
   }
 
+  get checkers() {
+    return this._checkers
+  }
+
   addChecker(checker: any, name?: string) {
     name = name || checker.name
-    assignKeyDefined(this.checkers, name, checker)
+    assignKeyDefined(this._checkers, name, checker)
   }
 
   get checkerNames() {

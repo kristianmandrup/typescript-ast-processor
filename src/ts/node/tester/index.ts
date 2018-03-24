@@ -1,9 +1,17 @@
 export {
-  ClassTester
+  ClassTester,
+  ClassMemberTester,
+  ClassMembersTester
 } from './class'
+
+import * as $function from './function'
+import * as $class from './class'
+
 export {
-  FunctionLikeTester
-} from './function'
+  $function,
+  $class
+}
+
 export {
   BaseTester
 } from './base'
@@ -16,7 +24,7 @@ import {
   nodeTypeCheckName
 } from '../../util'
 
-import { NodeDetailsTester } from '../details/node-tester';
+import { NodeDetailsTester } from '../details/generic';
 
 export class NodeTester {
   details: NodeDetailsTester

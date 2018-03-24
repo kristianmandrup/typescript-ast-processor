@@ -11,3 +11,7 @@ export {
   instrumentor,
   languageService
 }
+
+export {
+  createSrcFile
+} from './src-file'

@@ -30,9 +30,12 @@
   "license": "MIT",
   "dependencies": {
     "astravel": "^0.4.1",
+    "core-decorators": "^0.20.0",
     "eslint-traverser": "^1.5.2",
     "estree-walker": "^0.5.1",
+    "inversify": "^4.11.1",
     "json-query": "^2.2.2",
+    "reflect-metadata": "^0.1.12",
     "tsutils": "^2.22.2",
     "typescript": "^2.7.2",
     "typescript-eslint-parser": "^14.0.0"

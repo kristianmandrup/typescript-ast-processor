@@ -1,10 +1,14 @@
 import {
-  SourceFile
+  SourceFile, ScriptTarget
 } from 'typescript'
 import {
   SrcFile,
   createSrcFile
 } from '../../../src/ts/src-file'
+
+import {
+  compilerOpts
+} from '../../../src/ts/opts/compiler'
 
 // import fs from 'jest-plugin-fs'
 
@@ -30,6 +34,54 @@ describe('loader', () => {
   })
   const fileName = 'fixtures/hello.ts'
 
+  context('initial srcFile', () => {
+    it('is a SrcFile instance', () => {
+      expect(srcFile instanceof SrcFile).toBeTruthy()
+    })
+
+    describe('sourceFile', () => {
+      it('is not set', () => {
+        expect(srcFile.sourceFile).not.toBeDefined()
+      })
+    })
+
+    describe('compilerOpts', () => {
+      it('to be set', () => {
+        expect(srcFile.compilerOpts).toEqual(compilerOpts)
+      })
+    })
+
+    describe('fileNames', () => {
+      it('to be empty', () => {
+        expect(srcFile.fileNames).toEqual([])
+      })
+    })
+
+    describe('tsFileNames', () => {
+      it('to be empty', () => {
+        expect(srcFile.tsFileNames).toEqual([])
+      })
+    })
+
+    describe('fileName', () => {
+      it('is not set', () => {
+        expect(srcFile.fileName).not.toBeDefined()
+      })
+    })
+
+    describe('fileName', () => {
+      it('is not set', () => {
+        expect(srcFile.fileName).not.toBeDefined()
+      })
+    })
+
+    describe('languageVersion', () => {
+      it('is not set', () => {
+        expect(srcFile.languageVersion).toBe(ScriptTarget.Latest)
+      })
+    })
+  })
+
   context('with hello.ts typescript file', () => {
     let sourceFile: SourceFile
     beforeEach(() => {
@@ -39,6 +91,7 @@ describe('loader', () => {
     it('sets sourceFile of loader', () => {
       expect(sourceFile).toBe(srcFile.sourceFile)
     })
+
 
     describe('parse', () => {
       it('can parse', () => {

@@ -1,6 +1,6 @@
 import * as ts from 'typescript'
 
-export class NodeType {
+export class Loop {
   isWhile(node: any) {
     return ts.isDoStatement(node) || ts.isWhileStatement(node)
   }

@@ -5,9 +5,19 @@ import {
 import { BaseDetailsTester } from '../base';
 
 export class CheckModifier extends BaseDetailsTester {
+  constructor(options: any) {
+    super(options)
+    this.checkers = {
+      ...this.class,
+      ...this.call,
+      ...this.function,
+      ...this.identifier
+    }
+  }
+
   has(node: ts.Node, modifier: any) {
     if (!node.modifiers) return
-    return node.modifiers.find((modf: any) => modf.kind === modifier)
+    return !!(node.modifiers.find((modf: any) => modf.kind === modifier))
   }
 
   get modifiers() {
@@ -53,6 +63,45 @@ export class CheckModifier extends BaseDetailsTester {
     }
   }
 
+  get node() {
+    const has = this.has.bind(this)
+    return {
+      identifier(node: any) {
+        return has(node, ts.SyntaxKind.Identifier)
+      }
+    }
+  }
+
+  get argument() {
+    return {
+      ...this.literal,
+      ...this.node,
+      ...this.function
+    }
+
+  }
+
+  get literal() {
+    const has = this.has.bind(this)
+    return {
+      numeric(node: any) {
+        return has(node, ts.SyntaxKind.NumericLiteral)
+      },
+      string(node: any) {
+        return has(node, ts.SyntaxKind.StringLiteral)
+      },
+      null(node: any) {
+        return has(node, ts.SyntaxKind.NullKeyword)
+      },
+      array(node: any) {
+        return has(node, ts.SyntaxKind.ArrayLiteralExpression)
+      },
+      object(node: any) {
+        return has(node, ts.SyntaxKind.ObjectLiteralExpression)
+      }
+    }
+  }
+
   get type() {
     const has = this.has.bind(this)
     return {
@@ -87,7 +136,7 @@ export class CheckModifier extends BaseDetailsTester {
   get call() {
     const has = this.has.bind(this)
     return {
-      isAwait(node: any) {
+      await(node: any) {
         return has(node, ts.SyntaxKind.ArrowFunction)
       },
     }
@@ -96,10 +145,10 @@ export class CheckModifier extends BaseDetailsTester {
   get function() {
     const has = this.has.bind(this)
     return {
-      isAsync(node: any) {
+      async(node: any) {
         return has(node, ts.SyntaxKind.AsyncKeyword)
       },
-      isArrow(node: any) {
+      arrow(node: any) {
         return has(node, ts.SyntaxKind.ArrowFunction)
       }
     }
@@ -126,15 +175,6 @@ export class CheckModifier extends BaseDetailsTester {
       exported(node: any) {
         return has(node, ts.SyntaxKind.ExportKeyword)
       }
-    }
-  }
-
-  get checkers() {
-    return {
-      ...this.class,
-      ...this.call,
-      ...this.function,
-      ...this.identifier
     }
   }
 }

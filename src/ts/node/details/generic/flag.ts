@@ -15,6 +15,15 @@ const excludeFlags = [
 ]
 
 export class CheckFlag extends BaseDetailsTester {
+  constructor(options: any) {
+    super(options)
+
+    this.checkers = {
+      ...this.variable,
+      ...this.namespace
+    }
+  }
+
   has(node: ts.Node, flag: any): boolean {
     if (!node.flags) return false
 
@@ -49,20 +58,6 @@ export class CheckFlag extends BaseDetailsTester {
       nested(node: any) {
         return has(node, ts.NodeFlags.NestedNamespace)
       }
-    }
-  }
-
-
-  /**
-   * let
-   * const
-   * namespaced
-   * nestedNamespaced
-   */
-  get checkers() {
-    return {
-      ...this.variable,
-      ...this.namespace
     }
   }
 
