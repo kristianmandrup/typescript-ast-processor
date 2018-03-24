@@ -23,7 +23,8 @@ export class ClassTester extends BaseTester {
 
   info() {
     return {
-      abstract: this.testAbstract(true)
+      name: this.name,
+      abstract: this.testAbstract(true),
     }
   }
 

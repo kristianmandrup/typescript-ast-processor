@@ -21,6 +21,14 @@ export class BaseTester extends Loggable {
     }
   }
 
+  nameOf(node: ts.Node) {
+    return node['name'].getText()
+  }
+
+  get name() {
+    return this.nameOf(this.node)
+  }
+
   arrayTestMethod(name: string) {
     if (['one', 'any'].includes(name)) return 'find'
     if (name === 'all') return 'every'
@@ -29,7 +37,7 @@ export class BaseTester extends Loggable {
   }
 
   testName(name: string): boolean {
-    return this.node.name.getText()
+    return this.name
   }
 
   testType(type: string): boolean {
