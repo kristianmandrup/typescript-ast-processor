@@ -29,7 +29,7 @@ export class CheckFlag extends BaseDetailsTester {
 
     // to test if a const: https://github.com/Microsoft/TypeScript/issues/22681#issuecomment-374002621
     // variableDeclarationList.flags & ts.NodeFlags.Const
-    return !!(node.flags & flag)
+    return Boolean(node.flags & flag)
   }
 
   is(node: any, name: string) {

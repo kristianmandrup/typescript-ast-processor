@@ -1,6 +1,6 @@
 import * as ts from 'typescript'
 
-class NodeMemberTester {
+export class NodeMemberTester {
   nodeMemberTest(node: ts.Node, testDef: any = {}): any {
     return this._nodeListMemberTest(node, testDef)
   }

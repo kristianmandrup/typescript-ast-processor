@@ -36,12 +36,25 @@ export class BaseTester extends Loggable {
     throw new Error(`Invalid test name ${name}`)
   }
 
+  nameMatch(nodeName: string, name: string | RegExp) {
+    return name instanceof RegExp ? name.test(nodeName) : name === nodeName
+  }
+
+  createNameTest(nameQuery: any) {
+    return (nodeName: string) => {
+      const nameMatchers = nameQuery.anyOf || []
+      return nameMatchers.find((match: string | RegExp) => {
+        return this.nameMatch(nodeName, match)
+      })
+    }
+  }
+
   testName(name: string): boolean {
     return this.name
   }
 
   testType(type: string): boolean {
-    return !!(!type || this.validatePrimitiveType(type) && this.$node.details.is(this.node, type))
+    return Boolean(!type || this.validatePrimitiveType(type) && this.$node.details.is(this.node, type))
   }
 
   validatePrimitiveType(type: string): boolean {

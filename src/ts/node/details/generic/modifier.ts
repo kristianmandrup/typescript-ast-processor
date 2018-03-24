@@ -17,7 +17,7 @@ export class CheckModifier extends BaseDetailsTester {
 
   has(node: ts.Node, modifier: any) {
     if (!node.modifiers) return
-    return !!(node.modifiers.find((modf: any) => modf.kind === modifier))
+    return Boolean(node.modifiers.find((modf: any) => modf.kind === modifier))
   }
 
   get modifiers() {
