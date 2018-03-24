@@ -64,6 +64,16 @@ export function isEmpty(val: any) {
   return testObj.length === 0
 }
 
+export function flatten(list: any[]): any[] {
+  return list.reduce(
+    (a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []
+  )
+}
+
+export const flatMap = (f: any, xs: any) =>
+  xs.reduce((acc: any[], x: any) =>
+    acc.concat(f(x)), [])
+
 
 export function callFun(maybeFun: Function, ...args: any[]) {
   return isFunction(maybeFun) && maybeFun(...args)

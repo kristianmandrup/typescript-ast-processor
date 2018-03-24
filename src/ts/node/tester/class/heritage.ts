@@ -11,10 +11,41 @@
 import * as ts from 'typescript'
 import { BaseTester } from '../base'
 import { HeritageClauseTester } from './heritage-clause';
-
+import {
+  flatten
+} from '../../../util'
 export class ClassHeritageTester extends BaseTester {
+  _extendNames: string[]
+  _implementNames: string[]
+
   constructor(node: any, options: any) {
     super(node, options)
+  }
+
+  info() {
+    return {
+      extends: this.extendNames,
+      implements: {
+        names: this.implementNames,
+        number: this.implementNames.length
+      }
+    }
+  }
+
+  get implementNames() {
+    this._implementNames = this._implementNames || this.namesOf(this.implementClauses)
+    return this._implementNames
+  }
+
+  get extendNames() {
+    this._extendNames = this._extendNames || this.namesOf(this.extendClauses)
+    return this._extendNames
+  }
+
+  namesOf(clauses: ts.HeritageClause[]) {
+    return flatten(clauses.map((extendClause: ts.HeritageClause) => {
+      return this.createHeritageClauseTester(extendClause).names
+    }))
   }
 
   test(heritageQuery: any) {

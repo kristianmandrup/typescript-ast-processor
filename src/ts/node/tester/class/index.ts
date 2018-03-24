@@ -3,6 +3,7 @@ import { BaseTester } from '../base';
 import { ClassMembersTester } from './members';
 import { ClassMemberTester } from './member';
 import { ClassDetailsTester } from '../../details';
+import { ClassHeritageTester } from './heritage';
 
 export {
   ClassMembersTester,
@@ -10,12 +11,14 @@ export {
 }
 
 export class ClassTester extends BaseTester {
+  heritage: ClassHeritageTester
   members: ClassMembersTester
   classDetails: ClassDetailsTester
   isClass: boolean
 
   constructor(node: any, options: any = {}) {
     super(node, options)
+    this.heritage = new ClassHeritageTester(node, options)
     this.members = new ClassMembersTester(node, options)
     this.classDetails = new ClassDetailsTester(options)
     this.isClass = ts.isClassDeclaration(node)
@@ -25,6 +28,7 @@ export class ClassTester extends BaseTester {
     return {
       name: this.name,
       abstract: this.testAbstract(true),
+      heritage: this.heritage.info()
     }
   }
 
@@ -33,25 +37,25 @@ export class ClassTester extends BaseTester {
       members,
     } = details
     // this.testMembers(members)
-    return this.testAbstract(details.abstract)
-    // this.testImplements(details.implements)
-    // this.testExtends(details.extends)
+    return this.testAbstract(details.abstract) &&
+      this.testImplements(details.implements) &&
+      this.testExtends(details.extends)
   }
 
   testMembers(members: any) {
     this.members.test(members)
   }
 
-  testImplements(implementsInterfaces: string[]) {
-    this.$node.details.is(this.node, 'implements')
+  testImplements(implementsQuery: string) {
+    this.heritage.test(implementsQuery)
   }
 
   testAbstract(abstract: boolean) {
     return this.classDetails.is(this.node, 'abstract')
   }
 
-  testExtends(extendsClass: string) {
-    return true
+  testExtends(extendsQuery: string) {
+    this.heritage.test(extendsQuery)
   }
 }
 
