@@ -9,25 +9,25 @@ const { log } = console
 describe('class heritage', () => {
   describe('HeritageTester', () => {
 
-    describe('implements', () => {
-      const tester = testerFor('implements-class', {
+    describe('extends', () => {
+      const tester = testerFor('extends-class', {
         factory: node.tester.createClassHeritageTester,
         statementIndex: 1
       })
 
       describe('testExtends(query)', () => {
         it('anyOf: A - false', () => {
-          const result = tester.testImplements(query.implements.anyOf)
-          // log('testExtends', result)
-          expect(result).not.toEqual(false)
+          const res = tester.testExtends(query.extends.anyOf)
+          // log('testExtends', res)
+          expect(res).toEqual(['A'])
         })
       })
 
       describe('test(query)', () => {
-        it('implements: anyOf: Ix, Iy - false', () => {
-          const res = tester.test(query.heritage.onlyImplements)
+        it('extends: anyOf A and implements: anyOf: Ix, Iy - false', () => {
+          const res = tester.test(query.heritage.onlyExtends)
           // log('test', res)
-          expect(res.result).toEqual(['Ix'])
+          expect(res.result).toEqual(true)
         })
       })
 

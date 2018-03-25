@@ -106,12 +106,16 @@ describe('class heritage', () => {
       })
 
       describe('test(query)', () => {
+        it('empty query = true', () => {
+          const res = tester.test(query.heritage.none)
+          expect(res.result).toEqual(true)
+        })
+
         it('extends: anyOf A and implements: anyOf: Ix, Iy - false', () => {
-          const result = tester.test(query.heritage)
-          expect(result).toEqual(false)
+          const res = tester.test(query.heritage.extendsAndImplements)
+          expect(res.result).toEqual(false)
         })
       })
-
     })
 
   })

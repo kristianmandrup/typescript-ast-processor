@@ -5,7 +5,8 @@ import {
   createClassHeritageClauseTester
 } from './heritage-clause';
 import {
-  flatten
+  flatten,
+  isEmpty
 } from '../../../util'
 
 export {
@@ -90,10 +91,12 @@ export class ClassHeritageTester extends BaseTester {
   }
 
   testClauses(clauses: ts.HeritageClause[], query: any) {
-    const marchingClauses: any[] = clauses.map((clause: ts.HeritageClause) => {
+    if (isEmpty(query)) return true
+    const mappedClauses: any[] = clauses.map((clause: ts.HeritageClause) => {
       return this.createHeritageClauseTester(clause).test(query)
-    }).map(val => val)
-    return marchingClauses.length > 0 ? marchingClauses : false
+    })
+    const matchingClauses = mappedClauses.filter(val => val)
+    return matchingClauses.length > 0 ? matchingClauses : false
   }
 
   testExtends(query: any) {
@@ -105,7 +108,13 @@ export class ClassHeritageTester extends BaseTester {
   }
 
   test(query: any) {
-    return this.testExtends(query.extends) &&
-      this.testImplements(query.implements)
+    const testResult = {
+      extends: this.testExtends(query.extends),
+      implements: this.testImplements(query.implements)
+    }
+    return {
+      ...testResult,
+      result: testResult.extends && testResult.implements
+    }
   }
 }

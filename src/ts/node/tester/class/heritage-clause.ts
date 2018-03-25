@@ -1,5 +1,8 @@
 import { BaseTester } from '../base'
 import { ExpressionWithTypeArguments, Identifier } from 'typescript'
+import {
+  toList
+} from '../../../util'
 
 export function createClassHeritageClauseTester(node: any, options: any = {}) {
   return new HeritageClauseTester(node, options)
@@ -16,7 +19,9 @@ export class HeritageClauseTester extends BaseTester {
   test(query: any): any {
     const result = this.arrayTestMethod(query)
     if (!result) return false
-    return this[result.keyName][result.method]((name: string) => {
+    const queryPart = query[result.keyName] || query.named
+    if (!queryPart) return false
+    return toList(queryPart)[result.method]((name: string) => {
       const nameTest = this.createNameTest(query)
       return nameTest ? {
         node: this.node,

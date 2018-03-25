@@ -69,6 +69,7 @@ export function keysOf(val: any) {
 
 // on string or object
 export function isEmpty(val: any) {
+  if (!isDefined(val)) return true
   const testObj = isStr(val) || Array.isArray(val) ? val : Object.keys(val)
   return testObj.length === 0
 }

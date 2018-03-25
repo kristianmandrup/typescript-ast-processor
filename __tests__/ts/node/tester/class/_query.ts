@@ -23,14 +23,48 @@ export const query = {
     }
   },
   extends: {
-    anyOf: ['A']
+    anyOf: {
+      anyOf: ['A']
+    },
+    named: 'A'
   },
   heritage: {
-    implements: {
-      anyOf: ['Ix', 'Iy'],
+    none: {},
+    orNotExtends: {
+      extends: {
+        or: {
+          anyOf: ['A', /C/],
+          allOf: ['B']
+        },
+        not: {
+          anyOf: ['D']
+        }
+      }
     },
-    extends: {
-      anyOf: ['A']
+    notExtends: {
+      extends: {
+        not: {
+          anyOf: ['A']
+        }
+      }
+    },
+    onlyExtends: {
+      extends: {
+        anyOf: ['A']
+      }
+    },
+    onlyImplements: {
+      implements: {
+        anyOf: ['Ix', 'Iy'],
+      },
+    },
+    extendsAndImplements: {
+      implements: {
+        anyOf: ['Ix', 'Iy'],
+      },
+      extends: {
+        anyOf: ['A']
+      }
     }
   }
 }
