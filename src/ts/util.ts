@@ -58,6 +58,15 @@ export function toList(val: any) {
   return isArray(val) ? val : [val]
 }
 
+export function keysOf(val: any) {
+  if (isArray(val)) return val
+  if (isObject(val)) return Object.keys(val)
+  if (isStr(val)) return [val]
+  throw new Error(`keysOf: No keys can be extracted from ${val}`)
+}
+
+
+
 // on string or object
 export function isEmpty(val: any) {
   const testObj = isStr(val) || Array.isArray(val) ? val : Object.keys(val)

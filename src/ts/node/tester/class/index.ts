@@ -3,11 +3,21 @@ import { BaseTester } from '../base';
 import { ClassMembersTester } from './members';
 import { ClassMemberTester } from './member';
 import { ClassDetailsTester } from '../../details';
-import { ClassHeritageTester } from './heritage';
+import {
+  ClassHeritageTester,
+  createClassHeritageTester,
+  createClassHeritageClauseTester
+} from './heritage';
 
 export {
+  createClassHeritageClauseTester,
+  createClassHeritageTester,
   ClassMembersTester,
   ClassMemberTester
+}
+
+export function createClassTester(node: any, options: any = {}) {
+  return new ClassTester(node, options)
 }
 
 export class ClassTester extends BaseTester {

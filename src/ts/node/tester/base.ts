@@ -3,10 +3,19 @@ import { NodeDetailsTester } from '../details/generic';
 import { IdentifierTester } from '../details';
 import { Loggable } from '../../loggable';
 import { NodeTester } from '.';
+import {
+  keysOf
+} from '../../util'
 
 export interface INodeTester {
   tester: NodeTester
   details: NodeDetailsTester
+}
+
+const testMethodMap = {
+  find: ['one', 'any', 'anyOf', 'oneOf'],
+  every: ['exactly', 'all', 'allOf'],
+  some: ['some']
 }
 
 export class BaseTester extends Loggable {
@@ -33,11 +42,23 @@ export class BaseTester extends Loggable {
     return this.nameOf(this.node)
   }
 
-  arrayTestMethod(name: string) {
-    if (['one', 'any'].includes(name)) return 'find'
-    if (name === 'all') return 'every'
-    if (name === 'some') return 'some'
-    throw new Error(`Invalid test name ${name}`)
+  arrayTestMethod(obj: any): any {
+    console.log('arrayTestMethod', obj)
+    const keys: string[] = keysOf(obj)
+    const methodKeys: string[] = Object.keys(testMethodMap)
+    let keyName
+    const method = methodKeys.find((methodKey: string) => {
+      keyName = keys.find(key => {
+        return testMethodMap[methodKey].includes(key)
+      })
+      return Boolean(keyName)
+    })
+    const result = {
+      method,
+      keyName
+    }
+    console.log('arrayTestMethod', result)
+    return method && result || this.error(`arrayTestMethod: Invalid ${obj}`)
   }
 
   nameMatch(nodeName: string, name: string | RegExp) {

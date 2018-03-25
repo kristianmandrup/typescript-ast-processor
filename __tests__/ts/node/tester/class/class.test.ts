@@ -1,70 +1,11 @@
 import {
-  node,
-  fixtureFile,
-  createSrcFile
-} from '../'
-import { ClassTester } from '../../../../../src/ts/node/tester';
+  testerFor,
+  query
+} from './_imports'
+
 const { log } = console
 
-function loadAstNode(filePath: string, statementNumber = 0): any {
-  const fixturePath = fixtureFile(filePath)
-  const srcFile = createSrcFile().loadSourceFile(fixturePath)
-
-  const { sourceFile } = srcFile
-  const statements = sourceFile.statements
-  return statements[statementNumber]
-}
-
-function testerFor(fileName: string, statementNumber = 0): ClassTester {
-  const { ClassTester } = node.tester
-  const filePath = `class/${fileName}.ts`
-  const classStatement = loadAstNode(filePath, statementNumber)
-  return new ClassTester(classStatement, {
-    logging: true
-  })
-}
-
 describe('class', () => {
-  const query = {
-    empty: {},
-    invalid: {
-      names: 32
-    },
-    members: {
-      valid: {
-        names: ['hello']
-      }
-    },
-    implements: {
-      allOf: {
-        names: {
-          allOf: ['A']
-        },
-        count: {
-          eq: 2
-        }
-      },
-      anyOf: {
-        names: {
-          anyOf: ['Ix', 'Iy']
-        },
-        count: {
-          min: 2
-        }
-      }
-    },
-    extends: {
-      exactly: {
-        name: 'A'
-      },
-      anyOf: {
-        names: {
-          anyOf: ['A']
-        }
-      }
-    }
-  }
-
   describe('basic', () => {
     const tester = testerFor('basic-class')
     it('is a class', () => {
@@ -87,11 +28,11 @@ describe('class', () => {
     })
 
     describe('testAbstract', () => {
-      it('is not abstract', () => {
+      it('not abstract - true', () => {
         expect(tester.testAbstract(false)).toBeTruthy()
       })
 
-      it('is not abstract', () => {
+      it('abstract - false', () => {
         expect(tester.testAbstract(true)).toBeFalsy()
       })
     })
@@ -101,7 +42,7 @@ describe('class', () => {
         expect(tester.testImplements(query.empty)).toBeTruthy()
       })
 
-      it('invalid query - throws', () => {
+      it.only('invalid query - throws', () => {
         expect(() => tester.testImplements(query.invalid)).toThrow()
       })
     })

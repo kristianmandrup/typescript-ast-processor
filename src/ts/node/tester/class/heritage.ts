@@ -1,9 +1,22 @@
 import * as ts from 'typescript'
 import { BaseTester } from '../base'
-import { HeritageClauseTester } from './heritage-clause';
+import {
+  HeritageClauseTester,
+  createClassHeritageClauseTester
+} from './heritage-clause';
 import {
   flatten
 } from '../../../util'
+
+export {
+  HeritageClauseTester,
+  createClassHeritageClauseTester
+}
+
+export function createClassHeritageTester(node: any, options: any = {}) {
+  return new ClassHeritageTester(node, options)
+}
+
 export class ClassHeritageTester extends BaseTester {
   _extendNames: string[]
   _implementNames: string[]
@@ -13,11 +26,14 @@ export class ClassHeritageTester extends BaseTester {
   }
 
   info() {
-    return {
-      extends: this.extends,
+    const info: any = {
       implements: this.implements,
       isEmpty: this.isEmpty
     }
+    if (this.extends) {
+      info.extends = this.extends
+    }
+    return info
   }
 
   get isEmpty() {
@@ -52,15 +68,6 @@ export class ClassHeritageTester extends BaseTester {
     }))
   }
 
-  test(heritageQuery: any) {
-    const {
-      names,
-      list
-    } = heritageQuery
-    return this.testExtends(heritageQuery.extends) &&
-      this.testImplements(heritageQuery.implements)
-  }
-
   get heritage(): ts.HeritageClause[] {
     return this.node.heritageClauses || []
   }
@@ -71,26 +78,31 @@ export class ClassHeritageTester extends BaseTester {
   }
 
   get extendClauses() {
-    return this.clausesOf(ts.SyntaxKind.ExtendsKeyword)
+    return this.clausesOf(ts.SyntaxKind.ExtendsKeyword) || []
   }
 
   get implementClauses() {
-    return this.clausesOf(ts.SyntaxKind.ImplementsKeyword)
+    return this.clausesOf(ts.SyntaxKind.ImplementsKeyword) || []
   }
 
   createHeritageClauseTester(clause: ts.HeritageClause) {
     return new HeritageClauseTester(clause, this.options)
   }
 
-  testExtends(extendsQuery: any) {
+  testExtends(query: any) {
     return this.extendClauses.find((extendClause: ts.HeritageClause) => {
-      return this.createHeritageClauseTester(extendClause).test(extendsQuery)
+      return this.createHeritageClauseTester(extendClause).test(query)
     })
   }
 
-  testImplements(extendsQuery: any) {
+  testImplements(query: any) {
     return this.implementClauses.find((implementClause: ts.HeritageClause) => {
-      return this.createHeritageClauseTester(implementClause).test(extendsQuery)
+      return this.createHeritageClauseTester(implementClause).test(query)
     })
+  }
+
+  test(query: any) {
+    return this.testExtends(query.extends) &&
+      this.testImplements(query.implements)
   }
 }

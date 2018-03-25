@@ -1,6 +1,10 @@
 import { BaseTester } from '../base'
 import { ExpressionWithTypeArguments, Identifier } from 'typescript'
 
+export function createClassHeritageClauseTester(node: any, options: any = {}) {
+  return new HeritageClauseTester(node, options)
+}
+
 export class HeritageClauseTester extends BaseTester {
   // heritage: HeritageTester
 
@@ -9,10 +13,11 @@ export class HeritageClauseTester extends BaseTester {
     // this.heritage = new HeritageTester(node, options)
   }
 
-  test(heritageQuery: any): boolean {
-    const method = this.arrayTestMethod(heritageQuery.for)
-    return Boolean(this.names[method]((name: string) => {
-      const nameTest = this.createNameTest(heritageQuery)
+  test(query: any): boolean {
+    const result = this.arrayTestMethod(query)
+    if (!result) return false
+    return Boolean(this[result.keyName][result.method]((name: string) => {
+      const nameTest = this.createNameTest(query)
       return nameTest(name)
     }))
   }
