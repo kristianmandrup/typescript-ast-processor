@@ -2,8 +2,7 @@ import * as ts from 'typescript'
 import { BaseTester } from '../base'
 import { HeritageClauseTester } from './heritage-clause';
 import {
-  flatten,
-  isEmpty
+  flatten
 } from '../../../util'
 export class ClassHeritageTester extends BaseTester {
   _extendNames: string[]

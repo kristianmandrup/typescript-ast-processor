@@ -45,7 +45,7 @@ export class ClassTester extends BaseTester {
     this.members.test(membersQuery)
   }
 
-  testImplements(implementsQuery: string) {
+  testImplements(implementsQuery: any) {
     this.heritage.test(implementsQuery)
   }
 
@@ -53,7 +53,7 @@ export class ClassTester extends BaseTester {
     return this.classDetails.is(this.node, 'abstract') === abstract
   }
 
-  testExtends(extendsQuery: string) {
+  testExtends(extendsQuery: any) {
     this.heritage.test(extendsQuery)
   }
 }
