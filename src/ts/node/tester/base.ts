@@ -43,7 +43,6 @@ export class BaseTester extends Loggable {
   }
 
   arrayTestMethod(obj: any): any {
-    console.log('arrayTestMethod', obj)
     const keys: string[] = keysOf(obj)
     const methodKeys: string[] = Object.keys(testMethodMap)
     let keyName
@@ -57,7 +56,6 @@ export class BaseTester extends Loggable {
       method,
       keyName
     }
-    console.log('arrayTestMethod', result)
     return method && result || this.error(`arrayTestMethod: Invalid ${obj}`)
   }
 

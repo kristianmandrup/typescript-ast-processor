@@ -18,15 +18,14 @@ describe('class heritage', () => {
       describe('testExtends(query)', () => {
         it('anyOf: A - false', () => {
           const res = tester.testExtends(query.extends.anyOf)
-          // log('testExtends', res)
-          expect(res).toEqual(['A'])
+          expect(res).toEqual('A')
         })
       })
 
       describe('test(query)', () => {
         it('extends: anyOf A and implements: anyOf: Ix, Iy - false', () => {
           const res = tester.test(query.heritage.onlyExtends)
-          // log('test', res)
+          expect(res.extends).toEqual('A')
           expect(res.result).toEqual(true)
         })
       })
@@ -34,7 +33,7 @@ describe('class heritage', () => {
       describe('test(query)', () => {
         it('extends: anyOf A and implements: anyOf: Ix, Iy - false', () => {
           const res = tester.test(query.heritage.extendsAndImplements)
-          // log('test', res)
+          expect(res.extends).toEqual('A')
           expect(res.result).toEqual(false)
         })
       })

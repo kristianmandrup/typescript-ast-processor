@@ -100,7 +100,8 @@ export class ClassHeritageTester extends BaseTester {
   }
 
   testExtends(query: any) {
-    return this.testClauses(this.extendClauses, query)
+    const matches = this.testClauses(this.extendClauses, query)
+    return matches ? matches[0] : false
   }
 
   testImplements(query: any) {
@@ -114,7 +115,7 @@ export class ClassHeritageTester extends BaseTester {
     }
     return {
       ...testResult,
-      result: testResult.extends && testResult.implements
+      result: Boolean(testResult.extends && testResult.implements)
     }
   }
 }
