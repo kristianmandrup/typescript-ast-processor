@@ -9,10 +9,10 @@ export const query = {
     }
   },
   implements: {
-    all: {
-      all: ['A'],
+    allOf: {
+      allOf: ['Ix'],
       count: {
-        eq: 2
+        eq: 1
       }
     },
     anyOf: {
@@ -24,5 +24,13 @@ export const query = {
   },
   extends: {
     anyOf: ['A']
+  },
+  heritage: {
+    implements: {
+      anyOf: ['Ix', 'Iy'],
+    },
+    extends: {
+      anyOf: ['A']
+    }
   }
 }

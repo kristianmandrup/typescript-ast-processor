@@ -4,6 +4,7 @@ export {
   ClassMembersTester,
   createClassTester,
   createClassHeritageTester,
+  createClassHeritageClauseTester
 } from './class'
 
 import * as $function from './function'

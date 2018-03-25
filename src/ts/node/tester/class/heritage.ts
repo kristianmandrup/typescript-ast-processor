@@ -89,16 +89,19 @@ export class ClassHeritageTester extends BaseTester {
     return new HeritageClauseTester(clause, this.options)
   }
 
+  testClauses(clauses: ts.HeritageClause[], query: any) {
+    const marchingClauses: any[] = clauses.map((clause: ts.HeritageClause) => {
+      return this.createHeritageClauseTester(clause).test(query)
+    }).map(val => val)
+    return marchingClauses.length > 0 ? marchingClauses : false
+  }
+
   testExtends(query: any) {
-    return this.extendClauses.find((extendClause: ts.HeritageClause) => {
-      return this.createHeritageClauseTester(extendClause).test(query)
-    })
+    return this.testClauses(this.extendClauses, query)
   }
 
   testImplements(query: any) {
-    return this.implementClauses.find((implementClause: ts.HeritageClause) => {
-      return this.createHeritageClauseTester(implementClause).test(query)
-    })
+    return this.testClauses(this.implementClauses, query)
   }
 
   test(query: any) {

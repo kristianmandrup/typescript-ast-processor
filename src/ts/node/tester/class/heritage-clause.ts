@@ -13,13 +13,17 @@ export class HeritageClauseTester extends BaseTester {
     // this.heritage = new HeritageTester(node, options)
   }
 
-  test(query: any): boolean {
+  test(query: any): any {
     const result = this.arrayTestMethod(query)
     if (!result) return false
-    return Boolean(this[result.keyName][result.method]((name: string) => {
+    return this[result.keyName][result.method]((name: string) => {
       const nameTest = this.createNameTest(query)
-      return nameTest(name)
-    }))
+      return nameTest ? {
+        node: this.node,
+        name,
+        match: nameTest(name)
+      } : false
+    })
   }
 
   get identifiers() {
@@ -35,7 +39,4 @@ export class HeritageClauseTester extends BaseTester {
       return type.expression.getText && type.expression.getText()
     }).map(type => type.expression)
   }
-
-
-
 }
