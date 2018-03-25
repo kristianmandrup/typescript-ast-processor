@@ -28,22 +28,21 @@ export class ClassTester extends BaseTester {
     return {
       name: this.name,
       abstract: this.testAbstract(true),
-      heritage: this.heritage.info()
+      heritage: this.heritage.info(),
+      exported: this.isExported
     }
   }
 
   test(details: any) {
-    const {
-      members,
-    } = details
     // this.testMembers(members)
     return this.testAbstract(details.abstract) &&
       this.testImplements(details.implements) &&
-      this.testExtends(details.extends)
+      this.testExtends(details.extends) &&
+      this.testMembers(details.members)
   }
 
-  testMembers(members: any) {
-    this.members.test(members)
+  testMembers(membersQuery: any) {
+    this.members.test(membersQuery)
   }
 
   testImplements(implementsQuery: string) {
@@ -51,7 +50,7 @@ export class ClassTester extends BaseTester {
   }
 
   testAbstract(abstract: boolean) {
-    return this.classDetails.is(this.node, 'abstract')
+    return this.classDetails.is(this.node, 'abstract') === abstract
   }
 
   testExtends(extendsQuery: string) {

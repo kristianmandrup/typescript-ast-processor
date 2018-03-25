@@ -20,6 +20,5 @@ export class Loggable {
 
   log(msg: string, data?: any): void {
     data ? this.logger.log(msg, data) : this.logger.log(msg)
-    throw new Error(msg)
   }
 }

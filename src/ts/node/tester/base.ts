@@ -1,5 +1,6 @@
 import * as ts from 'typescript'
 import { NodeDetailsTester } from '../details/generic';
+import { IdentifierTester } from '../details';
 import { Loggable } from '../../loggable';
 import { NodeTester } from '.';
 
@@ -9,11 +10,14 @@ export interface INodeTester {
 }
 
 export class BaseTester extends Loggable {
+  identifier: IdentifierTester
   $node: INodeTester
   node: any
 
   constructor(node: any, options: any) {
     super(options)
+    this.identifier = new IdentifierTester(options)
+
     this.node = node
     this.$node = {
       tester: new NodeTester(options),
@@ -47,6 +51,14 @@ export class BaseTester extends Loggable {
         return this.nameMatch(nodeName, match)
       })
     }
+  }
+
+  exported(exported: true = true) {
+    return Boolean(this.isExported) === Boolean(exported)
+  }
+
+  get isExported() {
+    return this.identifier.is(this.node, 'exported')
   }
 
   testName(name: string): boolean {

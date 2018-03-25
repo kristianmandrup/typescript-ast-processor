@@ -1,18 +1,9 @@
-// node.heritageClauses
-// for each HeritageClause
-//  - test .kind is SyntaxKind.HeritageClause
-//  - test .token is ImplementsKeyword (108)
-//  - test .token is ExportKeyword (84)
-//  - test types
-//  for each ExpressionWithTypeArguments type
-//    - test .kind is SyntaxKind.ExpressionWithTypeArguments
-//    - .expression.identifier is the interface implemented
-
 import * as ts from 'typescript'
 import { BaseTester } from '../base'
 import { HeritageClauseTester } from './heritage-clause';
 import {
-  flatten
+  flatten,
+  isEmpty
 } from '../../../util'
 export class ClassHeritageTester extends BaseTester {
   _extendNames: string[]
@@ -24,13 +15,27 @@ export class ClassHeritageTester extends BaseTester {
 
   info() {
     return {
-      extends: this.extendNames,
-      implements: {
-        names: this.implementNames,
-        number: this.implementNames.length
-      }
+      extends: this.extends,
+      implements: this.implements,
+      isEmpty: this.isEmpty
     }
   }
+
+  get isEmpty() {
+    return isEmpty(this.extends) && this.implements.number === 0
+  }
+
+  get extends() {
+    return this.extendNames
+  }
+
+  get implements() {
+    return {
+      names: this.implementNames,
+      number: this.implementNames.length
+    }
+  }
+
 
   get implementNames() {
     this._implementNames = this._implementNames || this.namesOf(this.implementClauses)
@@ -58,10 +63,11 @@ export class ClassHeritageTester extends BaseTester {
   }
 
   get heritage(): ts.HeritageClause[] {
-    return this.node.heritageClauses
+    return this.node.heritageClauses || []
   }
 
   clausesOf(kind: ts.SyntaxKind) {
+    if (!this.heritage) return []
     return this.heritage.filter((clause: ts.HeritageClause) => clause.token === kind)
   }
 

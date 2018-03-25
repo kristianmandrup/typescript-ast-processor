@@ -1,5 +1,5 @@
-import { BaseTester } from "..";
-import { ExpressionWithTypeArguments, Identifier } from "typescript";
+import { BaseTester } from '../base'
+import { ExpressionWithTypeArguments, Identifier } from 'typescript'
 
 export class HeritageClauseTester extends BaseTester {
   // heritage: HeritageTester
