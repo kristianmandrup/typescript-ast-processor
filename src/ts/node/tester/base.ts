@@ -26,6 +26,12 @@ export class BaseTester extends Loggable {
   constructor(node: any, options: any) {
     super(options)
     this.identifier = new IdentifierTester(options)
+    if (!node) {
+      this.error(`BaseTester: Missing node for tester`, {
+        node,
+        options
+      })
+    }
 
     this.node = node
     this.$node = {
@@ -57,6 +63,21 @@ export class BaseTester extends Loggable {
       keyName
     }
     return method && result || this.error(`arrayTestMethod: Invalid ${obj}`)
+  }
+
+  testNot(query: any, tester: Function) {
+    if (!query) return true
+    return query.not ? !Boolean(tester(query.not)) : tester(query)
+  }
+
+  // TODO
+  orQuery(query: any, tester: Function) {
+    throw new Error('Not yet implemented')
+  }
+
+  testOr(query: any, tester: Function) {
+    if (!query) return true
+    return query.or ? this.orQuery(query.or, tester) : tester(query)
   }
 
   nameMatch(nodeName: string, name: string | RegExp) {

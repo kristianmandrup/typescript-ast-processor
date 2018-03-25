@@ -99,13 +99,23 @@ export class ClassHeritageTester extends BaseTester {
     return matchingClauses.length > 0 ? matchingClauses : false
   }
 
+  extendsQuery(query: any) {
+    return this.testClauses(this.extendClauses, query)
+  }
+
+  implementsQuery(query: any) {
+    return this.testClauses(this.implementClauses, query)
+  }
+
   testExtends(query: any) {
-    const matches = this.testClauses(this.extendClauses, query)
-    return matches ? matches[0] : false
+    const tester = this.extendsQuery.bind(this)
+    const result = this.testNot(query, tester)
+    return Array.isArray(result) ? result[0] : result
   }
 
   testImplements(query: any) {
-    return this.testClauses(this.implementClauses, query)
+    const tester = this.implementsQuery.bind(this)
+    return this.testNot(query, tester)
   }
 
   test(query: any) {

@@ -1,8 +1,15 @@
 import * as ts from 'typescript'
 import { BaseTester } from '../base';
-import { ClassMembersTester } from './members';
-import { ClassMemberTester } from './member';
+import {
+  ClassMembersTester,
+  createClassMembersTester
+} from './members';
+import {
+  ClassMemberTester,
+  createClassMemberTester
+} from './member';
 import { ClassDetailsTester } from '../../details';
+
 import {
   ClassHeritageTester,
   createClassHeritageTester,
@@ -13,7 +20,9 @@ export {
   createClassHeritageClauseTester,
   createClassHeritageTester,
   ClassMembersTester,
-  ClassMemberTester
+  ClassMemberTester,
+  createClassMembersTester,
+  createClassMemberTester
 }
 
 export function createClassTester(node: any, options: any = {}) {

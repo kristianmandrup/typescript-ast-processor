@@ -4,9 +4,72 @@ export const query = {
     anyOf: 32
   },
   members: {
-    valid: {
-      anyOf: ['hello']
-    }
+    identifiers: {
+      noMatch: {
+        anyOf: ['unknown']
+      },
+      anyOf: {
+        anyOf: ['hello']
+      },
+      allOf: {
+        allOf: ['hello']
+      }
+    },
+    onlyAccessors: {
+      noMatch: {
+        anyOf: ['unknown']
+      },
+      anyOf: {
+        anyOf: ['name']
+      },
+      allOf: {
+        allOf: ['name']
+      }
+    },
+    methods: {
+      noMatch: {
+        anyOf: ['unknown']
+      },
+      anyOf: {
+        anyOf: ['hello']
+      },
+      allOf: {
+        allOf: ['hello']
+      }
+    },
+    getters: {
+      noMatch: {
+        anyOf: ['unknown']
+      },
+      anyOf: {
+        anyOf: ['name']
+      },
+      allOf: {
+        allOf: ['name']
+      },
+    },
+    setters: {
+      noMatch: {
+        anyOf: ['unknown']
+      },
+      anyOf: {
+        anyOf: ['name']
+      },
+      allOf: {
+        allOf: ['name']
+      },
+    },
+    accessors: {
+      noMatch: {
+        anyOf: ['unknown']
+      },
+      anyOf: {
+        anyOf: ['name']
+      },
+      allOf: {
+        allOf: ['name']
+      },
+    },
   },
   implements: {
     allOf: {
@@ -57,6 +120,13 @@ export const query = {
       implements: {
         anyOf: ['Ix', 'Iy'],
       },
+    },
+    notImplements: {
+      implements: {
+        not: {
+          anyOf: ['Ix', 'Iy'],
+        }
+      }
     },
     extendsAndImplements: {
       implements: {

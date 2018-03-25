@@ -3,6 +3,10 @@ import { BaseTester } from '../base'
 import { ClassMemberTester } from './member';
 import { AccessTester } from '../../details/access';
 
+export function createClassMembersTester(node: any, options: any = {}) {
+  return new ClassMembersTester(node, options)
+}
+
 export class ClassMembersTester extends BaseTester {
   member: ClassMemberTester
   accessTester: AccessTester

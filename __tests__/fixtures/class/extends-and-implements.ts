@@ -8,7 +8,6 @@ interface Id {
   age: number
 }
 
-
 export class V extends B implements Id {
   age: number
 }

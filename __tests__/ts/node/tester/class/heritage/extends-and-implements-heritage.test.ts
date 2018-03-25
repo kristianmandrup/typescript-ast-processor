@@ -10,8 +10,7 @@ describe('class heritage', () => {
   describe('HeritageTester', () => {
     describe('extends', () => {
       const tester = testerFor('extends-and-implements', {
-        factory: node.tester.createClassHeritageTester,
-        statementIndex: 3
+        factory: node.tester.createClassHeritageTester
       })
 
       log({
