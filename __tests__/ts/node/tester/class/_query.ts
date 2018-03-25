@@ -26,6 +26,33 @@ export const query = {
         allOf: ['name']
       }
     },
+    constructor: {
+      noMatch: {
+        params: {
+          names: {
+            anyOf: ['unknown']
+          }
+        }
+      },
+      anyOf: {
+        params: {
+          names: {
+            anyOf: ['name']
+          }
+        }
+      }
+    },
+    statics: {
+      noMatch: {
+        anyOf: ['unknown']
+      },
+      anyOf: {
+        anyOf: ['hello']
+      },
+      allOf: {
+        allOf: ['hello']
+      }
+    },
     methods: {
       noMatch: {
         anyOf: ['unknown']
