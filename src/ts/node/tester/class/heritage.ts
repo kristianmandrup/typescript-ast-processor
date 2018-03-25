@@ -22,11 +22,12 @@ export class ClassHeritageTester extends BaseTester {
   }
 
   get isEmpty() {
-    return isEmpty(this.extends) && this.implements.number === 0
+    return !this.extends && this.implements.number === 0
   }
 
   get extends() {
-    return this.extendNames
+    // can only extend a single class!
+    return this.extendNames[0]
   }
 
   get implements() {
@@ -35,7 +36,6 @@ export class ClassHeritageTester extends BaseTester {
       number: this.implementNames.length
     }
   }
-
 
   get implementNames() {
     this._implementNames = this._implementNames || this.namesOf(this.implementClauses)

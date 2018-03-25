@@ -60,7 +60,7 @@ describe('class', () => {
       expect(info.abstract).toBeTruthy()
       expect(info.exported).toBeTruthy()
       expect(info.name).toEqual('Abs')
-      expect(info.heritage.extends).toEqual([])
+      expect(info.heritage.extends).toBeUndefined()
       expect(info.heritage.implements.number).toEqual(0)
       expect(info.heritage.isEmpty).toBeTruthy()
     })
@@ -74,7 +74,7 @@ describe('class', () => {
       expect(info.abstract).toBeFalsy()
       expect(info.exported).toBeTruthy()
       expect(info.name).toEqual('A')
-      expect(info.heritage.extends).toEqual(['B'])
+      expect(info.heritage.extends).toBe('B')
     })
   })
 
