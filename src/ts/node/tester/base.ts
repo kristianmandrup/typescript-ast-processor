@@ -29,7 +29,8 @@ export class BaseTester extends Loggable {
     if (!node) {
       this.error(`BaseTester: Missing node for tester`, {
         node,
-        options
+        options,
+        constructor: this.constructor.name
       })
     }
 

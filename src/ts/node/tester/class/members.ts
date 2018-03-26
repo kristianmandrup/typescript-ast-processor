@@ -14,7 +14,8 @@ export class ClassMembersTester extends BaseTester {
 
   constructor(node: any, options: any) {
     super(node, options)
-    this.member = new ClassMemberTester(node, options)
+    // needs to be used when iterating only
+    // this.member = new ClassMemberTester(node, options)
     this.accessor = new AccessTester(options)
     this.method = this.member // TODO: for now
   }

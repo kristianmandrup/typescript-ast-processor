@@ -9,20 +9,20 @@ const { log } = console
 
 describe('class', () => {
   describe('members', () => {
-    describe('accessors', () => {
+    describe('all', () => {
       context('members/none file', () => {
         const tester = testerFor('members/none', {
           factory: node.tester.createClassMembersTester,
           traverse: (statements: any[]) => {
             // find first getter
-            return statements[0] //.members[1]
+            return statements[0].members[1]
           }
         })
 
         describe.skip('not', () => {
           describe('testAccessors(query)', () => {
             it('not anyOf: A - true', () => {
-              const result = tester.testAccessors(query.members.onlyAccessors.anyOf)
+              const result = tester.test(query.members.onlyAccessors.anyOf)
               expect(result).toBe(true)
             })
           })
@@ -36,19 +36,19 @@ describe('class', () => {
         expect(tester.isClass).toBeTruthy()
       })
 
-      describe.only('testAccessors(query)', () => {
+      describe.only('test(query)', () => {
         context('has getter and setter for name', () => {
           it('anyOf: name - true ', () => {
-            const res = tester.testAccessors(query.members.onlyAccessors.anyOf)
+            const res = tester.test(query.members.onlyAccessors.anyOf)
             log('should match', { res })
             expect(res).not.toBe(false)
             expect(res.result).toBe(true)
           })
         })
 
-        context('has no matching accessors for unknown', () => {
+        context('has no matching members for unknown', () => {
           it('anyOf: name - true ', () => {
-            const res = tester.testAccessors(query.members.onlyAccessors.noMatch)
+            const res = tester.test(query.members.onlyAccessors.noMatch)
             log('no match', { res })
             expect(res).toBe(false)
           })

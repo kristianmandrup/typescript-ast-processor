@@ -22,7 +22,9 @@ export function loadAstNode(filePath: string, traverse: Function, statementNumbe
 
   const { sourceFile } = srcFile
   const statements = sourceFile.statements
-  return traverse ? traverse(statements) : statements[statementNumber]
+  const node = traverse ? traverse(statements) : statements[statementNumber]
+  console.log('using node:', node)
+  return node
 }
 
 export function testerFor(fileName: string, options: any = {}): any {

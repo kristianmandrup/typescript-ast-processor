@@ -157,11 +157,27 @@ export const query = {
     },
     extendsAndImplements: {
       implements: {
-        anyOf: ['Ix', 'Iy'],
+        anyOf: ['Ix', /^Iy/],
       },
-      extends: {
-        anyOf: ['A']
-      }
+      extends: /^A/
     }
   }
 }
+
+// const classQuery = {
+//   implements: {
+//     anyOf: ['Ix', /^Iy/],
+//   },
+//   extends: /^A/,
+//   abstract: false,
+//   exported: true,
+//   id: /^B/
+// }
+
+// const classInfo = {
+//   implements: ['Ix', 'Iy'],
+//   extends: 'A',
+//   abstract: false,
+//   exported: true,
+//   id: 'B'
+// }

@@ -12,8 +12,20 @@ export class FunctionLikeTester extends BaseTester {
 
   constructor(node: any, options: any) {
     super(node, options)
-    this.parameters = new ParametersTester(node.parameters, options)
-    this.type = new TypeTester(node.type, options)
+    if (node.parameters) {
+      this.parameters = new ParametersTester(node.parameters, options)
+    } else {
+      this.log('FunctionLikeTester: no typeParameters', {
+        node
+      })
+    }
+    if (node.type) {
+      this.type = new TypeTester(node.type, options)
+    } else {
+      this.log('FunctionLikeTester: no type', {
+        node
+      })
+    }
   }
 
   test(details: any) {
