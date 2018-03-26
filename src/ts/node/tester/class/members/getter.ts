@@ -1,17 +1,21 @@
 import * as ts from 'typescript'
-import { BaseTester } from '../../base'
 import {
   isMemberType
 } from './types'
+import { MethodLikeTester } from './method-like';
 
 export function createGetAccessorTester(node: any, options: any = {}) {
   if (!isMemberType(node, 'getter')) return
   return new GetAccessorTester(node, options)
 }
 
-export class GetAccessorTester extends BaseTester {
+export class GetAccessorTester extends MethodLikeTester {
   constructor(node: any, options: any) {
     super(node, options)
+  }
+
+  test(query: any) {
+    super.test(query) && this.testAccess(query.access)
   }
 }
 

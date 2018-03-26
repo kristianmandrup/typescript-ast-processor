@@ -1,14 +1,17 @@
-import { BaseTester } from '../../base'
 import { ExpressionWithTypeArguments, Identifier } from 'typescript'
+import { IndentifierNodeTester } from '../../identifier';
 import {
   toList
 } from '../../../../util'
+import {
+  queryNode
+} from '../../util'
 
 export function createClassHeritageClauseTester(node: any, options: any = {}) {
   return new HeritageClauseTester(node, options)
 }
 
-export class HeritageClauseTester extends BaseTester {
+export class HeritageClauseTester extends IndentifierNodeTester {
   // heritage: HeritageTester
 
   constructor(node: any, options: any) {
@@ -16,19 +19,8 @@ export class HeritageClauseTester extends BaseTester {
     // this.heritage = new HeritageTester(node, options)
   }
 
-  test(query: any): any {
-    const result = this.arrayTestMethod(query)
-    if (!result) return false
-    const queryPart = query[result.keyName] || query.named
-    if (!queryPart) return false
-    return toList(queryPart)[result.method]((name: string) => {
-      const nameTest = this.createNameTest(query)
-      return nameTest ? {
-        node: this.node,
-        name,
-        match: nameTest(name)
-      } : false
-    })
+  test(query: any) {
+    return queryNode(this.node, query)
   }
 
   get identifiers() {

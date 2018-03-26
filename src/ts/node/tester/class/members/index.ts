@@ -6,6 +6,10 @@ import {
   isEmpty
 } from '../../../../util'
 
+export {
+  createClassMemberTester
+} from './member'
+
 export function createClassMembersTester(node: any, options: any = {}) {
   return new ClassMembersTester(node, options)
 }

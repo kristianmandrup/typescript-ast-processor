@@ -2,6 +2,9 @@ import { Loggable } from '../../loggable'
 import {
   callFun
 } from '../../util'
+import {
+  queryNode
+} from '../tester/util'
 
 export class BaseDetailsTester extends Loggable {
   checkers: any = {}
@@ -14,32 +17,20 @@ export class BaseDetailsTester extends Loggable {
     return name[0].toLowerCase() + name.slice(1)
   }
 
-  test(node: any, names: any, method: string = 'any') {
-    method = method === 'all' ? 'hasAll' : 'hasAny'
-    return this[method](node, names)
+  testNames(node: any, names: any, method: string = 'any') {
+    method = method === 'all' ? 'allOf' : 'anyOf'
+    return this.test(node, {
+      [method]: names
+    })
   }
 
-  hasAll(node: any, names: string[]) {
-    return names.every(name => this.is(node, name))
-  }
-
-  hasAny(node: any, names: string[]) {
-    return names.find(name => this.is(node, name))
+  test(node: any, query: any) {
+    return queryNode(node, query, this.is.bind(this))
   }
 
   is(node: any, name: string) {
-    // console.log('is', {
-    //   node,
-    //   name,
-    //   checkers: this.checkers,
-    //   abstract: this.checkers[name]
-    // })
     name = this.nodeTypeCheckName(name)
     const fun = this.checkers[name]
-    // console.log({
-    //   name,
-    //   fun
-    // })
     return callFun(fun, node)
   }
 }

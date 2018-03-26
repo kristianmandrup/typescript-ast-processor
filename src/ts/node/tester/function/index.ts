@@ -6,11 +6,12 @@ import {
   isEmpty
 } from '../../../util'
 import { FunctionTester } from '../../details';
+import { IndentifierNodeTester } from '../identifier';
 
 /**
  * For function, arrow function or method
  */
-export class FunctionLikeTester extends BaseTester {
+export class FunctionLikeNodeTester extends IndentifierNodeTester {
   parametersTester: ParametersTester
   functionTester: FunctionTester
   typeTester: TypeTester

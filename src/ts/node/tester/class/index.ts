@@ -1,13 +1,9 @@
 import * as ts from 'typescript'
-import { BaseTester } from '../base';
 import {
   ClassMembersTester,
-  createClassMembersTester
-} from './members';
-import {
-  ClassMemberTester,
+  createClassMembersTester,
   createClassMemberTester
-} from './member';
+} from './members';
 import { ClassDetailsTester } from '../../details';
 
 import {
@@ -15,12 +11,12 @@ import {
   createClassHeritageTester,
   createClassHeritageClauseTester
 } from './heritage';
+import { IndentifierNodeTester } from '../identifier';
 
 export {
   createClassHeritageClauseTester,
   createClassHeritageTester,
   ClassMembersTester,
-  ClassMemberTester,
   createClassMembersTester,
   createClassMemberTester
 }
@@ -29,7 +25,7 @@ export function createClassTester(node: any, options: any = {}) {
   return new ClassTester(node, options)
 }
 
-export class ClassTester extends BaseTester {
+export class ClassTester extends IndentifierNodeTester {
   heritage: ClassHeritageTester
   members: ClassMembersTester
   classDetails: ClassDetailsTester
@@ -52,28 +48,30 @@ export class ClassTester extends BaseTester {
     }
   }
 
-  test(details: any) {
+  test(query: any) {
     // this.testMembers(members)
-    return this.testAbstract(details.abstract) &&
-      this.testImplements(details.implements) &&
-      this.testExtends(details.extends) &&
-      this.testMembers(details.members)
+    return this.testName(query) &&
+      this.testAbstract(query) &&
+      this.testImplements(query) &&
+      this.testExtends(query) &&
+      this.testMembers(query)
   }
 
-  testMembers(membersQuery: any) {
-    this.members.test(membersQuery)
+  testMembers(query: any) {
+    this.members.test(query.members || query)
   }
 
-  testImplements(implementsQuery: any) {
-    this.heritage.test(implementsQuery)
+  testImplements(query: any) {
+    this.heritage.test(query.implements || query)
   }
 
-  testAbstract(abstract: boolean) {
-    return this.classDetails.is(this.node, 'abstract') === abstract
+  testExtends(query: any) {
+    this.heritage.test(query.extends || query)
   }
 
-  testExtends(extendsQuery: any) {
-    this.heritage.test(extendsQuery)
+  testAbstract(query: any) {
+    query = query.abstract || query
+    return this.classDetails.is(this.node, 'abstract') === query
   }
 }
 
