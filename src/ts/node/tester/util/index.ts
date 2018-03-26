@@ -115,6 +115,11 @@ export function createNameTest(nameQuery: any) {
   }
 }
 
+export function testNames(names: string[], query: any): any[] {
+  query = query.name || query
+  return names.map(createNameTest(query))
+}
+
 export function testName(name: any, query: any): boolean {
   name = isStr(name) ? name : nameOf(name)
   return createNameTest(query.name || query)(name)
@@ -140,6 +145,7 @@ export function arrayTestMethod(obj: any, options: any = {}): any {
   const {
     error
   } = options
+  if (!obj) return
   const keys: string[] = keysOf(obj)
   const methodKeys: string[] = Object.keys(testMethodMap)
   let keyName

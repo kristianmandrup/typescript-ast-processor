@@ -72,9 +72,9 @@ describe('function', () => {
         })
       })
 
-      describe.only('testParameters(query)', () => {
+      describe('testParameters(query)', () => {
         context('has matching parameter name', () => {
-          it('anyOf: name - true ', () => {
+          it.only('anyOf: name - true ', () => {
             const res = tester.testParameters(query.parameters)
             log('should match', { res })
             expect(res).not.toBe(false)
@@ -82,7 +82,7 @@ describe('function', () => {
           })
         })
 
-        context('has no matching parameters for unknown', () => {
+        context.skip('has no matching parameters for unknown', () => {
           it('anyOf: name - true ', () => {
             const res = tester.testParameters(query.parameters)
             log('no match', { res })

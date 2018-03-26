@@ -18,14 +18,13 @@ export class ListTester extends BaseTester {
     super(node, options)
     const key = options.key
     const items = options.items
-    const nodes = this.node[key]
     if (items) {
       this.nodes = items
     } else if (key) {
       this.key = key
       this.nodes = this.node[key]
     }
-    if (!nodes) {
+    if (!this.nodes) {
       this.error(`ListTester: No nodes to iterate`, {
         options,
         node
@@ -46,8 +45,13 @@ export class ListTester extends BaseTester {
     if (!result) return true
     const queryExpr = query[result.keyName]
     if (!queryExpr) return false
-    const queryExprIterator = queryExpr[result.method]
-    return queryExprIterator((queryExpr: any) => this.testItem(queryExpr))
+    this.log('test list', {
+      queryExpr,
+      it: result.method
+    })
+    return queryExpr[result.method]((query: any) => {
+      return this.testItem(query)
+    })
   }
 
   testItem(queryExpr: any) {

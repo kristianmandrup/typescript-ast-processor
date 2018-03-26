@@ -8,7 +8,8 @@ import {
   nameOf,
   idDetails,
   typeName,
-  testName,
+  // testName,
+  testNames,
   decoratorName
 } from '../util'
 import { ListTester } from '../generic/list';
@@ -41,7 +42,9 @@ export class ParametersTester extends BaseTester {
 
   createNamesTesterFor(options: any) {
     return new ListTester(this.node, Object.assign(options, {
-      tester: testName
+      createTester: (nodes: any[]) => {
+        return (queryExpr: any) => testNames(nodes, queryExpr)
+      }
     }))
   }
 
@@ -50,9 +53,9 @@ export class ParametersTester extends BaseTester {
   }
 
   test(query: any) {
-    return this.testDecorators(query.decorators) &&
-      this.testNames(query.names) &&
-      this.testTypes(query.types)
+    return this.testNames(query.names) &&
+      this.testTypes(query.types) &&
+      this.testDecorators(query.decorators)
   }
 
   createParameterTester(node: any) {
@@ -68,30 +71,30 @@ export class ParametersTester extends BaseTester {
   }
 
   get types() {
-    return this.parameters.map(typeName)
+    return this.parameters.map(typeName) || []
   }
 
   get decorators() {
-    return this.parameters.map(decoratorName)
+    return this.parameters.map(decoratorName) || []
   }
 
   get names() {
-    return this.parameters.map(nameOf)
+    return this.parameters.map(nameOf) || []
   }
 
   get items() {
-    return this.parameters.map(idDetails)
+    return this.parameters.map(idDetails) || []
   }
 
   testNames(query: any) {
-    return this.createNamesTesterFor({ items: this.names }).test(query.names)
+    return this.createNamesTesterFor({ items: this.names }).test(query)
   }
 
   testDecorators(query: any) {
-    return this.createNamesTesterFor({ items: this.decorators }).test(query.decorators)
+    return this.createNamesTesterFor({ items: this.decorators }).test(query)
   }
 
   testTypes(query: any) {
-    return this.createNamesTesterFor({ items: this.types }).test(query.types)
+    return this.createNamesTesterFor({ items: this.types }).test(query)
   }
 }
