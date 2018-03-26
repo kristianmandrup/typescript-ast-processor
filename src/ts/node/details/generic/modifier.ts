@@ -74,62 +74,8 @@ export class CheckModifier extends BaseDetailsTester {
 
   get argument() {
     return {
-      ...this.literal,
       ...this.node,
       ...this.function
-    }
-
-  }
-
-  get literal() {
-    const has = this.has.bind(this)
-    return {
-      numeric(node: any) {
-        return has(node, ts.SyntaxKind.NumericLiteral)
-      },
-      string(node: any) {
-        return has(node, ts.SyntaxKind.StringLiteral)
-      },
-      null(node: any) {
-        return has(node, ts.SyntaxKind.NullKeyword)
-      },
-      array(node: any) {
-        return has(node, ts.SyntaxKind.ArrayLiteralExpression)
-      },
-      object(node: any) {
-        return has(node, ts.SyntaxKind.ObjectLiteralExpression)
-      }
-    }
-  }
-
-  get type() {
-    const has = this.has.bind(this)
-    return {
-      void(node: any) {
-        return has(node, ts.SyntaxKind.VoidKeyword)
-      },
-      string(node: any) {
-        return has(node, ts.SyntaxKind.StringKeyword)
-      },
-      number(node: any) {
-        return has(node, ts.SyntaxKind.NumberKeyword)
-      },
-      symbol(node: any) {
-        return has(node, ts.SyntaxKind.SymbolKeyword)
-      },
-      array(node: any) {
-        return has(node, ts.SyntaxKind.ArrayType)
-      },
-      union(node: any) {
-        return has(node, ts.SyntaxKind.UnionType)
-      },
-      boolean(node: any) {
-        return has(node, ts.SyntaxKind.BooleanKeyword)
-      },
-      any(node: any) {
-        return has(node, ts.SyntaxKind.AnyKeyword)
-      },
-
     }
   }
 

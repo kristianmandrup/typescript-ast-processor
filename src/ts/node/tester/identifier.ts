@@ -13,6 +13,7 @@ export class IndentifierNodeTester extends BaseTester {
 
   constructor(node: any, options: any) {
     super(node, options)
+    this.identifier = new details.IdentifierTester(options)
   }
 
   get name() {

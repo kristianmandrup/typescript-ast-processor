@@ -1,6 +1,8 @@
+import * as ts from 'typescript'
 import { Loggable } from '../../loggable'
 import {
-  callFun
+  callFun,
+  enumKeys
 } from '../../util'
 import {
   queryNode
@@ -11,6 +13,10 @@ export class BaseDetailsTester extends Loggable {
 
   constructor(options: any) {
     super(options)
+  }
+
+  get keys() {
+    return enumKeys(ts.SyntaxKind)
   }
 
   nodeTypeCheckName(name: string) {

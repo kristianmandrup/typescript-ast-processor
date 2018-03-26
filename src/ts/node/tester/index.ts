@@ -1,6 +1,5 @@
 export {
   ClassTester,
-  ClassMemberTester,
   ClassMembersTester,
   createClassTester,
   createClassHeritageTester,
@@ -8,6 +7,11 @@ export {
   createClassMembersTester,
   createClassMemberTester
 } from './class'
+
+export {
+  createFunctionTester,
+
+} from './function'
 
 import * as $function from './function'
 import * as $class from './class'

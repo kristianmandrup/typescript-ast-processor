@@ -1,3 +1,4 @@
+import * as ts from 'typescript'
 import {
   keysOf,
   toList,
@@ -27,9 +28,71 @@ export function queryNode(node: any, query: any, tester?: Function) {
 }
 
 export function nameOf(node: any) {
-  return node.name.getText()
+  const name = node.name || node
+  return name.getText()
 }
 
+// TODO: cache keys for next lookup in same enum?
+export function enumKey(enumRef: any, enumValue: any) {
+  for (var enumMember in enumRef) {
+    if (enumRef[enumMember] == enumValue) return enumMember
+  }
+  return undefined
+}
+
+export function literalTypeName(node: any): string {
+  const kind = node.kind || node
+  return enumKey(ts.SyntaxKind, kind) || 'any'
+}
+
+export function initializerDetails(node: any) {
+  const initializer = node.initializer
+  if (!initializer) return {}
+
+  const type = normalizeLiteral(literalTypeName(initializer))
+  let textValue = initializer.getText()
+  let value
+
+  if (type === 'number') {
+    value = parseInt(textValue)
+  }
+  if (type === 'boolean') {
+    value = Boolean(textValue)
+  }
+
+  return {
+    type,
+    value,
+    textValue
+  }
+}
+
+const literalMap = {
+  numeric: 'number'
+}
+
+export function normalizeLiteral(literal: string) {
+  const $literal = literal.replace(/Literal/, '').replace(/Expression/, '').toLowerCase()
+  return literalMap[$literal] || $literal
+}
+
+export function normalizeKeword(keyword: string) {
+  return keyword.replace(/Keyword$/, '').toLowerCase()
+}
+
+export function typeName(node: any) {
+  const type = node.type || node
+  const key = enumKey(ts.SyntaxKind, type.kind || type)
+  return key ? normalizeKeword(key) : 'any'
+}
+
+export function idDetails(node: any) {
+  return {
+    type: typeName(node),
+    name: nameOf(node),
+    init: initializerDetails(node)
+  }
+}
 
 export function nameMatch(nodeName: string, name: string | RegExp) {
   return name instanceof RegExp ? name.test(nodeName) : name === nodeName

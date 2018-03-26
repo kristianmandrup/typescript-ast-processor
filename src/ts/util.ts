@@ -66,7 +66,6 @@ export function keysOf(val: any) {
 }
 
 
-
 // on string or object
 export function isEmpty(val: any) {
   if (!isDefined(val)) return true

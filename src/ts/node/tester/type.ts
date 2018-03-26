@@ -1,16 +1,20 @@
 import * as ts from 'typescript'
 import { BaseTester } from './base'
+import { TypeTester } from '../details/type';
 
 export function createTypeTester(node: any, options: any = {}) {
-  return new TypeTester(node, options)
+  return new TypeNodeTester(node, options)
 }
 
-export class TypeTester extends BaseTester {
+export class TypeNodeTester extends BaseTester {
+  typeTester: TypeTester
+
   constructor(node: any, options: any) {
     super(node, options)
+    this.typeTester = new TypeTester(options)
   }
 
-  test(type: any) {
-    return true
+  get typeName() {
+    return this.typeTester.typeName
   }
 }

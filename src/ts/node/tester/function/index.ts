@@ -1,12 +1,28 @@
 import * as ts from 'typescript'
-import { BaseTester } from '../base'
-import { ParametersTester } from '../function/parameters';
-import { TypeTester } from '../type';
+import {
+  ParametersTester
+} from '../function/parameters';
+import {
+  TypeNodeTester
+} from '../type';
 import {
   isEmpty
 } from '../../../util'
 import { FunctionTester } from '../../details';
 import { IndentifierNodeTester } from '../identifier';
+
+export {
+  ParametersTester
+}
+
+export function isFunctionLike(node: any) {
+  return ts.isFunctionLike(node)
+}
+
+export function createFunctionTester(node: any, options: any = {}) {
+  if (!isFunctionLike(node)) return
+  return new FunctionLikeNodeTester(node, options)
+}
 
 /**
  * For function, arrow function or method
@@ -14,7 +30,7 @@ import { IndentifierNodeTester } from '../identifier';
 export class FunctionLikeNodeTester extends IndentifierNodeTester {
   parametersTester: ParametersTester
   functionTester: FunctionTester
-  typeTester: TypeTester
+  typeTester: TypeNodeTester
 
   constructor(node: any, options: any) {
     super(node, options)
@@ -28,11 +44,20 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
     this.functionTester = new FunctionTester(options)
 
     if (node.type) {
-      this.typeTester = new TypeTester(node.type, options)
+      this.typeTester = new TypeNodeTester(node.type, options)
     } else {
-      this.log('FunctionLikeTester: no type', {
-        node
-      })
+      // this.log('FunctionLikeTester: no type', {
+      //   node
+      // })
+    }
+  }
+
+  info() {
+    return {
+      name: this.name,
+      parameters: this.parameters.info(),
+      returnType: this.returnType,
+      exported: this.isExported
     }
   }
 
@@ -45,6 +70,14 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
 
   testReturnType(query: any) {
     return this.typeTester.test(query)
+  }
+
+  get parameters() {
+    return this.parametersTester
+  }
+
+  get returnType() {
+    return this.typeTester ? this.typeTester.typeName : 'any'
   }
 
   // modifer object true/false
