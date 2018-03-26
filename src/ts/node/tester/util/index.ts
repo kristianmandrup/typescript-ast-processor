@@ -11,6 +11,10 @@ const testMethodMap = {
   some: ['some']
 }
 
+export function stringifyObj(obj: any) {
+  return JSON.stringify(obj, null, 2)
+}
+
 export function queryNode(node: any, query: any, tester?: Function) {
   const testFun = tester || testName
   const result = arrayTestMethod(query)

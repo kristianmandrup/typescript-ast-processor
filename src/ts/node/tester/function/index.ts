@@ -11,6 +11,10 @@ import {
 import { FunctionTester } from '../../details';
 import { IndentifierNodeTester } from '../identifier';
 
+import {
+  stringifyObj
+} from '../util'
+
 export {
   ParametersTester
 }
@@ -31,6 +35,7 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
   parametersTester: ParametersTester
   functionTester: FunctionTester
   typeTester: TypeNodeTester
+  isDecl: boolean
 
   constructor(node: any, options: any) {
     super(node, options)
@@ -50,6 +55,7 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
       //   node
       // })
     }
+    this.isDecl = ts.isFunctionDeclaration(node)
   }
 
   info() {
@@ -57,8 +63,20 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
       name: this.name,
       parameters: this.parameters.info(),
       returnType: this.returnType,
-      exported: this.isExported
+      exported: this.isExported,
+      declaration: this.isDecl,
+      arrow: this.isArrow,
+      generator: this.isGenerator
     }
+  }
+
+  get isArrow(): boolean {
+    return this.functionTester.is(this.node, 'arrow')
+  }
+
+  // AsteriskToken
+  get isGenerator(): boolean {
+    return this.functionTester.is(this.node, 'generator')
   }
 
   test(query: any) {
@@ -88,6 +106,10 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
 
   // modifer object true/false
   testParameters(query: any) {
-    this.parametersTester.test(query)
+    this.log('testParameters', {
+      query: stringifyObj(query),
+      node: this.node
+    })
+    return this.parametersTester.test(query)
   }
 }

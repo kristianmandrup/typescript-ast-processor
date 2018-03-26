@@ -10,7 +10,6 @@ export class CheckModifier extends BaseDetailsTester {
     this.checkers = {
       ...this.class,
       ...this.call,
-      ...this.function,
       ...this.identifier
     }
   }
@@ -74,8 +73,7 @@ export class CheckModifier extends BaseDetailsTester {
 
   get argument() {
     return {
-      ...this.node,
-      ...this.function
+      ...this.node
     }
   }
 
@@ -85,18 +83,6 @@ export class CheckModifier extends BaseDetailsTester {
       await(node: any) {
         return has(node, ts.SyntaxKind.ArrowFunction)
       },
-    }
-  }
-
-  get function() {
-    const has = this.has.bind(this)
-    return {
-      async(node: any) {
-        return has(node, ts.SyntaxKind.AsyncKeyword)
-      },
-      arrow(node: any) {
-        return has(node, ts.SyntaxKind.ArrowFunction)
-      }
     }
   }
 

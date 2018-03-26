@@ -41,6 +41,7 @@ export class ParametersTester extends BaseTester {
   }
 
   test(query: any) {
+    this.log('ParametersTester: test', query)
     return this.testDecorators(query.decorators) &&
       this.testNames(query.names) &&
       this.testTypes(query.types)
@@ -71,7 +72,8 @@ export class ParametersTester extends BaseTester {
   }
 
   testNames(query: any) {
-    return true
+    throw new Error('Not yet implemented')
+    // return true
   }
 
   testDecorators(query: any) {

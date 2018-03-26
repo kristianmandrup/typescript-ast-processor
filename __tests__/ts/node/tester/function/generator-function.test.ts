@@ -8,20 +8,12 @@ import { FunctionLikeNodeTester } from '../../../../../src/ts/node/tester/functi
 
 const { log } = console
 
-function logObj(obj: any) {
-  log(JSON.stringify(obj, null, 2))
-}
-
 describe('function', () => {
-  describe('basic', () => {
-    context('basic-function file', () => {
-      const tester: FunctionLikeNodeTester = testerFor('basic-function', {
-        type: 'function',
-        statementIndex: 0
+  describe('generator', () => {
+    context('generator-function file', () => {
+      const tester: FunctionLikeNodeTester = testerFor('generator-function', {
+        type: 'function'
       })
-      // export function minus(a: number, b: number) {
-      //   return a - b
-      // }
 
       describe.skip('not', () => {
         describe('testMethods(query)', () => {
@@ -34,45 +26,7 @@ describe('function', () => {
         })
       })
 
-      describe('info()', () => {
-        it('collects correct info', () => {
-          const info = tester.info()
-          logObj(info)
-          expect(info).toEqual({
-            "name": "minus",
-            "parameters": {
-              "names": [
-                "a",
-                "b"
-              ],
-              "types": [
-                "number",
-                "number"
-              ],
-              "items": [
-                {
-                  "type": "number",
-                  "name": "a",
-                  "init": {}
-                },
-                {
-                  "type": "number",
-                  "name": "b",
-                  "init": {
-                    "type": "number",
-                    "value": 32,
-                    "textValue": "32"
-                  }
-                }
-              ]
-            },
-            "returnType": "any",
-            "exported": true
-          })
-        })
-      })
-
-      describe.only('testParameters(query)', () => {
+      describe('testParameters(query)', () => {
         context('has matching parameter name', () => {
           it('anyOf: name - true ', () => {
             const res = tester.testParameters(query.parameters)
