@@ -1,8 +1,8 @@
-import { BaseTester } from '../base'
+import { BaseTester } from '../../base'
 import { ExpressionWithTypeArguments, Identifier } from 'typescript'
 import {
   toList
-} from '../../../util'
+} from '../../../../util'
 
 export function createClassHeritageClauseTester(node: any, options: any = {}) {
   return new HeritageClauseTester(node, options)

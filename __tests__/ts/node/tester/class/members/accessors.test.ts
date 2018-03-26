@@ -15,7 +15,7 @@ describe('class', () => {
           factory: node.tester.createClassMembersTester,
           traverse: (statements: any[]) => {
             // find first getter
-            return statements[0] //.members[1]
+            return statements[0].members //[1]
           }
         })
 

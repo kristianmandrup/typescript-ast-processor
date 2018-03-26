@@ -2,25 +2,32 @@ import * as ts from 'typescript'
 import { BaseTester } from '../base'
 import { ParametersTester } from '../function/parameters';
 import { TypeTester } from '../type';
+import {
+  isEmpty
+} from '../../../util'
+import { FunctionTester } from '../../details';
 
 /**
  * For function, arrow function or method
  */
 export class FunctionLikeTester extends BaseTester {
-  parameters: ParametersTester
-  type: TypeTester
+  parametersTester: ParametersTester
+  functionTester: FunctionTester
+  typeTester: TypeTester
 
   constructor(node: any, options: any) {
     super(node, options)
     if (node.parameters) {
-      this.parameters = new ParametersTester(node.parameters, options)
+      this.parametersTester = new ParametersTester(node.parameters, options)
     } else {
       this.log('FunctionLikeTester: no typeParameters', {
         node
       })
     }
+    this.functionTester = new FunctionTester(options)
+
     if (node.type) {
-      this.type = new TypeTester(node.type, options)
+      this.typeTester = new TypeTester(node.type, options)
     } else {
       this.log('FunctionLikeTester: no type', {
         node
@@ -28,30 +35,25 @@ export class FunctionLikeTester extends BaseTester {
     }
   }
 
-  test(details: any) {
-    const {
-      modifiers,
-      name,
-      parameters,
-      returnType
-    } = details
-    return this.testName(name) &&
-      this.testModifiers(modifiers) &&
-      this.testParameters(parameters) &&
-      this.testReturnType(returnType)
+  test(query: any) {
+    return this.testName(query.name) &&
+      this.testType(query.type) && // async, arrow or normal
+      this.testParameters(query.parameters) &&
+      this.testReturnType(query.returnType)
   }
 
-  testReturnType(returnType: any) {
-    return this.type.test('void')
+  testReturnType(query: any) {
+    return this.typeTester.test(query)
   }
 
   // modifer object true/false
-  testModifiers(modifiers: any) {
-    // TODO: use node/details test
+  testType(query: any) {
+    if (isEmpty(this.modifiers)) return true
+    return this.functionTester.test(this.node, query)
   }
 
   // modifer object true/false
-  testParameters(parameters: any) {
-    this.parameters.test(parameters)
+  testParameters(query: any) {
+    this.parametersTester.test(query)
   }
 }

@@ -1,13 +1,13 @@
 import * as ts from 'typescript'
-import { BaseTester } from '../base'
+import { BaseTester } from '../../base'
 import {
   HeritageClauseTester,
   createClassHeritageClauseTester
-} from './heritage-clause';
+} from './clause';
 import {
   flatten,
   isEmpty
-} from '../../../util'
+} from '../../../../util'
 
 export {
   HeritageClauseTester,

@@ -41,6 +41,10 @@ export class BaseTester extends Loggable {
     }
   }
 
+  get modifiers() {
+    return this.node.modifiers || []
+  }
+
   nameOf(node: ts.Node) {
     return node['name'].getText()
   }
@@ -92,6 +96,10 @@ export class BaseTester extends Loggable {
         return this.nameMatch(nodeName, match)
       })
     }
+  }
+
+  test(query: any): any {
+    return true
   }
 
   exported(exported: true = true) {
