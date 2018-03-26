@@ -7,8 +7,11 @@ import {
 import {
   nameOf,
   idDetails,
-  typeName
+  typeName,
+  testName,
+  decoratorName
 } from '../util'
+import { ListTester } from '../generic/list';
 
 
 function isParameters(nodes: any[], options: any = {}) {
@@ -36,12 +39,17 @@ export class ParametersTester extends BaseTester {
     this.nodes = nodes
   }
 
+  createNamesTesterFor(options: any) {
+    return new ListTester(this.node, Object.assign(options, {
+      tester: testName
+    }))
+  }
+
   get parameters() {
     return this.nodes
   }
 
   test(query: any) {
-    this.log('ParametersTester: test', query)
     return this.testDecorators(query.decorators) &&
       this.testNames(query.names) &&
       this.testTypes(query.types)
@@ -63,6 +71,10 @@ export class ParametersTester extends BaseTester {
     return this.parameters.map(typeName)
   }
 
+  get decorators() {
+    return this.parameters.map(decoratorName)
+  }
+
   get names() {
     return this.parameters.map(nameOf)
   }
@@ -72,15 +84,14 @@ export class ParametersTester extends BaseTester {
   }
 
   testNames(query: any) {
-    throw new Error('Not yet implemented')
-    // return true
+    return this.createNamesTesterFor({ items: this.names }).test(query.names)
   }
 
   testDecorators(query: any) {
-    return true
+    return this.createNamesTesterFor({ items: this.decorators }).test(query.decorators)
   }
 
   testTypes(query: any) {
-    return true
+    return this.createNamesTesterFor({ items: this.types }).test(query.types)
   }
 }

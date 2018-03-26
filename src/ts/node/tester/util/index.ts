@@ -11,6 +11,10 @@ const testMethodMap = {
   some: ['some']
 }
 
+export function decoratorName(node: any) {
+  return 'unknown'
+}
+
 export function stringifyObj(obj: any) {
   return JSON.stringify(obj, null, 2)
 }
