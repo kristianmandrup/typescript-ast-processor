@@ -1,13 +1,34 @@
 # TODO
 
-## Tests
+- Add proper instrumentation
 
-- Write full test suite ;)
+## Remove
 
-## Implementation
+- Remove `ts/eslint` folder
 
-Start work on collectors and instrumentors. They should (possibly?) be registered with same names as visitors, so that data flows from visitor -> collector -> instrumentor.
+## Refactor
 
-For data aggregation, we can have multiple collectors call an aggregator (like cells to a molecule) with their data (can be multi-level hierarchy).
+- Refactor `__tests__/eslint` tests for use with `ts` engine
 
-The instrumentor should only instrument using a single root data aggregator (or single data source)
+## Extract libs
+
+- Extract node tester query engine as separate lib
+- (Perhaps) extract node "info" (ie. from node tester) as separate lib
+- Extract `visitor` as separate lib
+- Extract `collector` as separate lib
+- Extract `instrumenter` as separate lib
+- Extract `language-service` as separate lib
+- Extract `node-details` as separate lib (see possible overlaps with `ts-utils`)
+
+## Instrumentation
+
+- use [ts-simple-ast](https://github.com/dsherret/ts-simple-ast) to do AST instrumentation/refactoring
+- use [ts-emitter](https://github.com/KnisterPeter/ts-emitter) to emit refactored AST back to source code
+
+## WIP
+
+- Created basic Instrumentation skeleton, needs much more work
+
+### Tests
+
+- Started writing full test suite (much work and cleanup/refactor left to do...)
