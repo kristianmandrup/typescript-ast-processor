@@ -7,8 +7,14 @@ export {
 } from './id'
 export {
   nameOf,
-  createNameTest
+  createNameTest,
+  nameMatch,
 } from './name'
+export {
+  createValueTest,
+  valueMatch,
+  testValue
+} from './value'
 export {
   queryNode
 } from './query'

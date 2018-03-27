@@ -3,7 +3,9 @@ import {
   enumKey
 } from './enum'
 import {
-  isStr
+  isStr,
+  isRegExp,
+  isFunction
 } from '../../../util'
 
 export function nameOf(node: any) {
@@ -16,8 +18,11 @@ export function literalTypeName(node: any): string {
   return enumKey(ts.SyntaxKind, kind) || 'any'
 }
 
-export function nameMatch(nodeName: string, name: string | RegExp) {
-  return name instanceof RegExp ? name.test(nodeName) : name === nodeName
+export function nameMatch(nodeName: string, nameExpr: string | RegExp | Function) {
+  if (isStr(nameExpr)) return String(nameExpr) === nodeName
+  if (isRegExp(nameExpr)) return (nameExpr as RegExp).test(nodeName)
+  if (isFunction(nameExpr)) (nameExpr as Function)(nodeName)
+  return false
 }
 
 export function createNameTest(nameQuery: any) {

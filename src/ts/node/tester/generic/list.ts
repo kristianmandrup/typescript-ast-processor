@@ -1,10 +1,11 @@
 import * as ts from 'typescript'
 import { BaseTester } from '../base'
 import {
-  arrayTestMethod
+  resolveArrayIteratorFindMethod
 } from '../util'
 
 export interface IItemTester {
+  forNode(node: any): IItemTester
   test(item: any): boolean
 }
 
@@ -39,18 +40,29 @@ export class ListTester extends BaseTester {
     return this.options.createTester ? this.options.createTester(this.nodes) : this.options.tester
   }
 
-  // TODO: fix it! use arrayTestMethod to find iterator
+  /**
+   * Query list using query
+   * @param query
+   */
   test(query: any) {
-    const result = arrayTestMethod(query)
-    if (!result) return true
-    const queryExpr = query[result.keyName]
+    const resolved = resolveArrayIteratorFindMethod(query)
+    if (!resolved) return true
+    const {
+      queryKey,
+      iteratorMethod
+    } = resolved
+
+    const queryExpr = query[queryKey]
     if (!queryExpr) return false
-    return queryExpr[result.method]((query: any) => {
-      return this.testItem(query)
+
+    this.nodes.map(node => {
+      return queryExpr[iteratorMethod]((query: any) => {
+        return this.testItem(node, query)
+      })
     })
   }
 
-  testItem(queryExpr: any) {
-    return this.itemTester ? this.itemTester.test(queryExpr) : this.tester(queryExpr)
+  testItem(node: any, queryExpr: any) {
+    return this.itemTester ? this.itemTester.forNode(node).test(queryExpr) : this.tester(node, queryExpr)
   }
 }

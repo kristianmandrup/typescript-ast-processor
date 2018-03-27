@@ -28,7 +28,7 @@ export {
 export {
   nodeTypeCheckName,
   capitalizeFirst,
-  lowercaseFirst
+  lowercaseFirst,
 } from './name'
 
 export {
@@ -37,5 +37,6 @@ export {
   isDefined,
   isEmpty,
   isObject,
-  isFunction
+  isFunction,
+  isRegExp
 } from './is'

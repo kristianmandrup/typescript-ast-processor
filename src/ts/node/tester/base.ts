@@ -10,14 +10,19 @@ import {
 } from './generic'
 import { TypeTester } from '../details/type';
 
-export class BaseTester extends Loggable {
+export abstract class BaseTester extends Loggable {
   node: any
   typeTester: TypeTester
 
+  /**
+   * Create BaseTester
+   * @param node
+   * @param options
+   */
   constructor(node: any, options: any) {
     super(options)
     if (!node) {
-      this.error(`BaseTester: Missing node for tester`, {
+      this.error(`BaseTester: Missing node to test`, {
         node,
         options,
         constructor: this.constructor.name
@@ -35,6 +40,11 @@ export class BaseTester extends Loggable {
     return this.node.modifiers || []
   }
 
+  /**
+   * Create a tester object to test a list of nodes
+   * @param node
+   * @param options
+   */
   createListTester(node: any, options: any = {}) {
     return new ListTester(node, options)
   }
@@ -76,28 +86,54 @@ export class BaseTester extends Loggable {
     return resolveArrayIteratorFindMethod(obj, this.options)
   }
 
+  /**
+   * Boolean NOT condition on query (or result)
+   * @param query
+   * @param tester
+   */
   testNot(query: any, tester: Function) {
     return testNot(query, tester)
   }
 
+  /**
+   * Boolean OR condition on one or more queries (or results)
+   * @param query
+   * @param tester
+   */
   testOr(query: any, tester: Function) {
     return testOr(query, tester)
   }
 
+  /**
+   * Perform query on node
+   * @param query
+   */
   test(query: any): any {
     return true
   }
 
+  /**
+   * Test node type
+   * @param type
+   */
   testType(type: string): boolean {
     return Boolean(!type || this.validatePrimitiveType(type) && this.typeTester.forNode(this.node).is(type))
   }
 
+  /**
+   * Validate if type (to test) is a primitive type
+   * @param type
+   */
   validatePrimitiveType(type: string): boolean {
     return this.primitiveTypes.includes(type)
   }
 
+  /**
+   * List of primitive types (used by validation)
+   * Note: Should match node details type tester
+   */
   get primitiveTypes() {
-    return ['boolean', 'string', 'number', 'array', 'void']
+    return ['boolean', 'string', 'number', 'array', 'void', 'any', 'object']
   }
 }
 

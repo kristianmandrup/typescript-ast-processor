@@ -10,6 +10,10 @@ export function isStr(val: any) {
   return typeof val === 'string'
 }
 
+export function isRegExp(val: any) {
+  return val instanceof RegExp
+}
+
 export function isArray(val: any) {
   return Array.isArray(val)
 }

@@ -1,6 +1,7 @@
 import * as ts from 'typescript'
 import { BaseTester } from '../base'
 import {
+  createParameterTester,
   ParameterTester,
   isParameter
 } from './parameter';
@@ -13,7 +14,7 @@ import {
   decoratorName
 } from '../util/name'
 
-function isParameters(nodes: any[], options: any = {}) {
+export function isParameters(nodes: any[], options: any = {}) {
   const {
     error
   } = options
@@ -42,16 +43,28 @@ export class ParametersTester extends BaseTester {
     return this.nodes
   }
 
+  /**
+   * Query parameters
+   * @param query the query to perform
+   */
   test(query: any) {
     return this.testNames(query.names) &&
       this.testTypes(query.types) &&
       this.testDecorators(query.decorators)
   }
 
+  /**
+   * TODO: Use it instead of relying only on ListTester
+   * Create a ParameterTester for the node
+   * @param node
+   */
   createParameterTester(node: any) {
     return new ParameterTester(node, this.options)
   }
 
+  /**
+   * Collect info for parameters
+   */
   info() {
     return {
       names: this.names,
@@ -60,31 +73,76 @@ export class ParametersTester extends BaseTester {
     }
   }
 
+  /**
+   * The list of parameter types
+   */
   get types() {
     return this.parameters.map(typeName) || []
   }
 
+  /**
+   * The list of parameter decorators
+   */
   get decorators() {
     return this.parameters.map(decoratorName) || []
   }
 
+  /**
+   * The list of parameter names
+   */
   get names() {
     return this.parameters.map(nameOf) || []
   }
 
+  /**
+   * The list of parameter items
+   * each item has: name, type, decorators and initializer details
+   */
   get items() {
     return this.parameters.map(idDetails) || []
   }
 
+  /**
+   * Query the parameter names
+   * @param query
+   */
   testNames(query: any) {
     return this.queryItems(this.names, query)
   }
 
+  /**
+   * Query the parameter types
+   * @param query
+   */
   testTypes(query: any) {
     return this.queryItems(this.types, query)
   }
 
+  /**
+   * Query the parameter items
+   * @param query
+   */
   testDecorators(query: any) {
     return this.queryItems(this.decorators, query)
   }
+
+  /**
+   * Query the parameter items
+   * @param query
+   */
+  testItems(query: any, options: any = {}) {
+    return this.queryItems(this.items, query, options)
+  }
+
+  createItemTesterOpts() {
+    const createTester = (items: any[]) => {
+      return (node: any, query: any) => {
+        return this.createParameterTester(node).test(query)
+      }
+    }
+    return {
+      createTester
+    }
+  }
+
 }

@@ -14,7 +14,12 @@ export class TypeNodeTester extends BaseTester {
     this.typeTester = new TypeTester(options)
   }
 
-  get typeName() {
-    return this.typeTester.typeName
+  /**
+   * Get the type(s) that match for the node
+   * Uses node details tester: TypeTester
+   * TODO: can we return multiple types if union type or similar?
+   */
+  get typeName(): any {
+    return this.typeTester.matches()
   }
 }
