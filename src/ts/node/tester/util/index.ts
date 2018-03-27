@@ -3,7 +3,8 @@ export {
 } from './enum'
 export {
   idDetails,
-  typeName
+  typeName,
+  initializerDetails
 } from './id'
 export {
   nameOf,

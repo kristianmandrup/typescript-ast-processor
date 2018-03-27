@@ -43,10 +43,6 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
 
     if (node.type) {
       this.typeNodeTester = new TypeNodeTester(node.type, options)
-    } else {
-      // this.log('FunctionLikeTester: no type', {
-      //   node
-      // })
     }
     this.isDecl = ts.isFunctionDeclaration(node)
   }

@@ -59,7 +59,7 @@ export class ParametersTester extends BaseTester {
    * @param node
    */
   createParameterTester(node: any) {
-    return new ParameterTester(node, this.options)
+    return createParameterTester(node, this.options)
   }
 
   /**

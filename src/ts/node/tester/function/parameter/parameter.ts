@@ -1,29 +1,51 @@
 import * as ts from 'typescript'
-import { IndentifierNodeTester } from '../identifier';
+import { IndentifierNodeTester } from '../../identifier';
 import {
   testName,
   testNames,
-  testValue
-} from '../util'
+  testValue,
+  initializerDetails
+} from '../../util'
+
+import { TypeNodeTester } from '../../type';
 
 export function isParameter(node: any) {
   return ts.isParameter(node)
 }
 
+/**
+ * Factory for creating Parameter tester
+ * @param node parameter node to test
+ * @param options extra options
+ */
 export function createParameterTester(node: any, options: any = {}) {
-  if (!isParameter(node)) return
+  // if (!isParameter(node)) return
   return new ParameterTester(node, options)
 }
 
 export class ParameterTester extends IndentifierNodeTester {
+  typeNodeTester: TypeNodeTester
+
   constructor(node: any, options: any) {
     super(node, options)
+    if (node.type) {
+      this.typeNodeTester = new TypeNodeTester(node.type, options)
+    }
   }
 
+  /**
+   * Info for Parameter node
+   */
   info() {
     return {
-
+      name: this.name,
+      type: this.type,
+      initializer: this.initializerInfo
     }
+  }
+
+  get type() {
+    return this.typeNodeTester ? this.typeNodeTester.typeName : 'implicit:any'
   }
 
   test(query: any) {
@@ -50,6 +72,10 @@ export class ParameterTester extends IndentifierNodeTester {
       type: this.queryType(init.type, query.type),
       value: this.queryValue(init.value, query.value),
     }
+  }
+
+  get initializerInfo() {
+    return initializerDetails(this.node)
   }
 
   get initializer() {
