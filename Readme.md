@@ -166,7 +166,7 @@ const visitors = Object.assign(visitors, {
 
 When figuring out what to query for or what data to collect, use [AST explorer](https://astexplorer.net/) or [ts-ast-viewer](http://ts-ast-viewer.com/)
 
-For details on how to query nodes and collect data (information) see [AST Query engine](docs/AST-query-engine.md)
+For details on how to query nodes and collect data (information) see [AST Query engine](docs/query/engine.md)
 
 ## Visitor flow
 

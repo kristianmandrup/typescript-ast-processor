@@ -48,8 +48,7 @@ export class ClassTester extends IndentifierNodeTester {
     }
   }
 
-  test(query: any) {
-    // this.testMembers(members)
+  test(query: any): any {
     return this.testName(query) &&
       this.testAbstract(query) &&
       this.testImplements(query) &&

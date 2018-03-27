@@ -5,13 +5,16 @@ import {
   isParameter
 } from './parameter';
 import {
-  nameOf,
   idDetails,
-  typeName,
   // testName,
   testNames,
-  decoratorName
+  typeName,
+  nameOf,
 } from '../util'
+import {
+  decoratorName
+} from '../util/name'
+
 import { ListTester } from '../generic/list';
 
 
@@ -86,15 +89,19 @@ export class ParametersTester extends BaseTester {
     return this.parameters.map(idDetails) || []
   }
 
-  testNames(query: any) {
+  queryItems(items: any[], query: any) {
     return this.createNamesTesterFor({ items: this.names }).test(query)
   }
 
-  testDecorators(query: any) {
-    return this.createNamesTesterFor({ items: this.decorators }).test(query)
+  testNames(query: any) {
+    return this.queryItems(this.names, query)
   }
 
   testTypes(query: any) {
-    return this.createNamesTesterFor({ items: this.types }).test(query)
+    return this.queryItems(this.types, query)
+  }
+
+  testDecorators(query: any) {
+    return this.queryItems(this.decorators, query)
   }
 }

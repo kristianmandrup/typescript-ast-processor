@@ -45,10 +45,6 @@ export class ListTester extends BaseTester {
     if (!result) return true
     const queryExpr = query[result.keyName]
     if (!queryExpr) return false
-    this.log('test list', {
-      queryExpr,
-      it: result.method
-    })
     return queryExpr[result.method]((query: any) => {
       return this.testItem(query)
     })
