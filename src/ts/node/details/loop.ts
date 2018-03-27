@@ -6,6 +6,14 @@ export class LoopTester extends BaseDetailsTester {
     super(options)
   }
 
+  get checkerNames() {
+    return [
+      'for',
+      'while',
+      'loop'
+    ]
+  }
+
   for(node: any) {
     node = this.nodeOf({ node })
     return ts.isForStatement(node) || ts.isForInStatement(node) || ts.isForOfStatement(node)

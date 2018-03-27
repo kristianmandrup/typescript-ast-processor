@@ -7,7 +7,6 @@ import {
 import {
   idDetails,
   // testName,
-  testNames,
   typeName,
   nameOf,
 } from '../util'
@@ -41,14 +40,6 @@ export class ParametersTester extends BaseTester {
   constructor(nodes: any, options: any) {
     super(nodes, options)
     this.nodes = nodes
-  }
-
-  createNamesTesterFor(options: any) {
-    return new ListTester(this.node, Object.assign(options, {
-      createTester: (nodes: any[]) => {
-        return (queryExpr: any) => testNames(nodes, queryExpr)
-      }
-    }))
   }
 
   get parameters() {
@@ -87,10 +78,6 @@ export class ParametersTester extends BaseTester {
 
   get items() {
     return this.parameters.map(idDetails) || []
-  }
-
-  queryItems(items: any[], query: any) {
-    return this.createNamesTesterFor({ items: this.names }).test(query)
   }
 
   testNames(query: any) {

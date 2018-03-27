@@ -1,22 +1,20 @@
 import * as ts from 'typescript'
-import { NodeDetailsTester } from '../details/generic';
-
 import { Loggable } from '../../loggable';
 import { NodeTester } from '.';
 import {
   arrayTestMethod,
   testOr,
-  testNot
+  testNot,
+  testNames
 } from './util'
-
-export interface INodeTester {
-  tester: NodeTester
-  details: NodeDetailsTester
-}
+import {
+  ListTester
+} from './generic'
+import { TypeTester } from '../details/type';
 
 export class BaseTester extends Loggable {
-  $node: INodeTester
   node: any
+  typeTester: TypeTester
 
   constructor(node: any, options: any) {
     super(options)
@@ -27,16 +25,24 @@ export class BaseTester extends Loggable {
         constructor: this.constructor.name
       })
     }
-
+    this.typeTester = new TypeTester(options)
     this.node = node
-    this.$node = {
-      tester: new NodeTester(options),
-      details: new NodeDetailsTester(options)
-    }
   }
 
   get modifiers() {
     return this.node.modifiers || []
+  }
+
+  createNamesTesterFor(options: any) {
+    return new ListTester(this.node, Object.assign(options, {
+      createTester: (nodes: any[]) => {
+        return (queryExpr: any) => testNames(nodes, queryExpr)
+      }
+    }))
+  }
+
+  queryItems(items: any[], query: any) {
+    return this.createNamesTesterFor({ items }).test(query)
   }
 
   arrayTestMethod(obj: any): any {
@@ -56,7 +62,7 @@ export class BaseTester extends Loggable {
   }
 
   testType(type: string): boolean {
-    return Boolean(!type || this.validatePrimitiveType(type) && this.$node.details.is(this.node, type))
+    return Boolean(!type || this.validatePrimitiveType(type) && this.typeTester.forNode(this.node).is(type))
   }
 
   validatePrimitiveType(type: string): boolean {

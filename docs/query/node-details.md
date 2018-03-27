@@ -77,10 +77,18 @@ For flags they are tested via logical and `&` using: `Boolean(node.flags & flag)
 For modifiers, by default we test if `node.modifiers` contains the `modifier` in question.
 As this example illustrates, you can override which modifier key to use if and when needed.
 
-Alternatively use the special `isXyz` methods available in the `typescript` module:
+Alternatively use the special `isXyz` methods available in the `typescript` module.
+In case you don't use any of the maps such as `flagMap` or `syntaxMap` you need to provide a list of the checker function names available in `checkerNames`.
 
 ```js
 export class LoopTester extends BaseDetailsTester {
+  get checkerNames() {
+    return [
+      'for',
+      'while'
+    ]
+  }
+
   for(node: any) {
     node = this.nodeOf({ node })
     return ts.isForStatement(node) || ts.isForInStatement(node) || ts.isForOfStatement(node)

@@ -4,23 +4,51 @@ import {
   callFun,
   enumKeys,
   toList,
-  isStr
+  isStr,
+  isFunction
 } from '../../util'
 import {
   queryNode
 } from '../tester/util/query'
 
 export class BaseDetailsTester extends Loggable {
-  checkers: any = {}
   modifierKey: string = 'modifiers'
   node: any
   syntaxMap: any = {}
   flagMap: any = {}
+  funMap: any = {}
+
+  protected _maps: any = {}
 
   constructor(options: any) {
     super(options)
     this.modifierKey = options.modifierKey || this.modifierKey
     this.node = options.node
+  }
+
+  get maps() {
+    this._maps = this._maps || Object.assign({}, this.syntaxMap, this.flagMap)
+    return this._maps
+  }
+
+  get checkerNames() {
+    return Object.keys(this.maps)
+  }
+
+  get checkers() {
+    this.funMap = this.funMap || this.checkerNames.reduce((acc: any, key: string) => {
+      const fun = this[key]
+      if (isFunction(fun)) {
+        acc[key] = fun.bind(this)
+      }
+      return acc
+    }, {})
+    return this.funMap
+  }
+
+  forNode(node: any) {
+    this.node = node
+    return this
   }
 
   error(msg: string, data: any): boolean {

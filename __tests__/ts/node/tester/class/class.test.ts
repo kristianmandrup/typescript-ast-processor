@@ -72,7 +72,7 @@ describe('class', () => {
     })
 
     it('is named Abs', () => {
-      expect(tester.name).toEqual('Abs')
+      expect(tester.name).toBe('Abs')
     })
 
     it('collects correct info', () => {
@@ -82,7 +82,7 @@ describe('class', () => {
       })
       expect(info.abstract).toBeTruthy()
       expect(info.exported).toBeTruthy()
-      expect(info.name).toEqual('Abs')
+      expect(info.name).toBe('Abs')
       expect(info.heritage.extends).toBeUndefined()
       expect(info.heritage.implements.number).toEqual(0)
       expect(info.heritage.isEmpty).toBeTruthy()
@@ -97,14 +97,14 @@ describe('class', () => {
     })
 
     it('is named Abs', () => {
-      expect(tester.name).toEqual('A')
+      expect(tester.name).toBe('A')
     })
 
     it('collects correct info', () => {
       const info = tester.info()
       expect(info.abstract).toBeFalsy()
       expect(info.exported).toBeTruthy()
-      expect(info.name).toEqual('A')
+      expect(info.name).toBe('A')
       expect(info.heritage.extends).toBe('B')
     })
   })
@@ -117,18 +117,17 @@ describe('class', () => {
     })
 
     it('is named Abs', () => {
-      expect(tester.name).toEqual('X')
+      expect(tester.name).toBe('X')
     })
 
     it('collects correct info', () => {
       const info = tester.info()
       expect(info.abstract).toBeFalsy()
       expect(info.exported).toBeTruthy()
-      expect(info.name).toEqual('X')
+      expect(info.name).toBe('X')
       expect(info.heritage.implements.names).toEqual(['Ix'])
-      expect(info.heritage.implements.number).toEqual(1)
+      expect(info.heritage.implements.number).toBe(1)
     })
-
   })
 })
 
