@@ -14,14 +14,26 @@ export class ConditionalTester extends BaseDetailsTester {
     }
   }
 
+  /**
+   * Test if node is an if keyword
+   * @param node node to test
+   */
   if(node?: any) {
     return this.has('if', { node })
   }
 
+  /**
+   * Test if node is an else keyword
+   * @param node node to test
+   */
   else(node?: any) {
     return this.has('else', { node })
   }
 
+  /**
+   * Test if node is a switch keyword
+   * @param node node to test
+   */
   switch(node?: any) {
     return this.has('switch', { node })
   }

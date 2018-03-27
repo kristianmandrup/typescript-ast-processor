@@ -19,14 +19,26 @@ export class ClassDetailsTester extends BaseDetailsTester {
     return this.has('extends', { node })
   }
 
+  /**
+   * Test if class node extends another class
+   * @param node class node to test
+   */
   extends(node?: any) {
     return this.subclass(node)
   }
 
+  /**
+   * Test if class node implements another class
+   * @param node class node to test
+   */
   implements(node?: any) {
     return this.has('implements', { node })
   }
 
+  /**
+   * Test if class node is abstract (has abstract modifier)
+   * @param node class node to test
+   */
   abstract(node?: any) {
     return this.has('abstract', { node })
   }

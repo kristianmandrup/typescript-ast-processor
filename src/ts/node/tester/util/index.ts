@@ -17,6 +17,9 @@ export {
   testName,
   testNot,
   testOr,
-  arrayTestMethod
+  resolveArrayIteratorFindMethod
 } from './test'
+export {
+  stringifyObj
+} from '../../../util'
 

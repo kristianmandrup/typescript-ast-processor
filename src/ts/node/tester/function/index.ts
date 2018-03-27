@@ -6,14 +6,11 @@ import {
   TypeNodeTester
 } from '../type';
 import {
+  stringifyObj,
   isEmpty
 } from '../../../util'
 import { FunctionTester } from '../../details';
 import { IndentifierNodeTester } from '../identifier';
-
-import {
-  stringifyObj
-} from '../util'
 
 export {
   ParametersTester
@@ -34,7 +31,7 @@ export function createFunctionTester(node: any, options: any = {}) {
 export class FunctionLikeNodeTester extends IndentifierNodeTester {
   parametersTester: ParametersTester
   functionTester: FunctionTester
-  typeTester: TypeNodeTester
+  typeNodeTester: TypeNodeTester
   isDecl: boolean
 
   constructor(node: any, options: any) {
@@ -49,7 +46,7 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
     this.functionTester = new FunctionTester(options)
 
     if (node.type) {
-      this.typeTester = new TypeNodeTester(node.type, options)
+      this.typeNodeTester = new TypeNodeTester(node.type, options)
     } else {
       // this.log('FunctionLikeTester: no type', {
       //   node
@@ -95,7 +92,7 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
   }
 
   get returnType() {
-    return this.typeTester ? this.typeTester.typeName : 'any'
+    return this.typeNodeTester ? this.typeNodeTester.typeName : 'implicit:any'
   }
 
   // modifer object true/false

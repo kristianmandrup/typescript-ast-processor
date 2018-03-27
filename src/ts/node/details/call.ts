@@ -15,6 +15,10 @@ export class CallTester extends BaseDetailsTester {
     }
   }
 
+  /**
+   * Test if function call node is an await expression
+   * @param node function call node to test
+   */
   await(node?: any) {
     return this.has('await', { node })
   }

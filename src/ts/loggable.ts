@@ -13,12 +13,12 @@ export class Loggable {
     this.logger = options.logger || console
   }
 
-  error(msg: string, data?: any): void {
+  protected error(msg: string, data?: any): void {
     data ? this.logger.error(msg, data) : this.logger.error(msg)
     throw new Error(msg)
   }
 
-  log(msg: string, data?: any): void {
+  protected log(msg: string, data?: any): void {
     data ? this.logger.log(msg, data) : this.logger.log(msg)
   }
 }

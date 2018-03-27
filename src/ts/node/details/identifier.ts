@@ -12,6 +12,10 @@ export class IdentifierTester extends BaseDetailsTester {
     }
   }
 
+  /**
+   * Test if identifier node is exported
+   * @param node identifier node to test
+   */
   exported(node?: any) {
     return this.has('export', { node })
   }

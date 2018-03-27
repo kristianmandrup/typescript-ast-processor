@@ -13,10 +13,20 @@ export class VariableTester extends BaseDetailsTester {
     }
   }
 
+  /**
+   * Test if variable node has a let flag set
+   * Note: If const is set, let can NOT be set and vice versa
+   * @param node type node to test
+   */
   let(node?: any): boolean {
     return this.has('let', { node })
   }
 
+  /**
+   * Test if variable node has a const flag set
+   * Note: If const is set, let can NOT be set and vice versa
+   * @param node type node to test
+   */
   const(node?: any): boolean {
     return this.has('const', { node })
   }

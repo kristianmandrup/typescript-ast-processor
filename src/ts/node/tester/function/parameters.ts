@@ -6,16 +6,12 @@ import {
 } from './parameter';
 import {
   idDetails,
-  // testName,
   typeName,
   nameOf,
 } from '../util'
 import {
   decoratorName
 } from '../util/name'
-
-import { ListTester } from '../generic/list';
-
 
 function isParameters(nodes: any[], options: any = {}) {
   const {
