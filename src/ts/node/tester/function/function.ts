@@ -47,10 +47,13 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
     this.isDecl = ts.isFunctionDeclaration(node)
   }
 
+  /**
+   * Collect all info for function node
+   */
   info() {
     return {
       name: this.name,
-      parameters: this.parameters.info(),
+      parameters: this.parametersTester.info(),
       returnType: this.returnType,
       exported: this.isExported,
       declaration: this.isDecl,
@@ -59,15 +62,24 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
     }
   }
 
+  /**
+   * Determine if function is an arrow function
+   */
   get isArrow(): boolean {
     return this.functionTester.is(this.node, 'arrow')
   }
 
-  // AsteriskToken
+  /**
+   * Determine if function is a generator function with asterisk (function*)
+   */
   get isGenerator(): boolean {
     return this.functionTester.is(this.node, 'generator')
   }
 
+  /**
+   * Perform query on function node
+   * @param query
+   */
   test(query: any) {
     return this.testName(query.name) &&
       this.testType(query.type) && // async, arrow or normal
@@ -75,30 +87,35 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
       this.testReturnType(query.returnType)
   }
 
+  /**
+   * Query on the return type of function node
+   * @param query
+   */
   testReturnType(query: any) {
     return this.typeTester.test(query)
   }
 
-  get parameters() {
-    return this.parametersTester
-  }
-
+  /**
+   * Get the return type. If none specified, return implicit:any
+   */
   get returnType() {
     return this.typeNodeTester ? this.typeNodeTester.typeName : 'implicit:any'
   }
 
-  // modifer object true/false
+  /**
+   * Query the return type of function node
+   * @param query
+   */
   testType(query: any) {
     if (isEmpty(this.modifiers)) return true
     return this.functionTester.test(this.node, query)
   }
 
-  // modifer object true/false
+  /**
+   * Query the parameters of function node
+   * @param query
+   */
   testParameters(query: any) {
-    this.log('testParameters', {
-      query: stringifyObj(query),
-      node: this.node
-    })
     return this.parametersTester.test(query)
   }
 }

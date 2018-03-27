@@ -14,6 +14,11 @@ import {
   decoratorName
 } from '../util/name'
 
+/**
+ * Test if every node in the collection is a parameter node
+ * @param nodes nodes to test
+ * @param options extra options such as error handler
+ */
 export function isParameters(nodes: any[], options: any = {}) {
   const {
     error
@@ -25,7 +30,7 @@ export function isParameters(nodes: any[], options: any = {}) {
   }
 }
 
-export function createParametersTester(node: any, options: any = {}) {
+export function createParametersTester(node: any, options: any = {}): ParameterTester | undefined {
   if (!isParameters(node, options)) return
   return new ParameterTester(node, options)
 }
@@ -39,6 +44,9 @@ export class ParametersTester extends BaseTester {
     this.nodes = nodes
   }
 
+  /**
+   * Convenient alias
+   */
   get parameters() {
     return this.nodes
   }
@@ -131,18 +139,24 @@ export class ParametersTester extends BaseTester {
    * @param query
    */
   testItems(query: any, options: any = {}) {
-    return this.queryItems(this.items, query, options)
+    return this.queryItems(this.items, query, this.createItemTesterOpts(options))
   }
 
-  createItemTesterOpts() {
+  /**
+   * Create items tester options for testItems
+   * Creates custom createTester factory that uses ParameterTester to test on each item
+   * @param options
+   * @returns { Object } item tester options
+   */
+  createItemTesterOpts(options: any = {}) {
     const createTester = (items: any[]) => {
       return (node: any, query: any) => {
         return this.createParameterTester(node).test(query)
       }
     }
-    return {
+    return Object.assign(options, {
       createTester
-    }
+    })
   }
 
 }
