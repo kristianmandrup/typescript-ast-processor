@@ -6,19 +6,29 @@ export class LiteralTester extends BaseDetailsTester {
     super(options)
   }
 
+  get syntaxMap() {
+    return {
+      number: ts.SyntaxKind.NumericLiteral,
+      string: ts.SyntaxKind.StringLiteral,
+      null: ts.SyntaxKind.NullKeyword,
+      array: ts.SyntaxKind.ArrayLiteralExpression,
+      object: ts.SyntaxKind.ObjectLiteralExpression
+    }
+  }
+
   numeric(node?: any) {
-    return this.has(ts.SyntaxKind.NumericLiteral, { node })
+    return this.has('number', { node })
   }
   string(node?: any) {
-    return this.has(ts.SyntaxKind.StringLiteral, { node })
+    return this.has('string', { node })
   }
   null(node?: any) {
-    return this.has(ts.SyntaxKind.NullKeyword, { node })
+    return this.has('null', { node })
   }
   array(node?: any) {
-    return this.has(ts.SyntaxKind.ArrayLiteralExpression, { node })
+    return this.has('array', { node })
   }
   object(node?: any) {
-    return this.has(ts.SyntaxKind.ObjectLiteralExpression, { node })
+    return this.has('object', { node })
   }
 }

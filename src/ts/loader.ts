@@ -20,7 +20,7 @@ export class Loader {
     return this.srcFile.loadSourceFile(fileName)
   }
 
-  parse(fileName: string) {
-    this.load(fileName).parse()
+  process(fileName: string) {
+    this.load(fileName).process()
   }
 }

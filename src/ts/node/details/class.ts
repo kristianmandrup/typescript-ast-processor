@@ -6,9 +6,17 @@ export class ClassDetailsTester extends BaseDetailsTester {
     super(options)
   }
 
+  get syntaxMap() {
+    return {
+      extends: ts.SyntaxKind.ExtendsKeyword,
+      implements: ts.SyntaxKind.ImplementsKeyword,
+      abstract: ts.SyntaxKind.AbstractKeyword
+    }
+  }
+
   // alias
   subclass(node?: any) {
-    return this.has(ts.SyntaxKind.ExtendsKeyword, { node })
+    return this.has('extends', { node })
   }
 
   extends(node?: any) {
@@ -16,10 +24,10 @@ export class ClassDetailsTester extends BaseDetailsTester {
   }
 
   implements(node?: any) {
-    return this.has(ts.SyntaxKind.ImplementsKeyword, { node })
+    return this.has('implements', { node })
   }
 
   abstract(node?: any) {
-    return this.has(ts.SyntaxKind.AbstractKeyword, { node })
+    return this.has('abstract', { node })
   }
 }

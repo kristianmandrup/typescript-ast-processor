@@ -6,16 +6,25 @@ export class AccessTester extends BaseDetailsTester {
     super(options)
   }
 
+  get syntaxMap() {
+    return {
+      private: ts.SyntaxKind.PrivateKeyword,
+      protected: ts.SyntaxKind.ProtectedKeyword,
+      public: ts.SyntaxKind.PublicKeyword,
+      static: ts.SyntaxKind.StaticKeyword
+    }
+  }
+
   private(node?: any) {
-    return this.has(ts.SyntaxKind.PrivateKeyword, { node })
+    return this.has('private', { node })
   }
   protected(node?: any) {
-    return this.has(ts.SyntaxKind.ProtectedKeyword, { node })
+    return this.has('protected', { node })
   }
   public(node?: any) {
-    return this.has(ts.SyntaxKind.PublicKeyword, { node })
+    return this.has('public', { node })
   }
   static(node?: any) {
-    return this.has(ts.SyntaxKind.StaticKeyword, { node })
+    return this.has('static', { node })
   }
 }

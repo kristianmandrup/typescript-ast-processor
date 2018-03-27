@@ -9,7 +9,13 @@ export class CallTester extends BaseDetailsTester {
     super(options)
   }
 
+  get syntaxMap() {
+    return {
+      await: ts.SyntaxKind.AwaitExpression
+    }
+  }
+
   await(node?: any) {
-    return this.has(ts.SyntaxKind.ArrowFunction, { node })
+    return this.has('await', { node })
   }
 }

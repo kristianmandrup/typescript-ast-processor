@@ -6,7 +6,13 @@ export class IdentifierTester extends BaseDetailsTester {
     super(options)
   }
 
+  get syntaxMap() {
+    return {
+      export: ts.SyntaxKind.ExportKeyword
+    }
+  }
+
   exported(node?: any) {
-    return this.has(ts.SyntaxKind.ExportKeyword, { node })
+    return this.has('export', { node })
   }
 }

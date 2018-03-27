@@ -6,35 +6,48 @@ export class TypeTester extends BaseDetailsTester {
     super(options)
   }
 
+  get syntaxMap() {
+    return {
+      void: ts.SyntaxKind.VoidKeyword,
+      string: ts.SyntaxKind.StringKeyword,
+      number: ts.SyntaxKind.NumberKeyword,
+      symbol: ts.SyntaxKind.SymbolKeyword,
+      array: ts.SyntaxKind.ArrayType,
+      union: ts.SyntaxKind.UnionType,
+      boolean: ts.SyntaxKind.BooleanKeyword,
+      any: ts.SyntaxKind.AnyKeyword
+    }
+  }
+
   void(node: any) {
-    return this.has(ts.SyntaxKind.VoidKeyword, { node })
+    return this.has('void', { node })
   }
 
   string(node: any) {
-    return this.has(ts.SyntaxKind.StringKeyword, { node })
+    return this.has('string', { node })
   }
 
   number(node: any) {
-    return this.has(ts.SyntaxKind.NumberKeyword, { node })
+    return this.has('number', { node })
   }
 
   symbol(node: any) {
-    return this.has(ts.SyntaxKind.SymbolKeyword, { node })
+    return this.has('symbol', { node })
   }
 
   array(node: any) {
-    return this.has(ts.SyntaxKind.ArrayType, { node })
+    return this.has('array', { node })
   }
 
   union(node: any) {
-    return this.has(ts.SyntaxKind.UnionType, { node })
+    return this.has('union', { node })
   }
 
   boolean(node: any) {
-    return this.has(ts.SyntaxKind.BooleanKeyword, { node })
+    return this.has('boolean', { node })
   }
 
   any(node: any) {
-    return this.has(ts.SyntaxKind.AnyKeyword, { node })
+    return this.has('any', { node })
   }
 }

@@ -6,10 +6,17 @@ export class NamespaceTester extends BaseDetailsTester {
     super(options)
   }
 
+  get flagMap() {
+    return {
+      namespace: ts.NodeFlags.Namespace,
+      nestedNamespace: ts.NodeFlags.NestedNamespace,
+    }
+  }
+
   in(node?: any) {
-    return this.has(ts.NodeFlags.Namespace, { node })
+    return this.has('namespace', { node })
   }
   nested(node?: any) {
-    return this.has(ts.NodeFlags.NestedNamespace, { node })
+    return this.has('nestedNamespace', { node })
   }
 }

@@ -14,7 +14,9 @@ const defaults = {
   compilerOpts
 }
 
-import { Parser } from './parser';
+import {
+  Processor
+} from './processor';
 
 export function createSrcFile(options: any = {}) {
   return new SrcFile(options)
@@ -28,7 +30,7 @@ export class SrcFile extends Source {
   fileName: string
   sourceFile: ts.SourceFile
   sourceText: string
-  _parser: Parser
+  _processor: Processor
 
   constructor(options: any = {}) {
     super(options)
@@ -91,14 +93,14 @@ export class SrcFile extends Source {
     return sourceText ? sourceText : this.readSourceText(fileName)
   }
 
-  get parser() {
-    this._parser = this._parser || new Parser(this)
-    return this._parser
+  get processor() {
+    this._processor = this._processor || new Processor(this)
+    return this._processor
   }
 
-  parse(sourceFile?: ts.SourceFile) {
+  process(sourceFile?: ts.SourceFile) {
     sourceFile = sourceFile || this.sourceFile
-    return sourceFile ? this.parser.parse(sourceFile) : this.error('missing source file')
+    return sourceFile ? this.processor.process(sourceFile) : this.error('missing source file')
   }
 }
 

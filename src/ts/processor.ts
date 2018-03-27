@@ -6,7 +6,7 @@ import { NodeVisitor } from './visitor'
 import { RootDataCollector } from './collector';
 import { Instrumentor } from './instrumentor/base';
 
-export class Parser {
+export class Processor {
   options: any
   srcFile: SrcFile
   visitor: NodeVisitor
@@ -65,7 +65,7 @@ export class Parser {
     return new NodeVisitor(options || this.options)
   }
 
-  parse(sourceFile: SourceFile) {
+  process(sourceFile: SourceFile) {
     return this.visitor.visit(sourceFile)
   }
 }

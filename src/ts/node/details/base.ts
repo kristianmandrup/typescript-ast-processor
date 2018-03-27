@@ -3,7 +3,8 @@ import { Loggable } from '../../loggable'
 import {
   callFun,
   enumKeys,
-  toList
+  toList,
+  isStr
 } from '../../util'
 import {
   queryNode
@@ -13,6 +14,8 @@ export class BaseDetailsTester extends Loggable {
   checkers: any = {}
   modifierKey: string = 'modifiers'
   node: any
+  syntaxMap: any = {}
+  flagMap: any = {}
 
   constructor(options: any) {
     super(options)
@@ -54,15 +57,24 @@ export class BaseDetailsTester extends Loggable {
     return modifiers.find((nodeModifier: any) => nodeModifier.kind === modifier)
   }
 
-  has(dust: any, options: any = {}): boolean {
-    if (ts.SyntaxKind[dust]) return this.hasModifier(dust, options)
-    if (ts.NodeFlags[dust]) return this.hasFlag(dust, options)
-    return this.error(`has: unknown has (dust) argument, must be a ts modifier or flag`, {
-      dust
+  isModifier(key: any) {
+    return isStr(key) ? this.syntaxMap[key] : ts.SyntaxKind[key]
+  }
+
+  isFlag(key: any) {
+    return isStr(key) ? this.flagMap[key] : ts.NodeFlags[key]
+  }
+
+  has(key: any, options: any = {}): boolean {
+    if (this.isModifier(key)) return this.hasModifier(key, options)
+    if (this.isFlag(key)) return this.hasFlag(key, options)
+    return this.error(`has: unknown has key argument, must be a ts modifier or flag`, {
+      key
     }) && false
   }
 
-  hasModifier(modifier: ts.SyntaxKind, options: any = {}): boolean {
+  hasModifier(key: ts.SyntaxKind | string, options: any = {}): boolean {
+    const modifier: ts.SyntaxKind = isStr(key) ? this.syntaxMap[key] : key
     const node: ts.Node = this.nodeOf(options)
     const modifiers = this.modifiersOf(node, options)
     if (!modifiers) return false
@@ -70,7 +82,8 @@ export class BaseDetailsTester extends Loggable {
     return Boolean(result)
   }
 
-  hasFlag(flag: any, options: any = {}): boolean {
+  hasFlag(key: any, options: any = {}): boolean {
+    const flag: ts.NodeFlags = isStr(key) ? this.flagMap[key] : key
     const node = this.nodeOf(options)
     if (!node.flags) return false
     // to test if a const: https://github.com/Microsoft/TypeScript/issues/22681#issuecomment-374002621

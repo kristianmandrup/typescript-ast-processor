@@ -6,15 +6,23 @@ export class ConditionalTester extends BaseDetailsTester {
     super(options)
   }
 
+  get syntaxMap() {
+    return {
+      if: ts.SyntaxKind.IfKeyword,
+      else: ts.SyntaxKind.ElseKeyword,
+      switch: ts.SyntaxKind.SwitchKeyword
+    }
+  }
+
   if(node?: any) {
-    return this.has(ts.SyntaxKind.IfKeyword, { node })
+    return this.has('if', { node })
   }
 
   else(node?: any) {
-    return this.has(ts.SyntaxKind.ElseKeyword, { node })
+    return this.has('else', { node })
   }
 
   switch(node?: any) {
-    return this.has(ts.SyntaxKind.SwitchKeyword, { node })
+    return this.has('switch', { node })
   }
 }
