@@ -55,14 +55,19 @@ export class ListTester extends BaseTester {
     const queryExpr = query[queryKey]
     if (!queryExpr) return false
 
-    this.nodes.map(node => {
+    return this.nodes.map(node => {
       return queryExpr[iteratorMethod]((query: any) => {
         return this.testItem(node, query)
       })
     })
   }
 
-  testItem(node: any, queryExpr: any) {
-    return this.itemTester ? this.itemTester.forNode(node).test(queryExpr) : this.tester(node, queryExpr)
+  /**
+   * Test a single item of the list using an itemTester or custom tester function
+   * @param node the item node to test
+   * @param queryExpr the query to execute on item node
+   */
+  testItem(node: any, query: any) {
+    return this.itemTester ? this.itemTester.forNode(node).test(query) : this.tester(node, query)
   }
 }

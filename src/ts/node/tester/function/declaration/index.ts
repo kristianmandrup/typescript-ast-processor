@@ -5,4 +5,4 @@ export {
 export {
   FunctionLikeNodeTester,
   createFunctionTester
-} from './function'
+} from './function-declaration'

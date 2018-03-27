@@ -4,7 +4,8 @@ export {
 
 export {
   testNot,
-  testOr
+  testOr,
+  testAnd
 } from './boolean-logic'
 
 export {

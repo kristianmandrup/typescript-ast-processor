@@ -1,10 +1,14 @@
 import * as ts from 'typescript'
-import { ListTester } from '../_list'
-import { DecoratorTester } from './decorator';
+import { ListTester } from '../generic'
+import { createClassDecoratorTester } from './class-decorator';
 
-export class DecoratorsTester extends ListTester {
+export class ClassDecoratorsTester extends ListTester {
   constructor(node: any, options: any) {
     super(node, options)
-    this.item = new DecoratorTester(node, options)
   }
+
+  createClassDecoratorTester(decoratorNode: any) {
+    return createClassDecoratorTester(decoratorNode, this.options)
+  }
+
 }

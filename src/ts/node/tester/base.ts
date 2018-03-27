@@ -2,7 +2,9 @@ import { Loggable } from '../../loggable';
 import {
   resolveArrayIteratorFindMethod,
   testOr,
+  testAnd,
   testNot,
+  testName,
   testNames
 } from './util'
 import {

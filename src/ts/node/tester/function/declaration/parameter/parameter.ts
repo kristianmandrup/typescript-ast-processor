@@ -1,13 +1,13 @@
 import * as ts from 'typescript'
-import { IndentifierNodeTester } from '../../identifier';
+import { IndentifierNodeTester } from '../../../identifier';
 import {
   testName,
   testNames,
   testValue,
   initializerDetails
-} from '../../util'
+} from '../../../util'
 
-import { TypeNodeTester } from '../../type';
+import { TypeNodeTester } from '../../../type';
 
 export function isParameter(node: any) {
   return ts.isParameter(node)

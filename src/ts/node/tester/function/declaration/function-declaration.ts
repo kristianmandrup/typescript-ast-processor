@@ -1,16 +1,15 @@
 import * as ts from 'typescript'
 import {
   ParametersTester
-} from '../function/parameters';
+} from './parameters';
 import {
   TypeNodeTester
-} from '../type';
+} from '../../type';
 import {
-  stringifyObj,
   isEmpty
-} from '../../../util'
-import { FunctionTester } from '../../details';
-import { IndentifierNodeTester } from '../identifier';
+} from '../../../../util'
+import { FunctionTester } from '../../../details';
+import { IndentifierNodeTester } from '../../identifier';
 
 export function isFunctionLike(node: any) {
   return ts.isFunctionLike(node)

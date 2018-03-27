@@ -1,5 +1,5 @@
 import * as ts from 'typescript'
-import { BaseTester } from '../base'
+import { BaseTester } from '../../base'
 import {
   createParameterTester,
   ParameterTester,
@@ -9,10 +9,10 @@ import {
   idDetails,
   typeName,
   nameOf,
-} from '../util'
+} from '../../util'
 import {
   decoratorName
-} from '../util/name'
+} from '../../util/name'
 
 /**
  * Test if every node in the collection is a parameter node
@@ -30,9 +30,9 @@ export function isParameters(nodes: any[], options: any = {}) {
   }
 }
 
-export function createParametersTester(node: any, options: any = {}): ParameterTester | undefined {
+export function createParametersTester(node: any, options: any = {}): ParametersTester | undefined {
   if (!isParameters(node, options)) return
-  return new ParameterTester(node, options)
+  return new ParametersTester(node, options)
 }
 
 export class ParametersTester extends BaseTester {

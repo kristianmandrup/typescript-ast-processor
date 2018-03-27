@@ -24,6 +24,7 @@ export {
   testName,
   testNot,
   testOr,
+  testAnd,
   resolveArrayIteratorFindMethod
 } from './test'
 export {
