@@ -1,9 +1,12 @@
-import { CheckModifier } from './generic'
+import * as ts from 'typescript'
 import { BaseDetailsTester } from './base';
 
 export class IdentifierTester extends BaseDetailsTester {
   constructor(options: any) {
     super(options)
-    this.checkers = new CheckModifier(options).identifier
+  }
+
+  exported(node?: any) {
+    return this.has(ts.SyntaxKind.ExportKeyword, { node })
   }
 }

@@ -1,42 +1,24 @@
 import * as ts from 'typescript'
 import { BaseDetailsTester } from './base';
-import {
-  enumKeys
-} from '../../util'
 
 export class LiteralTester extends BaseDetailsTester {
   constructor(options: any) {
     super(options)
   }
 
-  literalName(node: any) {
-    const kind = node.kind || node
-    return ts.SyntaxKind[ts.SyntaxKind[kind]]
+  numeric(node?: any) {
+    return this.has(ts.SyntaxKind.NumericLiteral, { node })
   }
-
-  has(node: any, literal: ts.SyntaxKind) {
-    if (!node.type) return
-    return Boolean(node.kind === literal)
+  string(node?: any) {
+    return this.has(ts.SyntaxKind.StringLiteral, { node })
   }
-
-  get literal() {
-    const has = this.has.bind(this)
-    return {
-      numeric(node: any) {
-        return has(node, ts.SyntaxKind.NumericLiteral)
-      },
-      string(node: any) {
-        return has(node, ts.SyntaxKind.StringLiteral)
-      },
-      null(node: any) {
-        return has(node, ts.SyntaxKind.NullKeyword)
-      },
-      array(node: any) {
-        return has(node, ts.SyntaxKind.ArrayLiteralExpression)
-      },
-      object(node: any) {
-        return has(node, ts.SyntaxKind.ObjectLiteralExpression)
-      }
-    }
+  null(node?: any) {
+    return this.has(ts.SyntaxKind.NullKeyword, { node })
+  }
+  array(node?: any) {
+    return this.has(ts.SyntaxKind.ArrayLiteralExpression, { node })
+  }
+  object(node?: any) {
+    return this.has(ts.SyntaxKind.ObjectLiteralExpression, { node })
   }
 }

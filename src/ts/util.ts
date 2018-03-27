@@ -1,3 +1,9 @@
+import * as ts from 'typescript'
+
+export function stringifyObj(obj: any) {
+  return JSON.stringify(obj, null, 2)
+}
+
 function createTypeCheckName(name: string) {
   return `is${capitalize(name)}`
 }
@@ -91,3 +97,10 @@ export function callFun(maybeFun: Function, ...args: any[]) {
 export function enumKeys(E: any) {
   return Object.keys(E).filter(k => typeof E[k as any] === 'number')
 }
+
+export function syntaxNames() {
+  return enumKeys(ts.SyntaxKind).map((key: string) => {
+    return key.replace(/Keyword$/, '').toLowerCase()
+  })
+}
+

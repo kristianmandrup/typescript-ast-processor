@@ -1,31 +1,21 @@
 import * as ts from 'typescript'
-import { CheckModifier } from './generic'
 import { BaseDetailsTester } from './base';
 
 export class FunctionTester extends BaseDetailsTester {
   constructor(options: any) {
     super(options)
-    this.checkers = this.function
   }
 
-  has(node: any, type: ts.SyntaxKind) {
-    if (!node.type) return
-    return Boolean(node.type === type)
+  async(node: any) {
+    return this.has(node, ts.SyntaxKind.AsyncKeyword)
   }
 
-  get function() {
-    const has = this.has.bind(this)
-    return {
-      async(node: any) {
-        return has(node, ts.SyntaxKind.AsyncKeyword)
-      },
-      arrow(node: any) {
-        return has(node, ts.SyntaxKind.ArrowFunction)
-      },
-      generator(node: any) {
-        return node.asteriskToken === ts.SyntaxKind.AsteriskToken
-      }
-    }
+  arrow(node: any) {
+    return this.has(node, ts.SyntaxKind.ArrowFunction)
   }
 
+  generator(node?: any) {
+    node = node || this.node
+    return node.asteriskToken === ts.SyntaxKind.AsteriskToken
+  }
 }

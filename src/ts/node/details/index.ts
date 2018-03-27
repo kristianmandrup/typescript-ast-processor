@@ -1,8 +1,4 @@
 export {
-  CheckFlag,
-  CheckModifier
-} from './generic'
-export {
   AccessTester
 } from './access'
 export {
