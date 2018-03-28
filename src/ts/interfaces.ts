@@ -1,4 +1,4 @@
 export interface ISourceFileOpts {
-  fileName: string
+  filePath: string
   sourceText?: string
 }

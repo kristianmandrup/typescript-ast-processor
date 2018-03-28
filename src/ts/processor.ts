@@ -2,17 +2,24 @@ import {
   SourceFile
 } from 'typescript'
 import { SrcFile } from './src-file';
-import { NodeVisitor } from './visitor'
+import {
+  createASTNodeTraverser,
+  ASTNodeTraverser
+} from './visitor'
 import { RootDataCollector } from './collector';
 import { Instrumentor } from './instrumentor/base';
 
 export class Processor {
   options: any
   srcFile: SrcFile
-  visitor: NodeVisitor
+  nodeTraverser: ASTNodeTraverser
   collector: RootDataCollector
   instrumentor: Instrumentor
 
+  /**
+   * Create a Processor instance
+   * @param srcFile
+   */
   constructor(srcFile: SrcFile) {
     this.srcFile = srcFile
     const options = srcFile.options
@@ -25,11 +32,22 @@ export class Processor {
       .intializeInstrumentor()
   }
 
+  /**
+   * Register a single labeled processing entity
+   * Consists of a of visitor and collector function
+   * @param label
+   * @param functionMap
+   */
   register(label: string, functionMap: any) {
     this.collector.registerOne(label, functionMap.collector)
-    this.visitor.registerVisitor(label, functionMap.visitor)
+    this.nodeTraverser.registerVisitor(label, functionMap.visitor)
   }
 
+  /**
+   * Register a processing map
+   * consisting of visitor and collector functions for each labeled entity to monitor
+   * @param nestedFunctionMap
+   */
   registerMap(nestedFunctionMap: any) {
     Object.keys(nestedFunctionMap).map(label => {
       const functionMap = nestedFunctionMap[label]
@@ -37,11 +55,13 @@ export class Processor {
     })
   }
 
-
+  /**
+   * Initializes the visitor that traverses the (full) AST
+   */
   intializeVisitor() {
     const { options } = this
     const createVisitor = options.createVisitor || this.createVisitor
-    this.visitor = createVisitor(options)
+    this.nodeTraverser = createVisitor(options)
     return this
   }
 
@@ -52,7 +72,6 @@ export class Processor {
     return this
   }
 
-
   createInstrumentor(options: any) {
     return new Instrumentor(options || this.options)
   }
@@ -62,10 +81,10 @@ export class Processor {
   }
 
   createVisitor(options: any) {
-    return new NodeVisitor(options || this.options)
+    return createASTNodeTraverser(options || this.options)
   }
 
   process(sourceFile: SourceFile) {
-    return this.visitor.visit(sourceFile)
+    return this.nodeTraverser.visit(sourceFile)
   }
 }

@@ -9,6 +9,11 @@ export function createTypeTester(node: any, options: any = {}) {
 export class TypeNodeTester extends BaseTester {
   typeTester: TypeTester
 
+  /**
+   * Create a TypeNodeTester instance, used to query a type node
+   * @param node
+   * @param options
+   */
   constructor(node: any, options: any) {
     super(node, options)
     this.typeTester = new TypeTester(options)

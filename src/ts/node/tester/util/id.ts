@@ -8,7 +8,18 @@ import {
   enumKey
 } from './enum'
 
-export function initializerDetails(node: any) {
+interface IInitializerDetails {
+  type: string
+  value: any
+  textValue: string
+}
+
+/**
+ * Get initializer details for a parameter node (or similar?)
+ * @param node parameter node (with initializer)
+ * @returns { Object }
+ */
+export function initializerDetails(node: any): IInitializerDetails | {} {
   const initializer = node.initializer
   if (!initializer) return {}
 

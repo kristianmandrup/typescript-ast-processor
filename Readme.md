@@ -108,12 +108,12 @@ collector.collectData()
 instrumentor.instrument()
 ```
 
-### Visitor
+### AST Node Traverser
 
-The main Visitor is `NodeVisitor` which contains the generic functionality to traverse down the TypeScript AST.
+The default AST traverser is `ASTNodeTraverser` which contains generic functionality to traverse down the TypeScript AST.
 
 ```js
-class NodeVisitor extends Loggable {
+class ASTNodeTraverser extends Loggable {
   // register a map of visitor functions
   registerVisitors(registry: any) {
     // ...
@@ -141,7 +141,7 @@ It can be difficult and messy to build your own visitor functions using the Type
 The factories make it much easier to build complex visitors.
 
 ```js
-const { factory } = parser.visitor
+const { factory } = processor.visitor
 
 const visitorList = [
   // will generate a named function called FunctionDeclaration
@@ -179,7 +179,12 @@ const visitors = Object.assign(visitors, {
 
 When figuring out what to query for or what data to collect, use [AST explorer](https://astexplorer.net/) or [ts-ast-viewer](http://ts-ast-viewer.com/)
 
-For details on how to query nodes and collect data (information) see [AST Query engine](docs/query/engine.md)
+For details on how to *efficiently* query nodes and collect data (information) see [AST Query engine](docs/query/engine.md)
+
+The query engine can:
+
+- query nodes matching complex nested conditions
+- collect nested node data in an easy to work with structure
 
 #### Visitor flow
 

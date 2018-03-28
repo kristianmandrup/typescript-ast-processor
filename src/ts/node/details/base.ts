@@ -193,7 +193,8 @@ export class BaseDetailsTester extends Loggable {
    */
   test(query: any, options: any = {}) {
     const node: ts.Node = this.nodeOf(options)
-    return queryNode(node, query, this.is.bind(this))
+    const queryOpts = Object.assign(options, { tester: this.is.bind(this) })
+    return queryNode(node, query, queryOpts)
   }
 
   /**

@@ -1,7 +1,7 @@
 import * as ts from 'typescript'
 import { BaseTester } from '..';
 
-export class ThrowTester extends BaseTester {
+export class BlockTester extends BaseTester {
   constructor(node: any, options: any) {
     super(node, options)
   }

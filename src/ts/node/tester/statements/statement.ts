@@ -1,7 +1,11 @@
 import * as ts from 'typescript'
-import { ItemTester } from '../_item';
+import { BaseTester } from '..';
 
-export class StatementTester extends ItemTester {
+export function createStatementTester(node: any, options: any) {
+  return new StatementTester(node, options)
+}
+
+export class StatementTester extends BaseTester {
   constructor(node: any, options: any) {
     super(node, options)
   }

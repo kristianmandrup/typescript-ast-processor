@@ -1,1 +1,1 @@
-// TODO: Extract utility function from base.ts here
+// TODO: Extract utility functions from base.ts here

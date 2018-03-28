@@ -1,7 +1,7 @@
 import * as ts from 'typescript'
-import { ListTester } from '../_list'
+import { BaseTester } from '../../..';
 
-export class ConditionsTester extends ListTester {
+export class SwitchTester extends BaseTester {
   constructor(node: any, options: any) {
     super(node, options)
   }

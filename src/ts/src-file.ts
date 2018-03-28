@@ -25,29 +25,38 @@ export function createSrcFile(options: any = {}) {
 export class SrcFile extends Source {
   compilerOpts: ts.CompilerOptions
   languageVersion: ts.ScriptTarget
-  fileNames: string[] = []
-  tsFileNames: string[] = []
-  fileName: string
+  filePaths: string[] = []
+  tsfilePaths: string[] = []
+  filePath: string
   sourceFile: ts.SourceFile
   sourceText: string
   _processor: Processor
 
+  /**
+   * Create a SrcFile instance with compiler options and language version to use
+   * @param options
+   */
   constructor(options: any = {}) {
     super(options)
     this.compilerOpts = options.compiler || defaults.compilerOpts
     this.languageVersion = this.scriptTargetFor(options.languageVersion)
   }
 
+  /**
+   * Resolve the script target such as latest or ES2017 etc.
+   * TODO: currently hardcoded to latest
+   * @param languageVersion
+   */
   scriptTargetFor(languageVersion: string) {
     return ts.ScriptTarget.Latest
   }
 
   /**
    * Check if this is a TypeScript file based on extension
-   * @param fileName
+   * @param filePath
    */
-  isTsFile(fileName: string): boolean {
-    return fileName.endsWith('.ts') || fileName.endsWith('.tsx')
+  isTsFile(filePath: string): boolean {
+    return filePath.endsWith('.ts') || filePath.endsWith('.tsx')
   }
 
 
@@ -55,19 +64,23 @@ export class SrcFile extends Source {
    * Validate that we have any source files
    */
   validateSrcFiles(): any {
-    return this.tsFileNames.length > 0 || this.error('No TypeScript files found', {
-      fileNames: this.fileNames
+    return this.tsfilePaths.length > 0 || this.error('No TypeScript files found', {
+      filePaths: this.filePaths
     })
   }
 
-  loadSourceFile(fileName: string): SrcFile {
-    if (!this.isTsFile(fileName)) {
+  /**
+   * Load a source file
+   * @param filePath
+   */
+  loadSourceFile(filePath: string): SrcFile {
+    if (!this.isTsFile(filePath)) {
       this.error('Not a valid TypeScript file extension', {
-        fileName
+        filePath
       })
     }
-    this.fileName = fileName
-    this.createSourceFile({ fileName })
+    this.filePath = filePath
+    this.createSourceFile({ filePath })
     return this
   }
 
@@ -77,20 +90,20 @@ export class SrcFile extends Source {
    */
   createSourceFile(options: ISourceFileOpts): ts.SourceFile {
     this.sourceText = this.sourceTextFor(options)
-    this.sourceFile = ts.createSourceFile(options.fileName, this.sourceText, this.languageVersion, true)
+    this.sourceFile = ts.createSourceFile(options.filePath, this.sourceText, this.languageVersion, true)
     return this.sourceFile
   }
 
-  readSourceText(fileName: string) {
-    return this.fs.readFileSync(fileName).toString()
+  readSourceText(filePath: string) {
+    return this.fs.readFileSync(filePath).toString()
   }
 
   sourceTextFor(options: ISourceFileOpts) {
     const {
-      fileName,
+      filePath,
       sourceText
     } = options
-    return sourceText ? sourceText : this.readSourceText(fileName)
+    return sourceText ? sourceText : this.readSourceText(filePath)
   }
 
   get processor() {

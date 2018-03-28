@@ -7,13 +7,29 @@ import {
 } from '../../../util'
 
 
-function queryNodeItemResult(obj: any) {
-  return obj
+/**
+ * Default function to format query item result
+ * @param result
+ */
+function _formatQueryItemResult(result: any) {
+  return result
 }
 
-export function queryNode(node: any, query: any, tester?: Function) {
+/**
+ * Query a node using a query and tester function
+ * TODO: refactor/partition into smaller parts!
+ * @param node
+ * @param query
+ * @param tester
+ */
+export function queryNode(node: any, query: any, options: any = {}) {
+  let {
+    tester,
+    formatQueryItemResult
+  } = options
   // use testName function as tester by default
-  const testFun = tester || testName
+  tester = tester || testName
+  formatQueryItemResult = formatQueryItemResult || _formatQueryItemResult
 
   // find the key to use for querying node and the Array iterator method to use
   const queryDetails = resolveArrayIteratorFindMethod(query)
@@ -28,9 +44,9 @@ export function queryNode(node: any, query: any, tester?: Function) {
   const queryList = toList(queryPart)
 
   return queryList[iteratorMethod]((name: string) => {
-    const match = testFun(node, name)
+    const match = tester(node, name)
     return match ?
-      queryNodeItemResult({
+      formatQueryItemResult({
         node,
         name,
         match

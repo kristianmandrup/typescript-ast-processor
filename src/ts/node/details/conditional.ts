@@ -6,6 +6,9 @@ export class ConditionalTester extends BaseDetailsTester {
     super(options)
   }
 
+  /**
+   * Map of conditionals
+   */
   get syntaxMap() {
     return {
       if: ts.SyntaxKind.IfKeyword,

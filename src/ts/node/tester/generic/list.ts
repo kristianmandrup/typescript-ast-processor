@@ -36,6 +36,9 @@ export class ListTester extends BaseTester {
     this.tester = this.createTester()
   }
 
+  /**
+   * Create a tester function to test the list of items
+   */
   createTester(): Function {
     return this.options.createTester ? this.options.createTester(this.nodes) : this.options.tester
   }

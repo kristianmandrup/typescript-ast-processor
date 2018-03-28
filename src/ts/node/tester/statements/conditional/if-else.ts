@@ -1,7 +1,7 @@
 import * as ts from 'typescript'
-import { ListTester } from '../_list'
+import { BaseTester } from '../..';
 
-export class NestedBlockTester extends ListTester {
+export class IfElseTester extends BaseTester {
   constructor(node: any, options: any) {
     super(node, options)
   }
