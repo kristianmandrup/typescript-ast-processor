@@ -1,18 +1,20 @@
-# TypeScript AST Traverse
+# TypeScript AST Processor
 
-Trying to make it much easier to design tools that work with the TypeScript AST by providing a higher level API, helpers etc.
+This library is designed as a foundation for writing tools that work with the TypeScript AST. It aims to provide a higher level API, helpers etc. so you avoid the "pain" of working with the AST directly in most cases.
 
-Traverse the TypeScript AST:
+To traverse the TypeScript AST:
 
 - visit nodes of interest
-- collect data via collectors
-- perform instrumentation based on collected data
-- side effects such as code replacements or calling micro services etc.
+- query nodes and collect node data
+- aggregate collected data via collectors
+- perform instrumentations based on collected data
+- perform any side effects such as code replacements or calling micro services etc.
 
 ## Disclaimer
 
-Still a WIP. Tests not written yet, so purely "dream code" for now.
-Please help contribute to make it happen!!!
+Still a WIP. Mostly "dream code" for now.
+
+Please help contribute to make it happen, see [Contributing](CONTRIBUTING.md)
 
 ## Resources
 
@@ -22,6 +24,17 @@ Please help contribute to make it happen!!!
 See [Resources](docs/resources.md) for more
 
 ## Design
+
+The design uses the following main concepts:
+
+- [Loader](#Loader)
+- [SrcFile](#SrcFile)
+- [Processor](#Processor)
+- [Visitor](#Visitor)
+- [Collector](#Collector)
+- [Instrumentor](#Instrumentor)
+
+PS: Would love this lib to integrate better with [ts-simple-ast](https://github.com/dsherret/ts-simple-ast) and work seamlessly with `Project` and `Program` concepts as well.
 
 ### Loader
 
@@ -162,13 +175,13 @@ const visitors = Object.assign(visitors, {
 })
 ```
 
-## Testing node details
+#### Querying for node details
 
 When figuring out what to query for or what data to collect, use [AST explorer](https://astexplorer.net/) or [ts-ast-viewer](http://ts-ast-viewer.com/)
 
 For details on how to query nodes and collect data (information) see [AST Query engine](docs/query/engine.md)
 
-## Visitor flow
+#### Visitor flow
 
 Each visitor function is called with `(node, state, options)`
 
@@ -195,7 +208,7 @@ class NodeVisitor {
 }
 ```
 
-### Data collection
+#### Data collection
 
 The visitor factory is passed a collector, with all the registered data collectors.
 A visitor created via a factory will try to call a matching collector (ie. matching label) with the node matched by the visitor.
@@ -274,7 +287,7 @@ The instrumentor should only instrument using a single (root) data aggregator or
 
 The main instrumentor is initialized with reference to the main data collector in `Processor`.
 
-### Replacer
+#### Replacer
 
 A `Replacer` (as in `TypeWiz`) can be used to replace code in a source file directly in response to the instrumentation.
 
