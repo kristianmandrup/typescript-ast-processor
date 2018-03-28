@@ -1,4 +1,4 @@
-import { FunctionCallNodeTester } from "../function/call/function-call";
+import { FunctionCallNodeTester } from '../functions/call/function-call'
 
 
 export function createClassDecoratorTester(node: any, options: any = {}): ClassDecoratorTester {

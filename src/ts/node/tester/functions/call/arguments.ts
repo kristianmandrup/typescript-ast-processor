@@ -1,4 +1,4 @@
-import { BaseTester } from "../..";
+import { BaseTester } from '../../base'
 import {
   isArgument,
   createArgumentTester

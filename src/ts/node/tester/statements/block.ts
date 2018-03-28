@@ -1,5 +1,4 @@
-import * as ts from 'typescript'
-import { BaseTester } from '..'
+import { BaseTester } from '../base'
 import {
   findParentBlocks
 } from './util'

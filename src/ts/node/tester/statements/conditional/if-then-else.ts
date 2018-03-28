@@ -1,6 +1,10 @@
 import * as ts from 'typescript'
 import { BlockStatementTester } from '../block-statement';
 
+export function createIfThenElseTester(node: any, options: any = {}): IfThenElseTester {
+  return new IfThenElseTester(node, options)
+}
+
 export class IfThenElseTester extends BlockStatementTester {
   thenStatement: ts.Block
   elseStatement: ts.Block

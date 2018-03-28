@@ -1,5 +1,5 @@
-import { IndentifierNodeTester } from "../../identifier";
-import { ArgumentsTester } from "./arguments";
+import { IndentifierNodeTester } from '../../identifier'
+import { ArgumentsTester } from './arguments'
 
 export function createFunctionCallNodeTester(node: any, options: any = {}) {
   return new FunctionCallNodeTester(node, options)

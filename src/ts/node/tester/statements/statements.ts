@@ -1,4 +1,3 @@
-import * as ts from 'typescript'
 import { ListTester } from '../generic'
 import { createStatementTester } from './statement';
 

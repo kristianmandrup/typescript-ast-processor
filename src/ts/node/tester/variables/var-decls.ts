@@ -2,7 +2,7 @@ import * as ts from 'typescript'
 import { ListTester } from '../generic'
 import {
   createVariableDeclarationTester
-} from './variable-declaration'
+} from './var-decl'
 
 /**
  * Factory to create a Variable declarations tester

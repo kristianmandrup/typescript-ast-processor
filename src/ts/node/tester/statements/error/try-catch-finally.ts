@@ -1,8 +1,7 @@
 import * as ts from 'typescript'
 import { BlockStatementTester } from '../block-statement';
 
-export function createTryCatchFinallyTester(node: any, options: any = {}) {
-  // if (!isSwitchStatement(node)) return
+export function createTryCatchFinallyTester(node: any, options: any = {}): TryCatchFinallyTester {
   return new TryCatchFinallyTester(node, options)
 }
 

@@ -1,3 +1,0 @@
-export {
-  SwitchTester
-} from './switch'

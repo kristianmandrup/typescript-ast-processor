@@ -1,31 +1,28 @@
-export {
-  ClassTester,
-  ClassMembersTester,
-  createClassTester,
-  createClassHeritageTester,
-  createClassHeritageClauseTester,
-  createClassMembersTester,
-  createClassMemberTester
-} from './class'
+import * as base from './base'
+import * as decorators from './decorators'
+import * as literals from './literals'
+import * as variables from './variables'
+import * as generic from './generic'
+import * as initializer from './statements'
+import * as statements from './statements'
+import * as functions from './functions'
+import * as classes from './classes'
+import * as identifier from './identifier'
+import * as type from './type'
 
 export {
-} from './function'
-
-export {
-  createInitializerNodeTester,
-  InitializerNodeTester
-} from './initializer'
-
-
-import * as $function from './function'
-import * as $class from './class'
-
-export {
-  $function,
-  $class
+  base,
+  decorators,
+  literals,
+  variables,
+  generic,
+  initializer,
+  statements,
+  functions,
+  classes,
+  identifier,
+  type
 }
 
-export {
-  BaseTester
-} from './base'
+
 

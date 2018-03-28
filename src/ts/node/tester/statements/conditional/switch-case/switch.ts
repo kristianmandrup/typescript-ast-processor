@@ -1,13 +1,12 @@
 import * as ts from 'typescript'
-import { BaseTester } from '../../..';
+import { BaseTester } from '../../../base';
 import { createCaseBlockTester, CaseBlockTester } from './case-block';
-
 
 export function isSwitchStatement(node: any) {
   return ts.isSwitchStatement(node)
 }
 
-export function createFunctionTester(node: any, options: any = {}) {
+export function createSwitchStatementTester(node: any, options: any = {}) {
   if (!isSwitchStatement(node)) return
   return new SwitchStatementTester(node, options)
 }

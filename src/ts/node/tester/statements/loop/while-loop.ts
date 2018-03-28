@@ -1,6 +1,18 @@
 import * as ts from 'typescript'
-import { BlockStatementTester } from '../block-statement';
+import { BlockStatementTester } from '../block-statement'
 
+/**
+ * Factory to create a While loop tester
+ * @param node
+ * @param options
+ */
+export function createWhileLoopTester(node: any, options: any = {}): WhileLoopTester {
+  return new WhileLoopTester(node, options)
+}
+
+/**
+ * While loop query tester and data aggregator
+ */
 export class WhileLoopTester extends BlockStatementTester {
   constructor(node: any, options: any) {
     super(node, options)
