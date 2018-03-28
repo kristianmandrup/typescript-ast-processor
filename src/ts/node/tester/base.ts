@@ -35,6 +35,24 @@ export abstract class BaseTester extends Loggable {
   }
 
   /**
+   * Querying number of specific items such as cases, statements, blocks etc
+   * @param query
+   * @param count
+   */
+  testCount(query: any, count: number) {
+    query = query.count || query
+
+    // normalize
+    query.min = query.min || 0
+    query.max = query.max || 999
+
+    if (count < query.min) return false
+    if (count > query.max) return false
+    if (query.eq && query.eq !== count) return false
+    return true
+  }
+
+  /**
    * Many node tests are on modifiers collection
    * Used a lot in node details testers
    */

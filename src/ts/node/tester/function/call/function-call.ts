@@ -27,4 +27,8 @@ export class FunctionCallNodeTester extends IndentifierNodeTester {
       parameters: this.argumentsTester.info(),
     }
   }
+
+  test(query: any) {
+    return true
+  }
 }

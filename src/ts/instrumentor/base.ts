@@ -1,14 +1,14 @@
 import * as ts from 'typescript'
 import {
   applyReplacements,
-  Replacement
+  SourceTextReplacement
 } from './replacement';
 import { SrcFile } from '../src-file';
 import { Loggable } from '../loggable';
 import { DataCollector } from '../collector';
 
 export class Instrumentor extends Loggable {
-  replacements = [] as Replacement[]
+  replacements = [] as SourceTextReplacement[]
 
   // ??
   declaration = 'declare function $_$twiz(name: string, value: any, pos: number, filename: string, opts: any): void;\n';
@@ -30,7 +30,7 @@ export class Instrumentor extends Loggable {
   instrument() {
     const { replacements } = this
     if (replacements.length) {
-      replacements.push(Replacement.insert(0, this.declaration))
+      replacements.push(SourceTextReplacement.insert(0, this.declaration))
     }
     return applyReplacements(this.source, replacements)
   }

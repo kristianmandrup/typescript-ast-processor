@@ -4,7 +4,8 @@ export {
 export {
   idDetails,
   typeName,
-  initializerDetails
+  initializerDetails,
+  IInitializerDetails
 } from './id'
 export {
   nameOf,

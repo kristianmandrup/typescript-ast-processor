@@ -2,6 +2,12 @@ import * as ts from 'typescript'
 import { BaseTester } from './base'
 import { TypeTester } from '../details/type';
 
+/**
+ * Factory to create type node tester
+ * Can be used to test function return type, parameter types or variable decl types
+ * @param node
+ * @param options
+ */
 export function createTypeTester(node: any, options: any = {}) {
   return new TypeNodeTester(node, options)
 }

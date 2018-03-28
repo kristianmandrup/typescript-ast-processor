@@ -10,6 +10,10 @@ import {
 } from '../../../../util'
 import { FunctionTester } from '../../../details';
 import { IndentifierNodeTester } from '../../identifier';
+import {
+  BlockNodeTester,
+  createBlockNodeTester
+} from '../../statements/block';
 
 export function isFunctionLike(node: any) {
   return ts.isFunctionLike(node)
@@ -22,12 +26,13 @@ export function createFunctionTester(node: any, options: any = {}) {
 
 /**
  * For function, arrow function or method
+ * TODO: Use BlockStatementTester for adding nesting levels support and testing function block
  */
 export class FunctionLikeNodeTester extends IndentifierNodeTester {
   parametersTester: ParametersTester
   functionTester: FunctionTester
   typeNodeTester: TypeNodeTester
-  isDecl: boolean
+  blockNodeTester: BlockNodeTester
 
   constructor(node: any, options: any) {
     super(node, options)
@@ -43,7 +48,15 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
     if (node.type) {
       this.typeNodeTester = new TypeNodeTester(node.type, options)
     }
-    this.isDecl = ts.isFunctionDeclaration(node)
+
+    this.blockNodeTester = createBlockNodeTester(this.node, options)
+  }
+
+  /**
+   * Determine how many levels deep the if is nested
+   */
+  get nestedLevels() {
+    return this.blockNodeTester.nestedLevels
   }
 
   /**
@@ -55,9 +68,9 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
       parameters: this.parametersTester.info(),
       returnType: this.returnType,
       exported: this.isExported,
-      declaration: this.isDecl,
       arrow: this.isArrow,
-      generator: this.isGenerator
+      generator: this.isGenerator,
+      nestedLevels: this.nestedLevels
     }
   }
 

@@ -4,10 +4,12 @@ import {
   testName,
   testNames,
   testValue,
-  initializerDetails
+  initializerDetails,
+  IInitializerDetails
 } from '../../../util'
 
 import { TypeNodeTester } from '../../../type';
+import { AccessTester } from '../../../../details';
 
 export function isParameter(node: any) {
   return ts.isParameter(node)
@@ -28,6 +30,7 @@ export function createParameterTester(node: any, options: any = {}) {
  */
 export class ParameterTester extends IndentifierNodeTester {
   typeNodeTester: TypeNodeTester
+  accessTester: AccessTester
 
   /**
    * Create Parameter tester
@@ -38,6 +41,9 @@ export class ParameterTester extends IndentifierNodeTester {
     super(node, options)
     if (node.type) {
       this.typeNodeTester = new TypeNodeTester(node.type, options)
+    }
+    if (node.access) {
+      this.accessTester = new AccessTester({ ...options, node })
     }
   }
 
@@ -93,7 +99,7 @@ export class ParameterTester extends IndentifierNodeTester {
    */
   testInitializer(query: any) {
     query = query.initializer || query
-    const init = this.initializerInfo
+    const init = this.initializerInfo as IInitializerDetails
     return {
       type: this.queryType(init.type, query.type),
       value: this.queryValue(init.value, query.value),

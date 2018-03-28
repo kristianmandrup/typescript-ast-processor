@@ -1,5 +1,10 @@
-import { IndentifierNodeTester } from "../../identifier";
-import { BaseTester } from "../..";
+import {
+  createIndentifierNodeTester,
+  IndentifierNodeTester
+} from '../../identifier'
+import {
+  BaseTester
+} from '../../base';
 
 export function isArgument(node: any) {
   return true
@@ -20,6 +25,8 @@ export function createArgumentTester(node: any, options: any = {}) {
  * An argument can be pretty much anything... but mostly an identifier, literal or arrow function
  */
 export class ArgumentTester extends BaseTester {
+  idTester: IndentifierNodeTester
+
   /**
    * Create Argument tester
    * @param node parameter node to test
@@ -27,6 +34,7 @@ export class ArgumentTester extends BaseTester {
    */
   constructor(node: any, options: any) {
     super(node, options)
+    this.idTester = createIndentifierNodeTester(this.node.name, options)
   }
 
   /**

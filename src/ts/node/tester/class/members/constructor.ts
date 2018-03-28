@@ -9,6 +9,9 @@ export function createConstructorTester(node: any, options: any = {}) {
   return new ConstructorTester(node, options)
 }
 
+/**
+ * Constructor node tester
+ */
 export class ConstructorTester extends MethodLikeTester {
   constructor(node: any, options: any) {
     super(node, options)

@@ -9,9 +9,13 @@ export {
 } from './class'
 
 export {
-  createFunctionTester,
-
 } from './function'
+
+export {
+  createInitializerNodeTester,
+  InitializerNodeTester
+} from './initializer'
+
 
 import * as $function from './function'
 import * as $class from './class'

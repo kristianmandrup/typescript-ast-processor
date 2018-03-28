@@ -1,5 +1,5 @@
-import { initializerDetails } from "../../util";
-import { BaseTester } from "../..";
+import { initializerDetails } from "./util";
+import { BaseTester } from "./base";
 
 /**
  * Factory for creating InitializerNodeTester tester

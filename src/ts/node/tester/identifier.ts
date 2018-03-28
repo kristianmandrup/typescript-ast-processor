@@ -7,6 +7,9 @@ import {
   nameMatch
 } from '../tester/util'
 
+export function createIndentifierNodeTester(node: any, options: any = {}) {
+  return new IndentifierNodeTester(node, options)
+}
 
 export class IndentifierNodeTester extends BaseTester {
   identifier: details.IdentifierTester

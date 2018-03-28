@@ -3,20 +3,20 @@ import {
 } from './source'
 import * as ts from 'typescript'
 import {
-  ISourceFileOpts
-} from './interfaces'
-
+  Processor
+} from './processor'
 import {
   compilerOpts
 } from './opts/compiler'
 
+export interface ISourceFileOpts {
+  filePath: string
+  sourceText?: string
+}
+
 const defaults = {
   compilerOpts
 }
-
-import {
-  Processor
-} from './processor';
 
 export function createSrcFile(options: any = {}) {
   return new SrcFile(options)

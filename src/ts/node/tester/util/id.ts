@@ -8,7 +8,7 @@ import {
   enumKey
 } from './enum'
 
-interface IInitializerDetails {
+export interface IInitializerDetails {
   type: string
   value: any
   textValue: string
