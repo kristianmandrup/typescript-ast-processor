@@ -9,6 +9,7 @@ import * as functions from './functions'
 import * as classes from './classes'
 import * as identifier from './identifier'
 import * as type from './type'
+import * as expressions from './expressions'
 
 export {
   base,
@@ -21,7 +22,8 @@ export {
   functions,
   classes,
   identifier,
-  type
+  type,
+  expressions
 }
 
 
