@@ -7,20 +7,21 @@ import { IndentifierNodeTester, createIndentifierNodeTester } from '../../identi
  * @param node
  * @param options
  */
-export function createPropertyTester(node: any, options: any) {
-  return new PropertyTester(node, options)
+export function createPropertyAssignmentTester(node: any, options: any) {
+  return new PropertyAssignmentTester(node, options)
 }
 
-export class PropertyTester extends BaseTester {
+export class PropertyAssignmentTester extends BaseTester {
   identifierTester: IndentifierNodeTester
-  properties: ts.PropertyAssignment[]
 
   constructor(node: any, options: any) {
     super(node, options)
     this.identifierTester = createIndentifierNodeTester(node.name, this.options)
   }
 
-
+  get name() {
+    return this.identifierTester.name
+  }
 
   /**
    *  * TODO: Call the relevant VariableDeclaration tester that matches the particular type of VariableDeclaration (if available)

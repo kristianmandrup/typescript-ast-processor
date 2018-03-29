@@ -1,4 +1,3 @@
-import * as ts from 'typescript'
 import { BaseTester } from './base'
 import { TypeTester } from '../details/type';
 

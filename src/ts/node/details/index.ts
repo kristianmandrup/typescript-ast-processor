@@ -19,3 +19,6 @@ export {
 export {
   CallTester
 } from './call'
+export {
+  BinaryExprTester
+} from './binary-expr'

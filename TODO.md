@@ -68,4 +68,4 @@ We need to finish testers for `BinaryExpression` used for assignment
 
 ## Literal testers (Object, Array)
 
-We need to finish testers for `Literals` such as Object and Array literals (typically used for assignment or in initializers for variable declarations)
+We need to finish testers for `Literals` such as `Object` and `Array` literals (typically used for assignment or in initializers for variable declarations)

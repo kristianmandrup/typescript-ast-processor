@@ -5,11 +5,16 @@ import {
   testAnd,
   testNot,
   testName,
-  testNames
+  testNames,
 } from './util'
 import {
   ListTester
 } from './generic'
+import {
+  toList,
+  isEmpty,
+  isFunction
+} from '../../util'
 import { TypeTester } from '../details/type';
 
 export abstract class BaseTester extends Loggable {
@@ -32,6 +37,36 @@ export abstract class BaseTester extends Loggable {
     }
     this.typeTester = new TypeTester(options)
     this.node = node
+  }
+
+  /**
+   * Count occurences in sub tree(s) under this node
+   * Call ASTNodeTraverser with traverseQuery to control which nodes to exclude/include in visit count
+   * @param traverseQuery
+   */
+  countInTree(traverseQuery: any): number {
+    return 0
+  }
+
+  countOccurrence(options: any = {}): number {
+    const {
+      types,
+      tester
+    } = options
+    const typesToCount = toList(types)
+    const traverseQuery: any = {
+    }
+    if (!isEmpty(types)) {
+      traverseQuery.typesToCount = typesToCount
+    }
+    if (isFunction(tester)) {
+      traverseQuery.tester = tester
+    }
+    const excludeVisit = options.excludeVisit || [/Declaration$/]
+    if (!options.includeAll) {
+      traverseQuery.excludeVisit = excludeVisit
+    }
+    return this.countInTree(traverseQuery)
   }
 
   /**
