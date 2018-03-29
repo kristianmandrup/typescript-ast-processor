@@ -1,7 +1,10 @@
 # LiteralNodeTester
 
+The `LiteralNodeTester` will use one of the following specialized node testers depending on the type of literal for the node in question.
+
 - `ObjectLiteralNodeTester`
 - `ArrayLiteralNodeTester`
+- ...
 
 ## ObjectLiteralNodeTester
 
