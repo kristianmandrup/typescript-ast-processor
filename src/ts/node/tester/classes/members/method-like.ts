@@ -1,6 +1,6 @@
 import {
-  FunctionLikeNodeTester
-} from '../../function'
+  declaration
+} from '../../functions'
 import {
   isMemberType
 } from './types'
@@ -11,7 +11,7 @@ export function createMethodTester(node: any, options: any = {}) {
   return new MethodLikeTester(node, options)
 }
 
-export class MethodLikeTester extends FunctionLikeNodeTester {
+export class MethodLikeTester extends declaration.FunctionLikeNodeTester {
   // inherited
   // parameters: ParametersTester
   accessTester: AccessTester

@@ -4,7 +4,7 @@ import {
 } from './types'
 import { MethodLikeTester } from './method-like';
 
-export function createConstructorTester(node: any, options: any = {}) {
+export function createConstructorTester(node: any, options: any = {}): ConstructorTester | undefined {
   if (!isMemberType(node, 'constructor')) return
   return new ConstructorTester(node, options)
 }

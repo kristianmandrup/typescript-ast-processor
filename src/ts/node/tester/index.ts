@@ -1,9 +1,8 @@
-import * as tester from './exports'
+import * as testers from './exports'
+import * as factories from './factories'
 
 export {
-  tester
+  testers,
+  factories
 }
 
-export {
-  factoryMap
-} from './factory-map'

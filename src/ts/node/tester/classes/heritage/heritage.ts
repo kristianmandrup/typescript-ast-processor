@@ -1,5 +1,5 @@
 import * as ts from 'typescript'
-import { BaseTester } from '../../base'
+import { BaseNodeTester } from '../../base'
 import {
   createClassHeritageClauseTester
 } from './clause';
@@ -8,11 +8,11 @@ import {
   isEmpty
 } from '../../../../util'
 
-export function createClassHeritageTester(node: any, options: any = {}) {
+export function createClassHeritageTester(node: any, options: any = {}): ClassHeritageTester {
   return new ClassHeritageTester(node, options)
 }
 
-export class ClassHeritageTester extends BaseTester {
+export class ClassHeritageTester extends BaseNodeTester {
   _extendNames: string[]
   _implementNames: string[]
 
@@ -20,7 +20,7 @@ export class ClassHeritageTester extends BaseTester {
     super(node, options)
   }
 
-  info() {
+  info(): any {
     const info: any = {
       implements: this.implements,
       isEmpty: this.isEmpty

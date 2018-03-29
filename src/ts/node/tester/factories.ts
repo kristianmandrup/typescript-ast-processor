@@ -1,4 +1,7 @@
 import * as tester from './exports'
+import {
+  INodeTester
+} from './base'
 
 const {
   classes,
@@ -91,3 +94,17 @@ export const factoryMap = {
   // decorators
   classDecorator: decorators.createClassDecoratorsTester
 }
+
+export type INodeTesterFactory = (node: any, options: any) => INodeTester
+
+export function testerFactoryFor(name: string, $factoryMap?: any): INodeTesterFactory {
+  $factoryMap = $factoryMap || factoryMap
+  return $factoryMap[name]
+}
+
+export function createTester(factoryName: string, node: any, options: any = {}): INodeTester | undefined {
+  options.factories = options.factories || {}
+  const testerFactory = testerFactoryFor(factoryName, options.factories.tester)
+  return testerFactory && testerFactory(node, options)
+}
+

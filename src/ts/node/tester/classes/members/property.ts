@@ -4,7 +4,7 @@ import {
 } from './types'
 import { MemberTester } from './member';
 
-export function createPropertyTester(node: any, options: any = {}) {
+export function createPropertyTester(node: any, options: any = {}): PropertyTester | undefined {
   if (!isMemberType(node, 'property')) return
   return new PropertyTester(node, options)
 }

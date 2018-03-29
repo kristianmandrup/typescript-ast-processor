@@ -20,8 +20,13 @@ import {
   createASTNodeTraverser
 } from '../../visitor'
 
+export interface INodeTester {
+  test(query: any): boolean
+  query(query: any): any
+  info(): any
+}
 
-export abstract class BaseTester extends Loggable {
+export abstract class BaseTester extends Loggable implements INodeTester {
   node: any
   typeTester: TypeTester
   factories: any = {}
@@ -42,6 +47,33 @@ export abstract class BaseTester extends Loggable {
     }
     this.typeTester = new TypeTester(options)
     this.node = node
+  }
+
+  /**
+   * Perform query on node and return true if full query (ie. all sub-queries pass) or false otherwise
+   * Subclass should always override or extend
+   * @param query
+   */
+  public test(query: any): any {
+    return true
+  }
+
+  /**
+   * Perform query, returning reduce name/value result with each sub-query result
+   * Subclass should always override or extend
+   * @returns { Object } node information
+   */
+  public query(query: any): any {
+    return {}
+  }
+
+  /**
+   * Return object with node information
+   * Subclass should always override or extend
+   * @returns { Object } node information
+   */
+  public info(): any {
+    return {}
   }
 
   get testerFactories() {
@@ -165,7 +197,7 @@ export abstract class BaseTester extends Loggable {
    * @param query
    * @param tester
    */
-  testNot(query: any, tester: Function) {
+  protected testNot(query: any, tester: Function) {
     return testNot(query, tester)
   }
 
@@ -174,23 +206,15 @@ export abstract class BaseTester extends Loggable {
    * @param query
    * @param tester
    */
-  testOr(query: any, tester: Function) {
+  protected testOr(query: any, tester: Function) {
     return testOr(query, tester)
-  }
-
-  /**
-   * Perform query on node
-   * @param query
-   */
-  test(query: any): any {
-    return true
   }
 
   /**
    * Test node type
    * @param type
    */
-  testType(type: string): boolean {
+  protected testType(type: string): boolean {
     return Boolean(!type || this.validatePrimitiveType(type) && this.typeTester.forNode(this.node).is(type))
   }
 
@@ -198,7 +222,7 @@ export abstract class BaseTester extends Loggable {
    * Validate if type (to test) is a primitive type
    * @param type
    */
-  validatePrimitiveType(type: string): boolean {
+  protected validatePrimitiveType(type: string): boolean {
     return this.primitiveTypes.includes(type)
   }
 
@@ -206,7 +230,7 @@ export abstract class BaseTester extends Loggable {
    * List of primitive types (used by validation)
    * Note: Should match node details type tester
    */
-  get primitiveTypes() {
+  protected get primitiveTypes() {
     return ['boolean', 'string', 'number', 'array', 'void', 'any', 'object']
   }
 }

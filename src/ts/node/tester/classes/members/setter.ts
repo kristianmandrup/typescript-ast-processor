@@ -4,7 +4,7 @@ import {
 } from './types'
 import { MethodLikeTester } from './method-like';
 
-export function createSetAccessorTester(node: any, options: any = {}) {
+export function createSetAccessorTester(node: any, options: any = {}): SetAccessorTester | undefined {
   if (!isMemberType(node, 'setter')) return
   return new SetAccessorTester(node, options)
 }

@@ -1,2 +1,2 @@
-import * as tsTraverser from './ts'
-export default tsTraverser
+import * as tsProcessor from './ts'
+export default tsProcessor

@@ -8,10 +8,33 @@ The can be used to:
 - collect and aggregate data
 - query for matches
 
+## Usage
+
+You typically use the testers:
+
+- inside `visitor` functions to `query` or `test` details of the node.
+- inside `collector` function to gather `info` about the node
+
+Sample usage: inside `If` node visitor
+
+```js
+import tsProcessor from 'typescript-ast-processor'
+const {
+  factories
+} = tsProcessor.node.tester
+
+const tester = factories.createTester('ifThenElse', node, options)
+const hasElseBlock = tester.query({
+  else: true
+})
+// ...
+```
+
 ## Status
 
 Currently most work has gone into the `ClassTester` and `FunctionLikeNodeTester` since these are the complex, yet most essential constructs for many usecases.
-When they work, the rest should be rather easy to add and can use patterns and utilities developed for the more complex testers!
+
+When they work, the rest should be rather easy to add and can use patterns and utilities developed for the more complex testers.
 
 ## TODO
 
@@ -110,10 +133,10 @@ test(query: any): any {
 }
 ```
 
-Currently a typical implementation might look like this, but this is likely to be improved and changed.
+Currently a typical implementation might look like this, where each of the queries (or at least the aggregation of all the sub-queries) will be returned as a boolean (`true` or `false`)
 
 ```js
-  test(query: any): any {
+  test(query: any): boolean {
     return this.testName(query) &&
       this.testAbstract(query) &&
       this.testImplements(query) &&
@@ -122,7 +145,7 @@ Currently a typical implementation might look like this, but this is likely to b
   }
 ```
 
-An improved version might look sth like this:
+Each tester must also support a `query` method which returns the query result in a more structured form, where you get the result of each sub-query, such as:
 
 ```js
   query(query: any): any {
@@ -136,7 +159,9 @@ An improved version might look sth like this:
   }
 ```
 
-The `result` function would then filter and/or format the result for "consumption", such that f.ex keys with `undefined` values are stripped out.
+In order to avoid duplication, we might well use a clever `reduce` in order to re-use the query logic for both methods and only return sub-query results for queries that return a value. We will also likely further optimize the query, such as caching results and possibly performing sub-queries asynchronously.
+
+Note that in the example, the `result` function would filter and/or format the result for "consumption", such that f.ex keys with `undefined` values are stripped out (will likely instead be done in the reducer mentioned).
 
 ## Querying lists
 
