@@ -1,17 +1,15 @@
 import {
   testerFor,
   context,
-  node,
-  query
+  query,
+  logObj,
+  log,
 } from './_imports'
-import { FunctionLikeNodeTester } from '../../../../../src/ts/node/tester/function';
-
-const { log } = console
 
 describe('function', () => {
   describe('arrow', () => {
     context('arrow-function file', () => {
-      const tester: FunctionLikeNodeTester = testerFor('arrow-var-function', {
+      const tester: any = testerFor('arrow-var-function', {
         type: 'function'
       })
 
@@ -22,6 +20,15 @@ describe('function', () => {
               not: query.parameters
             })
             expect(result).toBe(true)
+          })
+        })
+      })
+
+      describe('info()', () => {
+        it('collects correct info', () => {
+          const info = tester.info()
+          logObj(info)
+          expect(info).toEqual({
           })
         })
       })

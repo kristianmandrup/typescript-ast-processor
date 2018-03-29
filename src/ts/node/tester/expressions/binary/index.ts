@@ -1,3 +1,10 @@
 export {
-  BinaryExpressionTester
+  BinaryExpressionTester,
+  createBinaryExpressionTester,
+  createBinaryOperatorTester
 } from './binary-expr'
+
+export {
+  createAssignmentTester,
+  AssignmentTester
+} from './assignment'

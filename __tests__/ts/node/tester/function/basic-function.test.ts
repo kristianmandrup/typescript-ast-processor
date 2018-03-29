@@ -1,21 +1,15 @@
 import {
   testerFor,
   context,
-  node,
-  query
+  query,
+  logObj,
+  log
 } from './_imports'
-import { FunctionLikeNodeTester } from '../../../../../src/ts/node/tester/function';
-
-const { log } = console
-
-function logObj(obj: any) {
-  log(JSON.stringify(obj, null, 2))
-}
 
 describe('function', () => {
   describe('basic', () => {
     context('basic-function file', () => {
-      const tester: FunctionLikeNodeTester = testerFor('basic-function', {
+      const tester: any = testerFor('basic-function', {
         type: 'function',
         statementIndex: 0
       })

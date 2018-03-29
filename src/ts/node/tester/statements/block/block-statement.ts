@@ -1,7 +1,12 @@
-import { BaseTester } from '../base';
+import { BaseTester } from '../../base';
 import {
-  createBlockNodeTester, BlockNodeTester
+  createBlockNodeTester,
+  BlockNodeTester
 } from './block'
+
+export function createBlockStatementTester(node: any, options: any = {}): BlockStatementTester {
+  return new BlockStatementTester(node, options)
+}
 
 export class BlockStatementTester extends BaseTester {
   blockNodeTester: BlockNodeTester

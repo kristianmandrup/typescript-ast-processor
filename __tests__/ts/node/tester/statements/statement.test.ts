@@ -2,6 +2,6 @@ import {
   node
 } from '../'
 
-describe('conditions', () => {
+describe('statement', () => {
 
 })

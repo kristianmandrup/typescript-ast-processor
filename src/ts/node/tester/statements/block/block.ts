@@ -1,7 +1,7 @@
-import { BaseTester } from '../base'
+import { BaseTester } from '../../base'
 import {
   findParentBlocks
-} from './util'
+} from '../util'
 
 /**
  * Factory to create a Block node tester

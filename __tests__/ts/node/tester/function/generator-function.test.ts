@@ -1,17 +1,15 @@
 import {
   testerFor,
   context,
-  node,
-  query
+  query,
+  logObj,
+  log,
 } from './_imports'
-import { FunctionLikeNodeTester } from '../../../../../src/ts/node/tester/function';
-
-const { log } = console
 
 describe('function', () => {
   describe('generator', () => {
     context('generator-function file', () => {
-      const tester: FunctionLikeNodeTester = testerFor('generator-function', {
+      const tester: any = testerFor('generator-function', {
         type: 'function'
       })
 
@@ -22,6 +20,15 @@ describe('function', () => {
               not: query.parameters
             })
             expect(result).toBe(true)
+          })
+        })
+      })
+
+      describe('info()', () => {
+        it('collects correct info', () => {
+          const info = tester.info()
+          logObj(info)
+          expect(info).toEqual({
           })
         })
       })

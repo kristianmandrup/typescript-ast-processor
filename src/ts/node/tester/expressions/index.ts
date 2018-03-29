@@ -1,3 +1,5 @@
+import * as binaryExpr from './binary'
+
 export {
-  BinaryExpressionTester
-} from './binary'
+  binaryExpr
+}

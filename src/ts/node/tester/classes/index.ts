@@ -1,13 +1,10 @@
-export {
-  createClassHeritageTester,
-  createClassHeritageClauseTester
-} from './heritage'
+import * as heritage from './heritage'
+import * as members from './members'
 
 export {
-  ClassMembersTester,
-  createClassMembersTester,
-  createClassMemberTester,
-} from './members'
+  heritage,
+  members
+}
 
 export {
   createClassTester,
