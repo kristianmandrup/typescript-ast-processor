@@ -1,6 +1,10 @@
 import * as ts from 'typescript'
 import { BaseDetailsTester } from './base';
 
+export function createFunctionTester(options: any) {
+  return new FunctionTester(options)
+}
+
 export class FunctionTester extends BaseDetailsTester {
   constructor(options: any) {
     super(options)

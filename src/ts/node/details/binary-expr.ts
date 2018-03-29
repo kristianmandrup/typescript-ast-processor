@@ -1,6 +1,10 @@
 import * as ts from 'typescript'
 import { BaseDetailsTester } from './base';
 
+export function createBinaryExprTester(options: any) {
+  return new BinaryExprTester(options)
+}
+
 export class BinaryExprTester extends BaseDetailsTester {
   constructor(options: any) {
     super(options)

@@ -1,24 +1,54 @@
-export {
-  AccessTester
+import {
+  AccessTester,
+  createAccessTester
 } from './access'
-export {
+import {
+  createFunctionTester,
   FunctionTester
 } from './function'
-export {
+import {
+  createNamespaceTester,
   NamespaceTester
 } from './namespace'
-export {
-  ClassDetailsTester
+import {
+  ClassDetailsTester,
+  createClassDetailsTester
 } from './class'
-export {
+import {
+  createVariableTester,
   VariableTester
 } from './variable'
-export {
+import {
+  createIdentifierTester,
   IdentifierTester
 } from './identifier'
-export {
+import {
+  createCallTester,
   CallTester
 } from './call'
-export {
+import {
+  createBinaryExprTester,
   BinaryExprTester
 } from './binary-expr'
+
+export {
+  BinaryExprTester,
+  CallTester,
+  IdentifierTester,
+  VariableTester,
+  ClassDetailsTester,
+  NamespaceTester,
+  FunctionTester,
+  AccessTester
+}
+
+export const factoryMap = {
+  binaryExpr: createBinaryExprTester,
+  funCall: createCallTester,
+  identifier: createIdentifierTester,
+  variable: createVariableTester,
+  class: createClassDetailsTester,
+  namespace: createNamespaceTester,
+  funDecl: createFunctionTester,
+  accessor: createAccessTester
+}

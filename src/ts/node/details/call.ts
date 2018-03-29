@@ -1,6 +1,10 @@
 import * as ts from 'typescript'
 import { BaseDetailsTester } from './base';
 
+export function createCallTester(options: any) {
+  return new CallTester(options)
+}
+
 export class CallTester extends BaseDetailsTester {
   literal: any
   node: any

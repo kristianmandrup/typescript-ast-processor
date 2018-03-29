@@ -1,6 +1,10 @@
 import * as ts from 'typescript'
 import { BaseDetailsTester } from './base';
 
+export function createNamespaceTester(options: any) {
+  return new NamespaceTester(options)
+}
+
 export class NamespaceTester extends BaseDetailsTester {
   constructor(options: any) {
     super(options)

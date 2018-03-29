@@ -24,6 +24,7 @@ import {
 export abstract class BaseTester extends Loggable {
   node: any
   typeTester: TypeTester
+  factories: any = {}
 
   /**
    * Create BaseTester
@@ -41,6 +42,12 @@ export abstract class BaseTester extends Loggable {
     }
     this.typeTester = new TypeTester(options)
     this.node = node
+  }
+
+  get testerFactories() {
+    let factories = this.options.factories || {}
+    factories = factories.tester || factories
+    return isEmpty(factories) ? this.factories : factories
   }
 
   createAstNodeTraverser(options: any = {}) {

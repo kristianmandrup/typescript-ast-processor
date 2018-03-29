@@ -1,11 +1,11 @@
 import * as ts from 'typescript'
 import {
-  ClassMembersTester,
+  ClassMembersTester, createClassMembersTester,
 } from './members';
 import { ClassDetailsTester } from '../../details';
 
 import {
-  ClassHeritageTester,
+  ClassHeritageTester, createClassHeritageTester,
 } from './heritage';
 
 import { IndentifierNodeTester } from '../identifier';
@@ -25,6 +25,13 @@ export class ClassTester extends IndentifierNodeTester {
   classDetails: ClassDetailsTester
   isClass: boolean
 
+  // tester factories
+  factories: any = {
+    // default factories
+    createClassHeritageTester,
+    createClassMembersTester
+  }
+
   /**
    * Create class tester
    * @param node
@@ -32,8 +39,12 @@ export class ClassTester extends IndentifierNodeTester {
    */
   constructor(node: any, options: any = {}) {
     super(node, options)
-    this.heritage = new ClassHeritageTester(node, options)
-    this.members = new ClassMembersTester(node, options)
+
+    this.factories = this.testerFactories
+
+    this.heritage = this.factories.createClassHeritageTester(node, options)
+    this.members = this.factories.createClassMembersTester(node, options)
+
     this.classDetails = new ClassDetailsTester(options)
     this.isClass = ts.isClassDeclaration(node)
   }
