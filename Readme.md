@@ -123,12 +123,28 @@ class ASTNodeTraverser extends Loggable {
   registerVisitor(name: string, visitor: Function) {
   }
 
-  visit(node: ts.Node) {
-    this.visitorIterator(this.createVisitorCaller(node))
-    this.recurseChildNodes(node)
+  /**
+   * Visit an AST node by passing it to each of the registered visitors
+   * @param node
+   */
+  visit(nextNode?: ts.Node) {
+    const node = nextNode || this.startNode
+    if (!this.shouldVisitNode(node)) {
+      this.skipped(node)
+      return
+    }
+    this.willVisit(node)
+    this.visitorIterator(this._createVisitorCaller(node))
+    this.wasVisited(node)
+    this.traverseChildNodes(node)
   }
 
-  recurseChildNodes(node: ts.Node) {
+  /**
+   * Traverse child nodes
+   * @param node
+   */
+  traverseChildNodes(node: ts.Node) {
+    if (!this.shouldTraverseChildNodes(node)) return
     node.forEachChild((child: ts.Node) => this.visit(child))
   }
 }
@@ -190,43 +206,32 @@ The query engine can:
 
 Each visitor function is called with `(node, state, options)`
 
-The core visitor logic:
+The core visitor (traverser) logic:
 
 - iterate through all registered visitors and call each one
 - each visitor will have one or more type checks as guards f.ex `ts.isFunctionDeclaration(node)` and possibly more guards such as name check and more detailed inspection guards (checking for modifiers, flags etc)
-- when done iterating, proceed to recurse each child node
+- when done iterating, proceed to traverse each child node
 
-```js
-class NodeVisitor {
-  // ...
-
-  visit(node: ts.Node) {
-    this.log('visit', this.nodeDisplayInfo(node))
-    // allow creation of custom iterator
-    this.visitorIterator(this.createVisitorCaller(node))
-    this.recurseChildNodes(node)
-  }
-
-  recurseChildNodes(node: ts.Node) {
-    node.forEachChild((child: ts.Node) => this.visit(child))
-  }
-}
-```
+You can see this logic playing out in the `ASTNodeTraverser` class show above, mainly using the `visit` and `traverseChildNodes` methods.
 
 #### Data collection
 
-The visitor factory is passed a collector, with all the registered data collectors.
-A visitor created via a factory will try to call a matching collector (ie. matching label) with the node matched by the visitor.
+The visitor factory is passed a `collector` registry, with all the registered data collectors. A visitor created via a factory will try to call a matching collector (ie. matching label), mainly with the node matched by the visitor and any state collected or maintained by the visitor itself.
+
+```js
+const matchingCollector = collector[label]
+matchingCollector && matchingCollector(node, state, options)
+```
 
 ### Collector
 
-As nodes are visited, the visitor functions activated can have access to callbacks that call a collector function with the visited node for data to be collected.
+As nodes are visited, the `visitor` functions activated can have access to callbacks that call a collector function with the visited node for data to be collected.
 
 The collectors should have access to a shared object, like a datastore in a typical frontend app. You could use any of the same patterns (`redux` or anything similar comes to mind...).
 
-They should (possibly?) be registered with same names as visitors, so that data flows from visitor -> collector -> instrumentor.
+Collectors should be registered with same names as visitors, so that data flows from visitor -> collector -> instrumentor.
 
-We can have multiple collectors collect data into a data aggregator. For complex cases, this can be setup to aggregate in multiple levels.
+You can have multiple collectors collect data into a data aggregator. For complex cases, this can be setup to aggregate in multiple levels.
 
 ```js
 function functionHello(node, state = {}) {
@@ -240,21 +245,21 @@ function functionHello(node, state = {}) {
 // ... define other collector functions
 ```
 
-Now register collector functions with main collector (ie. data aggregator) of parser
-on registration, each collector function will become the collect function of a `DataCollector` instance, so that `this.data` will reference the `data` of
-the collector instance.
+Register collector functions with the main collector (ie. data aggregator) of the processor
+on registration. Each collector function will become the collector function of a `DataCollector` instance, so that `this.data` will reference the `data` of
+the `collector` instance.
 
 ```js
-parser.collector.register({
+processor.collector.register({
   functionHello
   classPoliteGreeter
   classGreeter
 })
 ```
 
-Notice how the collector names match the visitor labels registered. We recommend starting by defining/creating and registering the data collectors and then create matching visitors as needed.
+Notice how the `collector` names match the `visitor` labels registered. We recommend starting by defining/creating and registering the data collectors and then create matching visitors as needed.
 
-A convenient shorthand now available, is to register both with the same label, directly on the `Processor` instance:
+You can also register the pair directly on the `Processor` instance using:
 
 ```js
 processor.register('functionHello', {
@@ -263,11 +268,10 @@ processor.register('functionHello', {
 })
 ```
 
-You could easily generalize this even further to make it more efficient to configure.
-This is now possible via `registerMap`:
+You can register a set of pairings (a `processorMap`) via the `registerMap` method:
 
 ```js
-const nestedMap = {
+const processorMap = {
   functionHello: {
     visitor: (...) => {},
     collector: (...) => {},
@@ -277,14 +281,14 @@ const nestedMap = {
     collector: (...) => {},
   }
 }
-processor.registerMap(nestedMap)
+processor.registerMap(processorMap)
 ```
 
 When this is all configurred and working, you can move on to instrumentation!
 
 ### Instrumentor
 
-When the visitation of the AST is complete and all data has been collected, the collected state should be sent to an Instrumentor instance to instrument changes or actions to be taken in response. This could be acting on the code or AST directly or even calling micro services to offload the responsibility!
+When the visitation of the AST is complete and all data has been collected, the collected state should be sent to an `Instrumentor` instance to instrument changes or actions to be taken in response. This could be acting on the code or AST directly or even calling micro services to offload the responsibility!
 
 Currently we have included a little "wizardry" from `TypeWiz`.
 
@@ -295,6 +299,8 @@ The main instrumentor is initialized with reference to the main data collector i
 #### Replacer
 
 A `Replacer` (as in `TypeWiz`) can be used to replace code in a source file directly in response to the instrumentation.
+
+In the near future we will include support for direct AST modification, using the typescript AST instrumentation/mutation API "under the hood".
 
 ## Tool integration
 

@@ -13,6 +13,12 @@ export interface IExtraOptions {
   parens?: [number, number];
 }
 
+export interface INodeVisitCounter {
+  visited: number,
+  skipped: number,
+  types: any
+}
+
 export class ASTNodeTraverser extends Loggable {
   fileName: string
   state: {}
@@ -22,16 +28,33 @@ export class ASTNodeTraverser extends Loggable {
   typer: Typer
   factory: VisitorFactory
   registry: any = {} // object
+  nestingLevel: number = 0
 
+  // registry used to count occurences of each type
+  counter: INodeVisitCounter = {
+    visited: 0,
+    skipped: 0,
+    // types of node visited
+    types: {
+    }
+  }
+
+  startNode: any
+  visitedNodes: any[]
+
+  /**
+   * Create an AST Node Traverser
+   * @param options
+   */
   constructor(options: any) {
     super(options)
+    this.startNode = options.node
     this.fileName = options.fileName
     this.what = new What(this._nodeTypes)
     this.typer = new Typer(this._nodeTypes)
     this.factory = new VisitorFactory(options)
     this.visitorIteratorMethodName = options.visitorIteratorMethodName || 'map'
     this.registry = options.visitors || {}
-
     const createVisitorIterator = options.createVisitorIterator || this._createVisitorIterator
     this._createVisitorIterator = createVisitorIterator.bind(this)
   }
@@ -119,30 +142,85 @@ export class ASTNodeTraverser extends Loggable {
   }
 
   /**
+   * Increment a node counter
+   * @param counterEntry
+   */
+  protected inc(key: string) {
+    this.counter[key] = (this.counter[key] || 0) + 1
+  }
+
+  /**
+   * Handler for when node visiting was skipped
+   * @param node
+   */
+  protected skipped(node: any) {
+    this.log('skipped', this.nodeDisplayInfo(node))
+    this.inc('skipped')
+  }
+
+  /**
+   * Handler for just after node was visited
+   * @param node
+   */
+  protected wasVisited(node: any) {
+    this.log('visited', this.nodeDisplayInfo(node))
+    this.inc('visited')
+    this.visitedNodes.push(node)
+  }
+
+  /**
+   * Handler for just before node is visited
+   * @param node
+   */
+  protected willVisit(node: any) {
+  }
+
+  /**
+   * Check if node was visited before
+   * @param node
+   */
+  wasVisitedBefore(node: any) {
+    return this.visitedNodes.includes(node)
+  }
+
+  /**
    * Visit an AST node by passing it to each of the registered visitors
    * @param node
    */
-  visit(node: ts.Node) {
-    this.log('visit', this.nodeDisplayInfo(node))
-    // allow creation of custom iterator
+  visit(nextNode?: ts.Node) {
+    const node = nextNode || this.startNode
+    if (!this.shouldVisitNode(node)) {
+      this.skipped(node)
+      return
+    }
+    this.willVisit(node)
     this.visitorIterator(this._createVisitorCaller(node))
-    this.recurseChildNodes(node)
+    this.wasVisited(node)
+    this.traverseChildNodes(node)
   }
 
   /**
    * Determine if traverser should traverse child nodes for this node
    * @param node
    */
-  shouldVisitChildNodes(node: ts.Node) {
-    return true
+  shouldTraverseChildNodes(node: ts.Node) {
+    true
   }
 
   /**
-   * Recurse child nodes
+   * Determine if traverser should visit this node
    * @param node
    */
-  recurseChildNodes(node: ts.Node) {
-    if (!this.shouldVisitChildNodes(node)) return
+  shouldVisitNode(node: ts.Node) {
+    return !this.wasVisitedBefore(node)
+  }
+
+  /**
+   * Traverse child nodes
+   * @param node
+   */
+  traverseChildNodes(node: ts.Node) {
+    if (!this.shouldTraverseChildNodes(node)) return
     node.forEachChild((child: ts.Node) => this.visit(child))
   }
 }

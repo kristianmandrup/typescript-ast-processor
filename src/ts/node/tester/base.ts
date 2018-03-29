@@ -16,6 +16,10 @@ import {
   isFunction
 } from '../../util'
 import { TypeTester } from '../details/type';
+import {
+  createASTNodeTraverser
+} from '../../visitor'
+
 
 export abstract class BaseTester extends Loggable {
   node: any
@@ -39,13 +43,21 @@ export abstract class BaseTester extends Loggable {
     this.node = node
   }
 
+  createAstNodeTraverser(options: any = {}) {
+    return createASTNodeTraverser(options)
+  }
+
   /**
    * Count occurences in sub tree(s) under this node
    * Call ASTNodeTraverser with traverseQuery to control which nodes to exclude/include in visit count
    * @param traverseQuery
    */
-  countInTree(traverseQuery: any): number {
-    return 0
+  countInTree(query: any): number {
+    return this.createAstNodeTraverser({
+      ...this.options,
+      query,
+      node: this.node
+    }).counter.visited
   }
 
   countOccurrence(options: any = {}): number {
