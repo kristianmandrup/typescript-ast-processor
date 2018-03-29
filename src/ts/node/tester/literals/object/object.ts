@@ -1,4 +1,4 @@
-import { BaseTester } from '../../base';
+import { BaseNodeTester } from '../../base';
 import { createPropertiesTester, PropertiesTester } from './properties';
 
 /**
@@ -17,7 +17,7 @@ export function createObjectLiteralTester(node: any, options: any) {
  *  - name (Identifier)
  *  - initializer - which can be an ObjectLiteral itself!
  */
-export class ObjectLiteralTester extends BaseTester {
+export class ObjectLiteralTester extends BaseNodeTester {
   propertiesTester: PropertiesTester
 
   constructor(node: any, options: any) {

@@ -1,7 +1,7 @@
 import {
   BinaryExprTester
 } from '../../../details'
-import { BaseTester } from '../../base';
+import { BaseNodeTester } from '../../base';
 
 /**
  * Factory to create a VariableDeclaration tester
@@ -31,7 +31,7 @@ export function createBinaryOperatorTester(operator: string, options: any = {}) 
 /**
  * TODO: Need to check use of parenthesis for dev score
  */
-export class BinaryExpressionTester extends BaseTester {
+export class BinaryExpressionTester extends BaseNodeTester {
   binaryTester: BinaryExprTester
 
   typeMap = {
@@ -88,7 +88,7 @@ export class BinaryExpressionTester extends BaseTester {
    */
   info() {
     return {
-      parenthesesised: this.countOccurrence('ParenthesesExpression'),
+      parenthesised: this.countOccurrence('ParenthesesExpression'),
       ...this.operatorInfo
     }
   }

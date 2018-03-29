@@ -26,7 +26,7 @@ export interface INodeTester {
   info(): any
 }
 
-export abstract class BaseTester extends Loggable implements INodeTester {
+export abstract class BaseNodeTester extends Loggable implements INodeTester {
   node: any
   typeTester: TypeTester
   factories: any = {}

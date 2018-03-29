@@ -1,7 +1,7 @@
 import * as ts from 'typescript'
 import { createPropertyAssignmentTester } from './property-assignment';
 import { ListTester } from '../../generic';
-import { BaseTester } from '../../base';
+import { BaseNodeTester } from '../../base';
 
 /**
  * Factory to create a statement tester
@@ -12,7 +12,7 @@ export function createPropertiesTester(node: any, options: any) {
   return new PropertiesTester(node, options)
 }
 
-export class PropertiesTester extends BaseTester {
+export class PropertiesTester extends BaseNodeTester {
   properties: ts.PropertyAssignment[]
   propertiesTester: ListTester
 

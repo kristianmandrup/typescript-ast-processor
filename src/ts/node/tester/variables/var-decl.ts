@@ -1,5 +1,5 @@
 import * as ts from 'typescript'
-import { BaseTester } from '../base';
+import { BaseNodeTester } from '../base';
 import {
   IndentifierNodeTester,
   createIndentifierNodeTester
@@ -19,7 +19,7 @@ export function createVariableDeclarationTester(node: any, options: any) {
  * TODO: Call the relevant VariableDeclaration tester that matches the particular type of VariableDeclaration (if available)
  * Note: has optional initializer just like a function parameter!
  */
-export class VariableDeclarationTester extends BaseTester {
+export class VariableDeclarationTester extends BaseNodeTester {
   identifierTester: IndentifierNodeTester
 
   constructor(node: any, options: any) {

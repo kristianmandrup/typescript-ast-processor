@@ -3,7 +3,7 @@ import {
   IndentifierNodeTester
 } from '../../identifier'
 import {
-  BaseTester
+  BaseNodeTester
 } from '../../base';
 
 export function isArgument(node: any) {
@@ -24,7 +24,7 @@ export function createArgumentTester(node: any, options: any = {}) {
  * Argument tester
  * An argument can be pretty much anything... but mostly an identifier, literal or arrow function
  */
-export class ArgumentTester extends BaseTester {
+export class ArgumentTester extends BaseNodeTester {
   idTester: IndentifierNodeTester
 
   /**

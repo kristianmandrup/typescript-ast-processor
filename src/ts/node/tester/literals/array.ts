@@ -1,5 +1,5 @@
 import * as ts from 'typescript'
-import { BaseTester } from '../base';
+import { BaseNodeTester } from '../base';
 import { ListTester } from '../generic';
 
 // TODO
@@ -29,7 +29,7 @@ export function createArrayLiteralTester(node: any, options: any) {
  *  - name (Identifier)
  *  - initializer - which can be an ArrayLiteral itself!
  */
-export class ArrayLiteralTester extends BaseTester {
+export class ArrayLiteralTester extends BaseNodeTester {
   nodes: any
   itemsTester: ListTester
 

@@ -1,4 +1,4 @@
-import { BaseTester } from '../base'
+import { BaseNodeTester } from '../base'
 import {
   resolveArrayIteratorFindMethod
 } from '../util'
@@ -8,7 +8,7 @@ export interface IItemTester {
   test(item: any): boolean
 }
 
-export class ListTester extends BaseTester {
+export class ListTester extends BaseNodeTester {
   itemTester: IItemTester
   tester: Function
   key: string

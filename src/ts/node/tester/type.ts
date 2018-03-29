@@ -1,4 +1,4 @@
-import { BaseTester } from './base'
+import { BaseNodeTester } from './base'
 import {
   createTypeTester,
   TypeTester
@@ -14,7 +14,7 @@ export function createTypeNodeTester(node: any, options: any = {}) {
   return new TypeNodeTester(node, options)
 }
 
-export class TypeNodeTester extends BaseTester {
+export class TypeNodeTester extends BaseNodeTester {
   typeTester: TypeTester
 
   /**

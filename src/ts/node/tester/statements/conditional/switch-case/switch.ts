@@ -1,5 +1,5 @@
 import * as ts from 'typescript'
-import { BaseTester } from '../../../base';
+import { BaseNodeTester } from '../../../base';
 import { createCaseBlockTester, CaseBlockTester } from './case-block';
 
 export function isSwitchStatement(node: any) {
@@ -11,7 +11,7 @@ export function createSwitchStatementTester(node: any, options: any = {}) {
   return new SwitchStatementTester(node, options)
 }
 
-export class SwitchStatementTester extends BaseTester {
+export class SwitchStatementTester extends BaseNodeTester {
   caseBlockTester: CaseBlockTester | undefined
 
   constructor(node: any, options: any) {

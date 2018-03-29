@@ -1,5 +1,5 @@
 import * as ts from 'typescript'
-import { BaseTester } from '../../base';
+import { BaseNodeTester } from '../../base';
 import { IndentifierNodeTester, createIndentifierNodeTester } from '../../identifier';
 
 /**
@@ -11,7 +11,7 @@ export function createPropertyAssignmentTester(node: any, options: any) {
   return new PropertyAssignmentTester(node, options)
 }
 
-export class PropertyAssignmentTester extends BaseTester {
+export class PropertyAssignmentTester extends BaseNodeTester {
   identifierTester: IndentifierNodeTester
 
   constructor(node: any, options: any) {

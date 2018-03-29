@@ -1,4 +1,4 @@
-import { BaseTester } from './base'
+import { BaseNodeTester } from './base'
 import * as details from '../details'
 import {
   testName,
@@ -11,7 +11,7 @@ export function createIndentifierNodeTester(node: any, options: any = {}) {
   return new IndentifierNodeTester(node, options)
 }
 
-export class IndentifierNodeTester extends BaseTester {
+export class IndentifierNodeTester extends BaseNodeTester {
   identifier: details.IdentifierTester
 
   /**

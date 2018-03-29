@@ -1,5 +1,5 @@
 import * as ts from 'typescript'
-import { BaseTester } from '../../../base';
+import { BaseNodeTester } from '../../../base';
 
 import {
   createCaseClauseTester
@@ -15,7 +15,7 @@ export function createCaseBlockTester(node: any, options: any = {}) {
 }
 
 
-export class CaseBlockTester extends BaseTester {
+export class CaseBlockTester extends BaseNodeTester {
   constructor(node: any, options: any) {
     super(node, options)
   }

@@ -1,5 +1,5 @@
 import * as ts from 'typescript'
-import { BaseTester } from '../../base'
+import { BaseNodeTester } from '../../base'
 import { createClassMemberTester } from './member';
 import {
   isEmpty
@@ -13,7 +13,7 @@ import {
   memberType
 } from './types'
 
-export class ClassMembersTester extends BaseTester {
+export class ClassMembersTester extends BaseNodeTester {
   nodes: any[]
   _accessors: any[]
   _getters: any[]

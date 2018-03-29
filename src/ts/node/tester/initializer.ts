@@ -1,5 +1,5 @@
 import { initializerDetails } from './util'
-import { BaseTester } from './base'
+import { BaseNodeTester } from './base'
 
 /**
  * Factory for creating InitializerNodeTester tester
@@ -11,7 +11,7 @@ export function createInitializerNodeTester(node: any, options: any = {}) {
   return new InitializerNodeTester(node, options)
 }
 
-export class InitializerNodeTester extends BaseTester {
+export class InitializerNodeTester extends BaseNodeTester {
 
   constructor(node: any, options: any) {
     super(node, options)

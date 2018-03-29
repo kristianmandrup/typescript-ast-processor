@@ -1,4 +1,4 @@
-import { BaseTester } from '../../base'
+import { BaseNodeTester } from '../../base'
 import {
   isArgument,
   createArgumentTester
@@ -25,7 +25,7 @@ export function createArgumentsTester(node: any, options: any = {}): ArgumentsTe
   return new ArgumentsTester(node, options)
 }
 
-export class ArgumentsTester extends BaseTester {
+export class ArgumentsTester extends BaseNodeTester {
   // argument: ArgumentTester
   nodes: any[]
 

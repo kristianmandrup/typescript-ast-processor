@@ -1,6 +1,6 @@
 // BinaryExpression with EqualsToken as operatorToken is an assignment :)
 import * as ts from 'typescript'
-import { BaseTester } from '../../base';
+import { BaseNodeTester } from '../../base';
 import {
   IndentifierNodeTester,
   createIndentifierNodeTester
@@ -20,7 +20,7 @@ export function createAssignmentTester(node: any, options: any) {
   return new AssignmentTester(node, options)
 }
 
-export class AssignmentTester extends BaseTester {
+export class AssignmentTester extends BaseNodeTester {
   identifierTester: IndentifierNodeTester
 
   constructor(node: any, options: any) {
@@ -33,6 +33,13 @@ export class AssignmentTester extends BaseTester {
    */
   get name() {
     return this.identifierTester.name
+  }
+
+  info() {
+    return {
+      name: this.name,
+      value: null // TODO
+    }
   }
 
   /**

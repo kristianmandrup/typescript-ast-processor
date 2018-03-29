@@ -1,4 +1,4 @@
-import { BaseTester } from '../../base'
+import { BaseNodeTester } from '../../base'
 import {
   findParentBlocks
 } from '../util'
@@ -13,7 +13,7 @@ export function createBlockNodeTester(node: any, options: any = {}): BlockNodeTe
   return new BlockNodeTester(node, options)
 }
 
-export class BlockNodeTester extends BaseTester {
+export class BlockNodeTester extends BaseNodeTester {
   /**
    * Create a Block node tester
    * @param node

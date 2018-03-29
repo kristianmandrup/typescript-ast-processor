@@ -1,5 +1,5 @@
 import * as ts from 'typescript'
-import { BaseTester } from '../../base';
+import { BaseNodeTester } from '../../base';
 import { createIndentifierNodeTester } from '../../identifier';
 
 export function createThrowTester(node: any, options: any = {}) {
@@ -7,7 +7,7 @@ export function createThrowTester(node: any, options: any = {}) {
   return new ThrowTester(node, options)
 }
 
-export class ThrowTester extends BaseTester {
+export class ThrowTester extends BaseNodeTester {
   expression: any
 
   constructor(node: any, options: any) {
