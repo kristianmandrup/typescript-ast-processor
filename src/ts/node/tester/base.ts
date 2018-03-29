@@ -102,7 +102,7 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
   countOccurrence(options: any = {}): number {
     const {
       types,
-      tester
+      typeChecker,
     } = options
     const typesToCount = toList(types)
     const traverseQuery: any = {
@@ -110,8 +110,8 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
     if (!isEmpty(types)) {
       traverseQuery.typesToCount = typesToCount
     }
-    if (isFunction(tester)) {
-      traverseQuery.tester = tester
+    if (isFunction(typeChecker)) {
+      traverseQuery.typeChecker = typeChecker
     }
     const excludeVisit = options.excludeVisit || [/Declaration$/]
     if (!options.includeAll) {
