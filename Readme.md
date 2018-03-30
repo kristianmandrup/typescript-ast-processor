@@ -41,7 +41,7 @@ PS: Would love this lib to integrate better with [ts-simple-ast](https://github.
 A `Loader` instance can be used to load a source file.
 
 ```js
-import { createLoader } from 'typescript-ast-traverser`
+import { createLoader } from 'typescript-ast-traverseræ
 const compilerOpts = {
   // ...
 }
