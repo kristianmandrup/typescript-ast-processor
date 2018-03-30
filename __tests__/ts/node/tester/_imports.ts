@@ -70,8 +70,9 @@ function getNode(sourceFile: any, opts: any = {}) {
  * @param fileName
  * @param options
  */
-export function testerFor(fileName: string, options: any = {}): any {
+export function testerFor(options: any = {}): any {
   let {
+    fileName,
     factory,
     statementIndex,
     indexMap,

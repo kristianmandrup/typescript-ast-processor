@@ -10,9 +10,10 @@ const { log } = console
 describe('class', () => {
   describe('members', () => {
     describe('accessors', () => {
-      context('members/none file', () => {
-        const tester = testerFor('members/none', {
-          factory: node.tester.createClassMembersTester,
+      context('none file - no accessors', () => {
+        const tester = testerFor({
+          fileName: 'none',
+          type: 'accessor',
           traverse: (statements: any[]) => {
             // find first getter
             return statements[0].members //[1]
@@ -30,8 +31,12 @@ describe('class', () => {
       })
     })
 
-    context('members/accessors file', () => {
-      const tester = testerFor('members/accessors')
+    context('members/accessors/pair file with pair', () => {
+      const tester = testerFor({
+        fileName: 'pair',
+        type: 'accessor',
+      })
+
       it('is a class', () => {
         expect(tester.isClass).toBeTruthy()
       })

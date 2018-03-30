@@ -2,7 +2,6 @@ import {
   testerFor,
   query,
   context,
-  node
 } from '../_imports'
 
 const { log } = console
@@ -10,9 +9,10 @@ const { log } = console
 describe('class', () => {
   describe('members', () => {
     describe('getter', () => {
-      context('members/none file', () => {
-        const tester = testerFor('members/none', {
-          factory: node.tester.createClassMembersTester,
+      context('getter file', () => {
+        const tester = testerFor({
+          fileName: 'getter',
+          type: 'getter',
           traverse: (statements: any[]) => {
             // find first getter
             return statements[0].members[1]
@@ -30,8 +30,8 @@ describe('class', () => {
       })
     })
 
-    context('members/accessors file', () => {
-      const tester = testerFor('members/accessors')
+    context('members/accessors/getter file', () => {
+      const tester = testerFor('members/accessors/getter')
       it('is a class', () => {
         expect(tester.isClass).toBeTruthy()
       })

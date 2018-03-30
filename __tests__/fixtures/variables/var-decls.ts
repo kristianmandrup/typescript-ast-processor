@@ -1,7 +1,3 @@
-const _a = 32
-let _b = true
-var _c = 'aaa'
-let _d = {
-  x: 10
-}
-const _e = [1, 2, 3]
+const cx = 32, cy = 33
+let bx = 'BX', by = 'BY', bz = 'BZ'
+var vx = 'VX', vy = 'VY', vz = 'VZ'

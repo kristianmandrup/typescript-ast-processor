@@ -2,7 +2,6 @@ import {
   testerFor,
   query,
   context,
-  node
 } from '../_imports'
 
 const { log } = console
@@ -11,8 +10,9 @@ describe('class', () => {
   describe('members', () => {
     describe('constructor', () => {
       context('members/static file', () => {
-        const tester = testerFor('members/constructor', {
-          factory: node.tester.createClassMembersTester,
+        const tester = testerFor({
+          file: 'constructor',
+          type: 'constructor',
           traverse: (statements: any[]) => {
             // find constructor
             return statements[0].members[1]
