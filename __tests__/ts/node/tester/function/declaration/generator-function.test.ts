@@ -4,13 +4,15 @@ import {
   query,
   logObj,
   log,
-} from './_imports'
+} from '../_imports'
 
 describe('function', () => {
   describe('generator', () => {
     context('generator-function file', () => {
-      const tester: any = testerFor('generator-function', {
-        type: 'function'
+      const tester: any = testerFor({
+        fileName: 'generator-function',
+        type: 'function',
+        category: 'declaration',
       })
 
       describe.skip('not', () => {

@@ -12,8 +12,9 @@ describe('class heritage', () => {
 
     describe('implements', () => {
       context('basic-class file', () => {
-        const tester = testerFor('basic-class', {
-          factory: node.tester.createClassHeritageTester
+        const tester = testerFor({
+          fileName: 'basic-class',
+          type: 'heritage'
         })
 
         describe('not', () => {
@@ -27,8 +28,9 @@ describe('class heritage', () => {
       })
 
       context('implements-class file', () => {
-        const tester = testerFor('implements-class', {
-          factory: node.tester.createClassHeritageTester
+        const tester = testerFor({
+          fileName: 'implements-class',
+          type: 'heritage'
         })
 
         describe('testImplements(query)', () => {

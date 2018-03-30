@@ -4,12 +4,13 @@ import {
   query,
   logObj,
   log,
-} from './_imports'
+} from '../_imports'
 
 describe('function', () => {
-  describe('arrow', () => {
-    context('arrow-function file', () => {
-      const tester: any = testerFor('arrow-var-function', {
+  describe('generator', () => {
+    context('generator-function file', () => {
+      const tester: any = testerFor({
+        fileName: 'async-function',
         type: 'function'
       })
 

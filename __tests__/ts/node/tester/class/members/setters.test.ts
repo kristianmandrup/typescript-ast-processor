@@ -11,8 +11,9 @@ describe('class', () => {
   describe('members', () => {
     describe('getter', () => {
       context('members/none file', () => {
-        const tester = testerFor('members/none', {
-          factory: node.tester.createClassMembersTester,
+        const tester = testerFor({
+          fileName: 'setter',
+          type: 'setter',
           traverse: (statements: any[]) => {
             // find first getter
             return statements[0].members[1]

@@ -4,12 +4,14 @@ import {
   query,
   logObj,
   log,
-} from './_imports'
+} from '../_imports'
 
 describe('parameters', () => {
   context('basic-function file', () => {
-    const tester: any = testerFor('parameters', {
-      type: 'parameters'
+    const tester: any = testerFor({
+      fileName: 'parameters',
+      type: 'parameters',
+      category: 'declaration',
     })
 
     describe('info()', () => {

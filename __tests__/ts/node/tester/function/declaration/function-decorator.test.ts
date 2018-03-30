@@ -1,16 +1,16 @@
 import {
   testerFor,
   context,
-  logObj,
+  logObj
 } from '../_imports'
 
-describe('function call', () => {
-  describe('generator', () => {
-    context('generator-function-call file', () => {
+describe('function', () => {
+  describe('custom decorator', () => {
+    context('function-decorator file', () => {
       const tester: any = testerFor({
-        fileName: 'generator-function-call',
+        fileName: 'generator-function',
         type: 'function',
-        category: 'call'
+        category: 'declaration',
       })
 
       describe('info()', () => {

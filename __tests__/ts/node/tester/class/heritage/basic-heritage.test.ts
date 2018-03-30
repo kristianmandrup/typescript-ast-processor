@@ -9,8 +9,9 @@ const { log } = console
 describe('class heritage', () => {
   describe('HeritageTester', () => {
     describe('basic', () => {
-      const tester = testerFor('basic-class', {
-        factory: node.tester.createClassHeritageTester
+      const tester = testerFor({
+        fileName: 'basic-class',
+        type: 'class'
       })
 
       describe('info', () => {

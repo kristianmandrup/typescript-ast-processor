@@ -1,8 +1,7 @@
 import {
   testerFor,
   query,
-  context,
-  node
+  context
 } from '../_imports'
 
 const { log } = console
@@ -11,8 +10,9 @@ describe('class', () => {
   describe('members', () => {
     describe('methods', () => {
       context('members/none file', () => {
-        const tester = testerFor('members/none', {
-          factory: node.tester.createClassMembersTester
+        const tester = testerFor({
+          fileName: 'method',
+          type: 'method'
         })
 
         describe.skip('not', () => {

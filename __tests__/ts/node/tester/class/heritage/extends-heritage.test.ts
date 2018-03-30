@@ -12,8 +12,10 @@ describe('class heritage', () => {
 
     describe('extends', () => {
       context('basic-class file', () => {
-        const tester = testerFor('basic-class', {
-          factory: node.tester.createClassHeritageTester
+        const tester = testerFor({
+          fileName: 'basic-class',
+          type: 'heritage'
+
         })
 
         describe('not', () => {
@@ -27,8 +29,9 @@ describe('class heritage', () => {
       })
 
       context('implements-class file', () => {
-        const tester = testerFor('extends-class', {
-          factory: node.tester.createClassHeritageTester
+        const tester = testerFor({
+          fileName: 'extends-class',
+          type: 'heritage'
         })
 
         describe('testExtends(query)', () => {

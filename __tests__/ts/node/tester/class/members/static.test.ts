@@ -11,8 +11,9 @@ describe('class', () => {
   describe('members', () => {
     describe('static', () => {
       context('members/static file', () => {
-        const tester = testerFor('members/static', {
-          factory: node.tester.createClassMembersTester,
+        const tester = testerFor({
+          fileName: 'static',
+          type: 'static',
           traverse: (statements: any[]) => {
             // find first static
             return statements[0].members[1]

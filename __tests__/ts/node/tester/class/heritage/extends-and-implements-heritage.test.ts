@@ -1,7 +1,8 @@
 import {
   node,
   testerFor,
-  query
+  query,
+  context
 } from '../_imports'
 
 const { log } = console
@@ -9,21 +10,24 @@ const { log } = console
 describe('class heritage', () => {
   describe('HeritageTester', () => {
     describe('extends', () => {
-      const tester = testerFor('extends-and-implements', {
-        factory: node.tester.createClassHeritageTester
-      })
+      context('extends-and-implements file', () => {
+        const tester = testerFor({
+          fileName: 'extends-and-implements',
+          type: 'heritage'
+        })
 
-      log({
-        node: tester.node
-      })
+        log({
+          node: tester.node
+        })
 
-      describe('test(query)', () => {
-        it('extends: anyOf A and implements: anyOf: Ix, Iy - false', () => {
-          const res = tester.test(query.heritage.extendsAndImplements)
-          log('test', res)
-          expect(res.extends).toEqual('A')
-          expect(res.implements).toEqual(['Ix'])
-          expect(res.result).toEqual(true)
+        describe('test(query)', () => {
+          it('extends: anyOf A and implements: anyOf: Ix, Iy - false', () => {
+            const res = tester.test(query.heritage.extendsAndImplements)
+            log('test', res)
+            expect(res.extends).toEqual('A')
+            expect(res.implements).toEqual(['Ix'])
+            expect(res.result).toEqual(true)
+          })
         })
       })
     })

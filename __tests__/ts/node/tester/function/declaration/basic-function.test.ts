@@ -3,15 +3,21 @@ import {
   context,
   query,
   logObj,
-  log,
-} from './_imports'
+  log
+} from '../_imports'
 
 describe('function', () => {
-  describe('generator', () => {
-    context('generator-function file', () => {
-      const tester: any = testerFor('generator-function', {
-        type: 'function'
+  describe('basic', () => {
+    context('basic-function file', () => {
+      const tester: any = testerFor({
+        fileName: 'basic-function',
+        type: 'function',
+        category: 'declaration',
+        statementIndex: 0
       })
+      // export function minus(a: number, b: number) {
+      //   return a - b
+      // }
 
       describe.skip('not', () => {
         describe('testMethods(query)', () => {
@@ -29,13 +35,42 @@ describe('function', () => {
           const info = tester.info()
           logObj(info)
           expect(info).toEqual({
+            "name": "minus",
+            "parameters": {
+              "names": [
+                "a",
+                "b"
+              ],
+              "types": [
+                "number",
+                "number"
+              ],
+              "items": [
+                {
+                  "type": "number",
+                  "name": "a",
+                  "init": {}
+                },
+                {
+                  "type": "number",
+                  "name": "b",
+                  "init": {
+                    "type": "number",
+                    "value": 32,
+                    "textValue": "32"
+                  }
+                }
+              ]
+            },
+            "returnType": "any",
+            "exported": true
           })
         })
       })
 
       describe('testParameters(query)', () => {
         context('has matching parameter name', () => {
-          it('anyOf: name - true ', () => {
+          it.only('anyOf: name - true ', () => {
             const res = tester.testParameters(query.parameters)
             log('should match', { res })
             expect(res).not.toBe(false)
@@ -43,7 +78,7 @@ describe('function', () => {
           })
         })
 
-        context('has no matching parameters for unknown', () => {
+        context.skip('has no matching parameters for unknown', () => {
           it('anyOf: name - true ', () => {
             const res = tester.testParameters(query.parameters)
             log('no match', { res })
