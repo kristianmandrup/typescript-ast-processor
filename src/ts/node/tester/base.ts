@@ -15,7 +15,6 @@ import {
   isEmpty,
   isFunction
 } from '../../util'
-import { TypeTester } from '../details/type';
 import {
   createASTNodeTraverser
 } from '../../visitor'
@@ -28,7 +27,6 @@ export interface INodeTester {
 
 export abstract class BaseNodeTester extends Loggable implements INodeTester {
   node: any
-  typeTester: TypeTester
   factories: any = {}
 
   /**
@@ -38,6 +36,7 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    */
   constructor(node: any, options: any) {
     super(options)
+    this.factories = this.testerFactories
     if (!node) {
       this.error(`BaseTester: Missing node to test`, {
         node,
@@ -45,7 +44,6 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
         constructor: this.constructor.name
       })
     }
-    this.typeTester = new TypeTester(options)
     this.node = node
   }
 
@@ -82,7 +80,12 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
     return isEmpty(factories) ? this.factories : factories
   }
 
-  createAstNodeTraverser(options: any = {}) {
+  /**
+   * Create a Node traverser for additional information gathering in subtrees,
+   * such as counting specific nodes
+   * @param options
+   */
+  createNodeTraverser(options: any = {}) {
     return createASTNodeTraverser(options)
   }
 
@@ -92,7 +95,7 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    * @param traverseQuery
    */
   countInTree(query: any): number {
-    return this.createAstNodeTraverser({
+    return this.createNodeTraverser({
       ...this.options,
       query,
       node: this.node
@@ -208,30 +211,6 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    */
   protected testOr(query: any, tester: Function) {
     return testOr(query, tester)
-  }
-
-  /**
-   * Test node type
-   * @param type
-   */
-  protected testType(type: string): boolean {
-    return Boolean(!type || this.validatePrimitiveType(type) && this.typeTester.forNode(this.node).is(type))
-  }
-
-  /**
-   * Validate if type (to test) is a primitive type
-   * @param type
-   */
-  protected validatePrimitiveType(type: string): boolean {
-    return this.primitiveTypes.includes(type)
-  }
-
-  /**
-   * List of primitive types (used by validation)
-   * Note: Should match node details type tester
-   */
-  protected get primitiveTypes() {
-    return ['boolean', 'string', 'number', 'array', 'void', 'any', 'object']
   }
 }
 

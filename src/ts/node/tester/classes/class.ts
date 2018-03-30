@@ -39,8 +39,6 @@ export class ClassTester extends IndentifierNodeTester {
    */
   constructor(node: any, options: any = {}) {
     super(node, options)
-
-    this.factories = this.testerFactories
     this.heritage = this.factories.createTester('heritage', node, options)
     this.members = this.factories.createTester('members', node, options)
     this.classDetails = this.factories.details.createTester('class', options)

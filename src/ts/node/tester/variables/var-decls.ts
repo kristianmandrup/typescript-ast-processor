@@ -21,26 +21,51 @@ export class VariableDeclarationNodesTester extends ListTester {
     this.declarations = node.declarations || node.parent.declarations || node
   }
 
+  /**
+   * Create a variable declaration node tester
+   * TODO: make more generic and reuse pattern
+   * @param node
+   */
   createVariableDeclarationTester(node: any) {
     return createVariableDeclarationTester(node, this.options)
   }
 
+  /**
+   * Return list of testers for each node in collection
+   * TODO: make more generic and reuse pattern
+   */
   get varDeclarationTesters() {
     return this.declarations.map(this.createVariableDeclarationTester)
   }
 
+  /**
+   * Count nodes
+   * TODO: make more generic and reuse pattern
+   */
   get declarationsCount() {
     return this.declarations.length
   }
 
+  /**
+   * Get name of declaration node via tester
+   * @param varDeclarationTester
+   */
   protected declName(varDeclarationTester: any) {
     return varDeclarationTester.name
   }
 
+  /**
+   * Get names of all nodes via mapping using tester
+   */
   get names() {
     return this.varDeclarationTesters.map(this.declName)
   }
 
+  /**
+   * Get info for variable declaration
+   * - names: all names of variables declared
+   * - count: number of variables declared
+   */
   info() {
     return {
       count: this.declarationsCount,
@@ -63,7 +88,11 @@ export class VariableDeclarationNodesTester extends ListTester {
     return this.testCount(query, this.declarationsCount)
   }
 
+  /**
+   * TODO
+   * @param query
+   */
   testVariablesDeclaration(query: any) {
-
+    return false
   }
 }

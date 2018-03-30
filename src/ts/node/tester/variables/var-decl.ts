@@ -18,6 +18,8 @@ export function createVariableDeclarationTester(node: any, options: any) {
  * Generic VariableDeclaration tester
  * TODO: Call the relevant VariableDeclaration tester that matches the particular type of VariableDeclaration (if available)
  * Note: has optional initializer just like a function parameter!
+ *
+ * Perhaps extend IdentifierNodeTester ??
  */
 export class VariableDeclarationNodeTester extends BaseNodeTester {
   identifierTester: IndentifierNodeTester
@@ -25,21 +27,34 @@ export class VariableDeclarationNodeTester extends BaseNodeTester {
 
   constructor(node: any, options: any) {
     super(node, options)
-    this.identifierTester = createIndentifierNodeTester(node.name, this.options)
-    this.variableTester = createVariableTester({
+    this.identifierTester = this.factories.createTester('identifier', node.name, this.options)
+
+    // perhaps use TypeNodeTester instead!?
+    this.variableTester = this.factories.details.createTester('variable', {
       ...options,
       node
     })
   }
 
+  /**
+   * TODO: perhaps use TypeNodeTester instead!
+   */
   get varType(): string {
     return this.variableTester.matches() || 'unknown'
   }
 
+  /**
+   * Get name of node
+   */
   get name() {
     return this.identifierTester.name
   }
 
+  /**
+   * Get info for variable declaration:
+   * - name: id of variable
+   * - varType: the type of variable
+   */
   info() {
     return {
       name: this.name,

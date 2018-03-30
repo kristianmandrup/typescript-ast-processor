@@ -1,18 +1,18 @@
 import { BaseNodeTester } from './base'
-import * as details from '../details'
 import {
   testName,
   nameOf,
   createNameTest,
   nameMatch
 } from '../tester/util'
+import { IDetailsTester } from '../details/base';
 
 export function createIndentifierNodeTester(node: any, options: any = {}) {
   return new IndentifierNodeTester(node, options)
 }
 
 export class IndentifierNodeTester extends BaseNodeTester {
-  identifierTester: details.IdentifierTester
+  identifierTester: IDetailsTester
 
   /**
    * Create Identifier node tester
@@ -21,7 +21,7 @@ export class IndentifierNodeTester extends BaseNodeTester {
    */
   constructor(node: any, options: any) {
     super(node, options)
-    this.identifierTester = new details.IdentifierTester(options)
+    this.identifierTester = this.factories.details.createTester('identifier', options)
   }
 
   /**

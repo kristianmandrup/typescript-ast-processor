@@ -12,8 +12,9 @@ import {
 } from '../tester/util/query'
 
 export interface IDetailsTester {
-  matches(options: any): any
-  is(name: string, options: any): boolean
+  forNode(node: any): IDetailsTester
+  matches(options?: any): any
+  is(name: string, options?: any): boolean
 }
 
 export class BaseDetailsTester extends Loggable {

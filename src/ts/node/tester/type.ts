@@ -1,8 +1,5 @@
 import { BaseNodeTester } from './base'
-import {
-  createTypeTester,
-  TypeTester
-} from '../details/type';
+import { IDetailsTester } from '../details/base';
 
 /**
  * Factory to create type node tester
@@ -15,7 +12,7 @@ export function createTypeNodeTester(node: any, options: any = {}) {
 }
 
 export class TypeNodeTester extends BaseNodeTester {
-  typeTester: TypeTester
+  typeTester: IDetailsTester
 
   /**
    * Create a TypeNodeTester instance, used to query a type node
@@ -24,7 +21,7 @@ export class TypeNodeTester extends BaseNodeTester {
    */
   constructor(node: any, options: any) {
     super(node, options)
-    this.typeTester = createTypeTester(options)
+    this.typeTester = this.factories.details.createTester('type', options)
   }
 
   /**
@@ -93,5 +90,21 @@ export class TypeNodeTester extends BaseNodeTester {
       'void',
       'any'
     ]
+  }
+
+  /**
+   * Test node type
+   * @param type
+   */
+  protected testType(type: string): boolean {
+    return Boolean(!type || this.validatePrimitiveType(type) && this.typeTester.forNode(this.node).is(type))
+  }
+
+  /**
+   * Validate if type (to test) is a primitive type
+   * @param type
+   */
+  protected validatePrimitiveType(type: string): boolean {
+    return this.primitiveTypes.includes(type)
   }
 }

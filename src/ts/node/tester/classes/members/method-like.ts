@@ -18,8 +18,6 @@ export class MethodLikeTester extends declaration.FunctionLikeNodeTester {
 
   constructor(node: any, options: any) {
     super(node, options)
-    this.factories = this.testerFactories
-
     this.accessTester = this.factories.details.createTester('access', options)
   }
 
