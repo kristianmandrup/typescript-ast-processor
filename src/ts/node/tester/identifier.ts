@@ -28,6 +28,10 @@ export class IndentifierNodeTester extends BaseNodeTester {
    * Get name of node (using nameOf utility method)
    */
   get name() {
+    return this.nameOf(this.node)
+  }
+
+  nameOf(node: any) {
     return nameOf(this.node)
   }
 

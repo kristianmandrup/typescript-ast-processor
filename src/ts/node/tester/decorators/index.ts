@@ -1,18 +1,11 @@
-import * as ts from 'typescript'
-import { ListTester } from '../generic'
-import { createClassDecoratorTester } from './class-decorator';
+import * as classes from './class-decorator'
+import * as members from './member-decorator'
+import * as params from './param-decorator'
+import * as decorators from './decorators'
 
-export function createClassDecoratorsTester(node: any, options: any = {}): ClassDecoratorsTester {
-  return new ClassDecoratorsTester(node, options)
-}
-
-export class ClassDecoratorsTester extends ListTester {
-  constructor(node: any, options: any) {
-    super(node, options)
-  }
-
-  createClassDecoratorTester(decoratorNode: any) {
-    return createClassDecoratorTester(decoratorNode, this.options)
-  }
-
+export {
+  decorators,
+  classes,
+  members,
+  params
 }
