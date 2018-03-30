@@ -28,11 +28,70 @@ export class TypeNodeTester extends BaseNodeTester {
   }
 
   /**
+   * Return info about type, including type "complexity"
+   */
+  info() {
+    return {
+      typeName: this.typeName,
+      union: this.isUnionType,
+      unionTypes: this.unionTypes,
+      primitive: this.isPrimitive,
+      complex: this.isComplex //
+    }
+  }
+
+  /**
+   * TODO
+   */
+  get unionTypes() {
+    if (!this.isUnionType) return []
+    this.log('unionTypes: Not yet implemented')
+    return []
+  }
+
+  /**
+   * If this is a union type
+   */
+  get isUnionType() {
+    return this.typeName === 'union'
+  }
+
+  /**
+   * Type can be expressed as a simple type name
+   */
+  get isPrimitive() {
+    return this.primitiveTypes.includes(this.typeName)
+  }
+
+  /**
+   * Type such as union type or generic type that can not be expressed as a simple type name
+   */
+  get isComplex() {
+    return !this.isPrimitive
+  }
+
+  /**
    * Get the type(s) that match for the node
    * Uses node details tester: TypeTester
    * TODO: can we return multiple types if union type or similar?
    */
-  get typeName(): any {
+  get typeName(): string {
     return this.typeTester.matches()
+  }
+
+  /**
+   * List of simple types used to determine if type is a simply/primitive type
+   */
+  protected get primitiveTypes(): string[] {
+    return [
+      'string',
+      'number',
+      'boolean',
+      'array',
+      'object',
+      'symbol',
+      'void',
+      'any'
+    ]
   }
 }

@@ -1,11 +1,11 @@
-import * as classes from './class-decorator'
-import * as members from './member-decorator'
-import * as params from './param-decorator'
+import * as $class from './class-decorator'
+import * as member from './member-decorator'
+import * as parameter from './param-decorator'
 import * as decorators from './decorators'
 
 export {
   decorators,
-  classes,
-  members,
-  params
+  $class as class,
+  member,
+  parameter
 }

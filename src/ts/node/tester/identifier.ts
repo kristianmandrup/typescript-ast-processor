@@ -12,7 +12,7 @@ export function createIndentifierNodeTester(node: any, options: any = {}) {
 }
 
 export class IndentifierNodeTester extends BaseNodeTester {
-  identifier: details.IdentifierTester
+  identifierTester: details.IdentifierTester
 
   /**
    * Create Identifier node tester
@@ -21,7 +21,7 @@ export class IndentifierNodeTester extends BaseNodeTester {
    */
   constructor(node: any, options: any) {
     super(node, options)
-    this.identifier = new details.IdentifierTester(options)
+    this.identifierTester = new details.IdentifierTester(options)
   }
 
   /**
@@ -72,6 +72,6 @@ export class IndentifierNodeTester extends BaseNodeTester {
    * Whether identifier is exported
    */
   get isExported() {
-    return this.identifier.is(this.node, 'exported')
+    return this.identifierTester.is(this.node, 'exported')
   }
 }

@@ -1,11 +1,11 @@
 import { DecoratorNodeTester } from './decorator';
 
 
-export function createPropertyDecoratorTester(node: any, options: any = {}): PropertyDecoratorTester {
-  return new PropertyDecoratorTester(node, options)
+export function createParameterDecoratorTester(node: any, options: any = {}): ParameterDecoratorTester {
+  return new ParameterDecoratorTester(node, options)
 }
 
-export class PropertyDecoratorTester extends DecoratorNodeTester {
+export class ParameterDecoratorTester extends DecoratorNodeTester {
   constructor(node: any, options: any) {
     super(node, options)
   }

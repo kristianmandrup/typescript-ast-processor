@@ -16,6 +16,7 @@ export class TypeTester extends BaseDetailsTester {
       string: ts.SyntaxKind.StringKeyword,
       number: ts.SyntaxKind.NumberKeyword,
       symbol: ts.SyntaxKind.SymbolKeyword,
+      object: ts.SyntaxKind.ObjectKeyword,
       array: ts.SyntaxKind.ArrayType,
       union: ts.SyntaxKind.UnionType,
       boolean: ts.SyntaxKind.BooleanKeyword,
