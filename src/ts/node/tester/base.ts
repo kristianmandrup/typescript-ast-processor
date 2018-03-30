@@ -50,6 +50,12 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
     this.node = node
   }
 
+  protected createTester(name: string, node: any, options: any = {}): INodeTester | IDetailsTester {
+    const factory = /details:/.test(name) ? 'createDetailsTester' : 'createNodeTester'
+    name = name.replace(/\w+:/, '')
+    return this[factory](name, node, options)
+  }
+
   /**
    * Convenience factory for creating a node tester
    * @param name
