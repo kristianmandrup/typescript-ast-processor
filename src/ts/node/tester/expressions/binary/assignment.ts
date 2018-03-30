@@ -6,8 +6,12 @@ import {
   createIndentifierNodeTester
 } from '../../identifier';
 import {
+  createBinaryExprTester,
   BinaryExprTester
-} from '../../../details'
+} from '../../../details/binary-expr';
+import {
+  testName
+} from '../../util'
 
 /**
  * Factory to create a VariableDeclaration tester
@@ -22,10 +26,12 @@ export function createAssignmentTester(node: any, options: any) {
 
 export class AssignmentTester extends BaseNodeTester {
   identifierTester: IndentifierNodeTester
+  binaryExprTester: BinaryExprTester
 
   constructor(node: any, options: any) {
     super(node, options)
     this.identifierTester = createIndentifierNodeTester(node.left, this.options)
+    this.binaryExprTester = createBinaryExprTester({ ...options, node })
   }
 
   /**
@@ -35,9 +41,14 @@ export class AssignmentTester extends BaseNodeTester {
     return this.identifierTester.name
   }
 
+  get assignmentType(): string {
+    return this.binaryExprTester.anyAssignment(this.node) || 'unknown'
+  }
+
   info() {
     return {
       name: this.name,
+      assignmentType: this.assignmentType,
       value: null // TODO
     }
   }
@@ -58,6 +69,10 @@ export class AssignmentTester extends BaseNodeTester {
    */
   test(query: any): any {
     return this.testName(query.name)
+  }
+
+  testAssignmentType(query: any) {
+    return testName(this.assignmentType, query)
   }
 
   testName(query: any) {

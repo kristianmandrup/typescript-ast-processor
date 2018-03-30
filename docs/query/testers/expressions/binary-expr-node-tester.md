@@ -37,7 +37,6 @@ Calling `query(query)` will return a result of the form:
 ```js
 {
   parenthesised: 3
-  and: true,
-  gt: true
+  and: true
 }
 ```

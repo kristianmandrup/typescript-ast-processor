@@ -7,6 +7,7 @@ Sample `AssignmentExprNodeTester.info()` result:
 ```js
 {
   name: 'obj',
+  assignmentType: '=',
   value: 2
 }
 ```
@@ -18,6 +19,7 @@ Sample `query`:
 ```js
 {
   name: /^obj/,
+  assignmentType: '=',
   value: (v) => v > 0
 }
 ```
@@ -33,8 +35,8 @@ Calling `query(query)` will return a result of the form:
 ```js
 {
   name: 'obj'
+  assignmentType: '=',
   value: 2
 }
 ```
 
-Which in this particular case is the exact same as the result of `info`

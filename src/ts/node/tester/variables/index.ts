@@ -1,8 +1,8 @@
 export {
   createVariableDeclarationTester,
-  VariableDeclarationTester
+  VariableDeclarationNodeTester
 } from './var-decl'
 export {
   createVariableDeclarationsTester,
-  VariableDeclarationsTester
+  VariableDeclarationNodesTester
 } from './var-decls'

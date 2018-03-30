@@ -1,5 +1,5 @@
 import * as ts from 'typescript'
-import { BlockStatementTester } from '../block-statement';
+import { BlockStatementTester } from '../block';
 
 export function createTryCatchFinallyTester(node: any, options: any = {}): TryCatchFinallyTester {
   return new TryCatchFinallyTester(node, options)

@@ -211,17 +211,23 @@ export class BaseDetailsTester extends Loggable {
   /**
    * Find the name or names of checker functions that match
    * Uses find by default, but can be overridden
-   * Pass a method option to override .find with .every or similar Array iterator
-   * Pass a test option with method to use to test name on each iteration
+   * - method option to override .find with .every or similar Array iterator
+   * - test option with method to use to test name on each iteration
    * @param options pass
    */
   matches(options: any = {}) {
-    const method: string = options.method || 'find'
+    const filterMethod: string = options.method || 'find'
     const defaultFind = (name: string) => {
       return this.is(name, options)
     }
-    const find = options.test || defaultFind
-    return this.checkerNames[method](find)
+    const findFn = options.test || defaultFind
+    return this.checkerNames[filterMethod](findFn)
+  }
+
+  matchesAny(names: string[], options: any = {}) {
+    return names.find(name => {
+      return this.is(name, options)
+    })
   }
 
   /**

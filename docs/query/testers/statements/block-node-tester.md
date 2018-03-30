@@ -24,7 +24,7 @@ Sample `query`:
 
 Find a block statement node:
 
-- which is not nested more than 3 levels deep (ie. more than 2 containing block parents)
+- that is not nested more than 3 levels deep (ie. more than 2 containing block parents)
 
 Only if all these conditions are met, `test(query)` will return `true`
 Calling `query(query)` will return a result of the form:

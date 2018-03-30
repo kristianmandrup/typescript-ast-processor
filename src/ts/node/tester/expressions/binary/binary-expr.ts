@@ -8,10 +8,10 @@ import { BaseNodeTester } from '../../base';
  * @param node
  * @param options
  */
-export function createBinaryExpressionTester(node: any, options: any) {
+export function createBinaryExpressionNodeTester(node: any, options: any) {
   const binaryTester = new BinaryExprTester({ ...options, node })
   if (binaryTester.matches(node)) return
-  return new BinaryExpressionTester(node, options)
+  return new BinaryExpressionNodeTester(node, options)
 }
 
 /**
@@ -31,7 +31,7 @@ export function createBinaryOperatorTester(operator: string, options: any = {}) 
 /**
  * TODO: Need to check use of parenthesis for dev score
  */
-export class BinaryExpressionTester extends BaseNodeTester {
+export class BinaryExpressionNodeTester extends BaseNodeTester {
   binaryTester: BinaryExprTester
 
   typeMap = {

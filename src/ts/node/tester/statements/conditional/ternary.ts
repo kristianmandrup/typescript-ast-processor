@@ -1,11 +1,11 @@
 import * as ts from 'typescript'
 import { BlockStatementTester } from '../block';
 
-export function createIfThenElseTester(node: any, options: any = {}): IfThenElseTester {
-  return new IfThenElseTester(node, options)
+export function createIfThenElseTester(node: any, options: any = {}): TernaryNodeTester {
+  return new TernaryNodeTester(node, options)
 }
 
-export class IfThenElseTester extends BlockStatementTester {
+export class TernaryNodeTester extends BlockStatementTester {
   thenStatement: ts.Block
   elseStatement: ts.Block
 
@@ -16,15 +16,8 @@ export class IfThenElseTester extends BlockStatementTester {
    */
   constructor(node: any, options: any) {
     super(node, options)
-    this.thenStatement = node.thenStatement
-    this.elseStatement = node.elseStatement
-  }
-
-  /**
-   * Determine if conditional has an else Block
-   */
-  get hasElse() {
-    return Boolean(this.elseStatement)
+    // this.thenStatement = node.thenStatement
+    // this.elseStatement = node.elseStatement
   }
 
   /**
@@ -33,7 +26,7 @@ export class IfThenElseTester extends BlockStatementTester {
   info() {
     return {
       ...super.info(),
-      else: this.hasElse
+      conditionalType: 'ternary'
     }
   }
 
@@ -41,14 +34,6 @@ export class IfThenElseTester extends BlockStatementTester {
    * Query whether on else block on/off and nesting levels
    */
   test(query: any) {
-    return this.testElse(query.else) && super.test(query.nested)
-  }
-
-  /**
-   * Query whether on else block on/off
-   */
-  testElse(query: any) {
-    if (!query) return true
-    return Boolean(query.else) === this.hasElse
+    return true
   }
 }

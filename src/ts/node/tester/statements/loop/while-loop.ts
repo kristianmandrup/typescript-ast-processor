@@ -1,5 +1,5 @@
 import * as ts from 'typescript'
-import { BlockStatementTester } from '../block-statement'
+import { BlockStatementTester } from '../block'
 
 /**
  * Factory to create a While loop tester
@@ -18,22 +18,34 @@ export class WhileLoopTester extends BlockStatementTester {
     super(node, options)
   }
 
-  get whileThen() {
+  get isWhileThen() {
     return ts.isWhileStatement(this.node)
   }
 
-  get doWhile() {
+  get isDoWhile() {
     return ts.isDoStatement(this.node)
   }
 
+  /**
+   * Determine and return the for for loop type ('for', 'of' or 'in')
+   */
+  get whileType(): string {
+    if (this.isWhileThen) return 'whileDo'
+    if (this.isDoWhile) return 'doWhile'
+    this.error('forType: unknown type of for loop', {
+      node: this.node
+    })
+    return 'unknown'
+  }
 
   info() {
     return {
       ...super.info(),
       loop: true,
-      while: true,
-      whileThen: this.whileThen,
-      doWhile: this.doWhile
+      loopType: 'while',
+      whileType: this.whileType,
+      whileThen: this.isWhileThen,
+      doWhile: this.isDoWhile
     }
   }
 }

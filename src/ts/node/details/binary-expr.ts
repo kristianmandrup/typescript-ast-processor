@@ -11,9 +11,20 @@ export class BinaryExprTester extends BaseDetailsTester {
     this.modifierKey = 'operatorToken'
   }
 
-  get syntaxMap() {
+  get assignments() {
     return {
       assignment: ts.SyntaxKind.EqualsToken,
+      powerAssignment: ts.SyntaxKind.AsteriskAsteriskEqualsToken,
+      multiplyAssignment: ts.SyntaxKind.AsteriskAsteriskEqualsToken,
+      plusAssignment: ts.SyntaxKind.PlusEqualsToken,
+      minusAssignment: ts.SyntaxKind.MinusEqualsToken,
+      divideAssignment: ts.SyntaxKind.SlashEqualsToken,
+      percentAssignment: ts.SyntaxKind.PercentEqualsToken,
+    }
+  }
+
+  get comparisons() {
+    return {
       lt: ts.SyntaxKind.LessThanToken,
       lte: ts.SyntaxKind.LessThanEqualsToken,
       gt: ts.SyntaxKind.GreaterThanToken,
@@ -24,9 +35,56 @@ export class BinaryExprTester extends BaseDetailsTester {
       notSame: ts.SyntaxKind.ExclamationEqualsToken,
       or: ts.SyntaxKind.BarBarToken,
       and: ts.SyntaxKind.AmpersandAmpersandToken,
-      binOr: ts.SyntaxKind.BarToken,
-      binAnd: ts.SyntaxKind.AmpersandToken,
     }
+  }
+
+  get binaryLogic() {
+    return {
+      binaryOr: ts.SyntaxKind.BarToken,
+      binaryAnd: ts.SyntaxKind.AmpersandToken,
+    }
+  }
+
+  get special() {
+    return {
+      instanceOf: ts.SyntaxKind.InstanceOfKeyword
+    }
+  }
+
+  get syntaxMap() {
+    return {
+      ...this.assignments,
+      ...this.comparisons,
+      ...this.binaryLogic,
+      ...this.special
+    }
+  }
+
+  /**
+   * Test if node is any type of assignment
+   * @param node node to test
+   */
+  anyAssignment(node?: any): string | undefined {
+    const assignmentKeys = Object.keys(this.assignments)
+    return this.matchesAny(assignmentKeys, { node })
+  }
+
+  /**
+   * Test if node is any type of assignment
+   * @param node node to test
+   */
+  anyComparison(node?: any): string | undefined {
+    const comparisonKeys = Object.keys(this.comparisons)
+    return this.matchesAny(comparisonKeys, { node })
+  }
+
+  /**
+   * Test if node is any type of assignment
+   * @param node node to test
+   */
+  anyBinary(node?: any): string | undefined {
+    const binaryLogicKeys = Object.keys(this.binaryLogic)
+    return this.matchesAny(binaryLogicKeys, { node })
   }
 
   /**
@@ -34,7 +92,55 @@ export class BinaryExprTester extends BaseDetailsTester {
    * @param node node to test
    */
   assignment(node?: any) {
-    return this.has('assignment', { node })
+    return this.has('assign', { node })
+  }
+
+  /**
+   * Test if node is an assignment with **= between left and right side
+   * @param node node to test
+   */
+  powerAssignment(node?: any) {
+    return this.has('powerAssignment', { node })
+  }
+
+  /**
+   * Test if node is an assignment with *= between left and right side
+   * @param node node to test
+   */
+  multiplyAssignment(node?: any) {
+    return this.has('multiplyAssignment', { node })
+  }
+
+  /**
+   * Test if node is an assignment with += between left and right side
+   * @param node node to test
+   */
+  plusAssignment(node?: any) {
+    return this.has('plusAssignment', { node })
+  }
+
+  /**
+   * Test if node is an assignment with += between left and right side
+   * @param node node to test
+   */
+  minusAssignment(node?: any) {
+    return this.has('minusAssignment', { node })
+  }
+
+  /**
+   * Test if node is an assignment with += between left and right side
+   * @param node node to test
+   */
+  divideAssignment(node?: any) {
+    return this.has('divideAssignment', { node })
+  }
+
+  /**
+   * Test if node is an assignment with += between left and right side
+   * @param node node to test
+   */
+  percentAssignment(node?: any) {
+    return this.has('percentAssignment', { node })
   }
 
   /**

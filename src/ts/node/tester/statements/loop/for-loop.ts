@@ -1,5 +1,5 @@
 import * as ts from 'typescript'
-import { BlockStatementTester } from '../block-statement';
+import { BlockStatementTester } from '../block';
 import {
   testName
 } from '../../util'
@@ -60,7 +60,10 @@ export class ForLoopTester extends BlockStatementTester {
     return {
       ...super.info(),
       loop: true,
-      for: true,
+      loopType: 'for',
+      for: this.isFor,
+      forOf: this.isForOf,
+      forIn: this.isForIn,
       forType: this.forType
     }
   }

@@ -14,7 +14,8 @@ Sample `LiteralNodeTester.info()` result:
 
 ```js
 {
-  // ...
+  nestingLevels: 2,
+  'else': true
 }
 ```
 
@@ -24,7 +25,23 @@ Sample `query`:
 
 ```js
 {
-    // ...
+  nestingLevels: 2,
+  'else': true
+}
+```
+
+Find an `if` node:
+
+- that is not nested more than 2 levels deep (max 2 parent blocks)
+- with an `else` block (ie. `if (condition) {} else {}`)
+
+Only if all these conditions are met, `test(query)` will return `true`
+Calling `query(query)` will return a result of the form:
+
+```js
+{
+  nestingLevels: 1,
+  'else': true
 }
 ```
 
@@ -36,7 +53,10 @@ Sample `SwitchNodeTester.info()` result:
 
 ```js
 {
-  // ...
+  nestingLevels: 1,
+  conditionalType: 'switch',
+  cases: 3,
+  defaultCase: true
 }
 ```
 
@@ -46,7 +66,28 @@ Sample `query`:
 
 ```js
 {
-    // ...
+  nestingLevels: 1,
+  cases: {
+    max: 2
+  },
+  defaultCase: true
+}
+```
+
+Find a `switch` node:
+
+- that is not nested more than 1 levels deep (max 1 parent blocks)
+- that has at most 2 case blocks (ie. `case negative: return 0`)
+- that has a default case block
+
+Only if all these conditions are met, `test(query)` will return `true`
+Calling `query(query)` will return a result of the form:
+
+```js
+{
+  nestingLevels: 1,
+  cases: 2,
+  defaultCase: true
 }
 ```
 
@@ -58,7 +99,7 @@ Sample `TernaryNodeTester.info()` result:
 
 ```js
 {
-  // ...
+  conditionalType: 'ternary'
 }
 ```
 
@@ -68,6 +109,8 @@ Sample `query`:
 
 ```js
 {
-    // ...
+  conditionalType: 'ternary'
 }
 ```
+
+Find a conditional node of the type `ternary`

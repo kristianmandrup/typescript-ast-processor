@@ -33,6 +33,7 @@ export class IfThenElseTester extends BlockStatementTester {
   info() {
     return {
       ...super.info(),
+      conditionalType: 'if',
       else: this.hasElse
     }
   }

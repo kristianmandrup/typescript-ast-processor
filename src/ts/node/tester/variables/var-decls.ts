@@ -10,10 +10,10 @@ import {
  * @param options
  */
 export function createVariableDeclarationsTester(node: any, options: any) {
-  return new VariableDeclarationsTester(node, options)
+  return new VariableDeclarationNodesTester(node, options)
 }
 
-export class VariableDeclarationsTester extends ListTester {
+export class VariableDeclarationNodesTester extends ListTester {
   declarations: any[]
 
   constructor(node: any, options: any) {
@@ -21,17 +21,30 @@ export class VariableDeclarationsTester extends ListTester {
     this.declarations = node.declarations || node.parent.declarations || node
   }
 
-  createVariableDeclarationTester(node: any, options: any) {
-    return createVariableDeclarationTester(node, options)
+  createVariableDeclarationTester(node: any) {
+    return createVariableDeclarationTester(node, this.options)
+  }
+
+  get varDeclarationTesters() {
+    return this.declarations.map(this.createVariableDeclarationTester)
   }
 
   get declarationsCount() {
     return this.declarations.length
   }
 
+  protected declName(varDeclarationTester: any) {
+    return varDeclarationTester.name
+  }
+
+  get names() {
+    return this.varDeclarationTesters.map(this.declName)
+  }
+
   info() {
     return {
-      count: this.declarationsCount
+      count: this.declarationsCount,
+      names: this.names
     }
   }
 
