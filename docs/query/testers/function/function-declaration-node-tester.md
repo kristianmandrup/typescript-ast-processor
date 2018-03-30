@@ -10,6 +10,9 @@ Sample `FunctionDeclarationNodeTester.info()` result:
   exported: true,
   arrow: false,
   generator: false,
+  returnCount: 1,
+  lastStatementReturn: true,
+  returnType: 'Thingy',
   async: true,
   parameters: {
     count: 2,

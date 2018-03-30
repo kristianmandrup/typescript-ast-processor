@@ -60,6 +60,20 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
   }
 
   /**
+   * Determine if the last statement is of the form:
+   * - return ...
+   */
+  get isLastStatementReturn() {
+    return false
+  }
+
+  /**
+   * Find the number of return statements within this function scope
+   */
+  get returnCount() {
+    return 1
+  }
+  /**
    * Collect all info for function node
    */
   info() {
@@ -67,6 +81,8 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
       name: this.name,
       parameters: this.parametersTester.info(),
       returnType: this.returnType,
+      returnCount: this.returnCount,
+      lastStatementReturn: this.isLastStatementReturn,
       exported: this.isExported,
       arrow: this.isArrow,
       generator: this.isGenerator,
