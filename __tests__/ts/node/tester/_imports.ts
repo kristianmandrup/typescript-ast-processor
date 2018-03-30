@@ -16,15 +16,9 @@ export {
  * @param traverse
  * @param statementNumber
  */
-export function loadAstNode(filePath: string, traverse: Function, statementNumber = 0): any {
+export function loadAstNode(filePath: string, traverse: Function): any {
   const fixturePath = fixtureFile(filePath)
-  const srcFile = createSrcFile().loadSourceFile(fixturePath)
-
-  const { sourceFile } = srcFile
-  const statements = sourceFile.statements
-  const node = traverse ? traverse(statements) : statements[statementNumber]
-  // console.log('using node:', node)
-  return node
+  return createSrcFile().loadSourceFile(fixturePath).sourceFile
 }
 
 const { log } = console
@@ -38,7 +32,7 @@ export function logObj(obj: any) {
 }
 
 const {
-  factoryMap
+  factories
 } = node.tester
 
 function resolveStatementIndex(type: string, fileName: string): number | undefined {
@@ -56,6 +50,15 @@ function resolveStatementIndex(type: string, fileName: string): number | undefin
   return
 }
 
+function getNode(sourceFile: any, opts: any = {}) {
+  const { index, traverse } = opts
+  const statements = sourceFile.statements
+  const node = traverse ? traverse(statements) : statements[index]
+  // console.log('using node:', node)
+  return node
+
+}
+
 
 /**
  * Create a tester for a given fileName (ie source file to load and the type of tester)
@@ -71,16 +74,30 @@ export function testerFor(fileName: string, options: any = {}): any {
   let {
     factory,
     statementIndex,
+    indexMap,
     traverse,
+    traversers = {},
     type = 'class'
   } = options
-  factory = factory || factoryMap[type]
+  factory = factory || factories[type]
 
   statementIndex = statementIndex || resolveStatementIndex(type, fileName)
 
   const filePath = `${type}/${fileName}.ts`
-  const classStatement = loadAstNode(filePath, traverse, statementIndex)
-  return factory(classStatement, {
-    logging: true
-  })
+  const srcFile = loadAstNode(filePath, traverse)
+
+  if (statementIndex || traverse) {
+    const node = getNode(srcFile, { index: statementIndex, traverse })
+    return factory(node, {
+      logging: true
+    })
+  } else {
+    return indexMap.map((label: string, index: number) => {
+      const traverser = traversers[label]
+      const node = getNode(srcFile, { index, traverser })
+      return factory(node, {
+        logging: true
+      })
+    })
+  }
 }
