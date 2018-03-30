@@ -86,7 +86,22 @@ Calling `query(query)` will return a result of the form:
 ```js
 {
   nestingLevels: 1,
-  cases: 2,
+  cases: {
+    count: 2,
+    keys: [
+      'x', 'y'
+    ],
+    clauses: [
+      {
+        name: 'x',
+        breakCount: 1
+      },
+      {
+        name: 'y',
+        breakCount: 0
+      }
+    ]
+  },
   defaultCase: true
 }
 ```

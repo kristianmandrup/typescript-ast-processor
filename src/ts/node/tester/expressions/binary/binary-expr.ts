@@ -2,6 +2,7 @@ import {
   BinaryExprTester
 } from '../../../details'
 import { BaseNodeTester } from '../../base';
+import { createBinaryExprTester } from '../../../details/binary-expr';
 
 /**
  * Factory to create a VariableDeclaration tester
@@ -21,7 +22,7 @@ export function createBinaryExpressionNodeTester(node: any, options: any) {
  */
 export function createBinaryOperatorTester(operator: string, options: any = {}) {
   return (node: any) => {
-    const binaryTester = new BinaryExprTester({ ...options, node })
+    const binaryTester = createBinaryExprTester({ ...options, node })
     return binaryTester.test({
       [operator]: true
     })
@@ -29,7 +30,8 @@ export function createBinaryOperatorTester(operator: string, options: any = {}) 
 }
 
 /**
- * TODO: Need to check use of parenthesis for dev score
+ * Test binary expressin of the form [leftSide, operatorToken, rightSide]
+ * Also check use of parenthesis for dev score
  */
 export class BinaryExpressionNodeTester extends BaseNodeTester {
   binaryTester: BinaryExprTester
@@ -45,7 +47,7 @@ export class BinaryExpressionNodeTester extends BaseNodeTester {
    */
   constructor(node: any, options: any) {
     super(node, options)
-    this.binaryTester = new BinaryExprTester({ ...options, node })
+    this.binaryTester = createBinaryExprTester({ ...options, node })
   }
 
   /**
@@ -88,8 +90,10 @@ export class BinaryExpressionNodeTester extends BaseNodeTester {
    */
   info() {
     return {
-      parenthesised: this.countOccurrence('ParenthesesExpression'),
-      ...this.operatorInfo
+      occurences: {
+        parenthesised: this.countOccurrence('ParenthesesExpression'),
+        ...this.operatorInfo
+      }
     }
   }
 

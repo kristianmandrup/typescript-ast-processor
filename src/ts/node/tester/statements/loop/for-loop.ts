@@ -1,8 +1,8 @@
 import * as ts from 'typescript'
-import { BlockStatementTester } from '../block';
 import {
   testName
 } from '../../util'
+import { LoopNodeTester } from '.';
 
 /**
  * Factory to create a For loop tester
@@ -17,7 +17,7 @@ export function createForLoopTester(node: any, options: any = {}): ForLoopTester
  * For loop query tester and data aggregator
  */
 
-export class ForLoopTester extends BlockStatementTester {
+export class ForLoopTester extends LoopNodeTester {
   constructor(node: any, options: any) {
     super(node, options)
   }
@@ -59,7 +59,6 @@ export class ForLoopTester extends BlockStatementTester {
   info() {
     return {
       ...super.info(),
-      loop: true,
       loopType: 'for',
       for: this.isFor,
       forOf: this.isForOf,

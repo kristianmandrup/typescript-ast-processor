@@ -27,8 +27,13 @@ Sample `query`:
 
 ```js
 {
-  nestingLevels: 1,
+  nestingLevels: {
+    max: 1
+  },
   whileType: 'whileDo'
+  breakCount: {
+    max: 1
+  }
 }
 ```
 
@@ -43,7 +48,9 @@ Calling `query(query)` will return a result of the form:
 ```js
 {
   nestingLevels: 0,
-  whileType: true
+  whileType: true,
+  breakCount: 0,
+  continueCount: 1
 }
 ```
 
@@ -57,6 +64,7 @@ Sample `ForLoopNodeTester.info()` result:
 {
   nestingLevels: 2,
   loop: true,
+  breakCount: 0,
   loopType: 'for',
   forOf: true,
   forType: 'of'
@@ -70,14 +78,16 @@ Sample `query`:
 ```js
 {
   nestingLevels: 1,
-  forType: 'of'
+  forType: {
+    anyOf: ['of', 'in']
+  }
 }
 ```
 
 Find a for loop node:
 
 - where the node is not nested more than 1 level deep (max 1 parent block)
-- is a for loop of the type `of` (ie. `for (x of xs)`)
+- is a for loop of the type `of` or `in` (ie. `for (x of xs)` or `for (x in xs)`)
 
 Only if all these conditions are met, `test(query)` will return `true`
 Calling `query(query)` will return a result of the form:
@@ -85,6 +95,6 @@ Calling `query(query)` will return a result of the form:
 ```js
 {
   nestingLevels: 0,
-  forType: true
+  forType: 'of'
 }
 ```

@@ -24,7 +24,15 @@ export class SwitchStatementTester extends BaseNodeTester {
   }
 
   get caseCount(): number {
-    return this.caseBlockTester.clauseIds.length
+    return this.caseBlockTester.clauseKeys.length
+  }
+
+  get caseClausesInfo(): any[] {
+    return this.caseBlockTester.clausesInfo
+  }
+
+  get caseClausesKeys(): string[] {
+    return this.caseBlockTester.clauseKeys
   }
 
   /**
@@ -34,7 +42,11 @@ export class SwitchStatementTester extends BaseNodeTester {
     return {
       ...super.info(),
       conditionalType: 'switch',
-      cases: this.caseCount,
+      cases: {
+        count: this.caseCount,
+        keys: this.caseClausesKeys,
+        clauses: this.caseClausesInfo,
+      },
       defaultCase: this.hasDefault
     }
   }

@@ -20,13 +20,18 @@ export class CaseClauseTester extends BaseNodeTester {
     this.expression = node.expression
   }
 
-  get name() {
+  get key() {
     return ts.isLiteralExpression(this.expression) ? this.expression.getText() : 'unknown'
+  }
+
+  get breakCount() {
+    return 0
   }
 
   info() {
     return {
-      name: this.name
+      key: this.key,
+      breakCount: this.breakCount
     }
   }
 }

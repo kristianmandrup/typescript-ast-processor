@@ -15,7 +15,7 @@ export class BinaryExprTester extends BaseDetailsTester {
     return {
       assignment: ts.SyntaxKind.EqualsToken,
       powerAssignment: ts.SyntaxKind.AsteriskAsteriskEqualsToken,
-      multiplyAssignment: ts.SyntaxKind.AsteriskAsteriskEqualsToken,
+      multiplyAssignment: ts.SyntaxKind.AsteriskEqualsToken,
       plusAssignment: ts.SyntaxKind.PlusEqualsToken,
       minusAssignment: ts.SyntaxKind.MinusEqualsToken,
       divideAssignment: ts.SyntaxKind.SlashEqualsToken,
@@ -51,9 +51,18 @@ export class BinaryExprTester extends BaseDetailsTester {
     }
   }
 
+  get applyCalc() {
+    return {
+      applyPlus: ts.SyntaxKind.PlusPlusToken,
+      applyMinus: ts.SyntaxKind.MinusMinusToken,
+      applyPower: ts.SyntaxKind.AsteriskAsteriskToken,
+    }
+  }
+
   get syntaxMap() {
     return {
       ...this.assignments,
+      ...this.applyCalc,
       ...this.comparisons,
       ...this.binaryLogic,
       ...this.special
@@ -86,6 +95,31 @@ export class BinaryExprTester extends BaseDetailsTester {
     const binaryLogicKeys = Object.keys(this.binaryLogic)
     return this.matchesAny(binaryLogicKeys, { node })
   }
+
+  /**
+   * Test if node is uses ++ token between left and right side
+   * @param node node to test
+   */
+  applyPlus(node?: any) {
+    return this.has('applyPlus', { node })
+  }
+
+  /**
+   * Test if node is uses -- token between left and right side
+   * @param node node to test
+   */
+  applyMinus(node?: any) {
+    return this.has('applyMinus', { node })
+  }
+
+  /**
+   * Test if node is uses ** token between left and right side
+   * @param node node to test
+   */
+  applyPower(node?: any) {
+    return this.has('applyPower', { node })
+  }
+
 
   /**
    * Test if node is an assignment with eq token = between left and right side

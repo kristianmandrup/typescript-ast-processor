@@ -12,7 +12,9 @@ export class ExpressionTester extends BaseDetailsTester {
 
   get syntaxMap() {
     return {
-      typeOf: ts.SyntaxKind.TypeOfKeyword
+      typeof: ts.SyntaxKind.TypeOfKeyword,
+      not: ts.SyntaxKind.ExclamationToken,
+      delete: ts.SyntaxKind.DeleteKeyword
     }
   }
 
@@ -20,7 +22,24 @@ export class ExpressionTester extends BaseDetailsTester {
    * Test if node is a comparison with !=== token between left and right side
    * @param node node to test
    */
-  typeOf(node?: any) {
-    return this.has('typeOf', { node })
+  typeof(node?: any) {
+    return this.has('typeof', { node })
+  }
+
+  /**
+   * Test if node is a not expression ie !x
+   * @param node node to test
+   */
+  not(node?: any) {
+    return this.has('not', { node })
+  }
+
+  /**
+   * Test if node is a delete expression
+   * @param node node to test
+   */
+  delete(node?: any) {
+    ts.isDeleteExpression(node)
+    // return this.has('delete', { node })
   }
 }

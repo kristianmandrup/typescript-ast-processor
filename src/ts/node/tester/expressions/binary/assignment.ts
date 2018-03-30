@@ -1,5 +1,3 @@
-// BinaryExpression with EqualsToken as operatorToken is an assignment :)
-import * as ts from 'typescript'
 import { BaseNodeTester } from '../../base';
 import {
   IndentifierNodeTester,

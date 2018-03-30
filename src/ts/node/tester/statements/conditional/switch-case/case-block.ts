@@ -32,7 +32,7 @@ export class CaseBlockTester extends BaseNodeTester {
     return this.clauseNodes.map(this.clauseInfo)
   }
 
-  get clauseIds() {
+  get clauseKeys() {
     return this.clausesInfo.map((info: any) => info.name)
   }
 
@@ -42,10 +42,6 @@ export class CaseBlockTester extends BaseNodeTester {
 
   get defaultClauseNode(): ts.DefaultClause {
     return this.node.clauses.filter((clause: ts.CaseClause) => ts.isDefaultClause(clause))
-  }
-
-  get caseIds() {
-    return this.clauseIds
   }
 
   get caseCount() {
@@ -60,7 +56,7 @@ export class CaseBlockTester extends BaseNodeTester {
   info() {
     return {
       cases: {
-        ids: this.caseIds,
+        keys: this.clauseKeys,
         count: this.caseCount
       },
       default: Boolean(this.defaultCase)

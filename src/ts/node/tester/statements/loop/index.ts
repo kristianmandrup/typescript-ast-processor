@@ -6,3 +6,7 @@ export {
   createWhileLoopTester,
   WhileLoopTester
 } from './while-loop'
+export {
+  LoopNodeTester,
+  createLoopNodeTester
+} from './loop'

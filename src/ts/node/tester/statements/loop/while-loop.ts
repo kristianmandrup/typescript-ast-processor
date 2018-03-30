@@ -1,5 +1,5 @@
 import * as ts from 'typescript'
-import { BlockStatementTester } from '../block'
+import { LoopNodeTester } from '.';
 
 /**
  * Factory to create a While loop tester
@@ -13,7 +13,7 @@ export function createWhileLoopTester(node: any, options: any = {}): WhileLoopTe
 /**
  * While loop query tester and data aggregator
  */
-export class WhileLoopTester extends BlockStatementTester {
+export class WhileLoopTester extends LoopNodeTester {
   constructor(node: any, options: any) {
     super(node, options)
   }
@@ -41,7 +41,6 @@ export class WhileLoopTester extends BlockStatementTester {
   info() {
     return {
       ...super.info(),
-      loop: true,
       loopType: 'while',
       whileType: this.whileType,
       whileThen: this.isWhileThen,
