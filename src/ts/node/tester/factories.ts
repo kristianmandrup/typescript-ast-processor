@@ -35,7 +35,10 @@ const {
   accessors
 } = members
 
+import { factories as detailsFactories } from '../details'
+
 export const factoryMap = {
+  details: detailsFactories,
   // class
   class: classes.createClassTester,
   heritage: heritage.createClassHeritageTester,
@@ -92,13 +95,18 @@ export const factoryMap = {
   assignment: expressions.binaryExpr.createAssignmentTester,
 
   // decorators
-  classDecorator: decorators.createClassDecoratorsTester
+  classDecorator: decorators.class.ClassDecoratorTester
 }
 
 export type INodeTesterFactory = (node: any, options: any) => INodeTester
 
 export function testerFactoryFor(name: string, $factoryMap?: any): INodeTesterFactory {
   $factoryMap = $factoryMap || factoryMap
+  return $factoryMap[name]
+}
+
+export function detailsFactoryFor(name: string, $factoryMap?: any): INodeTesterFactory {
+  $factoryMap = $factoryMap || factoryMap.details
   return $factoryMap[name]
 }
 

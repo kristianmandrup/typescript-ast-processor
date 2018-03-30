@@ -42,7 +42,7 @@ export {
   AccessTester
 }
 
-export const factoryMap = {
+export const factories = {
   binaryExpr: createBinaryExprTester,
   funCall: createCallTester,
   identifier: createIdentifierTester,
@@ -52,3 +52,21 @@ export const factoryMap = {
   funDecl: createFunctionTester,
   accessor: createAccessTester
 }
+
+import {
+  IDetailsTester
+} from './base'
+
+export type IDetailsTesterFactory = (options: any) => IDetailsTester
+
+export function detailsFactoryFor(name: string, $factoryMap?: any): IDetailsTesterFactory {
+  $factoryMap = $factoryMap || factories
+  return $factoryMap[name]
+}
+
+export function createTester(factoryName: string, node: any, options: any = {}): IDetailsTester | undefined {
+  options.factories = options.factories || {}
+  const testerFactory = detailsFactoryFor(factoryName, options.factories.tester)
+  return testerFactory && testerFactory(options)
+}
+

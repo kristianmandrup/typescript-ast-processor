@@ -60,8 +60,8 @@ export class Processor {
    */
   intializeVisitor() {
     const { options } = this
-    const createVisitor = options.createVisitor || this.createVisitor
-    this.nodeTraverser = createVisitor(options)
+    const createNodeTraverser = options.createNodeTraverser || this.createNodeTraverser
+    this.nodeTraverser = createNodeTraverser(options)
     return this
   }
 
@@ -80,7 +80,7 @@ export class Processor {
     return new RootDataCollector(options || this.options)
   }
 
-  createVisitor(options: any) {
+  createNodeTraverser(options: any) {
     return createASTNodeTraverser(options || this.options)
   }
 

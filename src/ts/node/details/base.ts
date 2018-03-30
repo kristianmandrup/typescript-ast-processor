@@ -11,6 +11,11 @@ import {
   queryNode
 } from '../tester/util/query'
 
+export interface IDetailsTester {
+  matches(options: any): any
+  is(name: string, options: any): boolean
+}
+
 export class BaseDetailsTester extends Loggable {
   modifierKey: string = 'modifiers'
   node: any
@@ -215,7 +220,7 @@ export class BaseDetailsTester extends Loggable {
    * - test option with method to use to test name on each iteration
    * @param options pass
    */
-  matches(options: any = {}) {
+  matches(options: any = {}): any {
     const filterMethod: string = options.method || 'find'
     const defaultFind = (name: string) => {
       return this.is(name, options)
@@ -225,7 +230,7 @@ export class BaseDetailsTester extends Loggable {
   }
 
   matchesAny(names: string[], options: any = {}) {
-    return names.find(name => {
+    return names.find((name: string) => {
       return this.is(name, options)
     })
   }
@@ -236,7 +241,7 @@ export class BaseDetailsTester extends Loggable {
    * @param name
    * @param options
    */
-  is(name: string, options: any = {}) {
+  is(name: string, options: any = {}): boolean {
     const node: ts.Node = this.nodeOf(options)
     // normalize name by lowercasing first letter
     name = this._checkerName(name)
