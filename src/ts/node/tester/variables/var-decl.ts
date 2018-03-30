@@ -3,6 +3,7 @@ import {
   IndentifierNodeTester,
   createIndentifierNodeTester
 } from '../identifier';
+import { createVariableTester, VariableTester } from '../../details/variable';
 
 /**
  * Factory to create a VariableDeclaration tester
@@ -20,10 +21,19 @@ export function createVariableDeclarationTester(node: any, options: any) {
  */
 export class VariableDeclarationNodeTester extends BaseNodeTester {
   identifierTester: IndentifierNodeTester
+  variableTester: VariableTester
 
   constructor(node: any, options: any) {
     super(node, options)
     this.identifierTester = createIndentifierNodeTester(node.name, this.options)
+    this.variableTester = createVariableTester({
+      ...options,
+      node
+    })
+  }
+
+  get varType(): string {
+    return this.variableTester.matches() || 'unknown'
   }
 
   get name() {
@@ -32,7 +42,8 @@ export class VariableDeclarationNodeTester extends BaseNodeTester {
 
   info() {
     return {
-      name: this.name
+      name: this.name,
+      varType: this.varType
     }
   }
 

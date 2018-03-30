@@ -14,7 +14,8 @@ Sample `VariableDeclarationNodesTester.info()` result:
 ```js
 {
   count: 2,
-  names: ['a', 'b']
+  names: ['a', 'b'],
+  varType: 'let'
 }
 ```
 
@@ -54,6 +55,7 @@ Sample `VariableDeclarationNodeTester.info()` result:
 ```js
 {
   name: 'a'
+  varType: 'const'
 }
 ```
 
@@ -65,8 +67,13 @@ Sample `query`:
 {
   name: {
     anyOf: ['a', /b/]
-  }
+  },
   // TODO
+  varType: {
+    not: {
+      anyOf: ['let', 'var']
+    }
+  },
   initializer: {
     anyOf: ['object', 'array']
   }
