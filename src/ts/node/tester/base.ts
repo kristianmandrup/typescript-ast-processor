@@ -18,6 +18,8 @@ import {
 import {
   createASTNodeTraverser
 } from '../../visitor'
+import { INodeOccurrenceTester } from './occurrence';
+import { IDetailsTester } from '../details/base';
 
 export interface INodeTester {
   test(query: any): boolean
@@ -26,17 +28,18 @@ export interface INodeTester {
 }
 
 export abstract class BaseNodeTester extends Loggable implements INodeTester {
-  node: any
   factories: any = {}
+  occurenceTester: INodeOccurrenceTester
 
   /**
    * Create BaseTester
    * @param node
    * @param options
    */
-  constructor(node: any, options: any) {
+  constructor(public node: any, options: any) {
     super(options)
     this.factories = this.testerFactories
+    this.occurenceTester = this.factories.createTester('occurrence', node, options)
     if (!node) {
       this.error(`BaseTester: Missing node to test`, {
         node,
@@ -45,6 +48,26 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
       })
     }
     this.node = node
+  }
+
+  /**
+   * Convenience factory for creating a node tester
+   * @param name
+   * @param node
+   * @param options
+   */
+  protected createNodeTester(name: string, node: any, options: any = {}): INodeTester {
+    return this.factories.createTester(name, node, options)
+  }
+
+  /**
+   * Convenience factory for creating a node details tester
+   * @param name
+   * @param node
+   * @param options
+   */
+  protected createDetailsTester(name: string, node: any, options: any = {}): IDetailsTester {
+    return this.factories.details.createTester(name, { node, ...options })
   }
 
   /**
@@ -74,19 +97,13 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
     return {}
   }
 
+  /**
+   * Get tester factories from options or from default map
+   */
   get testerFactories() {
     let factories = this.options.factories || {}
     factories = factories.tester || factories
     return isEmpty(factories) ? this.factories : factories
-  }
-
-  /**
-   * Create a Node traverser for additional information gathering in subtrees,
-   * such as counting specific nodes
-   * @param options
-   */
-  createNodeTraverser(options: any = {}) {
-    return createASTNodeTraverser(options)
   }
 
   /**
@@ -95,32 +112,16 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    * @param traverseQuery
    */
   countInTree(query: any): number {
-    return this.createNodeTraverser({
-      ...this.options,
-      query,
-      node: this.node
-    }).counter.visited
+    return this.occurenceTester.countInTree(query)
   }
 
+  /**
+   * Count occurences in subtree
+   * TODO: extract and use from utility class
+   * @param options
+   */
   countOccurrence(options: any = {}): number {
-    const {
-      types,
-      typeChecker,
-    } = options
-    const typesToCount = toList(types)
-    const traverseQuery: any = {
-    }
-    if (!isEmpty(types)) {
-      traverseQuery.typesToCount = typesToCount
-    }
-    if (isFunction(typeChecker)) {
-      traverseQuery.typeChecker = typeChecker
-    }
-    const excludeVisit = options.excludeVisit || [/Declaration$/]
-    if (!options.includeAll) {
-      traverseQuery.excludeVisit = excludeVisit
-    }
-    return this.countInTree(traverseQuery)
+    return this.occurenceTester.countOccurrence(options)
   }
 
   /**

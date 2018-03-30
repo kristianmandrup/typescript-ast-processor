@@ -15,6 +15,7 @@ export interface IDetailsTester {
   forNode(node: any): IDetailsTester
   matches(options?: any): any
   is(name: string, options?: any): boolean
+  test(query: any, options?: any): any // boolean ??
 }
 
 export class BaseDetailsTester extends Loggable {
@@ -197,7 +198,7 @@ export class BaseDetailsTester extends Loggable {
    * @param query
    * @param options
    */
-  test(query: any, options: any = {}) {
+  test(query: any, options: any = {}): any {
     const node: ts.Node = this.nodeOf(options)
     const queryOpts = Object.assign(options, { tester: this.is.bind(this) })
     return queryNode(node, query, queryOpts)

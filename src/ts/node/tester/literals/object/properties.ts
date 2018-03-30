@@ -1,6 +1,5 @@
 import * as ts from 'typescript'
 import { createPropertyAssignmentTester } from './property-assignment';
-import { ListTester } from '../../generic';
 import { BaseNodeTester } from '../../base';
 
 /**
@@ -14,12 +13,12 @@ export function createPropertiesTester(node: any, options: any) {
 
 export class PropertiesTester extends BaseNodeTester {
   properties: ts.PropertyAssignment[]
-  propertiesTester: ListTester
+  propertiesTester: any // TODO
 
   constructor(properties: any, options: any) {
     super(properties, options)
     this.properties = properties
-    this.propertiesTester = new ListTester(this.properties, this.options)
+    this.propertiesTester = this.factories.createTester('list', this.properties, this.options)
   }
 
   /**

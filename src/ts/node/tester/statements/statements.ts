@@ -48,6 +48,6 @@ export class StatementsTester extends ListTester {
   }
 
   testStatement(query: any) {
-
+    return false
   }
 }

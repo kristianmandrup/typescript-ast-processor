@@ -5,13 +5,13 @@ import { BaseNodeTester } from '../../base';
 import { createBinaryExprTester } from '../../../details/binary-expr';
 
 /**
- * Factory to create a VariableDeclaration tester
+ * Factory to create a BinaryExpressionNode tester
  * @param node
  * @param options
  */
 export function createBinaryExpressionNodeTester(node: any, options: any) {
-  const binaryTester = new BinaryExprTester({ ...options, node })
-  if (binaryTester.matches(node)) return
+  // const binaryTester = new BinaryExprTester({ ...options, node })
+  // if (binaryTester.matches(node)) return
   return new BinaryExpressionNodeTester(node, options)
 }
 

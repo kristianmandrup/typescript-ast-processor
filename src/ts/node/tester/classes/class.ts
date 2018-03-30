@@ -20,10 +20,9 @@ export function createClassTester(node: any, options: any = {}) {
 }
 
 export class ClassTester extends IndentifierNodeTester {
-  heritage: ClassHeritageTester
-  members: ClassMembersTester
-  classDetails: ClassDetailsTester
-  isClass: boolean
+  heritageNodeTester: any // ClassHeritageNodesTester
+  memberNodesTester: any // ClassMemberNodesTester
+  classDetailsTester: ClassDetailsTester
 
   // tester factories
   factories: any = {
@@ -39,9 +38,9 @@ export class ClassTester extends IndentifierNodeTester {
    */
   constructor(node: any, options: any = {}) {
     super(node, options)
-    this.heritage = this.factories.createTester('heritage', node, options)
-    this.members = this.factories.createTester('members', node, options)
-    this.classDetails = this.factories.details.createTester('class', options)
+    this.heritageNodeTester = this.createNodeTester('heritage', node, options)
+    this.memberNodesTester = this.factories.createTester('members', node, options)
+    this.classDetailsTester = this.factories.details.createTester('class', options)
   }
 
   /**
@@ -51,7 +50,7 @@ export class ClassTester extends IndentifierNodeTester {
     return {
       name: this.name,
       abstract: this.testAbstract(true),
-      heritage: this.heritage.info(),
+      heritage: this.heritageNodeTester.info(),
       exported: this.isExported
     }
   }
@@ -73,7 +72,7 @@ export class ClassTester extends IndentifierNodeTester {
    * @param query
    */
   testMembers(query: any) {
-    this.members.test(query.members || query)
+    this.memberNodesTester.test(query.members || query)
   }
 
   /**
@@ -81,7 +80,7 @@ export class ClassTester extends IndentifierNodeTester {
    * @param query
    */
   testImplements(query: any) {
-    this.heritage.test(query.implements || query)
+    this.heritageNodeTester.test(query.implements || query)
   }
 
   /**
@@ -89,7 +88,7 @@ export class ClassTester extends IndentifierNodeTester {
    * @param query
    */
   testExtends(query: any) {
-    this.heritage.test(query.extends || query)
+    this.heritageNodeTester.test(query.extends || query)
   }
 
   /**
@@ -98,7 +97,7 @@ export class ClassTester extends IndentifierNodeTester {
    */
   testAbstract(query: any) {
     query = query.abstract || query
-    return this.classDetails.is(this.node, 'abstract') === query
+    return this.classDetailsTester.is(this.node, 'abstract') === query
   }
 }
 

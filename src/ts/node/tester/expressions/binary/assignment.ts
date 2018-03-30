@@ -1,42 +1,46 @@
-import { BaseNodeTester } from '../../base';
-import {
-  IndentifierNodeTester,
-  createIndentifierNodeTester
-} from '../../identifier';
-import {
-  createBinaryExprTester,
-  BinaryExprTester
-} from '../../../details/binary-expr';
+import { BaseNodeTester, INodeTester } from '../../base';
 import {
   testName
 } from '../../util'
 
 /**
- * Factory to create a VariableDeclaration tester
+ * Factory to create a BinaryExpressionNode tester
  * @param node
  * @param options
  */
-export function createAssignmentTester(node: any, options: any) {
-  const binaryTester = new BinaryExprTester({ ...options, node })
-  if (binaryTester.assignment(node)) return
-  return new AssignmentTester(node, options)
+export function createAssignmentNodeTester(node: any, options: any) {
+  // const binaryTester = new BinaryExprTester({ ...options, node })
+  // if (binaryTester.matches(node)) return
+  return new AssignmentNodeTester(node, options)
 }
 
-export class AssignmentTester extends BaseNodeTester {
-  identifierTester: IndentifierNodeTester
-  binaryExprTester: BinaryExprTester
+export class AssignmentNodeTester extends BaseNodeTester {
+  identifierNodeTester: any // INodeTester
+  binaryExprTester: any // IDetailsTester
 
   constructor(node: any, options: any) {
     super(node, options)
-    this.identifierTester = createIndentifierNodeTester(node.left, this.options)
-    this.binaryExprTester = createBinaryExprTester({ ...options, node })
+    this.identifierNodeTester = this.createNodeTester('identifier', node.left, this.options)
+    this.binaryExprTester = this.createDetailsTester('binaryExpr', node, options)
   }
+
+  /**
+   * Factory to create a VariableDeclaration tester
+   * @param node
+   * @param options
+   */
+  createAssignmentTester(node: any, options: any) {
+    const binaryTester: any = this.createDetailsTester('binaryExpr', node, options)
+    if (binaryTester.assignment(node)) return
+    return this.createNodeTester('assignment', node, options)
+  }
+
 
   /**
    * Get name of identifier being assigned to
    */
   get name() {
-    return this.identifierTester.name
+    return this.identifierNodeTester.name
   }
 
   get assignmentType(): string {
@@ -57,7 +61,7 @@ export class AssignmentTester extends BaseNodeTester {
    */
   testDetails(query: any): any {
     return {
-      name: this.identifierTester.test(query.name)
+      name: this.identifierNodeTester.test(query.name)
     }
   }
 
@@ -74,7 +78,7 @@ export class AssignmentTester extends BaseNodeTester {
   }
 
   testName(query: any) {
-    return this.identifierTester.test(query.name)
+    return this.identifierNodeTester.test(query.name)
   }
 
   /**

@@ -1,4 +1,3 @@
-import * as ts from 'typescript'
 import { BaseNodeTester } from '../../base';
 import { IndentifierNodeTester, createIndentifierNodeTester } from '../../identifier';
 
@@ -16,7 +15,7 @@ export class PropertyAssignmentTester extends BaseNodeTester {
 
   constructor(node: any, options: any) {
     super(node, options)
-    this.identifierTester = createIndentifierNodeTester(node.name, this.options)
+    this.identifierTester = this.factories.createTester('identifier', node.name, this.options)
   }
 
   get name() {

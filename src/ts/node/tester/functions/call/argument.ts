@@ -3,7 +3,7 @@ import {
   IndentifierNodeTester
 } from '../../identifier'
 import {
-  BaseNodeTester
+  BaseNodeTester, INodeTester
 } from '../../base';
 
 export function isArgument(node: any) {
@@ -25,7 +25,7 @@ export function createArgumentTester(node: any, options: any = {}) {
  * An argument can be pretty much anything... but mostly an identifier, literal or arrow function
  */
 export class ArgumentTester extends BaseNodeTester {
-  idTester: IndentifierNodeTester
+  identifierNodeTester: INodeTester // IndentifierNodeTester
 
   /**
    * Create Argument tester
@@ -34,7 +34,7 @@ export class ArgumentTester extends BaseNodeTester {
    */
   constructor(node: any, options: any) {
     super(node, options)
-    this.idTester = createIndentifierNodeTester(this.node.name, options)
+    this.identifierNodeTester = this.createNodeTester('identifier', this.node.name, options)
   }
 
   /**

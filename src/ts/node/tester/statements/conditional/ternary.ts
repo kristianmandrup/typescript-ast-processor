@@ -1,14 +1,16 @@
-import * as ts from 'typescript'
-import { BlockStatementTester } from '../block';
+import { BaseNodeTester } from "../../base";
 
-export function createIfThenElseTester(node: any, options: any = {}): TernaryNodeTester {
+/**
+ * Factory to create ternary condition node tester
+ * condition ? then : else
+ * @param node
+ * @param options
+ */
+export function createTernaryNodeTester(node: any, options: any = {}): TernaryNodeTester {
   return new TernaryNodeTester(node, options)
 }
 
-export class TernaryNodeTester extends BlockStatementTester {
-  thenStatement: ts.Block
-  elseStatement: ts.Block
-
+export class TernaryNodeTester extends BaseNodeTester {
   /**
    * Create If Then Else Tester
    * @param node
@@ -16,8 +18,6 @@ export class TernaryNodeTester extends BlockStatementTester {
    */
   constructor(node: any, options: any) {
     super(node, options)
-    // this.thenStatement = node.thenStatement
-    // this.elseStatement = node.elseStatement
   }
 
   /**

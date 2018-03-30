@@ -1,19 +1,12 @@
 import * as ts from 'typescript'
 import {
-  ParametersTester
-} from './parameters';
-import {
-  TypeNodeTester
-} from '../../type';
-import {
   isEmpty
 } from '../../../../util'
-import { FunctionTester } from '../../../details';
-import { IndentifierNodeTester } from '../../identifier';
+import { INodeTester } from '../../base';
 import {
-  BlockNodeTester,
-  createBlockNodeTester
-} from '../../statements/block';
+  IndentifierNodeTester
+} from '../../identifier'
+import { IDetailsTester } from '../../../details/base';
 
 export function isFunctionLike(node: any) {
   return ts.isFunctionLike(node)
@@ -29,27 +22,28 @@ export function createFunctionTester(node: any, options: any = {}) {
  * TODO: Use BlockStatementTester for adding nesting levels support and testing function block
  */
 export class FunctionLikeNodeTester extends IndentifierNodeTester {
-  parametersTester: ParametersTester
-  functionTester: FunctionTester
-  typeNodeTester: TypeNodeTester
-  blockNodeTester: BlockNodeTester
+  functionTester: IDetailsTester
+
+  parameterNodesTester: INodeTester
+  typeNodeTester: any // INodeTester
+  blockNodeTester: any // INodeTester
 
   constructor(node: any, options: any) {
     super(node, options)
     if (node.parameters) {
-      this.parametersTester = new ParametersTester(node.parameters, options)
+      this.parameterNodesTester = this.createNodeTester('parameters', node.parameters, options)
     } else {
       this.log('FunctionLikeTester: no typeParameters', {
         node
       })
     }
-    this.functionTester = new FunctionTester(options)
+    this.functionTester = this.createDetailsTester(node, options)
 
     if (node.type) {
-      this.typeNodeTester = new TypeNodeTester(node.type, options)
+      this.typeNodeTester = this.createNodeTester('type', node.type, options)
     }
 
-    this.blockNodeTester = createBlockNodeTester(this.node, options)
+    this.blockNodeTester = this.createNodeTester('block', this.node, options)
   }
 
   /**
@@ -79,7 +73,7 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
   info() {
     return {
       name: this.name,
-      parameters: this.parametersTester.info(),
+      parameters: this.parameterNodesTester.info(),
       returnType: this.returnType,
       returnCount: this.returnCount,
       lastStatementReturn: this.isLastStatementReturn,
@@ -120,7 +114,7 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
    * @param query
    */
   testReturnType(query: any) {
-    return this.typeTester.test(query)
+    return this.typeNodeTester.test(query)
   }
 
   /**
@@ -144,6 +138,6 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
    * @param query
    */
   testParameters(query: any) {
-    return this.parametersTester.test(query)
+    return this.parameterNodesTester.test(query)
   }
 }

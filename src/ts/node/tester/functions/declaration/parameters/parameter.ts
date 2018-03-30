@@ -135,4 +135,12 @@ export class ParameterTester extends IndentifierNodeTester {
     query = query.decorators || query
     return testNames(this.decorators, query)
   }
+
+  /**
+   * TODO
+   * @param query
+   */
+  testType(query: any) {
+    return false
+  }
 }

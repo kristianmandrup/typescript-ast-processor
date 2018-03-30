@@ -1,6 +1,4 @@
-import * as ts from 'typescript'
 import { BlockStatementTester } from '../block';
-import { createExpressionTester } from '../../../details/expression';
 
 /**
  * Factory to create a For loop tester
@@ -9,13 +7,6 @@ import { createExpressionTester } from '../../../details/expression';
  */
 export function createLoopNodeTester(node: any, options: any = {}): LoopNodeTester {
   return new LoopNodeTester(node, options)
-}
-
-function createExprTester(token: string = 'typeof', options: any = {}) {
-  return (node: any) => {
-    const exprTester = createExpressionTester({ ...options, node })
-    return exprTester.is(token, node)
-  }
 }
 
 /**
@@ -27,16 +18,37 @@ export class LoopNodeTester extends BlockStatementTester {
     super(node, options)
   }
 
-  protected countOccurenceOf(token: string): number {
+  protected createExpressionTester(options: any = {}) {
+    return this.factories.details.createTester('expression', { ...options, node: this.node })
+  }
+
+  protected createExprTester(token: string = 'break', options: any = {}) {
+    return (node: any) => {
+      const exprTester = this.createExpressionTester({ ...options, node })
+      return exprTester.is(token, node)
+    }
+  }
+
+  protected countOccurenceOf(token: string, options: any = {}): number {
     return this.countOccurrence({
-      tester: createExprTester(token)
+      tester: this.createExprTester(token, {
+        ...options,
+        exclude: ['switch', 'loop'] // exclude any nested switch or loop
+      })
     })
   }
 
+  /**
+   * Count number of break statements within
+   * TODO: also exlude any nested for/while loops
+   */
   get breakCount() {
     return this.countOccurenceOf('break')
   }
 
+  /**
+   * Count number of continue statements within
+   */
   get continueCount() {
     return this.countOccurenceOf('continue')
   }

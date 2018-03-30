@@ -3,7 +3,7 @@ import {
   createIndentifierNodeTester
 } from '../../identifier'
 import { ArgumentsTester } from './arguments'
-import { BaseNodeTester } from '../../base';
+import { BaseNodeTester, INodeTester } from '../../base';
 
 export function createFunctionCallNodeTester(node: any, options: any = {}) {
   return new FunctionCallNodeTester(node, options)
@@ -13,19 +13,19 @@ export function createFunctionCallNodeTester(node: any, options: any = {}) {
  * For function call
  */
 export class FunctionCallNodeTester extends BaseNodeTester {
-  argumentsTester: ArgumentsTester
-  identifierTester: IndentifierNodeTester
+  argumentsTester: INodeTester
+  identifierNodeTester: any // INodeTester
 
   constructor(node: any, options: any) {
     super(node, options)
-    this.identifierTester = createIndentifierNodeTester({ ...options, node })
+    this.identifierNodeTester = this.createNodeTester('identifier', node, options)
     if (node.arguments) {
-      this.argumentsTester = new ArgumentsTester(node.arguments, options)
+      this.argumentsTester = this.createNodeTester('arguments', node.arguments, options)
     }
   }
 
   get name() {
-    return this.identifierTester.name
+    return this.identifierNodeTester.name
   }
 
   /**

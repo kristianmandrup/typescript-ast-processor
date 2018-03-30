@@ -72,7 +72,7 @@ export const factoryMap = {
   // conditional
   ifThenElse: conditional.ifThenElse.createIfThenElseTester,
   switch: conditional.switchCase.createSwitchStatementTester,
-  ternary: conditional.ternary.createIfThenElseTester,
+  ternary: conditional.ternary.createTernaryNodeTester,
 
   // loops
   forLoop: loop.createForLoopTester,

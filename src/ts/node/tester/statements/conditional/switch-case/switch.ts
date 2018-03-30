@@ -16,7 +16,11 @@ export class SwitchStatementTester extends BaseNodeTester {
 
   constructor(node: any, options: any) {
     super(node, options)
-    this.caseBlockTester = createCaseBlockTester(node.caseBlock, options)
+    this.caseBlockTester = this.createCaseBlockTester(node.caseBlock, options)
+  }
+
+  createCaseBlockTester(node: any, options: any) {
+    return createCaseBlockTester(node, options)
   }
 
   get hasDefault() {
