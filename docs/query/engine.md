@@ -48,7 +48,79 @@ export class ClassNodeTester extends BaseNodeTester {
 
 Please let us know if there are parts of the API that need to be made more generic and customizable to suit your needs.
 
-Note: Not all testers have yet been "upgraded" to make use the generic factory mapping.
+Note: All testers have now been upgraded to make use the generic factory mapping, but some mapping might be a little off. Please help improve the test suite to uncover which I mapped incorrectly.
+
+The current factory mapping for node testers looks as follows:
+
+```js
+  details: detailsFactories,
+  // class
+  'class': classes.createClassTester,
+  heritage: heritage.createClassHeritageTester,
+
+  member: members.createClassMemberTester,
+  property: members.createPropertyTester,
+  getter: accessors.createGetAccessorTester,
+  setter: accessors.createSetAccessorTester,
+  constructor: members.createConstructorTester,
+  method: members.createMethodTester,
+
+  // function
+  // - call
+  functionCall: funCall.createFunctionCallNodeTester,
+
+  // - decl
+  'function': funDecl.createFunctionTester,
+
+  // misc
+  initializer: initializer.createInitializerNodeTester,
+  type: type.createTypeNodeTester,
+
+  // variable decl
+  'var': variables.createVariableDeclarationTester,
+  vars: variables.createVariableDeclarationsTester,
+
+  // statements
+  statements: statements.statements.createStatementsTester,
+  statement: statement.createStatementTester,
+
+  // conditional
+  'if': conditional.ifThenElse.createIfThenElseTester,
+  'switch': conditional.switchCase.createSwitchStatementTester,
+  ternary: conditional.ternary.createTernaryNodeTester,
+
+  // loops
+  'for': loop.createForLoopTester,
+  'while': loop.createWhileLoopTester,
+
+  // error
+  tryCatch: error.createTryCatchFinallyTester,
+  'throw': error.createThrowTester,
+
+  // block
+  block: block.createBlockNodeTester,
+  blockStmt: block.createBlockStatementTester,
+
+  // literals
+  array: literals.createArrayLiteralTester,
+  object: literals.createObjectLiteralTester,
+
+  // expressions
+  binary: expressions.binary.createBinaryExpressionNodeTester,
+  assignment: expressions.binary.createAssignmentNodeTester,
+
+  // decorators
+  classDecorator: decorators.class.createClassDecoratorTester,
+  memberDecorator: decorators.member.createMemberDecoratorTester,
+  paramDecorator: decorators.parameter.createParameterDecoratorTester,
+
+  // occurrence
+  occurence: occurrences.createNodeOccurrenceTester
+```
+
+## Engine Customization
+
+You are free to substitute any or all of these mappings with your own factories to suit your needs. If you are implementing the engine for a different AST, such as ESTree, ts-simple-ast or similar, you need to substitute all of these mappings. You can however still re-use much of the internal logic of the individual node tester (and node details) classes, so it will likely make sense to extend the existing classes and override key methods.
 
 ### Node detail testers
 

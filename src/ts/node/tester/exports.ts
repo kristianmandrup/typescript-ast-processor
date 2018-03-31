@@ -10,6 +10,7 @@ import * as classes from './classes'
 import * as identifier from './identifier'
 import * as type from './type'
 import * as expressions from './expressions'
+import * as occurrences from './occurrence'
 
 export {
   base,
@@ -23,5 +24,6 @@ export {
   classes,
   identifier,
   type,
-  expressions
+  expressions,
+  occurrences
 }

@@ -13,7 +13,9 @@ export interface INodeOccurrenceTester {
   countOccurrence(options: any): number
 }
 
-
+export function createNodeOccurrenceTester(node: any, options: any = {}) {
+  return new NodeOccurrenceTester(node, options)
+}
 
 export class NodeOccurrenceTester {
   protected factories: any
@@ -35,6 +37,11 @@ export class NodeOccurrenceTester {
   /**
    * Count occurences in sub tree(s) under this node
    * Call ASTNodeTraverser with traverseQuery to control which nodes to exclude/include in visit count
+   * query:
+   *  - typesToCount
+   *  - countNodeTypeChecker
+   *  - excludeVisit
+   *
    * @param traverseQuery
    */
   public countInTree(query: any): number {
@@ -48,7 +55,7 @@ export class NodeOccurrenceTester {
   public countOccurrence(options: any = {}): number {
     const {
       types,
-      typeChecker,
+      countNodeTypeChecker,
     } = options
     const typesToCount = toList(types)
     const traverseQuery: any = {
@@ -56,8 +63,8 @@ export class NodeOccurrenceTester {
     if (!isEmpty(types)) {
       traverseQuery.typesToCount = typesToCount
     }
-    if (isFunction(typeChecker)) {
-      traverseQuery.typeChecker = typeChecker
+    if (isFunction(countNodeTypeChecker)) {
+      traverseQuery.countNodeTypeChecker = countNodeTypeChecker
     }
     const excludeVisit = options.excludeVisit || [/Declaration$/]
     if (!options.includeAll) {

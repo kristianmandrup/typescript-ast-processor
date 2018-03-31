@@ -1,5 +1,5 @@
-import * as binaryExpr from './binary'
+import * as binary from './binary'
 
 export {
-  binaryExpr
+  binary
 }

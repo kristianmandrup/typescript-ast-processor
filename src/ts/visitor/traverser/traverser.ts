@@ -3,6 +3,13 @@ import { Loggable } from '../../loggable';
 import { What } from '../../node/what';
 import { VisitorFactory } from '../factory';
 import { Typer } from '../../node/typer';
+import {
+  isEmpty,
+  isFunction,
+  flatten,
+  nodeTypeCheckName,
+  assignKeyDefined
+} from '../../util'
 
 export function createASTNodeTraverser(options: any) {
   return new ASTNodeTraverser(options)
@@ -41,6 +48,35 @@ export class ASTNodeTraverser extends Loggable {
 
   startNode: any
   visitedNodes: any[]
+  query: any
+
+  nodeTypes: {
+    toCount: string[],
+    fnToCount: Function,
+    toExcludeFromVisit: string[],
+    categories: {
+      toExcludeFromVisit: string[]
+    }
+  }
+
+  fns: any // functions map
+  _nodeTypesToCheckFor: string[]
+
+  categoryMap: {
+    'switch': [
+      'SwitchStatement'
+    ],
+    'loop': [
+      'IterationStatement'
+      // 'ForStatement',
+      // 'DoStatement',
+      // 'WhileStatement'
+    ],
+    'declaration': [
+      'Declaration',
+      'DeclarationStatement'
+    ]
+  }
 
   /**
    * Create an AST Node Traverser
@@ -48,6 +84,17 @@ export class ASTNodeTraverser extends Loggable {
    */
   constructor(options: any) {
     super(options)
+    this.init(options)
+  }
+
+  /**
+   * Initialize with options object
+   * Customize to suit your needs ;)
+   * @param options
+   */
+  init(options: any = {}) {
+    this.query = options.query
+    this.parseQuery(options.query)
     this.startNode = options.node
     this.fileName = options.fileName
     this.what = new What(this._nodeTypes)
@@ -57,6 +104,52 @@ export class ASTNodeTraverser extends Loggable {
     this.registry = options.visitors || {}
     const createVisitorIterator = options.createVisitorIterator || this._createVisitorIterator
     this._createVisitorIterator = createVisitorIterator.bind(this)
+  }
+
+  /**
+   * query:
+   * query:
+   *  - typesToCount
+   *  - typeChecker
+   *  - excludeVisit
+   *
+   * @param query
+   */
+  parseQuery(query: any = {}) {
+    const {
+      nodeTypes
+    } = query
+    this.nodeTypes = nodeTypes
+    this.resolveTypeCategories()
+  }
+
+  /**
+   * Resolve type categories to be exluded
+   */
+  protected resolveTypeCategories() {
+    const categories = this.nodeTypes.categories
+    if (isEmpty(categories)) return
+    Object.keys(categories).map(key => {
+      const resolvedList = this.resolveCategoryKey(key)
+      this.nodeTypes[key].concat(resolvedList)
+    })
+  }
+
+  /**
+   * Resolve list for category key, such as
+   * @param key
+   */
+  protected resolveCategoryKey(key: string) {
+    const list: string[] = this.nodeTypes.categories[key]
+    return isEmpty(list) ? [] : flatten(list.map(this.resolveTypeCategory))
+  }
+
+  /**
+   * Resolve type category
+   * @param categoryName
+   */
+  protected resolveTypeCategory(categoryName: string) {
+    return this.categoryMap[categoryName]
   }
 
   /**
@@ -145,8 +238,9 @@ export class ASTNodeTraverser extends Loggable {
    * Increment a node counter
    * @param counterEntry
    */
-  protected inc(key: string) {
-    this.counter[key] = (this.counter[key] || 0) + 1
+  protected inc(key: string, counter?: any) {
+    counter = counter || this.counter
+    counter[key] = (counter[key] || 0) + 1
   }
 
   /**
@@ -157,6 +251,54 @@ export class ASTNodeTraverser extends Loggable {
     this.log('skipped', this.nodeDisplayInfo(node))
     this.inc('skipped')
   }
+
+  get resolveNodeTypesToCheckFor() {
+    return this.nodeTypes.toCount.concat(this.nodeTypes.toExcludeFromVisit)
+  }
+
+
+  /**
+   *
+   */
+  get nodeTypesToCheckFor() {
+    this._nodeTypesToCheckFor = this._nodeTypesToCheckFor || this.resolveNodeTypesToCheckFor
+    return this._nodeTypesToCheckFor
+  }
+
+
+  /**
+   * TODO: Lookup node type using Typer
+   * @param node
+   */
+  protected typeOf(node: any): string | undefined {
+    return this.nodeTypesToCheckFor.find(type => {
+      const isFnName = nodeTypeCheckName(type)
+      return ts[isFnName](node)
+    })
+  }
+
+  protected resolveNodeTypesToCount(nodeTypes: any, node: any) {
+    if (isFunction(this.nodeTypes.fnToCount)) {
+      return this.nodeTypes.fnToCount(node.nodeType)
+    }
+    if (isEmpty(this.nodeTypes.toCount)) return true
+    return this.nodeTypes.toCount.includes(node.nodeType)
+  }
+
+  protected shouldCountNodeType(node: any): boolean {
+    return this.resolveNodeTypesToCount(this.nodeTypes, node)
+  }
+
+  /**
+   * Count type of visited node if in include list of nodes to count
+   * @param node
+   */
+  protected countVisitedNodeType(node: any) {
+    if (this.resolveNodeTypesToCount(this.nodeTypes, node)) {
+      this.inc(node.nodeType, this.counter.types)
+    }
+  }
+
 
   /**
    * Handler for just after node was visited
@@ -189,6 +331,7 @@ export class ASTNodeTraverser extends Loggable {
    */
   visit(nextNode?: ts.Node) {
     const node = nextNode || this.startNode
+    assignKeyDefined(node, 'nodeType', this.typeOf(node))
     if (!this.shouldVisitNode(node)) {
       this.skipped(node)
       return
@@ -207,11 +350,18 @@ export class ASTNodeTraverser extends Loggable {
     true
   }
 
+  shouldExcludeNodeFromVisit(node: any) {
+    return !isEmpty(this.nodeTypes.toExcludeFromVisit) && this.nodeTypes.toExcludeFromVisit.includes(node.nodeType)
+  }
+
   /**
    * Determine if traverser should visit this node
    * @param node
    */
-  shouldVisitNode(node: ts.Node) {
+  shouldVisitNode(node: any) {
+    if (this.shouldExcludeNodeFromVisit(node.nodeType)) {
+      return false
+    }
     return !this.wasVisitedBefore(node)
   }
 

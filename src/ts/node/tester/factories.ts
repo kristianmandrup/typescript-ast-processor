@@ -12,7 +12,8 @@ const {
   statements,
   literals,
   expressions,
-  decorators
+  decorators,
+  occurrences
 } = tester
 
 const {
@@ -62,15 +63,15 @@ export const factoryMap = {
   type: type.createTypeNodeTester,
 
   // variable decl
-  varDecl: variables.createVariableDeclarationTester,
-  varDecls: variables.createVariableDeclarationsTester,
+  var: variables.createVariableDeclarationTester,
+  vars: variables.createVariableDeclarationsTester,
 
   // statements
   statements: statements.statements.createStatementsTester,
   statement: statement.createStatementTester,
 
   // conditional
-  ifThenElse: conditional.ifThenElse.createIfThenElseTester,
+  if: conditional.ifThenElse.createIfThenElseTester,
   switch: conditional.switchCase.createSwitchStatementTester,
   ternary: conditional.ternary.createTernaryNodeTester,
 
@@ -84,18 +85,22 @@ export const factoryMap = {
 
   // block
   block: block.createBlockNodeTester,
-  blockStatement: block.createBlockStatementTester,
+  blockStmt: block.createBlockStatementTester,
 
   // literals
-  arrayLit: literals.createArrayLiteralTester,
-  objectLit: literals.createObjectLiteralTester,
+  array: literals.createArrayLiteralTester,
+  object: literals.createObjectLiteralTester,
 
   // expressions
-  binaryExpr: expressions.binaryExpr.createBinaryExpressionTester,
-  assignment: expressions.binaryExpr.createAssignmentTester,
+  binary: expressions.binary.createBinaryExpressionNodeTester,
+  assignment: expressions.binary.createAssignmentNodeTester,
 
   // decorators
-  classDecorator: decorators.class.ClassDecoratorTester
+  classDecorator: decorators.class.createClassDecoratorTester,
+  memberDecorator: decorators.member.createMemberDecoratorTester,
+  paramDecorator: decorators.parameter.createParameterDecoratorTester,
+
+  occurence: occurrences.createNodeOccurrenceTester
 }
 
 export type INodeTesterFactory = (node: any, options: any) => INodeTester

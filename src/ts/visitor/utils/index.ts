@@ -1,3 +1,0 @@
-export {
-  hasParensAroundArguments
-} from './function'
