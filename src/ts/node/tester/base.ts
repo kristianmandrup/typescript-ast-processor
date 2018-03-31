@@ -11,13 +11,8 @@ import {
   ListTester
 } from './generic'
 import {
-  toList,
   isEmpty,
-  isFunction
 } from '../../util'
-import {
-  createASTNodeTraverser
-} from '../../visitor'
 import { INodeOccurrenceTester } from './occurrence';
 import { IDetailsTester } from '../details/base';
 
@@ -62,8 +57,18 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    * @param node
    * @param options
    */
+  protected createCategoryTester(category: string, name: string, node: any, options: any = {}): any {
+    return this.factories[category].createTester(name, node, options)
+  }
+
+  /**
+   * Convenience factory for creating a node tester
+   * @param name
+   * @param node
+   * @param options
+   */
   protected createNodeTester(name: string, node: any, options: any = {}): INodeTester {
-    return this.factories.createTester(name, node, options)
+    return this.createCategoryTester('tester', name, node, options)
   }
 
   /**
@@ -73,7 +78,7 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    * @param options
    */
   protected createDetailsTester(name: string, node: any, options: any = {}): IDetailsTester {
-    return this.factories.details.createTester(name, { node, ...options })
+    return this.createCategoryTester('details', name, { node, ...options })
   }
 
   /**

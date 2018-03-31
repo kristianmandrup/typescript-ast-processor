@@ -1,9 +1,5 @@
 import { BaseFactory } from './base'
 import {
-  FunctionLikeTester,
-  ClassTester
-} from '../../node/tester';
-import {
   toList
 } from '../../util'
 
@@ -31,8 +27,6 @@ export function createVisitorFactory(options: any) {
 }
 
 export class VisitorFactory extends BaseFactory {
-  classTest: ClassTester
-  functionTest: FunctionLikeTester
   factory: {} // contains all registered factory methods
 
   constructor(options: any = {}) {

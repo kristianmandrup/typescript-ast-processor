@@ -434,7 +434,6 @@ export const jsx = {
 export const expression = [
   'OuterExpression',
   'SimpleCopiableExpression',
-
   'ExpressionNode',
   'InExpressionContext',
   'DeclarationOfFunctionOrClassExpression',

@@ -1,11 +1,11 @@
 import * as ts from 'typescript'
-import { Loggable } from '../../loggable';
-import { What } from '../../node/what';
-import { VisitorFactory } from '../factory';
-import { Typer } from '../../node/typer';
+import { Loggable } from '../loggable';
+import { What } from '../node/what';
+import { VisitorFactory } from '../visitor/factory';
+import { Typer } from '../node/typer';
 import {
   assignKeyDefined
-} from '../../util'
+} from '../util'
 
 export function createASTNodeTraverser(options: any) {
   return new ASTNodeTraverser(options)

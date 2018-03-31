@@ -31,6 +31,7 @@
   "dependencies": {
     "astravel": "^0.4.1",
     "core-decorators": "^0.20.0",
+    "deepmerge": "^2.1.0",
     "eslint-traverser": "^1.5.2",
     "estree-walker": "^0.5.1",
     "inversify": "^4.11.1",

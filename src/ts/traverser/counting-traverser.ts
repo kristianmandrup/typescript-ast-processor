@@ -8,7 +8,7 @@ import {
   isFunction,
   flatten,
   nodeTypeCheckName,
-} from '../../util'
+} from '../util'
 
 export function createCountingASTNodeTraverser(options: any) {
   return new CountingASTNodeTraverser(options)
@@ -26,6 +26,13 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
     fnToCount: Function,
     toExcludeFromVisit: string[],
     categories: {
+      toCount: [
+        // always count:
+        'statement',
+        'declaration',
+        'expression'
+        // 'condition'
+      ],
       toExcludeFromVisit: string[]
     }
   }
@@ -43,9 +50,18 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
       // 'DoStatement',
       // 'WhileStatement'
     ],
+    'condition': [
+      'ConditionalExpression'
+    ],
+    'expression': [
+      'Expression'
+    ]
+    'statement': [
+      'Statement'
+    ],
     'declaration': [
-      'Declaration',
-      'DeclarationStatement'
+      'Declaration'
+      // 'DeclarationStatement'
     ]
   }
 

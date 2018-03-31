@@ -26,10 +26,10 @@ You can then pass in your own factory map with testers that work with the AST th
 
 You can use the forms:
 
-- `node:xyz` such as `node:heritage` to indicate a node tester
+- `node:xyz` such as `node:class.heritage` to indicate a node tester
 - `details:xyz` such as `details:class` to indicate a node details tester
 
-If you use the simple form `xyz` such as `members`, a node tester will be implied.
+Alternatively use `createCategoryTester` such as `createCategoryTester('node', 'decl.class', node, options)`
 
 For the factory methods such as `createTester` to be available, you must extend `BaseNodeTester` (at some level in your inheritance hierarchy for your node tester class).
 
@@ -39,8 +39,8 @@ export class ClassNodeTester extends BaseNodeTester {
 
   constructor(node: any, options: any = {}) {
     super(node, options)
-    this.heritageNodeTester = this.createTester('node:heritage', node, options)
-    this.membersNodeTester = this.createTester('members', node, options)
+    this.heritageNodeTester = this.createTester('node:class.heritage', node, options)
+    this.membersNodeTester = this.createCategoryTester('node', 'class.members', node, options)
     this.classDetailsTester = this.createTester('details:class', node, options)
   }
 }
@@ -50,72 +50,91 @@ Please let us know if there are parts of the API that need to be made more gener
 
 Note: All testers have now been upgraded to make use the generic factory mapping, but some mapping might be a little off. Please help improve the test suite to uncover which I mapped incorrectly.
 
+### Node tester factories
+
 The current factory mapping for node testers looks as follows:
 
 ```js
-  details: detailsFactories,
+export const factories = {
   // class
-  'class': classes.createClassTester,
-  heritage: heritage.createClassHeritageTester,
+  'decl.class': classes.createClassTester,
+  'class.heritage': heritage.createClassHeritageTester,
 
-  member: members.createClassMemberTester,
-  property: members.createPropertyTester,
-  getter: accessors.createGetAccessorTester,
-  setter: accessors.createSetAccessorTester,
-  constructor: members.createConstructorTester,
-  method: members.createMethodTester,
+  'class.member': members.createClassMemberTester,
+  'class.property': members.createPropertyTester,
+  'class.getter': accessors.createGetAccessorTester,
+  'class.setter': accessors.createSetAccessorTester,
+  'class.constructor': members.createConstructorTester,
+  'class.method': members.createMethodTester,
 
   // function
   // - call
-  functionCall: funCall.createFunctionCallNodeTester,
+  'function.call': funCall.createFunctionCallNodeTester,
 
   // - decl
-  'function': funDecl.createFunctionTester,
+  'function.decl': funDecl.createFunctionTester,
 
   // misc
   initializer: initializer.createInitializerNodeTester,
   type: type.createTypeNodeTester,
 
   // variable decl
-  'var': variables.createVariableDeclarationTester,
-  vars: variables.createVariableDeclarationsTester,
+  'decl.var': variables.createVariableDeclarationTester,
+  'decl.vars': variables.createVariableDeclarationsTester,
 
   // statements
   statements: statements.statements.createStatementsTester,
   statement: statement.createStatementTester,
 
   // conditional
-  'if': conditional.ifThenElse.createIfThenElseTester,
-  'switch': conditional.switchCase.createSwitchStatementTester,
-  ternary: conditional.ternary.createTernaryNodeTester,
+  'condition.if': conditional.ifThenElse.createIfThenElseTester,
+  'condition.switch': conditional.switchCase.createSwitchStatementTester,
+  'condition.ternary': conditional.ternary.createTernaryNodeTester,
 
   // loops
-  'for': loop.createForLoopTester,
-  'while': loop.createWhileLoopTester,
+  'loop.for': loop.createForLoopTester,
+  'loop.while': loop.createWhileLoopTester,
 
   // error
-  tryCatch: error.createTryCatchFinallyTester,
-  'throw': error.createThrowTester,
+  'error.try': error.createTryCatchFinallyTester,
+  'error.throw': error.createThrowTester,
 
   // block
   block: block.createBlockNodeTester,
-  blockStmt: block.createBlockStatementTester,
+  'block.stmt': block.createBlockStatementTester,
 
   // literals
-  array: literals.createArrayLiteralTester,
-  object: literals.createObjectLiteralTester,
+  'lit.array': literals.createArrayLiteralTester,
+  'lit.object': literals.createObjectLiteralTester,
 
   // expressions
-  binary: expressions.binary.createBinaryExpressionNodeTester,
-  assignment: expressions.binary.createAssignmentNodeTester,
+  'expr.binary': expressions.binary.createBinaryExpressionNodeTester,
+  'expr.assignment': expressions.binary.createAssignmentNodeTester,
 
   // decorators
-  classDecorator: decorators.class.createClassDecoratorTester,
-  memberDecorator: decorators.member.createMemberDecoratorTester,
-  paramDecorator: decorators.parameter.createParameterDecoratorTester,
+  'decorator.class': decorators.class.createClassDecoratorTester,
+  'decorator.member': decorators.member.createMemberDecoratorTester,
+  'decorator.param': decorators.parameter.createParameterDecoratorTester,
 
-  // occurrence
-  occurence: occurrences.createNodeOccurrenceTester
+  occurences: occurrences.createNodeOccurrenceTester
+}
+```
+
+### Node details factories
+
+The current factory mapping for node details looks as follows:
+
+```js
+export const factories = {
+  'expr.binary': details.binary.createBinaryExprTester,
+  'function.call': details.call.createCallTester,
+  identifier: details.identifier.createIdentifierTester,
+  variable: details.variable.createVariableTester,
+  class: details.class.createClassDetailsTester,
+  namespace: details.namespace.createNamespaceTester,
+  'function.decl': details.function.createFunctionTester,
+  'class.accessor': details.access.createAccessTester
+}
 ```
 
 ## Engine Customization

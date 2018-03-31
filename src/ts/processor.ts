@@ -5,7 +5,7 @@ import { SrcFile } from './src-file';
 import {
   createASTNodeTraverser,
   ASTNodeTraverser
-} from './visitor'
+} from './traverser'
 import { RootDataCollector } from './collector';
 import { Instrumentor } from './instrumentor/base';
 

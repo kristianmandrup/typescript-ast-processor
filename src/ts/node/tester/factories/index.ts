@@ -1,0 +1,18 @@
+import { factories } from './tester'
+
+import {
+  INodeTester
+} from '../base'
+
+export type INodeTesterFactory = (node: any, options: any) => INodeTester
+
+export function testerFactoryFor(name: string, $factoryMap?: any): INodeTesterFactory {
+  $factoryMap = $factoryMap || factories
+  return $factoryMap[name]
+}
+
+export function createTester(factoryName: string, node: any, options: any = {}): INodeTester | undefined {
+  options.factories = options.factories || {}
+  const testerFactory = testerFactoryFor(factoryName, options.factories.tester)
+  return testerFactory && testerFactory(node, options)
+}
