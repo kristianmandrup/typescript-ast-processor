@@ -1,6 +1,6 @@
 import {
-  createASTNodeTraverser
-} from '../../visitor'
+  createCountingASTNodeTraverser
+} from '../../visitor/traverser'
 
 import {
   toList,
@@ -30,7 +30,7 @@ export class NodeOccurrenceTester {
    * @param options
    */
   createNodeTraverser(options: any = {}) {
-    const createNodeTraverser = options.createNodeTraverser || createASTNodeTraverser
+    const createNodeTraverser = options.createNodeTraverser || createCountingASTNodeTraverser
     return createNodeTraverser(options)
   }
 

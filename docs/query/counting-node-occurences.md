@@ -9,6 +9,8 @@ To facilitate counting occurences you can use the following methods available on
 - `countOccurrence(options): number`
 - `countInTree(query): number`
 
+The `countInTree` method will be default instantiate a traverser instance of  `CountingASTNodeTraverser` class via `createCountingASTNodeTraverser` factory. You can override this like all other factories, by using a modified factory map.
+
 ## countOccurrence
 
 Options can take any of the following
@@ -24,4 +26,6 @@ Note that the `typeChecker` can be used to add additional custom constraints, us
 
 ## countInTree
 
-Takes a `count` nodes expression, creates a new `ASTNodeTraver` instance passing this query and let's the `ASTNodeTraver` count each node type (to be counted) given the query conditions.
+Takes a `count` nodes expression, creates a new `ASTNodeTraverser` instance (by default `CountingASTNodeTraverser` class), passing this query and let's the `ASTNodeTraverser` count each node type (to be counted) given the query conditions.
+
+TODO: Need to add and use minimal interface for a Node Traverser that has counting capability.
