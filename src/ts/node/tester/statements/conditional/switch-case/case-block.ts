@@ -1,5 +1,5 @@
 import * as ts from 'typescript'
-import { BaseNodeTester } from '../../../base';
+import { BaseNodeTester, INodeTester } from '../../../base';
 
 export function isCaseBlock(node: any) {
   return ts.isCaseBlock(node)
@@ -8,6 +8,12 @@ export function isCaseBlock(node: any) {
 export function createCaseBlockTester(node: any, options: any = {}) {
   // if (!isCaseBlock(node)) return
   return new CaseBlockTester(node, options)
+}
+
+export interface ICaseBlockTester extends INodeTester {
+  defaultCase: string
+  clauseKeys: string[]
+  clausesInfo: any
 }
 
 
