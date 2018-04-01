@@ -1,4 +1,7 @@
 import * as details from './exports'
+import {
+  callFun
+} from '../../util'
 
 export const factories = {
   'expr.binary': details.binary.createBinaryExprTester,
@@ -25,5 +28,5 @@ export function factoryFor(name: string, $factoryMap?: any): IDetailsTesterFacto
 export function createTester(factoryName: string, node: any, options: any = {}): IDetailsTester | undefined {
   options.factories = options.factories || {}
   const testerFactory = factoryFor(factoryName, options.factories.tester)
-  return testerFactory && testerFactory(options)
+  return callFun(testerFactory, options)
 }

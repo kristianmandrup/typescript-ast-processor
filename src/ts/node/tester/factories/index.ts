@@ -1,4 +1,7 @@
 import { factories } from './tester'
+import {
+  callFun
+} from '../../../util'
 
 import {
   INodeTester
@@ -14,5 +17,5 @@ export function testerFactoryFor(name: string, $factoryMap?: any): INodeTesterFa
 export function createTester(factoryName: string, node: any, options: any = {}): INodeTester | undefined {
   options.factories = options.factories || {}
   const testerFactory = testerFactoryFor(factoryName, options.factories.tester)
-  return testerFactory && testerFactory(node, options)
+  return callFun(testerFactory, node, options)
 }

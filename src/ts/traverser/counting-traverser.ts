@@ -8,6 +8,8 @@ import {
   isFunction,
   flatten,
   nodeTypeCheckName,
+  lowercaseFirst,
+  callFun
 } from '../util'
 
 export function createCountingASTNodeTraverser(options: any) {
@@ -96,12 +98,12 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
   /**
    * Resolve type categories to be exluded
    */
-  protected resolveTypeCategories() {
+  protected resolveTypeCategories(): string[] | undefined {
     const categories = this.nodeTypes.categories
     if (isEmpty(categories)) return
-    Object.keys(categories).map(key => {
+    return Object.keys(categories).map(key => {
       const resolvedList = this.resolveCategoryKey(key)
-      this.nodeTypes[key].concat(resolvedList)
+      return this.nodeTypes[key].concat(resolvedList)
     })
   }
 
@@ -122,6 +124,10 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
     return this.categoryMap[categoryName]
   }
 
+  protected counterKeyFor(key: string) {
+    return lowercaseFirst(key)
+  }
+
   /**
    * Increment a node counter
    * @param counterEntry
@@ -129,7 +135,8 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
   protected inc(key: string, counter?: any) {
     if (isEmpty(key)) return
     counter = counter || this.counter
-    counter[key] = (counter[key] || 0) + 1
+    const keyName = this.counterKeyFor(key)
+    counter[keyName] = (counter[keyName] || 0) + 1
   }
 
 
@@ -165,7 +172,8 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
     let fnName
     const typeName = this.nodeTypesToCheckFor.find(type => {
       fnName = nodeTypeCheckName(type)
-      return ts[fnName](node)
+      const fn = ts[fnName]
+      return callFun(fn, node)
     })
     return typeName && this.typeNameFor(typeName, fnName)
   }

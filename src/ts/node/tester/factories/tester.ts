@@ -1,5 +1,4 @@
 import * as tester from '../exports'
-
 const {
   classes,
   functions,

@@ -174,7 +174,7 @@ export class ASTNodeTraverser extends Loggable {
    * @param fnName
    */
   protected typeNameFor(typeName: string, fnName?: string) {
-    return typeName
+    return fnName || typeName
   }
 
   /**
