@@ -9,7 +9,7 @@ import {
 } from '../../../util'
 
 import { TypeNodeTester } from '../../../type';
-import { AccessTester } from '../../../../details';
+import { api } from '../../../../details';
 
 export function isParameter(node: any) {
   return ts.isParameter(node)
@@ -30,7 +30,7 @@ export function createParameterTester(node: any, options: any = {}) {
  */
 export class ParameterTester extends IndentifierNodeTester {
   typeNodeTester: TypeNodeTester
-  accessTester: AccessTester
+  accessTester: api.access.AccessTester
 
   /**
    * Create Parameter tester
@@ -40,10 +40,10 @@ export class ParameterTester extends IndentifierNodeTester {
   constructor(node: any, options: any) {
     super(node, options)
     if (node.type) {
-      this.typeNodeTester = new TypeNodeTester(node.type, options)
+      this.typeNodeTester = this.createNodeTester('type', node.type, options) as TypeNodeTester
     }
     if (node.access) {
-      this.accessTester = new AccessTester({ ...options, node })
+      this.accessTester = this.createDetailsTester('access', node, options) as api.access.AccessTester
     }
   }
 

@@ -10,8 +10,8 @@ export const factories = {
   variable: details.variable.createVariableTester,
   class: details.class.createClassDetailsTester,
   namespace: details.namespace.createNamespaceTester,
-  'function.decl': details.function.createFunctionTester,
-  'class.accessor': details.access.createAccessTester
+  'function': details.function.createFunctionTester,
+  access: details.access.createAccessTester
 }
 
 import {

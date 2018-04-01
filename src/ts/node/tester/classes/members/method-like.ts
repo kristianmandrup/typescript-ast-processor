@@ -4,7 +4,7 @@ import {
 import {
   isMemberType
 } from './types'
-import { AccessTester } from '../../../details';
+import { IDetailsTester } from '../../../details/base';
 
 export function createMethodTester(node: any, options: any = {}) {
   if (!isMemberType(node, 'method')) return
@@ -14,11 +14,11 @@ export function createMethodTester(node: any, options: any = {}) {
 export class MethodLikeTester extends declaration.FunctionLikeNodeTester {
   // inherited
   // parameters: ParametersTester
-  accessTester: AccessTester
+  accessTester: IDetailsTester
 
   constructor(node: any, options: any) {
     super(node, options)
-    this.accessTester = this.factories.details.createTester('access', options)
+    this.accessTester = this.createDetailsTester('access', options)
   }
 
   test(query: any) {

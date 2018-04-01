@@ -21,7 +21,7 @@ export class AssignmentNodeTester extends BaseNodeTester {
   constructor(node: any, options: any) {
     super(node, options)
     this.identifierNodeTester = this.createNodeTester('identifier', node.left, this.options)
-    this.binaryExprTester = this.createDetailsTester('binaryExpr', node, options)
+    this.binaryExprTester = this.createDetailsTester('expr.binary', node, options)
   }
 
   /**
@@ -30,7 +30,7 @@ export class AssignmentNodeTester extends BaseNodeTester {
    * @param options
    */
   createAssignmentTester(node: any, options: any) {
-    const binaryTester: any = this.createDetailsTester('binaryExpr', node, options)
+    const binaryTester: any = this.createDetailsTester('expr.binary', node, options)
     if (binaryTester.assignment(node)) return
     return this.createNodeTester('assignment', node, options)
   }

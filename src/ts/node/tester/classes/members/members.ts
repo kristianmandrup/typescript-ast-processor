@@ -1,6 +1,5 @@
 import * as ts from 'typescript'
 import { BaseNodeTester } from '../../base'
-import { createClassMemberTester } from './member';
 import {
   isEmpty
 } from '../../../../util'
@@ -56,7 +55,7 @@ export class ClassMembersTester extends BaseNodeTester {
   }
 
   createMemberTester(member: any) {
-    return createClassMemberTester(member, this.options)
+    return this.createTester('class.member', member, this.options)
   }
 
   membersOf(kind: ts.SyntaxKind) {

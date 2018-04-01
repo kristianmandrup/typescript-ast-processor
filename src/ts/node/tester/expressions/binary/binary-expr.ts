@@ -1,8 +1,6 @@
-import {
-  BinaryExprTester
-} from '../../../details'
 import { BaseNodeTester } from '../../base';
-import { createBinaryExprTester } from '../../../details/binary-expr';
+import { createBinaryExprTester, BinaryExprTester } from '../../../details/binary-expr';
+import { IDetailsTester } from '../../../details/base';
 
 /**
  * Factory to create a BinaryExpressionNode tester
@@ -34,7 +32,7 @@ export function createBinaryOperatorTester(operator: string, options: any = {}) 
  * Also check use of parenthesis for dev score
  */
 export class BinaryExpressionNodeTester extends BaseNodeTester {
-  binaryTester: BinaryExprTester
+  binaryTester: BinaryExprTester // IDetailsTester
 
   typeMap = {
     '()': 'ParenthesesExpression',
@@ -47,7 +45,7 @@ export class BinaryExpressionNodeTester extends BaseNodeTester {
    */
   constructor(node: any, options: any) {
     super(node, options)
-    this.binaryTester = createBinaryExprTester({ ...options, node })
+    this.binaryTester = this.createDetailsTester('expr.binary', node, options) as BinaryExprTester
   }
 
   /**

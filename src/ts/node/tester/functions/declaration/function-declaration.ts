@@ -31,7 +31,7 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
   constructor(node: any, options: any) {
     super(node, options)
     if (node.parameters) {
-      this.parameterNodesTester = this.createNodeTester('parameters', node.parameters, options)
+      this.parameterNodesTester = this.createNodeTester('function.parameters', node.parameters, options)
     } else {
       this.log('FunctionLikeTester: no typeParameters', {
         node

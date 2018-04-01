@@ -1,7 +1,6 @@
 import * as ts from 'typescript'
 import { BaseNodeTester } from '../../../base'
 import {
-  createParameterTester,
   ParameterTester,
   isParameter
 } from './parameter';
@@ -67,7 +66,7 @@ export class ParametersTester extends BaseNodeTester {
    * @param node
    */
   createParameterTester(node: any) {
-    return createParameterTester(node, this.options)
+    return this.createNodeTester('function.parameter', node, this.options)
   }
 
   /**

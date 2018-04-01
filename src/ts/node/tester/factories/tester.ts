@@ -9,7 +9,8 @@ const {
   literals,
   expressions,
   decorators,
-  occurrences
+  occurrences,
+  identifier
 } = tester
 
 const {
@@ -38,6 +39,7 @@ export const factories = {
   'decl.class': classes.createClassTester,
   'class.heritage': heritage.createClassHeritageTester,
 
+  'class.members': members.createClassMembersTester,
   'class.member': members.createClassMemberTester,
   'class.property': members.createPropertyTester,
   'class.getter': accessors.createGetAccessorTester,
@@ -51,6 +53,8 @@ export const factories = {
 
   // - decl
   'function.decl': funDecl.createFunctionTester,
+  'function.parameters': funDecl.parameters.createParametersTester,
+  'function.parameter': funDecl.parameters.createParameterTester,
 
   // misc
   initializer: initializer.createInitializerNodeTester,
@@ -94,5 +98,6 @@ export const factories = {
   'decorator.member': decorators.member.createMemberDecoratorTester,
   'decorator.param': decorators.parameter.createParameterDecoratorTester,
 
-  occurences: occurrences.createNodeOccurrenceTester
+  occurences: occurrences.createNodeOccurrenceTester,
+  identifier: identifier.createIndentifierNodeTester
 }

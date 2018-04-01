@@ -1,14 +1,7 @@
 import * as ts from 'typescript'
-import {
-  ClassMembersTester, createClassMembersTester,
-} from './members';
-import { ClassDetailsTester } from '../../details';
-
-import {
-  ClassHeritageTester, createClassHeritageTester,
-} from './heritage';
-
 import { IndentifierNodeTester } from '../identifier';
+import { IDetailsTester } from '../../details/base';
+import { INodeTester } from '../base';
 
 /**
  * Factory to create class tester to query and collect data for class node
@@ -20,17 +13,9 @@ export function createClassTester(node: any, options: any = {}) {
 }
 
 export class ClassTester extends IndentifierNodeTester {
-  heritageNodeTester: any // ClassHeritageNodesTester
-  memberNodesTester: any // ClassMemberNodesTester
-  classDetailsTester: ClassDetailsTester
-
-  // tester factories
-  factories: any = {
-    // default factories
-    createClassHeritageTester,
-    createClassMembersTester
-  }
-
+  heritageNodeTester: INodeTester
+  memberNodesTester: INodeTester
+  classDetailsTester: IDetailsTester
   /**
    * Create class tester
    * @param node
@@ -38,9 +23,9 @@ export class ClassTester extends IndentifierNodeTester {
    */
   constructor(node: any, options: any = {}) {
     super(node, options)
-    this.heritageNodeTester = this.createNodeTester('heritage', node, options)
-    this.memberNodesTester = this.factories.createTester('members', node, options)
-    this.classDetailsTester = this.factories.details.createTester('class', options)
+    this.heritageNodeTester = this.createNodeTester('class.heritage', node, options)
+    this.memberNodesTester = this.createNodeTester('class.members', node, options)
+    this.classDetailsTester = this.createDetailsTester('details:class', options)
   }
 
   /**

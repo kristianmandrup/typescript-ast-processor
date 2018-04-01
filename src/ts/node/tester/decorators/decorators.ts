@@ -1,5 +1,4 @@
 import { ListTester } from '../generic'
-import { createClassDecoratorTester } from './class-decorator';
 
 export function createClassDecoratorsTester(node: any, options: any = {}): ClassDecoratorsTester {
   return new ClassDecoratorsTester(node, options)
@@ -11,6 +10,6 @@ export class ClassDecoratorsTester extends ListTester {
   }
 
   createClassDecoratorTester(decoratorNode: any) {
-    return createClassDecoratorTester(decoratorNode, this.options)
+    return this.createNodeTester('decorator.class', decoratorNode, this.options)
   }
 }
