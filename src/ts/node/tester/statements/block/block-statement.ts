@@ -1,26 +1,23 @@
-import { BaseNodeTester } from '../../base';
-import {
-  createBlockNodeTester,
-  BlockNodeTester
-} from './block'
+import { BaseNodeTester, INodeTester } from '../../base';
+import { BlockNodeTester } from '.';
 
 export function createBlockStatementTester(node: any, options: any = {}): BlockStatementTester {
   return new BlockStatementTester(node, options)
 }
 
 export class BlockStatementTester extends BaseNodeTester {
-  blockNodeTester: BlockNodeTester
+  blockNodeTester: INodeTester // BlockNodeTester
 
   constructor(node: any, options: any) {
     super(node, options)
-    this.blockNodeTester = createBlockNodeTester(this.node, options)
+    this.blockNodeTester = this.createNodeTester('block', this.node, options) // as BlockNodeTester
   }
 
   /**
    * Determine how many levels deep the if is nested
    */
-  get nestedLevels() {
-    return this.blockNodeTester.nestedLevels
+  get nestedLevels(): number {
+    return this.blockNodeTester.nestedLevels || 0
   }
 
   /**

@@ -1,6 +1,6 @@
 import {
   createCountingASTNodeTraverser
-} from '../../visitor/traverser'
+} from '../../traverser'
 
 import {
   toList,

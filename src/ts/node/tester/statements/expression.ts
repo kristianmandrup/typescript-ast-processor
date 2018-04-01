@@ -27,34 +27,38 @@ export class ExpressionStatementNodeTester extends BaseNodeTester {
     this.exprTester = this.createExpressionTester(options)
   }
 
-  protected createExpressionTester(options: any = {}) {
-    return this.factories.details.createTester('expression', { ...options, node: this.node })
+  // TODO: avoid duplication!!!
+  protected createExpressionTester(node: any, options: any = {}) {
+    return this.createDetailsTester('expression', node, options)
   }
 
   protected createExprTester(token: string = 'typeof', options: any = {}) {
     return (node: any) => {
-      const exprTester = this.createExpressionTester({ ...options, node })
+      const exprTester = this.createExpressionTester(node, options)
       return exprTester.is(token, node)
     }
   }
 
-
-  protected countOccurenceOf(token: string): number {
+  /**
+   * Count occurremces of token
+   * @param token
+   */
+  protected countOccurrenceOf(token: string): number {
     return this.countOccurrence({
       tester: this.createExprTester(token)
     })
   }
 
   get typeofCount() {
-    return this.countOccurenceOf('typeOf')
+    return this.countOccurrenceOf('typeOf')
   }
 
   get deleteCount() {
-    return this.countOccurenceOf('delete')
+    return this.countOccurrenceOf('delete')
   }
 
   get notCount() {
-    return this.countOccurenceOf('not')
+    return this.countOccurrenceOf('not')
   }
 
   info() {

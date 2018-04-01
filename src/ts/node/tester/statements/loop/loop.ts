@@ -18,13 +18,13 @@ export class LoopNodeTester extends BlockStatementTester {
     super(node, options)
   }
 
-  protected createExpressionTester(options: any = {}) {
-    return this.factories.details.createTester('expression', { ...options, node: this.node })
+  protected createExpressionTester(node: any, options: any = {}) {
+    return this.createDetailsTester('expression', node, options)
   }
 
   protected createExprTester(token: string = 'break', options: any = {}) {
     return (node: any) => {
-      const exprTester = this.createExpressionTester({ ...options, node })
+      const exprTester = this.createExpressionTester(node, options)
       return exprTester.is(token, node)
     }
   }

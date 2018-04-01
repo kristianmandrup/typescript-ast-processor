@@ -4,6 +4,7 @@ import {
 } from '../../util'
 
 export const factories = {
+  'expression': details.expression.createExpressionTester,
   'expr.binary': details.binary.createBinaryExprTester,
   'function.call': details.call.createCallTester,
   identifier: details.identifier.createIdentifierTester,

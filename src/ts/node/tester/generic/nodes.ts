@@ -8,7 +8,16 @@ export interface IItemTester {
   test(item: any): boolean
 }
 
-export class ListTester extends BaseNodeTester {
+/**
+ * Factory to create a VariableDeclaration tester
+ * @param node
+ * @param options
+ */
+export function createNodesTester(node: any, options: any) {
+  return new NodesTester(node, options)
+}
+
+export class NodesTester extends BaseNodeTester {
   itemTester: IItemTester
   tester: Function
   key: string
@@ -32,14 +41,6 @@ export class ListTester extends BaseNodeTester {
     }
 
     this.itemTester = options.itemTester
-    this.tester = this.createTester()
-  }
-
-  /**
-   * Create a tester function to test the list of items
-   */
-  createTester(): Function {
-    return this.options.createTester ? this.options.createTester(this.nodes) : this.options.tester
   }
 
   /**

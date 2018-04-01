@@ -22,18 +22,15 @@ export function createVariableDeclarationTester(node: any, options: any) {
  * Perhaps extend IdentifierNodeTester ??
  */
 export class VariableDeclarationNodeTester extends BaseNodeTester {
-  identifierTester: IndentifierNodeTester
+  identifierNodeTester: IndentifierNodeTester
   variableTester: VariableTester
 
   constructor(node: any, options: any) {
     super(node, options)
-    this.identifierTester = this.factories.createTester('identifier', node.name, this.options)
+    this.identifierNodeTester = this.createNodeTester('identifier', node.name, this.options) as IndentifierNodeTester
 
     // perhaps use TypeNodeTester instead!?
-    this.variableTester = this.factories.details.createTester('variable', {
-      ...options,
-      node
-    })
+    this.variableTester = this.createDetailsTester('variable', node, options) as VariableTester
   }
 
   /**
@@ -47,7 +44,7 @@ export class VariableDeclarationNodeTester extends BaseNodeTester {
    * Get name of node
    */
   get name() {
-    return this.identifierTester.name
+    return this.identifierNodeTester.name
   }
 
   /**
@@ -67,6 +64,6 @@ export class VariableDeclarationNodeTester extends BaseNodeTester {
    * @param query
    */
   test(query: any): any {
-    return this.identifierTester.test(query.id)
+    return this.identifierNodeTester.test(query.id)
   }
 }

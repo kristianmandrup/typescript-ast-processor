@@ -21,7 +21,7 @@ export class IndentifierNodeTester extends BaseNodeTester {
    */
   constructor(node: any, options: any) {
     super(node, options)
-    this.identifierTester = this.factories.details.createTester('identifier', options)
+    this.identifierTester = this.createDetailsTester('identifier', options)
   }
 
   /**

@@ -42,7 +42,6 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
     if (node.type) {
       this.typeNodeTester = this.createNodeTester('type', node.type, options)
     }
-
     this.blockNodeTester = this.createNodeTester('block', this.node, options)
   }
 

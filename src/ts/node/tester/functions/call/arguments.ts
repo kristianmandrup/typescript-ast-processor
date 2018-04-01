@@ -1,7 +1,6 @@
 import { BaseNodeTester } from '../../base'
 import {
-  isArgument,
-  createArgumentTester
+  isArgument
 } from './argument';
 
 /**
@@ -42,7 +41,7 @@ export class ArgumentsTester extends BaseNodeTester {
   }
 
   createArgumentTester(argumentNode: any) {
-    return createArgumentTester(argumentNode, this.options)
+    return this.createNodeTester('function.argument', argumentNode, this.options)
   }
 
   info() {

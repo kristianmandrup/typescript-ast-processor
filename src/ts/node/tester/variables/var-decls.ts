@@ -1,8 +1,5 @@
 import * as ts from 'typescript'
-import { ListTester } from '../generic'
-import {
-  createVariableDeclarationTester
-} from './var-decl'
+import { BaseNodeTester } from '../base';
 
 /**
  * Factory to create a Variable declarations tester
@@ -13,7 +10,7 @@ export function createVariableDeclarationsTester(node: any, options: any) {
   return new VariableDeclarationNodesTester(node, options)
 }
 
-export class VariableDeclarationNodesTester extends ListTester {
+export class VariableDeclarationNodesTester extends BaseNodeTester {
   declarations: any[]
 
   constructor(node: any, options: any) {
@@ -27,7 +24,7 @@ export class VariableDeclarationNodesTester extends ListTester {
    * @param node
    */
   createVariableDeclarationTester(node: any) {
-    return createVariableDeclarationTester(node, this.options)
+    return this.createNodeTester('var', node, this.options)
   }
 
   /**

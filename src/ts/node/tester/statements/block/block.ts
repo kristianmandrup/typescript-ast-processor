@@ -27,7 +27,7 @@ export class BlockNodeTester extends BaseNodeTester {
    * Find the list of parent blocks the block is nested within
    */
   get parentBlocks(): any[] {
-    return findParentBlocks(this.node)
+    return findParentBlocks(this.node) || []
   }
 
   /**
@@ -41,7 +41,7 @@ export class BlockNodeTester extends BaseNodeTester {
    * How many levels deep the block is nested
    */
   get nestedLevels(): number {
-    return this.parentBlocks.length
+    return this.parentBlocks.length || 0
   }
 
   /**

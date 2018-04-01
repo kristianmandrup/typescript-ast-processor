@@ -1,6 +1,6 @@
 import * as ts from 'typescript'
 import { BaseNodeTester } from '../base';
-import { ListTester } from '../generic';
+import { NodesTester } from '../generic';
 
 // TODO
 function createLiteralTester(node: any, options: any) {
@@ -31,12 +31,12 @@ export function createArrayLiteralTester(node: any, options: any) {
  */
 export class ArrayLiteralTester extends BaseNodeTester {
   nodes: any
-  itemsTester: ListTester
+  itemsTester: NodesTester
 
   constructor(node: any, options: any) {
     super(node, options)
     this.nodes = node.elements
-    this.itemsTester = new ListTester(this.nodes, this.options)
+    this.itemsTester = this.createNodeTester('list', this.nodes, this.options) as NodesTester
   }
 
   get items() {

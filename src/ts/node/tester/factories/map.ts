@@ -10,7 +10,8 @@ const {
   expressions,
   decorators,
   occurrences,
-  identifier
+  identifier,
+  generic
 } = tester
 
 const {
@@ -35,6 +36,10 @@ const {
 
 
 export const factories = {
+  // generic
+  'list': generic.createNodesTester,
+  'nodes': generic.createNodesTester, // alias
+
   // class
   'decl.class': classes.createClassTester,
   'class.heritage': heritage.createClassHeritageTester,
@@ -50,6 +55,8 @@ export const factories = {
   // function
   // - call
   'function.call': funCall.createFunctionCallNodeTester,
+  'function.arguments': funCall.createArgumentsTester,
+  'function.argument': funCall.createArgumentTester,
 
   // - decl
   'function.decl': funDecl.createFunctionTester,
@@ -73,6 +80,9 @@ export const factories = {
   'condition.switch': conditional.switchCase.createSwitchStatementTester,
   'condition.ternary': conditional.ternary.createTernaryNodeTester,
 
+  'case.block': conditional.switchCase.createCaseBlockTester,
+  'case.clause': conditional.switchCase.createCaseClauseTester,
+
   // loops
   'loop.for': loop.createForLoopTester,
   'loop.while': loop.createWhileLoopTester,
@@ -88,6 +98,7 @@ export const factories = {
   // literals
   'lit.array': literals.createArrayLiteralTester,
   'lit.object': literals.createObjectLiteralTester,
+  'object.properties': literals.object.createPropertyNodesTester,
 
   // expressions
   'expr.binary': expressions.binary.createBinaryExpressionNodeTester,

@@ -1,5 +1,4 @@
-import { BaseNodeTester } from '../../base';
-import { createPropertiesTester, PropertiesTester } from './properties';
+import { BaseNodeTester, INodeTester } from '../../base';
 
 /**
  * Factory to create a VariableDeclaration tester
@@ -18,11 +17,11 @@ export function createObjectLiteralTester(node: any, options: any) {
  *  - initializer - which can be an ObjectLiteral itself!
  */
 export class ObjectLiteralTester extends BaseNodeTester {
-  propertiesTester: PropertiesTester
+  propertiesNodeTester: INodeTester
 
   constructor(node: any, options: any) {
     super(node, options)
-    this.propertiesTester = createPropertiesTester(node.properties, this.options)
+    this.propertiesNodeTester = this.createNodeTester('properties', node.properties, this.options)
   }
 
   /**
@@ -30,6 +29,6 @@ export class ObjectLiteralTester extends BaseNodeTester {
    * @param query
    */
   test(query: any): any {
-    return this.propertiesTester.test(query.id)
+    return this.propertiesNodeTester.test(query.id)
   }
 }

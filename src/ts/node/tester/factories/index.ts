@@ -1,4 +1,4 @@
-import { factories } from './tester'
+import { factories } from './map'
 import {
   callFun
 } from '../../../util'

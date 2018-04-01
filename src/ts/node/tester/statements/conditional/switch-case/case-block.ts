@@ -1,10 +1,6 @@
 import * as ts from 'typescript'
 import { BaseNodeTester } from '../../../base';
 
-import {
-  createCaseClauseTester
-} from './case-clause'
-
 export function isCaseBlock(node: any) {
   return ts.isCaseBlock(node)
 }
@@ -21,7 +17,7 @@ export class CaseBlockTester extends BaseNodeTester {
   }
 
   createClauseTester(node: ts.CaseClause, options: any = {}) {
-    return createCaseClauseTester(node, options)
+    return this.createNodeTester('case.clause', node, options)
   }
 
   clauseInfo(clause: ts.CaseClause): any {

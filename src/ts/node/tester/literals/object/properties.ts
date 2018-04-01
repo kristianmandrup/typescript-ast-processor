@@ -7,18 +7,18 @@ import { BaseNodeTester } from '../../base';
  * @param node
  * @param options
  */
-export function createPropertiesTester(node: any, options: any) {
-  return new PropertiesTester(node, options)
+export function createPropertyNodesTester(node: any, options: any) {
+  return new PropertyNodesTester(node, options)
 }
 
-export class PropertiesTester extends BaseNodeTester {
+export class PropertyNodesTester extends BaseNodeTester {
   properties: ts.PropertyAssignment[]
   propertiesTester: any // TODO
 
   constructor(properties: any, options: any) {
     super(properties, options)
     this.properties = properties
-    this.propertiesTester = this.factories.createTester('list', this.properties, this.options)
+    this.propertiesTester = this.createNodeTester('list', this.properties, this.options)
   }
 
   /**

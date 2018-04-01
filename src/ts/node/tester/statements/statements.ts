@@ -1,5 +1,4 @@
-import { ListTester } from '../generic'
-import { createStatementTester } from './statement';
+import { BaseNodeTester } from '../base';
 
 /**
  * Factory to create a statement tester
@@ -10,7 +9,7 @@ export function createStatementsTester(node: any, options: any) {
   return new StatementsTester(node, options)
 }
 
-export class StatementsTester extends ListTester {
+export class StatementsTester extends BaseNodeTester {
   statements: any[]
 
   constructor(node: any, options: any) {
@@ -19,7 +18,7 @@ export class StatementsTester extends ListTester {
   }
 
   createStatementTester(node: any, options: any) {
-    return createStatementTester(node, options)
+    return this.createNodeTester('stmt', node, options)
   }
 
   get statementCount() {

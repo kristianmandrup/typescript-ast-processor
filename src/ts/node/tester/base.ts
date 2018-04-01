@@ -8,15 +8,16 @@ import {
   testNames,
 } from './util'
 import {
-  ListTester
-} from './generic'
-import {
   isEmpty,
 } from '../../util'
 import { INodeOccurrenceTester } from './occurrence';
 import { IDetailsTester } from '../details/base';
 
 export interface INodeTester {
+  parentBlocks?: any[]
+  isNested?: boolean
+  nestedLevels?: number
+
   test(query: any): boolean
   query(query: any): any
   info(): any
@@ -34,7 +35,7 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
   constructor(public node: any, options: any) {
     super(options)
     this.factories = this.testerFactories
-    this.occurenceTester = this.factories.createTester('occurrence', node, options)
+    this.occurenceTester = this.factories.createNodeTester('occurrence', node, options)
     if (!node) {
       this.error(`BaseTester: Missing node to test`, {
         node,
@@ -167,7 +168,7 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    * @param options
    */
   createListTester(node: any, options: any = {}) {
-    return new ListTester(node, options)
+    return this.createNodeTester('list', node, options)
   }
 
   /**

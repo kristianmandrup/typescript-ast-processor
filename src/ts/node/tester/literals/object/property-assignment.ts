@@ -1,4 +1,4 @@
-import { BaseNodeTester } from '../../base';
+import { BaseNodeTester, INodeTester } from '../../base';
 import { IndentifierNodeTester, createIndentifierNodeTester } from '../../identifier';
 
 /**
@@ -11,11 +11,11 @@ export function createPropertyAssignmentTester(node: any, options: any) {
 }
 
 export class PropertyAssignmentTester extends BaseNodeTester {
-  identifierTester: IndentifierNodeTester
+  identifierTester: IndentifierNodeTester // INodeTester // IndentifierNodeTester
 
   constructor(node: any, options: any) {
     super(node, options)
-    this.identifierTester = this.factories.createTester('identifier', node.name, this.options)
+    this.identifierTester = this.createNodeTester('identifier', node.name, this.options) as IndentifierNodeTester
   }
 
   get name() {

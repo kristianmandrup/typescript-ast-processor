@@ -1,6 +1,5 @@
 import * as ts from 'typescript'
-import { BaseNodeTester } from '../../../base';
-import { createCaseBlockTester, CaseBlockTester } from './case-block';
+import { BaseNodeTester, INodeTester } from '../../../base';
 
 export function isSwitchStatement(node: any) {
   return ts.isSwitchStatement(node)
@@ -12,15 +11,15 @@ export function createSwitchStatementTester(node: any, options: any = {}) {
 }
 
 export class SwitchStatementTester extends BaseNodeTester {
-  caseBlockTester: CaseBlockTester
+  caseBlockTester: INodeTester // CaseBlockTester
 
   constructor(node: any, options: any) {
     super(node, options)
     this.caseBlockTester = this.createCaseBlockTester(node.caseBlock, options)
   }
 
-  createCaseBlockTester(node: any, options: any) {
-    return createCaseBlockTester(node, options)
+  createCaseBlockTester(node: any, options: any): INodeTester {
+    return this.createNodeTester('case.block', node, options) // as CaseBlockTester
   }
 
   get hasDefault() {
