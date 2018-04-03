@@ -11,6 +11,10 @@ export function createASTNodeTraverser(options: any) {
   return new ASTNodeTraverser(options)
 }
 
+enum TraverseMode {
+  Children,
+  Ancestor
+}
 export interface IExtraOptions {
   arrow?: boolean;
   parens?: [number, number];
@@ -30,7 +34,7 @@ export class ASTNodeTraverser extends Loggable {
   startNode: any
   visitedNodes: any[]
   query: any
-
+  mode: TraverseMode.Children
 
   /**
    * Create an AST Node Traverser
@@ -47,6 +51,7 @@ export class ASTNodeTraverser extends Loggable {
    * @param options
    */
   init(options: any = {}) {
+    this.mode = options.mode || this.mode
     this.query = options.query
     this.parseQuery(options.query)
     this.startNode = options.node
@@ -226,6 +231,14 @@ export class ASTNodeTraverser extends Loggable {
   }
 
   /**
+   * Determine if traverser should traverse ancestor node for this node
+   * @param node
+   */
+  shouldTraverseAncestor(node: ts.Node) {
+    true
+  }
+
+  /**
    *
    * @param node
    */
@@ -241,6 +254,10 @@ export class ASTNodeTraverser extends Loggable {
     return !this.wasVisitedBefore(node)
   }
 
+  traverseChildNodesNext(node: any) {
+    this.mode === TraverseMode.Children ? this.traverseChildNodes(node) : this.traverseAncestor(node)
+  }
+
   /**
    * Traverse child nodes
    * @param node
@@ -248,5 +265,16 @@ export class ASTNodeTraverser extends Loggable {
   traverseChildNodes(node: ts.Node) {
     if (!this.shouldTraverseChildNodes(node)) return
     node.forEachChild((child: ts.Node) => this.visit(child))
+  }
+
+  /**
+   * Traverse child nodes
+   * @param node
+   */
+  traverseAncestor(node: ts.Node) {
+    if (!this.shouldTraverseAncestor(node)) return
+    if (node.parent) {
+      this.visit(node.parent)
+    }
   }
 }
