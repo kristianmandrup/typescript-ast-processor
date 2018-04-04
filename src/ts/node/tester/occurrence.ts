@@ -54,23 +54,16 @@ export class NodeOccurrenceTester {
 
   public countOccurrence(options: any = {}): number {
     const {
-      types,
-      countNodeTypeChecker,
+      nodeTypes
     } = options
-    const typesToCount = toList(types)
-    const traverseQuery: any = {
-    }
-    if (!isEmpty(types)) {
-      traverseQuery.typesToCount = typesToCount
-    }
-    if (isFunction(countNodeTypeChecker)) {
-      traverseQuery.countNodeTypeChecker = countNodeTypeChecker
-    }
-    const excludeVisit = options.excludeVisit || [/Declaration$/]
+
     if (!options.includeAll) {
-      traverseQuery.excludeVisit = excludeVisit
+      // default categories to exclude
+      nodeTypes.exclude = nodeTypes.exclude || ['declaration']
     }
-    return this.countInTree(traverseQuery)
+    return this.countInTree({
+      nodeTypes
+    })
   }
 
   protected createExpressionTester(options: any = {}) {

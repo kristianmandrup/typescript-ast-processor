@@ -1,4 +1,5 @@
 import * as ts from 'typescript'
+import * as deepmerge from 'deepmerge'
 import {
   ASTNodeTraverser
 } from './traverser'
@@ -82,7 +83,8 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
    * query:
    *  - typesToCount
    *  - typeChecker
-   *  - excludeVisit
+   *  - toExcludeFromVisit
+   *  - exclude
    *
    * @param query
    */
@@ -90,8 +92,16 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
     const {
       nodeTypes
     } = query
-    this.nodeTypes = nodeTypes
+    let categories = nodeTypes.categories
+    nodeTypes.categories = categories || {}
+    if (query.exclude) {
+      categories.toExcludeFromVisit = categories.toExcludeFromVisit || []
+      categories.toExcludeFromVisit.concat(query.exclude)
+      query.nodeTypes.categories = categories
+    }
+    this.nodeTypes = deepmerge(this.nodeTypes, nodeTypes)
     this.resolveTypeCategories()
+    return this
   }
 
 
@@ -152,14 +162,14 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
   /**
    * Find the list of node types to check for
    */
-  get resolveNodeTypesToCheckFor() {
+  protected get resolveNodeTypesToCheckFor() {
     return this.nodeTypes.toCount.concat(this.nodeTypes.toExcludeFromVisit)
   }
 
   /**
    * return cached list of node types to check for
    */
-  get nodeTypesToCheckFor() {
+  protected get nodeTypesToCheckFor() {
     this._nodeTypesToCheckFor = this._nodeTypesToCheckFor || this.resolveNodeTypesToCheckFor
     return this._nodeTypesToCheckFor
   }
@@ -221,7 +231,7 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
    *
    * @param node
    */
-  shouldExcludeNodeFromVisit(node: any) {
+  protected shouldExcludeNodeFromVisit(node: any) {
     const { toExcludeFromVisit } = this.nodeTypes
     return !isEmpty(toExcludeFromVisit) && toExcludeFromVisit.includes(node.nodeType)
   }
@@ -230,7 +240,7 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
    * Determine if traverser should visit this node
    * @param node
    */
-  shouldVisitNode(node: any) {
+  protected shouldVisitNode(node: any) {
     if (this.shouldExcludeNodeFromVisit(node.nodeType)) return false
     return super.shouldVisitNode(node)
   }

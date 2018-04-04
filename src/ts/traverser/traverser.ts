@@ -75,6 +75,7 @@ export class ASTNodeTraverser extends Loggable {
    * @param query
    */
   parseQuery(query: any = {}) {
+    return this
   }
 
 
@@ -160,8 +161,12 @@ export class ASTNodeTraverser extends Loggable {
     return { kind: String(node.kind) }
   }
 
+  /**
+   * Get the type of a node
+   * @param node
+   */
   protected typeOf(node: any): string | undefined {
-    return 'unknown'
+    return node.kind || 'unknown'
   }
 
   /**
@@ -201,7 +206,7 @@ export class ASTNodeTraverser extends Loggable {
    * Check if node was visited before
    * @param node
    */
-  wasVisitedBefore(node: any) {
+  protected wasVisitedBefore(node: any) {
     return this.visitedNodes.includes(node)
   }
 
@@ -219,14 +224,14 @@ export class ASTNodeTraverser extends Loggable {
     this.willVisit(node)
     this.visitorIterator(this._createVisitorCaller(node))
     this.wasVisited(node)
-    this.traverseChildNodes(node)
+    this.traverseNext(node)
   }
 
   /**
    * Determine if traverser should traverse child nodes for this node
    * @param node
    */
-  shouldTraverseChildNodes(node: ts.Node) {
+  protected shouldTraverseChildNodes(node: ts.Node) {
     true
   }
 
@@ -234,15 +239,15 @@ export class ASTNodeTraverser extends Loggable {
    * Determine if traverser should traverse ancestor node for this node
    * @param node
    */
-  shouldTraverseAncestor(node: ts.Node) {
+  protected shouldTraverseAncestor(node: ts.Node) {
     true
   }
 
   /**
-   *
+   * Determine if node should be excluded from visit
    * @param node
    */
-  shouldExcludeNodeFromVisit(node: any) {
+  protected shouldExcludeNodeFromVisit(node: any) {
     return false
   }
 
@@ -250,11 +255,16 @@ export class ASTNodeTraverser extends Loggable {
    * Determine if traverser should visit this node
    * @param node
    */
-  shouldVisitNode(node: any) {
+  protected shouldVisitNode(node: any) {
     return !this.wasVisitedBefore(node)
   }
 
-  traverseChildNodesNext(node: any) {
+  /**
+   * Traverse next node(s)
+   * Usually either ancestry (up/root) or child nodes (down/sub trees)
+   * @param node
+   */
+  protected traverseNext(node: any) {
     this.mode === TraverseMode.Children ? this.traverseChildNodes(node) : this.traverseAncestor(node)
   }
 
@@ -262,16 +272,16 @@ export class ASTNodeTraverser extends Loggable {
    * Traverse child nodes
    * @param node
    */
-  traverseChildNodes(node: ts.Node) {
+  protected traverseChildNodes(node: ts.Node) {
     if (!this.shouldTraverseChildNodes(node)) return
     node.forEachChild((child: ts.Node) => this.visit(child))
   }
 
   /**
-   * Traverse child nodes
+   * Traverse ancestry nodes via parent reference
    * @param node
    */
-  traverseAncestor(node: ts.Node) {
+  protected traverseAncestor(node: ts.Node) {
     if (!this.shouldTraverseAncestor(node)) return
     if (node.parent) {
       this.visit(node.parent)
