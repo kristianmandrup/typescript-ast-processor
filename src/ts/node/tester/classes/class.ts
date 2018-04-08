@@ -14,7 +14,7 @@ export function createClassTester(node: any, options: any = {}) {
 
 export class ClassTester extends IndentifierNodeTester {
   heritageNodeTester: INodeTester
-  memberNodesTester: INodeTester
+  memberNodesTester: any // INodeTester
   classDetailsTester: IDetailsTester
   /**
    * Create class tester
@@ -65,6 +65,14 @@ export class ClassTester extends IndentifierNodeTester {
    */
   testMembers(query: any) {
     this.memberNodesTester.test(query.members || query)
+  }
+
+  /**
+   * Query all class members
+   * @param query
+   */
+  testAccessors(query: any) {
+    this.memberNodesTester.testAccessors(query.accessors || query)
   }
 
   /**

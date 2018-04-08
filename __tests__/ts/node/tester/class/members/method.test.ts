@@ -7,31 +7,27 @@ import {
 const { log } = console
 
 describe('class', () => {
-  describe('members', () => {
-    describe('methods', () => {
-      context('members/none file', () => {
-        const tester = testerFor({
-          fileName: 'method',
-          type: 'method'
-        })
+  describe('method', () => {
+    context('members/none file', () => {
+      const tester = testerFor({
+        fileName: 'members/methods',
+        type: 'class',
+        factoryName: 'class.method',
+        traverse: (statements: any[]) => {
+          // find first getter
+          return statements[0].members[1]
+        }
+      })
 
-        describe.skip('not', () => {
-          describe('testMethods(query)', () => {
-            it('not anyOf: A - true', () => {
-              const result = tester.testMethods({
-                not: query.members.methods.anyOf
-              })
-              expect(result).toBe(true)
+      describe.skip('not', () => {
+        describe('testMethods(query)', () => {
+          it('not anyOf: A - true', () => {
+            const result = tester.testMethods({
+              not: query.members.methods.anyOf
             })
+            expect(result).toBe(true)
           })
         })
-      })
-    })
-
-    context('members/methods file', () => {
-      const tester = testerFor('members/methods')
-      it('is a class', () => {
-        expect(tester.isClass).toBeTruthy()
       })
 
       describe.only('testMethods(query)', () => {

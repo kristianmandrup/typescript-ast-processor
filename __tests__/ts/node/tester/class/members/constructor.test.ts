@@ -2,6 +2,7 @@ import {
   testerFor,
   query,
   context,
+  logObj
 } from '../_imports'
 
 const { log } = console
@@ -9,14 +10,25 @@ const { log } = console
 describe('class', () => {
   describe('members', () => {
     describe('constructor', () => {
-      context('members/static file', () => {
+      context('members/constructor file', () => {
         const tester = testerFor({
-          file: 'constructor',
-          type: 'constructor',
+          fileName: 'members/constructor',
+          type: 'class',
+          factoryName: 'class.constructor',
           traverse: (statements: any[]) => {
             // find constructor
-            return statements[0].members[1]
+            return statements[0].members[0]
           }
+        })
+
+        describe('info', () => {
+          it('collects correct info', () => {
+            const info = tester.info()
+            logObj('info', info)
+            expect(info).toEqual({
+
+            })
+          })
         })
 
         describe.skip('not', () => {

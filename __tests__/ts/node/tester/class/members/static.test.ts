@@ -8,28 +8,40 @@ import {
 const { log } = console
 
 describe('class', () => {
-  describe('members', () => {
-    describe('static', () => {
-      context('members/static file', () => {
-        const tester = testerFor({
-          fileName: 'static',
-          type: 'static',
-          traverse: (statements: any[]) => {
-            // find first static
-            return statements[0].members[1]
-          }
-        })
+  describe('static', () => {
+    context('members/static file', () => {
+      const tester = testerFor({
+        fileName: 'members/static',
+        type: 'class',
+        factoryName: 'class.method',
+        traverse: (statements: any[]) => {
+          // find first static
+          return statements[0].members[2]
+        }
+      })
 
-        describe.skip('not', () => {
-          describe('testStatics(query)', () => {
-            it('not anyOf: A - true', () => {
-              const result = tester.testStatics(query.members.statics.anyOf)
-              expect(result).toBe(true)
-            })
+      it('is static', () => {
+        expect(tester.isStatic).toBeTruthy()
+      })
+
+      describe('info', () => {
+        it('collects correct info', () => {
+          const info = tester.info()
+          // logObj('info', info)
+          expect(info.isStatic).toBeTruthy()
+        })
+      })
+
+      describe.skip('not', () => {
+        describe('testStatics(query)', () => {
+          it('not anyOf: A - true', () => {
+            const result = tester.testStatics(query.members.statics.anyOf)
+            expect(result).toBe(true)
           })
         })
       })
     })
   })
 })
+
 

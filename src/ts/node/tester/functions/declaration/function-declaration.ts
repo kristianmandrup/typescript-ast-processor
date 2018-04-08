@@ -37,7 +37,7 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
         node
       })
     }
-    this.functionTester = this.createDetailsTester(node, options)
+    this.functionTester = this.createDetailsTester('function', node, options)
 
     if (node.type) {
       this.typeNodeTester = this.createNodeTester('type', node.type, options)

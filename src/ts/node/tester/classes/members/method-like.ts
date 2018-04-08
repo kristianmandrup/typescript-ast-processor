@@ -18,7 +18,7 @@ export class MethodLikeTester extends declaration.FunctionLikeNodeTester {
 
   constructor(node: any, options: any) {
     super(node, options)
-    this.accessTester = this.createDetailsTester('access', options)
+    this.accessTester = this.createDetailsTester('access', node, options)
   }
 
   test(query: any) {
