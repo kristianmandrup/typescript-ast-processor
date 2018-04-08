@@ -1,8 +1,7 @@
 import {
   testerFor,
   query,
-  context,
-  node
+  context
 } from '../_imports'
 
 const { log } = console
