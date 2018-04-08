@@ -8,6 +8,7 @@ export function createTypeTester(options: any) {
 export class TypeTester extends BaseDetailsTester {
   constructor(options: any) {
     super(options)
+    this.modifierKey = 'kind'
   }
 
   get syntaxMap() {

@@ -21,11 +21,11 @@ export interface IDetailsTester {
 export class BaseDetailsTester extends Loggable {
   modifierKey: string = 'modifiers'
   node: any
-  syntaxMap: any = {}
-  flagMap: any = {}
-  funMap: any = {}
+  syntaxMap: any
+  flagMap: any
+  funMap: any
 
-  protected _maps: any = {}
+  protected _maps: any
 
   constructor(options: any) {
     super(options)
@@ -106,7 +106,15 @@ export class BaseDetailsTester extends Loggable {
    * @param options
    */
   modifiersOf(node: any, options: any = {}) {
-    return node[options.modifierKey || this.modifierKey]
+    const modifierKey = options.modifierKey || this.modifierKey
+    if (!modifierKey) {
+      this.error('modifiersOf: Missing modifierKey', {
+        modifierKey,
+        this: this.modifierKey,
+        options
+      })
+    }
+    return node[modifierKey]
   }
 
   /**
@@ -125,7 +133,7 @@ export class BaseDetailsTester extends Loggable {
   findMatch(modifiers: any, key: ts.SyntaxKind | string) {
     modifiers = toList(modifiers)
     const modifier: ts.SyntaxKind = this.resolveModifier(key)
-    return modifiers.find((nodeModifier: any) => nodeModifier.kind === modifier)
+    return modifiers.find((nodeModifier: any) => (nodeModifier.kind || nodeModifier) === modifier)
   }
 
   /**
@@ -173,7 +181,18 @@ export class BaseDetailsTester extends Loggable {
   hasModifier(key: ts.SyntaxKind | string, options: any = {}): boolean {
     const modifier: ts.SyntaxKind = isStr(key) ? this.syntaxMap[key] : key
     const node: ts.Node = this.nodeOf(options)
+    if (!node) {
+      this.error('hasModifier: Missing node', {
+        node
+      })
+    }
     const modifiers = this.modifiersOf(node, options)
+    // this.log('hasModifier', {
+    //   modifiers,
+    //   key,
+    //   modifier
+    // })
+
     if (!modifiers) return false
     const result = this.findMatch(modifiers, modifier)
     return Boolean(result)
@@ -225,8 +244,15 @@ export class BaseDetailsTester extends Loggable {
   matches(options: any = {}): any {
     const filterMethod: string = options.method || 'find'
     const defaultFind = (name: string) => {
+      // console.log('is?', name)
       return this.is(name, options)
     }
+    // this.log('matches', {
+    //   maps: this.maps,
+    //   syntaxMap: this.syntaxMap,
+    //   checkerNames: this.checkerNames,
+    //   options
+    // })
     const findFn = options.test || defaultFind
     return this.checkerNames[filterMethod](findFn)
   }

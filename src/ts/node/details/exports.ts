@@ -7,6 +7,7 @@ import * as identifier from './identifier'
 import * as call from './call'
 import * as binary from './binary-expr'
 import * as expression from './expression'
+import * as type from './type'
 
 export {
   $function as function,
@@ -17,5 +18,6 @@ export {
   identifier,
   call,
   binary,
-  expression
+  expression,
+  type
 }

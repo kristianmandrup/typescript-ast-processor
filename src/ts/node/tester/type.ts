@@ -21,7 +21,7 @@ export class TypeNodeTester extends BaseNodeTester {
    */
   constructor(node: any, options: any) {
     super(node, options)
-    this.typeTester = this.createDetailsTester('type', options)
+    this.typeTester = this.createDetailsTester('type', node, options)
   }
 
   /**

@@ -12,12 +12,17 @@ const factories = {
   class: details.class.createClassDetailsTester,
   namespace: details.namespace.createNamespaceTester,
   'function': details.function.createFunctionTester,
-  access: details.access.createAccessTester
+  access: details.access.createAccessTester,
+  type: details.type.createTypeTester
 }
 
 export {
   factories as map
 }
+
+import {
+  isEmpty
+} from '../../util'
 
 import {
   IDetailsTester
@@ -31,7 +36,22 @@ export function factoryFor(name: string, $factoryMap?: any): IDetailsTesterFacto
 }
 
 export function createTester(factoryName: string, node: any, options: any = {}): IDetailsTester | undefined {
-  options.factories = options.factories || {}
-  const testerFactory = factoryFor(factoryName, options.factories.tester)
-  return callFun(testerFactory, options)
+  const factories = options.factories || options.factories || {}
+  if (isEmpty(factories)) {
+    throw new Error('createTester: Missing factories')
+  }
+  const map = factories.details.map
+  const testerFactory = factoryFor(factoryName, map)
+  if (!testerFactory) {
+    console.error('No such factory', {
+      factoryName,
+      map,
+      factories
+    })
+  }
+  const factoryOpts = {
+    node,
+    ...options
+  }
+  return callFun(testerFactory, factoryOpts)
 }

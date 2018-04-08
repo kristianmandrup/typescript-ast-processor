@@ -93,7 +93,7 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    * @param options
    */
   protected createDetailsTester(name: string, node: any, options: any = {}): IDetailsTester {
-    return this.createCategoryTester('details', name, { node, ...options })
+    return this.createCategoryTester('details', name, node, options)
   }
 
   /**
