@@ -1,5 +1,5 @@
 import * as ts from 'typescript'
-import { LoopNodeTester } from '.';
+import { LoopNodeTester } from './loop';
 
 /**
  * Factory to create a While loop tester

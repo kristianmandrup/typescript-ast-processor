@@ -1,6 +1,6 @@
 export {
-  BlockStatementTester,
-  createBlockStatementTester
+  BlockStatementNodeTester,
+  createBlockStatementNodeTester
 } from './block-statement'
 
 export {

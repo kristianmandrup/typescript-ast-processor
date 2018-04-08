@@ -2,22 +2,22 @@ import * as ts from 'typescript'
 import {
   testName
 } from '../../util'
-import { LoopNodeTester } from '.';
+import { LoopNodeTester } from './loop';
 
 /**
  * Factory to create a For loop tester
  * @param node
  * @param options
  */
-export function createForLoopTester(node: any, options: any = {}): ForLoopTester {
-  return new ForLoopTester(node, options)
+export function createForLoopTester(node: any, options: any = {}): ForLoopNodeTester {
+  return new ForLoopNodeTester(node, options)
 }
 
 /**
  * For loop query tester and data aggregator
  */
 
-export class ForLoopTester extends LoopNodeTester {
+export class ForLoopNodeTester extends LoopNodeTester {
   constructor(node: any, options: any) {
     super(node, options)
   }

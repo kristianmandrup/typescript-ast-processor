@@ -27,13 +27,15 @@ export {
   log
 }
 
-export function logObj(obj: any) {
-  log(JSON.stringify(obj, null, 2))
+export function logObj(msg: string, obj: any) {
+  log(msg, JSON.stringify(obj, null, 2))
 }
 
 const {
   factories
 } = node.tester
+
+const factoryMap = node.defaults.factories
 
 function resolveStatementIndex(type: string, fileName: string): number | undefined {
   if (type === 'class') {
@@ -47,16 +49,24 @@ function resolveStatementIndex(type: string, fileName: string): number | undefin
       return 3
     }
   }
-  return
+  return 0
 }
 
 function getNode(sourceFile: any, opts: any = {}) {
   const { index, traverse } = opts
   const statements = sourceFile.statements
   const node = traverse ? traverse(statements) : statements[index]
-  // console.log('using node:', node)
+  // console.log('using node:', { node, traverse })
   return node
 
+}
+
+function resolveTester(srcFile: string, opts: any = {}) {
+  const node = getNode(srcFile, opts)
+  return opts.factory(node, {
+    logging: true,
+    factories: factoryMap // factories.map
+  })
 }
 
 
@@ -80,25 +90,32 @@ export function testerFor(options: any = {}): any {
     traversers = {},
     type = 'class'
   } = options
-  factory = factory || factories[type]
+  factory = factory || factories.testerFactoryFor(type, factories.map)
 
   statementIndex = statementIndex || resolveStatementIndex(type, fileName)
 
   const filePath = `${type}/${fileName}.ts`
   const srcFile = loadAstNode(filePath, traverse)
 
-  if (statementIndex || traverse) {
-    const node = getNode(srcFile, { index: statementIndex, traverse })
-    return factory(node, {
-      logging: true
+  // console.log('testerFor', { testerFor, options, factory, factories })
+
+  if (!isNaN(statementIndex) || traverse) {
+    // console.log('resolve')
+    return resolveTester(srcFile, {
+      factory,
+      index: statementIndex,
+      traverse
     })
-  } else {
+  }
+  if (indexMap && indexMap.length > 0 && traversers && Object.keys(traversers).length > 0) {
     return indexMap.map((label: string, index: number) => {
-      const traverser = traversers[label]
-      const node = getNode(srcFile, { index, traverser })
-      return factory(node, {
-        logging: true
+      return resolveTester(srcFile, {
+        factory,
+        index: statementIndex,
+        traverse: traversers[label]
       })
     })
   }
+  console.error({ options })
+  throw new Error('Invalid options. Missing: statementIndex, traverse or indexMap')
 }

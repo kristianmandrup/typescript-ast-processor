@@ -20,7 +20,7 @@ export interface IInitializerDetails {
  * @returns { Object }
  */
 export function initializerDetails(node: any): IInitializerDetails | {} {
-  const initializer = node.initializer
+  const initializer = node.initializer || node
   if (!initializer) return {}
 
   const type = normalizeLiteral(literalTypeName(initializer))
@@ -30,8 +30,19 @@ export function initializerDetails(node: any): IInitializerDetails | {} {
   if (type === 'number') {
     value = parseInt(textValue)
   }
+  if (type === 'object') {
+    try {
+      const jsonTextValue = textValue.replace(/(\w+):/, `"$1":`)
+      // console.log({ jsonTextValue })
+      value = JSON.parse(jsonTextValue)
+    } catch (err) {
+    }
+  }
   if (type === 'boolean') {
     value = Boolean(textValue)
+  }
+  if (type === 'string') {
+    value = String(textValue)
   }
 
   return {

@@ -1,4 +1,4 @@
-import { BlockStatementTester } from '../block';
+import { BlockStatementNodeTester } from '../block';
 
 /**
  * Factory to create a For loop tester
@@ -13,7 +13,7 @@ export function createLoopNodeTester(node: any, options: any = {}): LoopNodeTest
  * For loop query tester and data aggregator
  */
 
-export class LoopNodeTester extends BlockStatementTester {
+export class LoopNodeTester extends BlockStatementNodeTester {
   constructor(node: any, options: any) {
     super(node, options)
   }

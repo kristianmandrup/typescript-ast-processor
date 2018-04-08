@@ -1,11 +1,11 @@
 import * as ts from 'typescript'
-import { BlockStatementTester } from '../block';
+import { BlockStatementNodeTester } from '../block';
 
 export function createTryCatchFinallyTester(node: any, options: any = {}): TryCatchFinallyTester {
   return new TryCatchFinallyTester(node, options)
 }
 
-export class TryCatchFinallyTester extends BlockStatementTester {
+export class TryCatchFinallyTester extends BlockStatementNodeTester {
   catchClause: ts.CatchClause
   finallyBlock: ts.Block
   tryBlock: ts.Block

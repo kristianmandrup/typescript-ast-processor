@@ -139,7 +139,9 @@ export const factories = {
 
 ## Engine Customization
 
-You are free to substitute any or all of these mappings with your own factories to suit your needs. If you are implementing the engine for a different AST, such as ESTree, ts-simple-ast or similar, you need to substitute all of these mappings. You can however still re-use much of the internal logic of the individual node tester (and node details) classes, so it will likely make sense to extend the existing classes and override key methods.
+You are free to substitute any or all of these mappings with your own factories to suit your needs. If you are implementing the engine for a different AST, such as ESTree, ts-simple-ast or similar, you need to substitute all of these mappings.
+
+You can however still re-use much of the internal logic of the individual node tester (and node details) classes, so it will likely make sense to extend the existing classes and override key methods.
 
 ### Node detail testers
 

@@ -93,7 +93,7 @@ export const factories = {
 
   // block
   block: block.createBlockNodeTester,
-  'block.stmt': block.createBlockStatementTester,
+  'block.stmt': block.createBlockStatementNodeTester,
 
   // literals
   'lit.array': literals.createArrayLiteralTester,

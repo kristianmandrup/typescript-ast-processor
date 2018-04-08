@@ -9,6 +9,10 @@ import {
 
 export type INodeTesterFactory = (node: any, options: any) => INodeTester
 
+export {
+  factories as map
+}
+
 export function testerFactoryFor(name: string, $factoryMap?: any): INodeTesterFactory {
   $factoryMap = $factoryMap || factories
   return $factoryMap[name]

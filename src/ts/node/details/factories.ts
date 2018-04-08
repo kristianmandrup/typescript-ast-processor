@@ -3,7 +3,7 @@ import {
   callFun
 } from '../../util'
 
-export const factories = {
+const factories = {
   'expression': details.expression.createExpressionTester,
   'expr.binary': details.binary.createBinaryExprTester,
   'function.call': details.call.createCallTester,
@@ -13,6 +13,10 @@ export const factories = {
   namespace: details.namespace.createNamespaceTester,
   'function': details.function.createFunctionTester,
   access: details.access.createAccessTester
+}
+
+export {
+  factories as map
 }
 
 import {

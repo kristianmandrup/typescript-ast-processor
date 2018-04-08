@@ -259,13 +259,17 @@ export class ASTNodeTraverser extends Loggable {
     return !this.wasVisitedBefore(node)
   }
 
+  protected get traverseNextMethod() {
+    return this.mode === TraverseMode.Children ? 'traverseChildNodes' : 'traverseAncestor'
+  }
+
   /**
    * Traverse next node(s)
    * Usually either ancestry (up/root) or child nodes (down/sub trees)
    * @param node
    */
   protected traverseNext(node: any) {
-    this.mode === TraverseMode.Children ? this.traverseChildNodes(node) : this.traverseAncestor(node)
+    this[this.traverseNextMethod](node)
   }
 
   /**

@@ -110,7 +110,7 @@ instrumentor.instrument()
 
 ### AST Node Traverser
 
-The default AST traverser is `ASTNodeTraverser` which contains generic functionality to traverse down the TypeScript AST.
+The default AST traverser is `ASTNodeTraverser` which contains generic functionality to traverse up or down the TypeScript AST, depending on `mode` (default: `TraverseMode.Children`).
 
 ```js
 class ASTNodeTraverser extends Loggable {
@@ -140,14 +140,33 @@ class ASTNodeTraverser extends Loggable {
   }
 
   /**
+   * Traverse next node(s)
+   * Usually either ancestry (up/root) or child nodes (down/sub trees)
+   * @param node
+   */
+  protected traverseNext(node: any) {
+    this[this.traverseNextMethod](node)
+  }
+
+  /**
    * Traverse child nodes
    * @param node
    */
-  traverseChildNodes(node: ts.Node) {
+  protected traverseChildNodes(node: ts.Node) {
     if (!this.shouldTraverseChildNodes(node)) return
     node.forEachChild((child: ts.Node) => this.visit(child))
   }
-}
+
+  /**
+   * Traverse ancestry nodes via parent reference
+   * @param node
+   */
+  protected traverseAncestor(node: ts.Node) {
+    if (!this.shouldTraverseAncestor(node)) return
+    if (node.parent) {
+      this.visit(node.parent)
+    }
+  }}
 ```
 
 #### Visitor factories

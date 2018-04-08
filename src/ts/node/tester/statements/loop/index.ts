@@ -1,5 +1,5 @@
 export {
-  ForLoopTester,
+  ForLoopNodeTester,
   createForLoopTester
 } from './for-loop'
 export {

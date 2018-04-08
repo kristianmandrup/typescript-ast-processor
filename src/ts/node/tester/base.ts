@@ -25,7 +25,7 @@ export interface INodeTester {
 
 export abstract class BaseNodeTester extends Loggable implements INodeTester {
   factories: any = {}
-  occurenceTester: INodeOccurrenceTester
+  occurenceTester: any // INodeOccurrenceTester
 
   /**
    * Create BaseTester
@@ -34,8 +34,14 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    */
   constructor(public node: any, options: any) {
     super(options)
-    this.factories = this.testerFactories
-    this.occurenceTester = this.factories.createNodeTester('occurrence', node, options)
+    this.factories = options.factories
+    if (!this.factories) {
+      this.error('Missing factories in options', {
+        options
+      })
+    }
+
+    this.occurenceTester = this.createNodeTester('occurrence', node, options)
     if (!node) {
       this.error(`BaseTester: Missing node to test`, {
         node,
@@ -59,7 +65,15 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    * @param options
    */
   protected createCategoryTester(category: string, name: string, node: any, options: any = {}): any {
-    return this.factories[category].createTester(name, node, options)
+    const factoryCategory = this.factories[category]
+    if (!factoryCategory) {
+      this.error('Invalid factory category', {
+        factories: this.factories,
+        category,
+        factoryCategory,
+      })
+    }
+    return factoryCategory.createTester(name, node, options)
   }
 
   /**
@@ -107,15 +121,6 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    */
   public info(): any {
     return {}
-  }
-
-  /**
-   * Get tester factories from options or from default map
-   */
-  get testerFactories() {
-    let factories = this.options.factories || {}
-    factories = factories.tester || factories
-    return isEmpty(factories) ? this.factories : factories
   }
 
   /**

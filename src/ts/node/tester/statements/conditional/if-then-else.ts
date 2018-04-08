@@ -1,11 +1,11 @@
 import * as ts from 'typescript'
-import { BlockStatementTester } from '../block';
+import { BlockStatementNodeTester } from '../block';
 
 export function createIfThenElseTester(node: any, options: any = {}): IfThenElseTester {
   return new IfThenElseTester(node, options)
 }
 
-export class IfThenElseTester extends BlockStatementTester {
+export class IfThenElseTester extends BlockStatementNodeTester {
   thenStatement: ts.Block
   elseStatement: ts.Block
 
