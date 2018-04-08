@@ -84,18 +84,24 @@ export function testerFor(options: any = {}): any {
   let {
     fileName,
     factory,
+    factoryName,
     statementIndex,
     indexMap,
     traverse,
     traversers = {},
     type = 'class'
   } = options
-  factory = factory || factories.testerFactoryFor(type, factories.map)
+  factoryName = factoryName || type
+  factory = factory || factories.testerFactoryFor(factoryName, factories.map)
 
   statementIndex = statementIndex || resolveStatementIndex(type, fileName)
 
   const filePath = `${type}/${fileName}.ts`
   const srcFile = loadAstNode(filePath, traverse)
+
+  if (!factory) {
+    throw new Error(`No such factory in map: ${type}`)
+  }
 
   // console.log('testerFor', { testerFor, options, factory, factories })
 

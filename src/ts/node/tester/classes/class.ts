@@ -25,7 +25,7 @@ export class ClassTester extends IndentifierNodeTester {
     super(node, options)
     this.heritageNodeTester = this.createNodeTester('class.heritage', node, options)
     this.memberNodesTester = this.createNodeTester('class.members', node, options)
-    this.classDetailsTester = this.createDetailsTester('details:class', options)
+    this.classDetailsTester = this.createDetailsTester('class', node, options)
   }
 
   /**

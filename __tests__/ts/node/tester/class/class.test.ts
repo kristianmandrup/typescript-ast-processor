@@ -5,9 +5,24 @@ import {
 
 const { log } = console
 
+// 'decl.class': classes.createClassTester,
+// 'class.heritage': heritage.createClassHeritageTester,
+
+// 'class.members': members.createClassMembersTester,
+// 'class.member': members.createClassMemberTester,
+// 'class.property': members.createPropertyTester,
+// 'class.getter': accessors.createGetAccessorTester,
+// 'class.setter': accessors.createSetAccessorTester,
+// 'class.constructor': members.createConstructorTester,
+// 'class.method': members.createMethodTester,
+
 describe('class', () => {
   describe('basic', () => {
-    const tester = testerFor('basic-class')
+    const tester = testerFor({
+      fileName: 'basic-class',
+      factoryName: 'decl.class',
+      type: 'class'
+    })
     it('is a class', () => {
       expect(tester.isClass).toBeTruthy()
     })
@@ -65,7 +80,11 @@ describe('class', () => {
 
 
   describe('abstract', () => {
-    const tester = testerFor('abstract-class')
+    const tester = testerFor({
+      fileName: 'abstract-class',
+      factoryName: 'decl.class',
+      type: 'class',
+    })
 
     it('is a class', () => {
       expect(tester.isClass).toBeTruthy()
@@ -91,7 +110,12 @@ describe('class', () => {
 
 
   describe('extends', () => {
-    const tester = testerFor('extends-class', 1)
+    const tester = testerFor({
+      fileName: 'heritage/extends-class',
+      factoryName: 'decl.class',
+      type: 'class',
+      statementIndex: 1
+    })
     it('is a class', () => {
       expect(tester.isClass).toBeTruthy()
     })
@@ -110,7 +134,12 @@ describe('class', () => {
   })
 
   describe('implements', () => {
-    const tester = testerFor('implements-class', 1)
+    const tester = testerFor({
+      fileName: 'heritage/implements-class',
+      factoryName: 'decl.class',
+      type: 'class',
+      statementIndex: 1
+    })
 
     it('is a class', () => {
       expect(tester.isClass).toBeTruthy()
