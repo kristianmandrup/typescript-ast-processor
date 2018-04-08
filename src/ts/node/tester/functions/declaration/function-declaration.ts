@@ -30,8 +30,12 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
 
   constructor(node: any, options: any) {
     super(node, options)
-    if (node.parameters) {
-      this.parameterNodesTester = this.createNodeTester('function.parameters', node.parameters, options)
+    const {
+      type,
+      parameters
+    } = node
+    if (parameters) {
+      this.parameterNodesTester = this.createNodeTester('function.parameters', parameters, options)
     } else {
       this.log('FunctionLikeTester: no typeParameters', {
         node
@@ -39,8 +43,8 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
     }
     this.functionTester = this.createDetailsTester('function', node, options)
 
-    if (node.type) {
-      this.typeNodeTester = this.createNodeTester('type', node.type, options)
+    if (type) {
+      this.typeNodeTester = this.createNodeTester('type', type, options)
     }
     this.blockNodeTester = this.createNodeTester('block', this.node, options)
   }
@@ -72,7 +76,7 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
   info() {
     return {
       name: this.name,
-      parameters: this.parameterNodesTester.info(),
+      parameters: this.parameters,
       returnType: this.returnType,
       returnCount: this.returnCount,
       lastStatementReturn: this.isLastStatementReturn,
@@ -83,18 +87,22 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
     }
   }
 
+  get parameters() {
+    return this.parameterNodesTester ? this.parameterNodesTester.info() : {}
+  }
+
   /**
    * Determine if function is an arrow function
    */
   get isArrow(): boolean {
-    return this.functionTester.is(this.node, 'arrow')
+    return this.functionTester.is('arrow')
   }
 
   /**
    * Determine if function is a generator function with asterisk (function*)
    */
   get isGenerator(): boolean {
-    return this.functionTester.is(this.node, 'generator')
+    return this.functionTester.is('generator')
   }
 
   /**

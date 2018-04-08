@@ -2,7 +2,7 @@ import {
   testerFor,
   query,
   context,
-  node
+  logObj
 } from '../_imports'
 
 const { log } = console
@@ -20,6 +20,23 @@ describe('class', () => {
         }
       })
 
+      describe.only('info', () => {
+        it('collects correct info', () => {
+          const info = tester.info()
+          logObj('info', info)
+          expect(info).toEqual({
+            "name": "name",
+            "parameters": {},
+            "returnType": "implicit:any",
+            "returnCount": 1,
+            "lastStatementReturn": false,
+            "exported": false,
+            "arrow": false,
+            "nestedLevels": 1
+          })
+        })
+      })
+
       describe.skip('not', () => {
         describe('testAccess(query)', () => {
           it('not anyOf: A - true', () => {
@@ -29,8 +46,7 @@ describe('class', () => {
         })
       })
 
-
-      describe.only('testAccess(query)', () => {
+      describe.skip('testAccess(query)', () => {
         context('has getter and setter for name', () => {
           it('anyOf: name - true ', () => {
             const res = tester.testAccess(query.members.getters.anyOf)
