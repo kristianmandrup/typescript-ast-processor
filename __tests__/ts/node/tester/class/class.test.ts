@@ -18,7 +18,7 @@ const { log } = console
 // 'class.method': members.createMethodTester,
 
 describe('class', () => {
-  describe.only('basic', () => {
+  describe('basic', () => {
     const tester = testerFor({
       fileName: 'basic-class',
       factoryName: 'decl.class',
@@ -30,7 +30,7 @@ describe('class', () => {
       expect(tester.name).toEqual('Abs')
     })
 
-    it.only('is exported', () => {
+    it('is exported', () => {
       expect(tester.isExported).toBeTruthy()
     })
 
@@ -56,22 +56,22 @@ describe('class', () => {
     })
 
     describe('testImplements', () => {
-      it('empty query - ignored and always true', () => {
+      it.skip('empty query - ignored and always true', () => {
         expect(tester.testImplements(query.empty)).toBeTruthy()
       })
 
-      it('invalid query - throws', () => {
+      it.skip('invalid query - throws', () => {
         expect(() => tester.testImplements(query.invalid)).toThrow()
       })
     })
 
     describe('testMembers', () => {
 
-      it('empty query - always true', () => {
+      it.skip('empty query - always true', () => {
         expect(tester.testMembers(query.empty)).toBeTruthy()
       })
 
-      it('invalid query - throws', () => {
+      it.skip('invalid query - throws', () => {
         expect(() => tester.testMembers(query.invalid)).toThrow()
       })
     })
@@ -87,10 +87,6 @@ describe('class', () => {
       fileName: 'abstract-class',
       factoryName: 'decl.class',
       type: 'class',
-    })
-
-    it('is a class', () => {
-      expect(tester.isClass).toBeTruthy()
     })
 
     it('is named Abs', () => {
@@ -119,9 +115,6 @@ describe('class', () => {
       type: 'class',
       statementIndex: 1
     })
-    it('is a class', () => {
-      expect(tester.isClass).toBeTruthy()
-    })
 
     it('is named Abs', () => {
       expect(tester.name).toBe('A')
@@ -142,10 +135,6 @@ describe('class', () => {
       factoryName: 'decl.class',
       type: 'class',
       statementIndex: 1
-    })
-
-    it('is a class', () => {
-      expect(tester.isClass).toBeTruthy()
     })
 
     it('is named Abs', () => {

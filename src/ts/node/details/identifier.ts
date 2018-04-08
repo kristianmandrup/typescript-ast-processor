@@ -10,6 +10,9 @@ export class IdentifierTester extends BaseDetailsTester {
     super(options)
   }
 
+  // for VariableDeclaration node
+  // NOTE: You can also test on existence of localSymbol.exportSymbol
+
   get syntaxMap() {
     return {
       exported: ts.SyntaxKind.ExportKeyword
