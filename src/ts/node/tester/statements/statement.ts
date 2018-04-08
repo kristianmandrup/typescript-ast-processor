@@ -18,6 +18,12 @@ export class StatementTester extends BaseNodeTester {
     super(node, options)
   }
 
+  // what to return here!?
+  info() {
+    return super.info()
+  }
+
+
   /**
    *  * TODO: Call the relevant statement tester that matches the particular type of statement (if available)
    * @param query

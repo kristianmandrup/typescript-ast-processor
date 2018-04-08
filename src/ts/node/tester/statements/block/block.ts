@@ -13,6 +13,9 @@ export function createBlockNodeTester(node: any, options: any = {}): BlockNodeTe
   return new BlockNodeTester(node, options)
 }
 
+// TODO:
+// Not sure if we need this distinction, looks to be the same node,
+// ie. an ifStatement thenStatement etc, are all block statement nodes!
 export class BlockNodeTester extends BaseNodeTester {
   /**
    * Create a Block node tester

@@ -8,14 +8,15 @@ describe('statement', () => {
   context('statements file', () => {
     const tester = testerFor({
       fileName: 'statements',
-      type: 'statement',
+      type: 'statements',
+      factoryName: 'statement',
       statementIndex: 0
     })
 
     describe('info()', () => {
       it('collects correct info', () => {
         const info = tester.info()
-        logObj(info)
+        logObj('info', info)
         expect(info).toEqual({
         })
       })

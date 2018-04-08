@@ -1,7 +1,7 @@
 import {
-  logObj,
   testerFor,
-  context
+  context,
+  logObj
 } from '../_imports'
 
 describe('statements', () => {
@@ -14,9 +14,9 @@ describe('statements', () => {
     describe('info()', () => {
       it('collects correct info', () => {
         const info = tester.info()
-        logObj(info)
+        logObj('info', info)
         expect(info).toEqual({
-          count: 4
+          count: 5
         })
       })
     })
