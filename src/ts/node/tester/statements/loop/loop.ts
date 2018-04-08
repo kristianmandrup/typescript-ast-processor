@@ -60,8 +60,8 @@ export class LoopNodeTester extends BlockStatementNodeTester {
     return {
       ...super.info(),
       loop: true,
-      breakCount: this.breakCount,
-      continueCount: this.continueCount
+      // breakCount: this.breakCount,
+      // continueCount: this.continueCount
     }
   }
 }
