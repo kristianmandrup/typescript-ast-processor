@@ -114,7 +114,7 @@ export class BaseDetailsTester extends Loggable {
         options
       })
     }
-    return node[modifierKey]
+    return node[modifierKey] || []
   }
 
   /**
@@ -149,7 +149,7 @@ export class BaseDetailsTester extends Loggable {
    * @param key { any } used to test if a modifier key
    */
   isModifier(key: any) {
-    return isStr(key) ? this.syntaxMap[key] : ts.SyntaxKind[key]
+    return isStr(key) ? (this.syntaxMap || {})[key] : ts.SyntaxKind[key]
   }
 
   /**
@@ -157,7 +157,7 @@ export class BaseDetailsTester extends Loggable {
    * @param key { ts.SyntaxKind | string } used to test if a modifier key
    */
   isFlag(key: any) {
-    return isStr(key) ? this.flagMap[key] : ts.NodeFlags[key]
+    return isStr(key) ? (this.flagMap || {})[key] : ts.NodeFlags[key]
   }
 
   /**
@@ -166,8 +166,10 @@ export class BaseDetailsTester extends Loggable {
    * @param options xtras including override node
    */
   has(key: any, options: any = {}): boolean {
-    if (this.isModifier(key)) return this.hasModifier(key, options)
-    if (this.isFlag(key)) return this.hasFlag(key, options)
+    const modf = this.isModifier(key)
+    const flag = this.isFlag(key)
+    if (modf) return this.hasModifier(key, options)
+    if (flag) return this.hasFlag(key, options)
     return this.error(`has: unknown has key argument, must be a ts modifier or flag`, {
       key
     }) && false
@@ -187,12 +189,6 @@ export class BaseDetailsTester extends Loggable {
       })
     }
     const modifiers = this.modifiersOf(node, options)
-    // this.log('hasModifier', {
-    //   modifiers,
-    //   key,
-    //   modifier
-    // })
-
     if (!modifiers) return false
     const result = this.findMatch(modifiers, modifier)
     return Boolean(result)

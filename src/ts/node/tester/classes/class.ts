@@ -33,11 +33,18 @@ export class ClassTester extends IndentifierNodeTester {
    */
   info() {
     return {
-      name: this.name,
-      abstract: this.testAbstract(true),
-      heritage: this.heritageNodeTester.info(),
-      exported: this.isExported
+      ...super.info(),
+      abstract: this.abstract,
+      heritage: this.heritage
     }
+  }
+
+  get abstract() {
+    return this.testAbstract(true)
+  }
+
+  get heritage() {
+    return this.heritageNodeTester.info()
   }
 
   /**
@@ -82,7 +89,11 @@ export class ClassTester extends IndentifierNodeTester {
    */
   testAbstract(query: any) {
     query = query.abstract || query
-    return this.classDetailsTester.is(this.node, 'abstract') === query
+    return this.isAbstract === query
+  }
+
+  get isAbstract() {
+    return this.classDetailsTester.is('abstract')
   }
 }
 

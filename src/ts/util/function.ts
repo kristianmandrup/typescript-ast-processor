@@ -3,5 +3,6 @@ import {
 } from './is'
 
 export function callFun(maybeFun: Function, ...args: any[]) {
-  return isFunction(maybeFun) && maybeFun(...args)
+  if (!isFunction(maybeFun)) return
+  return maybeFun(...args)
 }

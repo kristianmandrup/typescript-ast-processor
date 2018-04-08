@@ -5,7 +5,6 @@ export function createIdentifierTester(options: any) {
   return new IdentifierTester(options)
 }
 
-
 export class IdentifierTester extends BaseDetailsTester {
   constructor(options: any) {
     super(options)
@@ -13,7 +12,7 @@ export class IdentifierTester extends BaseDetailsTester {
 
   get syntaxMap() {
     return {
-      export: ts.SyntaxKind.ExportKeyword
+      exported: ts.SyntaxKind.ExportKeyword
     }
   }
 
@@ -22,6 +21,6 @@ export class IdentifierTester extends BaseDetailsTester {
    * @param node identifier node to test
    */
   exported(node?: any) {
-    return this.has('export', { node })
+    return this.has('exported', { node })
   }
 }

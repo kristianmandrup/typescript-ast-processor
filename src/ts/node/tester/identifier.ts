@@ -13,6 +13,8 @@ export function createIndentifierNodeTester(node: any, options: any = {}) {
 
 export class IndentifierNodeTester extends BaseNodeTester {
   identifierTester: IDetailsTester
+  exportTester: any // IDetailsTester
+  idNode: any
 
   /**
    * Create Identifier node tester
@@ -21,18 +23,31 @@ export class IndentifierNodeTester extends BaseNodeTester {
    */
   constructor(node: any, options: any) {
     super(node, options)
-    this.identifierTester = this.createDetailsTester('identifier', node, options)
+    this.idNode = this.idNodeFor(node)
+    this.exportTester = this.createDetailsTester('identifier', node, options)
+    this.identifierTester = this.createDetailsTester('identifier', this.idNode, options)
+  }
+
+  protected idNodeFor(node: any) {
+    return node.declarationList ? node.declarationList.declarations[0] : node
+  }
+
+  info() {
+    return {
+      name: this.name,
+      exported: this.isExported
+    }
   }
 
   /**
    * Get name of node (using nameOf utility method)
    */
   get name() {
-    return this.nameOf(this.node)
+    return this.nameOf(this.idNode)
   }
 
   nameOf(node: any) {
-    return nameOf(this.node)
+    return nameOf(node)
   }
 
   /**
@@ -64,14 +79,14 @@ export class IndentifierNodeTester extends BaseNodeTester {
    * Test if identifier export status
    * @param exported
    */
-  exported(exported: true = true) {
+  testExported(exported: true = true) {
     return Boolean(this.isExported) === Boolean(exported)
   }
 
   /**
    * Whether identifier is exported
    */
-  get isExported() {
-    return this.identifierTester.is(this.node, 'exported')
+  get isExported(): boolean {
+    return Boolean(this.exportTester.is('exported'))
   }
 }

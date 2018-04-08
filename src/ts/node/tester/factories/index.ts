@@ -20,6 +20,12 @@ export function testerFactoryFor(name: string, $factoryMap?: any): INodeTesterFa
 
 export function createTester(factoryName: string, node: any, options: any = {}): INodeTester | undefined {
   options.factories = options.factories || {}
-  const testerFactory = testerFactoryFor(factoryName, options.factories.tester)
+  const factoryMap = options.factories.tester.map
+  const testerFactory = testerFactoryFor(factoryName, factoryMap)
+  // console.log('createTester', {
+  //   testerFactory,
+  //   factoryName,
+  //   factoryMap
+  // })
   return callFun(testerFactory, node, options)
 }

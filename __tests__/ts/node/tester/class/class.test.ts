@@ -1,6 +1,7 @@
 import {
   testerFor,
-  query
+  query,
+  logObj
 } from './_imports'
 
 const { log } = console
@@ -17,24 +18,26 @@ const { log } = console
 // 'class.method': members.createMethodTester,
 
 describe('class', () => {
-  describe('basic', () => {
+  describe.only('basic', () => {
     const tester = testerFor({
       fileName: 'basic-class',
       factoryName: 'decl.class',
-      type: 'class'
-    })
-    it('is a class', () => {
-      expect(tester.isClass).toBeTruthy()
+      type: 'class',
+      statementIndex: 0
     })
 
     it('is named Abs', () => {
       expect(tester.name).toEqual('Abs')
     })
 
+    it.only('is exported', () => {
+      expect(tester.isExported).toBeTruthy()
+    })
 
     describe('info', () => {
       it('collects correct info', () => {
         const info = tester.info()
+        logObj('info', info)
         expect(info.abstract).toBeFalsy()
         expect(info.exported).toBeTruthy()
         expect(info.name).toEqual('Abs')
@@ -57,7 +60,7 @@ describe('class', () => {
         expect(tester.testImplements(query.empty)).toBeTruthy()
       })
 
-      it.only('invalid query - throws', () => {
+      it('invalid query - throws', () => {
         expect(() => tester.testImplements(query.invalid)).toThrow()
       })
     })

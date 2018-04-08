@@ -30,17 +30,18 @@ export class ClassMembersTester extends BaseNodeTester {
     super(node, options)
     const members = Array.isArray(node) ? node : node.members
     this.isMembersNode(members) || this.error('ClassMembersTester: invalid members node', {
-      node
+      node,
+      members
     })
     this.nodes = members
   }
 
   validMembers(node: any) {
-    Array.isArray(node) ? node : node.members
+    return Array.isArray(node) ? node : node.members
   }
 
-  isMembersNode(node: any) {
-    return Array.isArray(node.members)
+  isMembersNode(members: any) {
+    return Array.isArray(members)
   }
 
   // alias
