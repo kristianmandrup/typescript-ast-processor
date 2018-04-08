@@ -24,7 +24,7 @@ export class IfThenElseTester extends BlockStatementNodeTester {
    * Determine if conditional has an else Block
    */
   get hasElse() {
-    return Boolean(this.elseStatement)
+    return Boolean(this.elseStatement !== undefined)
   }
 
   /**
