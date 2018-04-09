@@ -8,6 +8,7 @@ export function createVariableTester(options: any) {
 export class VariableTester extends BaseDetailsTester {
   constructor(options: any) {
     super(options)
+    this.modifierKey = 'type'
   }
 
   get flagMap() {

@@ -24,7 +24,7 @@ export class VariableDeclarationNodesTester extends BaseNodeTester {
    * @param node
    */
   createVariableDeclarationTester(node: any) {
-    return this.createNodeTester('var', node, this.options)
+    return this.createNodeTester('decl.var', node, this.options)
   }
 
   /**
@@ -32,7 +32,7 @@ export class VariableDeclarationNodesTester extends BaseNodeTester {
    * TODO: make more generic and reuse pattern
    */
   get varDeclarationTesters() {
-    return this.declarations.map(this.createVariableDeclarationTester)
+    return this.declarations.map(this.createVariableDeclarationTester.bind(this))
   }
 
   /**

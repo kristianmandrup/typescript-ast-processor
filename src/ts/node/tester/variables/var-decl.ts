@@ -2,9 +2,8 @@ import { BaseNodeTester } from '../base';
 import {
   IndentifierNodeTester
 } from '../identifier';
-import {
-  VariableTester
-} from '../../details/variable';
+
+// import { api as detailsApi } from '../../details';
 
 /**
  * Factory to create a VariableDeclaration tester
@@ -24,21 +23,24 @@ export function createVariableDeclarationTester(node: any, options: any) {
  */
 export class VariableDeclarationNodeTester extends BaseNodeTester {
   identifierNodeTester: IndentifierNodeTester
-  variableTester: VariableTester
+  typeTester: any
 
   constructor(node: any, options: any) {
     super(node, options)
     this.identifierNodeTester = this.createNodeTester('identifier', node.name, this.options) as IndentifierNodeTester
 
-    // perhaps use TypeNodeTester instead!?
-    this.variableTester = this.createDetailsTester('variable', node, options) as VariableTester
+    // TODO: perhaps use NodeTypeTester
+    if (node.type) {
+      this.typeTester = this.createDetailsTester('type', node.type, options) // as TypeTester
+    }
   }
 
   /**
    * TODO: perhaps use TypeNodeTester instead!
    */
   get varType(): string {
-    return this.variableTester.matches() || 'unknown'
+    const detectedType = this.typeTester ? this.typeTester.matches() : undefined
+    return detectedType || 'unknown'
   }
 
   /**

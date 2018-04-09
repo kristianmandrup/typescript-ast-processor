@@ -25,7 +25,7 @@ describe('variable declaration', () => {
           logObj('info', info)
           expect(info).toEqual({
             name: '_a',
-            varType: 'unknown'
+            varType: 'number'
           })
         })
       })
@@ -38,7 +38,7 @@ describe('variable declaration', () => {
           logObj('info', info)
           expect(info).toEqual({
             name: '_b',
-            varType: 'unknown'
+            varType: 'boolean'
           })
         })
       })
@@ -51,7 +51,7 @@ describe('variable declaration', () => {
           logObj('info', info)
           expect(info).toEqual({
             name: '_c',
-            varType: 'unknown'
+            varType: 'string'
           })
         })
       })
