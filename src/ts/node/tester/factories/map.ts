@@ -101,6 +101,8 @@ export const factories = {
   'lit.array': literals.createArrayLiteralTester,
   'lit.object': literals.createObjectLiteralTester,
   'object.properties': literals.object.createPropertyNodesTester,
+  'object.propAssign': literals.object.createPropertyAssignmentTester,
+
 
   // expressions
   'expr.binary': expressions.binary.createBinaryExpressionNodeTester,

@@ -7,3 +7,9 @@ export {
   createPropertyNodesTester,
   PropertyNodesTester
 } from './properties'
+
+export {
+  createPropertyAssignmentTester,
+  PropertyAssignmentNodeTester
+} from './property-assignment'
+

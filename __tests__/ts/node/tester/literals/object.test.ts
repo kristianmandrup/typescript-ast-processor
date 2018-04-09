@@ -19,7 +19,7 @@ describe('object literal', () => {
       }
     }
 
-    describe.only('info()', () => {
+    describe('info()', () => {
       it('collects correct info', () => {
         const info = tester.info()
         logObj('info', info)

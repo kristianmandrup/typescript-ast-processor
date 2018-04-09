@@ -56,10 +56,18 @@ export class PropertyNodesTester extends BaseNodeTester {
       this.testPropertyItems(query)
   }
 
+  /**
+   * Test properties
+   * @param query
+   */
   testProperties(query: any) {
     this.propertiesTester.test(query.properties)
   }
 
+  /**
+   * Test specifics (such as names and types) of object properties
+   * @param query
+   */
   testPropertyItems(query: any) {
     return this.properties.reduce((acc: any, prop: ts.PropertyAssignment) => {
       const propTester = this.createPropertyAssignmentTester(prop)

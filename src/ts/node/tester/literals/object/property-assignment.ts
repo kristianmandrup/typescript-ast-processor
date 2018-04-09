@@ -7,10 +7,10 @@ import { IndentifierNodeTester, createIndentifierNodeTester } from '../../identi
  * @param options
  */
 export function createPropertyAssignmentTester(node: any, options: any) {
-  return new PropertyAssignmentTester(node, options)
+  return new PropertyAssignmentNodeTester(node, options)
 }
 
-export class PropertyAssignmentTester extends BaseNodeTester {
+export class PropertyAssignmentNodeTester extends BaseNodeTester {
   identifierTester: IndentifierNodeTester // INodeTester // IndentifierNodeTester
 
   constructor(node: any, options: any) {
@@ -18,8 +18,20 @@ export class PropertyAssignmentTester extends BaseNodeTester {
     this.identifierTester = this.createNodeTester('identifier', node.name, this.options) as IndentifierNodeTester
   }
 
+  /**
+   * id of identifier node
+   */
   get name() {
     return this.identifierTester.name
+  }
+
+  /**
+   * Node info
+   */
+  info() {
+    return {
+      name: this.name
+    }
   }
 
   /**
