@@ -1,9 +1,10 @@
 import { BaseNodeTester } from '../base';
 import {
-  IndentifierNodeTester,
-  createIndentifierNodeTester
+  IndentifierNodeTester
 } from '../identifier';
-import { createVariableTester, VariableTester } from '../../details/variable';
+import {
+  VariableTester
+} from '../../details/variable';
 
 /**
  * Factory to create a VariableDeclaration tester

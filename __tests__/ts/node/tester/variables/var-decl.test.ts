@@ -8,27 +8,37 @@ describe('variable declaration', () => {
   context('var-decls file', () => {
     const testers = testerFor({
       fileName: 'var-decl',
-      type: 'var-decl',
-      indexMap: ['number', 'boolean', 'string', 'object', 'array']
+      type: 'variables',
+      factoryName: 'decl.var',
+      indexMap: ['number', 'boolean', 'string', 'object', 'array'],
+      traverseToIndex(index: number) {
+        return (statements: any[]) => {
+          return statements[index].declarationList.declarations[0]
+        }
+      }
     })
 
     context('number', () => {
       describe('info()', () => {
         it('collects correct info', () => {
           const info = testers.number.info()
-          logObj(info)
+          logObj('info', info)
           expect(info).toEqual({
+            name: '_a',
+            varType: 'unknown'
           })
         })
       })
     })
 
-    context('number', () => {
+    context('boolean', () => {
       describe('info()', () => {
         it('collects correct info', () => {
           const info = testers.boolean.info()
-          logObj(info)
+          logObj('info', info)
           expect(info).toEqual({
+            name: '_b',
+            varType: 'unknown'
           })
         })
       })
@@ -38,8 +48,10 @@ describe('variable declaration', () => {
       describe('info()', () => {
         it('collects correct info', () => {
           const info = testers.string.info()
-          logObj(info)
+          logObj('info', info)
           expect(info).toEqual({
+            name: '_c',
+            varType: 'unknown'
           })
         })
       })
@@ -49,8 +61,10 @@ describe('variable declaration', () => {
       describe('info()', () => {
         it('collects correct info', () => {
           const info = testers.object.info()
-          logObj(info)
+          logObj('info', info)
           expect(info).toEqual({
+            name: '_d',
+            varType: 'unknown'
           })
         })
       })
@@ -60,12 +74,13 @@ describe('variable declaration', () => {
       describe('info()', () => {
         it('collects correct info', () => {
           const info = testers.array.info()
-          logObj(info)
+          logObj('info', info)
           expect(info).toEqual({
+            name: '_e',
+            varType: 'unknown'
           })
         })
       })
     })
-
   })
 })

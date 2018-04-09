@@ -88,6 +88,7 @@ export function testerFor(options: any = {}): any {
     statementIndex,
     indexMap,
     traverse,
+    traverseToIndex,
     traversers = {},
     type = 'class'
   } = options
@@ -104,24 +105,28 @@ export function testerFor(options: any = {}): any {
   }
 
   // console.log('testerFor', { testerFor, options, factory, factories })
+  if (indexMap && indexMap.length > 0) {
+    return indexMap.reduce((acc: any, label: string, index: number) => {
+      const traverse = traversers[label] || traverseToIndex && traverseToIndex(index)
+
+      const tester = resolveTester(srcFile, {
+        factory,
+        index,
+        traverse
+      })
+      acc[label] = tester
+      return acc
+    }, {})
+  }
 
   if (!isNaN(statementIndex) || traverse) {
-    // console.log('resolve')
     return resolveTester(srcFile, {
       factory,
       index: statementIndex,
       traverse
     })
   }
-  if (indexMap && indexMap.length > 0 && traversers && Object.keys(traversers).length > 0) {
-    return indexMap.map((label: string, index: number) => {
-      return resolveTester(srcFile, {
-        factory,
-        index: statementIndex,
-        traverse: traversers[label]
-      })
-    })
-  }
+
   console.error({ options })
   throw new Error('Invalid options. Missing: statementIndex, traverse or indexMap')
 }
