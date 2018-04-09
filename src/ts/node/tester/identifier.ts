@@ -1,3 +1,4 @@
+import * as ts from 'typescript'
 import { BaseNodeTester } from './base'
 import {
   testName,
@@ -28,8 +29,15 @@ export class IndentifierNodeTester extends BaseNodeTester {
     this.identifierTester = this.createDetailsTester('identifier', this.idNode, options)
   }
 
-  protected idNodeFor(node: any) {
-    return node.declarationList ? node.declarationList.declarations[0] : node
+  /**
+   * TODO: make it work for any kind of identifiable node!
+   * @param node
+   */
+  protected idNodeFor(node: any): any {
+    if (ts.isArrowFunction(node)) {
+      return this.idNodeFor(node.parent)
+    }
+    return node.declarationList ? node.declarationList.declarations[0] : (node.name || node)
   }
 
   info() {

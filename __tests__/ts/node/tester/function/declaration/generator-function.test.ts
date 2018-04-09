@@ -11,8 +11,9 @@ describe('function', () => {
     context('generator-function file', () => {
       const tester: any = testerFor({
         fileName: 'generator-function',
-        type: 'function',
-        category: 'declaration',
+        type: 'function/declaration',
+        factoryName: 'function.decl',
+        statementIndex: 0
       })
 
       describe.skip('not', () => {
@@ -29,7 +30,7 @@ describe('function', () => {
       describe('info()', () => {
         it('collects correct info', () => {
           const info = tester.info()
-          logObj(info)
+          logObj('info', info)
           expect(info).toEqual({
           })
         })

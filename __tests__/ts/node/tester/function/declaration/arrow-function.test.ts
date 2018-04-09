@@ -11,8 +11,11 @@ describe('function', () => {
     context('arrow-function file', () => {
       const tester: any = testerFor({
         fileName: 'arrow-var-function',
-        type: 'function',
-        category: 'declaration'
+        type: 'function/declaration',
+        factoryName: 'function.decl',
+        traverse(statements: any[]) {
+          return statements[0].declarationList.declarations[0].initializer
+        }
       })
 
       describe.skip('not', () => {
@@ -29,8 +32,36 @@ describe('function', () => {
       describe('info()', () => {
         it('collects correct info', () => {
           const info = tester.info()
-          logObj(info)
+          logObj('info', info)
           expect(info).toEqual({
+            "name": "plus",
+            "parameters": {
+              names: [
+                'a',
+                'b'
+              ],
+              types: [
+                'number',
+                'number'
+              ],
+              items: [
+                {
+                  name: 'a',
+                  type: 'number'
+                },
+                {
+                  name: 'b',
+                  type: 'number'
+                }
+              ]
+            },
+            "returnType": "number",
+            "returnCount": 1,
+            "lastStatementReturn": false,
+            "lastStatementImplicitReturn": true,
+            "exported": false,
+            "arrow": true,
+            "nestedLevels": 0
           })
         })
       })

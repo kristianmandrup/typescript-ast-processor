@@ -27,5 +27,15 @@ export function createTester(factoryName: string, node: any, options: any = {}):
   //   factoryName,
   //   factoryMap
   // })
-  return callFun(testerFactory, node, options)
+  if (!testerFactory) {
+    const msg = 'Could not find or create tester via factory'
+    console.error(msg, {
+      factory: factoryName,
+      factoryMap
+    })
+    throw new Error('Could not find or create tester via factory')
+  }
+
+  const tester = callFun(testerFactory, node, options)
+  return tester
 }

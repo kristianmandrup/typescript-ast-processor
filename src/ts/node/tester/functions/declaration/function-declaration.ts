@@ -2,10 +2,7 @@ import * as ts from 'typescript'
 import {
   isEmpty
 } from '../../../../util'
-import { INodeTester } from '../../base';
-import {
-  IndentifierNodeTester
-} from '../../identifier'
+import { INodeTester, BaseNodeTester } from '../../base';
 import { IDetailsTester } from '../../../details/base';
 
 export function isFunctionLike(node: any) {
@@ -21,8 +18,9 @@ export function createFunctionTester(node: any, options: any = {}) {
  * For function, arrow function or method
  * TODO: Use BlockStatementTester for adding nesting levels support and testing function block
  */
-export class FunctionLikeNodeTester extends IndentifierNodeTester {
+export class FunctionLikeNodeTester extends BaseNodeTester {
   functionTester: IDetailsTester
+  identifierNodeTester: any
 
   parameterNodesTester: INodeTester
   typeNodeTester: any // INodeTester
@@ -34,6 +32,12 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
       type,
       parameters
     } = node
+
+    // NOTE: anonymous function has no ID
+    if (this.hasId(node)) {
+      this.identifierNodeTester = this.createNodeTester('identifier', node, options)
+    }
+
     if (parameters) {
       this.parameterNodesTester = this.createNodeTester('function.parameters', parameters, options)
     } else {
@@ -47,6 +51,21 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
       this.typeNodeTester = this.createNodeTester('type', type, options)
     }
     this.blockNodeTester = this.createNodeTester('block', this.node, options)
+  }
+
+  /**
+   * TODO: Really test if this function is anonomous or NOT
+  */
+  hasId(node: any) {
+    return true
+  }
+
+  get name() {
+    return this.identifierNodeTester ? this.identifierNodeTester.name : undefined
+  }
+
+  get isExported() {
+    return this.identifierNodeTester ? this.identifierNodeTester.isExported : undefined
   }
 
   /**
@@ -74,17 +93,20 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
    * Collect all info for function node
    */
   info() {
-    return {
-      name: this.name,
+    const obj: any = {
       parameters: this.parameters,
       returnType: this.returnType,
       returnCount: this.returnCount,
       lastStatementReturn: this.isLastStatementReturn,
-      exported: this.isExported,
       arrow: this.isArrow,
       generator: this.isGenerator,
       nestedLevels: this.nestedLevels
     }
+    if (this.name) {
+      obj.name = this.name
+      obj.exported = this.isExported
+    }
+    return obj
   }
 
   get parameters() {
@@ -103,6 +125,11 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
    */
   get isGenerator(): boolean {
     return this.functionTester.is('generator')
+  }
+
+  testName(query: any) {
+    if (!query) return true
+    return this.identifierNodeTester ? this.identifierNodeTester.testName(query) : false
   }
 
   /**
@@ -145,6 +172,7 @@ export class FunctionLikeNodeTester extends IndentifierNodeTester {
    * @param query
    */
   testParameters(query: any) {
-    return this.parameterNodesTester.test(query)
+    if (!query) return true
+    return this.parameterNodesTester ? this.parameterNodesTester.test(query) : false
   }
 }

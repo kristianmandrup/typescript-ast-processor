@@ -6,13 +6,13 @@ import {
   log
 } from '../_imports'
 
-describe('function', () => {
+describe('function declaration', () => {
   describe('basic', () => {
     context('basic-function file', () => {
       const tester: any = testerFor({
         fileName: 'basic-function',
-        type: 'function',
-        category: 'declaration',
+        type: 'function/declaration',
+        factoryName: 'function.decl',
         statementIndex: 0
       })
       // export function minus(a: number, b: number) {
@@ -33,7 +33,7 @@ describe('function', () => {
       describe('info()', () => {
         it('collects correct info', () => {
           const info = tester.info()
-          logObj(info)
+          logObj('info', info)
           expect(info).toEqual({
             "name": "minus",
             "parameters": {
@@ -70,18 +70,20 @@ describe('function', () => {
 
       describe('testParameters(query)', () => {
         context('has matching parameter name', () => {
+
+          // TODO: Fix
+          // WTF are the query parameters!?
           it.only('anyOf: name - true ', () => {
             const res = tester.testParameters(query.parameters)
-            log('should match', { res })
-            expect(res).not.toBe(false)
-            // expect(res.result).toBe(true)
+            log('should match', res)
+            expect(res.result).toBe(true)
           })
         })
 
         context.skip('has no matching parameters for unknown', () => {
           it('anyOf: name - true ', () => {
             const res = tester.testParameters(query.parameters)
-            log('no match', { res })
+            log('no match', res)
             expect(res).toBe(false)
           })
         })

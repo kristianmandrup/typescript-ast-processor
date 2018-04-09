@@ -6,12 +6,14 @@ import {
   log,
 } from '../_imports'
 
-describe('function', () => {
-  describe('generator', () => {
-    context('generator-function file', () => {
+describe('function declaration', () => {
+  describe('async', () => {
+    context('async-function file', () => {
       const tester: any = testerFor({
         fileName: 'async-function',
-        type: 'function'
+        type: 'function/declaration',
+        factoryName: 'function.decl',
+        statementIndex: 0
       })
 
       describe.skip('not', () => {
@@ -28,7 +30,7 @@ describe('function', () => {
       describe('info()', () => {
         it('collects correct info', () => {
           const info = tester.info()
-          logObj(info)
+          logObj('info', info)
           expect(info).toEqual({
           })
         })
