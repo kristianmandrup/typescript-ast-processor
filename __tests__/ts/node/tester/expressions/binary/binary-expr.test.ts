@@ -25,7 +25,7 @@ describe('expressions: binary', () => {
         logObj('info', info)
         const expected = {
           "occurences": {
-            "parenthesised": 0,
+            "parenthesised": 2,
             "assignment": 0,
             "powerAssignment": 0,
             "multiplyAssignment": 0,
@@ -44,8 +44,8 @@ describe('expressions: binary', () => {
             "notEq": 0,
             "same": 0,
             "notSame": 0,
-            "or": 0,
-            "and": 0,
+            "or": 2,
+            "and": 2,
             "binaryOr": 0,
             "binaryAnd": 0,
             "instanceOf": 0

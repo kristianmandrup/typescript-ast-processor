@@ -18,9 +18,11 @@ export class FunctionCallNodeTester extends BaseNodeTester {
 
   constructor(node: any, options: any) {
     super(node, options)
-    this.identifierNodeTester = this.createNodeTester('identifier', node, options)
-    if (node.arguments) {
-      this.argumentsTester = this.createNodeTester('arguments', node.arguments, options)
+    const idNode = node.expression || node
+    this.identifierNodeTester = this.createNodeTester('identifier', idNode, options)
+    const argumentNodes = node.arguments
+    if (argumentNodes) {
+      this.argumentsTester = this.createNodeTester('function.arguments', argumentNodes, options)
     }
   }
 
@@ -34,9 +36,14 @@ export class FunctionCallNodeTester extends BaseNodeTester {
   info() {
     return {
       name: this.name,
-      parameters: this.argumentsTester.info(),
+      arguments: this.argumentsInfo,
     }
   }
+
+  get argumentsInfo() {
+    return this.argumentsTester.info()
+  }
+
 
   test(query: any) {
     return true

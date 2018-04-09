@@ -23,9 +23,11 @@ export function createArgumentTester(node: any, options: any = {}) {
 /**
  * Argument tester
  * An argument can be pretty much anything... but mostly an identifier, literal or arrow function
+ *
+ * Should be/use generic NodeTester instead
  */
 export class ArgumentTester extends BaseNodeTester {
-  identifierNodeTester: INodeTester // IndentifierNodeTester
+  identifierNodeTester: any // INodeTester // IndentifierNodeTester
 
   /**
    * Create Argument tester
@@ -34,15 +36,25 @@ export class ArgumentTester extends BaseNodeTester {
    */
   constructor(node: any, options: any) {
     super(node, options)
-    this.identifierNodeTester = this.createNodeTester('identifier', this.node.name, options)
+    // TODO: make generic to allow for any kind of expression
+    if (node.name) {
+      this.identifierNodeTester = this.createNodeTester('identifier', node.name, options)
+    }
+  }
+
+  get name() {
+    return this.identifierNodeTester ? this.identifierNodeTester.name : undefined
   }
 
   /**
    * Collect info for Argument node
    */
   info() {
-    return {
-      // name: this.name
+    let obj: any = {
     }
+    if (this.name) {
+      obj.name = this.name
+    }
+    return obj
   }
 }

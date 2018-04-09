@@ -4,5 +4,5 @@ async function prompt(file: string) {
   return await fs.readFile(file)
 }
 
-prompt('label')
+await prompt('label')
 

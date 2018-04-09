@@ -17,16 +17,23 @@ export function isArguments(nodes: any[], options: any = {}) {
       nodes
     })
   }
+  return true
 }
 
 export function createArgumentsTester(node: any, options: any = {}): ArgumentsTester | undefined {
-  if (!isArguments(node, options)) return
+  if (!isArguments(node, options)) {
+    console.error('Not an arguments node', {
+      node
+    })
+    return
+  }
   return new ArgumentsTester(node, options)
 }
 
 export class ArgumentsTester extends BaseNodeTester {
   // argument: ArgumentTester
   nodes: any[]
+  _items: any[]
 
   constructor(nodes: any, options: any) {
     super(nodes, options)
@@ -40,11 +47,19 @@ export class ArgumentsTester extends BaseNodeTester {
     return this.nodes
   }
 
-  createArgumentTester(argumentNode: any) {
+  createArgumentTester(argumentNode: any): any {
     return this.createNodeTester('function.argument', argumentNode, this.options)
   }
 
+  get items() {
+    this._items = this._items || this.arguments.map(argumentNode => this.createArgumentTester(argumentNode).info())
+    return this._items
+  }
+
   info() {
-    return this.arguments.map(argumentNode => this.createArgumentTester(argumentNode).info())
+    return {
+      items: this.items,
+      count: this.items.length
+    }
   }
 }

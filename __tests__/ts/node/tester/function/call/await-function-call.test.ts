@@ -9,15 +9,27 @@ describe('function call', () => {
     context('await-function-call file', () => {
       const tester: any = testerFor({
         fileName: 'await-function-call',
-        type: 'function',
-        category: 'call'
+        type: 'function/call',
+        factoryName: 'function.call',
+        // statementIndex: 2
+        traverse(statements: any[]) {
+          const awaitExpr = statements[2].expression
+          return awaitExpr.expression
+        }
       })
 
       describe('info()', () => {
         it('collects correct info', () => {
           const info = tester.info()
-          logObj(info)
+          logObj('info', info)
           expect(info).toEqual({
+            "name": "prompt",
+            "arguments": {
+              "items": [
+                {}
+              ],
+              "count": 1
+            }
           })
         })
       })
