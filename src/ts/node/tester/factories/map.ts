@@ -19,7 +19,8 @@ const {
   conditional,
   loop,
   error,
-  block
+  block,
+  expression
 } = statements
 
 const funCall = functions.call
@@ -74,6 +75,7 @@ export const factories = {
   // statements
   statements: statements.statements.createStatementsTester,
   statement: statement.createStatementTester,
+  expression: expression.createExpressionStatementNodeTester,
 
   // conditional
   'condition.if': conditional.ifThenElse.createIfThenElseTester,

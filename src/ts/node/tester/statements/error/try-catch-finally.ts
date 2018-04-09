@@ -25,6 +25,20 @@ export class TryCatchFinallyTester extends BlockStatementNodeTester {
     return Boolean(this.finallyBlock)
   }
 
+  testCatch(query: any) {
+    return this.hasCatch === query
+  }
+
+  testFinally(query: any) {
+    return this.hasFinally === query
+  }
+
+  test(query: any) {
+    return super.test(query) &&
+      this.testCatch(query.catch) &&
+      this.testFinally(query.finally)
+  }
+
   info() {
     return {
       ...super.info(),
