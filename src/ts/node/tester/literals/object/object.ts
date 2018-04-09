@@ -18,10 +18,28 @@ export function createObjectLiteralTester(node: any, options: any) {
  */
 export class ObjectLiteralTester extends BaseNodeTester {
   propertiesNodeTester: INodeTester
+  properties: any[] = []
 
   constructor(node: any, options: any) {
     super(node, options)
-    this.propertiesNodeTester = this.createNodeTester('properties', node.properties, this.options)
+    const properties = node.properties || []
+    this.properties = properties
+    if (this.hasProperties) {
+      this.propertiesNodeTester = this.createNodeTester('object.properties', properties, this.options)
+    }
+  }
+
+  get hasProperties() {
+    return this.propertyCount > 0
+  }
+
+  get propertyCount() {
+    return this.properties.length
+  }
+
+  get propertiesInfo() {
+    if (!this.hasProperties) return []
+    return this.propertiesNodeTester.info()
   }
 
   /**
@@ -29,6 +47,13 @@ export class ObjectLiteralTester extends BaseNodeTester {
    * @param query
    */
   test(query: any): any {
-    return this.propertiesNodeTester.test(query.id)
+    if (!this.propertiesNodeTester) return false
+    return this.propertiesNodeTester.test(query.properties)
+  }
+
+  info() {
+    return {
+      properties: this.propertiesInfo
+    }
   }
 }

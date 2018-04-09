@@ -8,15 +8,34 @@ describe('object literal', () => {
   context('object file', () => {
     const tester = testerFor({
       fileName: 'object',
-      type: 'object'
+      type: 'literals',
+      factoryName: 'lit.object',
+      statementIndex: 0
     })
 
-    describe('info()', () => {
+    const query = {
+      properties: {
+        anyOf: ['name']
+      }
+    }
+
+    describe.only('info()', () => {
       it('collects correct info', () => {
         const info = tester.info()
-        logObj(info)
+        logObj('info', info)
         expect(info).toEqual({
+          properties: [
+            'name',
+            'coords'
+          ]
         })
+      })
+    })
+
+    describe('test(query)', () => {
+      it('queries object for properties', () => {
+        const result = tester.test(query)
+        expect(result).toBeTruthy()
       })
     })
   })

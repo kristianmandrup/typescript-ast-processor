@@ -30,17 +30,23 @@ export function createArrayLiteralTester(node: any, options: any) {
  *  - initializer - which can be an ArrayLiteral itself!
  */
 export class ArrayLiteralTester extends BaseNodeTester {
-  nodes: any
+  items: any[]
   itemsTester: NodesTester
 
   constructor(node: any, options: any) {
     super(node, options)
-    this.nodes = node.elements
-    this.itemsTester = this.createNodeTester('list', this.nodes, this.options) as NodesTester
+    const items = node.elements || []
+    this.items = items
+    if (this.hasItems) {
+      this.itemsTester = this.createNodeTester('list', items, options) as NodesTester
+    }
   }
 
-  get items() {
-    return this.nodes
+  /**
+   * if array has any items
+   */
+  get hasItems() {
+    return this.itemsCount > 0
   }
 
   /**
@@ -52,10 +58,21 @@ export class ArrayLiteralTester extends BaseNodeTester {
     return createLiteralTester(itemNode, this.options)
   }
 
+  /**
+   * number of items in array
+   */
   get itemsCount() {
     return this.items.length
   }
 
+  /**
+   * Basic info on array
+   * TODO: would be nice to add types info on items:
+   * - literals
+   * - id refs
+   * - functions
+   * - other
+   */
   info() {
     return {
       count: this.itemsCount
@@ -74,9 +91,9 @@ export class ArrayLiteralTester extends BaseNodeTester {
    */
   test(query: any) {
     query = query.count || query
-    return this.testCount(query, this.itemsCount) &&
-      this.testItems(query) &&
-      this.testReduceItems(query)
+    return this.testCount(query, this.itemsCount) // &&
+    // this.testItems(query) &&
+    // this.testReduceItems(query)
   }
 
   /**

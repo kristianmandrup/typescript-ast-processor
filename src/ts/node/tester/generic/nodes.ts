@@ -26,7 +26,7 @@ export class NodesTester extends BaseNodeTester {
   constructor(node: any, options: any) {
     super(node, options)
     const key = options.key
-    const items = options.items
+    const items = Array.isArray(node) ? node : options.items
     if (items) {
       this.nodes = items
     } else if (key) {
