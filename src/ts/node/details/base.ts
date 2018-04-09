@@ -240,7 +240,6 @@ export class BaseDetailsTester extends Loggable {
   matches(options: any = {}): any {
     const filterMethod: string = options.method || 'find'
     const defaultFind = (name: string) => {
-      // console.log('is?', name)
       return this.is(name, options)
     }
     // this.log('matches', {

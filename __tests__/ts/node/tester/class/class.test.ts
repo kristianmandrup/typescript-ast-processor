@@ -95,9 +95,6 @@ describe('class', () => {
 
     it('collects correct info', () => {
       const info = tester.info()
-      console.log({
-        info
-      })
       expect(info.abstract).toBeTruthy()
       expect(info.exported).toBeTruthy()
       expect(info.name).toBe('Abs')

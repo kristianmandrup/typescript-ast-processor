@@ -143,6 +143,8 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
     let list: string[] = this.nodeTypes.categories[key] || []
     const resolveTypeCategoryFun = this.resolveTypeCategory.bind(this)
     if (isEmpty(list)) return []
+
+    // TODO: test that this is the way...
     list = Array.isArray(list) ? list : Object.keys(list)
     return flatten(list.map(resolveTypeCategoryFun))
   }
