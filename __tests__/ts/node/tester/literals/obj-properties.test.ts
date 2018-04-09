@@ -9,7 +9,7 @@ function declaration(statements: any[], index: number = 0, declIndex: number = 0
 }
 
 describe('object literal properties', () => {
-  context('object file', () => {
+  context('object file: properties', () => {
     const tester = testerFor({
       fileName: 'obj-props',
       type: 'literals',
@@ -24,16 +24,16 @@ describe('object literal properties', () => {
         const info = tester.info()
         logObj('info', info)
         expect(info).toEqual({
-          properties: [
-            'name',
-            'coords'
+          count: 1,
+          propertyNames: [
+            'name'
           ]
         })
       })
     })
   })
 
-  context('object file', () => {
+  context('object file: property assignment', () => {
     const tester = testerFor({
       fileName: 'obj-props',
       type: 'literals',
@@ -44,6 +44,7 @@ describe('object literal properties', () => {
       }
     })
 
+    // query type as well?
     const query = {
       properties: {
         anyOf: ['name']
@@ -55,10 +56,7 @@ describe('object literal properties', () => {
         const info = tester.info()
         logObj('info', info)
         expect(info).toEqual({
-          properties: [
-            'name',
-            'coords'
-          ]
+          name: 'name'
         })
       })
     })

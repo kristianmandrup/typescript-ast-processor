@@ -6,7 +6,7 @@ import {
 export class Typer {
   nodeTypes: any
 
-  constructor(nodeTypes: any) {
+  constructor(nodeTypes: any = {}) {
     this.nodeTypes = Typer.nodeTypes || nodeTypes
   }
 

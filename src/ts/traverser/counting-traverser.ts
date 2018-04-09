@@ -23,26 +23,7 @@ export interface INodeVisitCounter {
   types: any
 }
 
-export class CountingASTNodeTraverser extends ASTNodeTraverser {
-  nodeTypes: {
-    toCount: string[],
-    fnToCount: Function,
-    toExcludeFromVisit: string[],
-    categories: {
-      toCount: [
-        // always count:
-        'statement',
-        'declaration',
-        'expression'
-        // 'condition'
-      ],
-      toExcludeFromVisit: string[]
-    }
-  }
-
-  fns: any // functions map
-  _nodeTypesToCheckFor: string[]
-
+const defaults = {
   categoryMap: {
     'switch': [
       'SwitchStatement'
@@ -58,7 +39,7 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
     ],
     'expression': [
       'Expression'
-    ]
+    ],
     'statement': [
       'Statement'
     ],
@@ -67,6 +48,21 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
       // 'DeclarationStatement'
     ]
   }
+}
+
+export class CountingASTNodeTraverser extends ASTNodeTraverser {
+  _nodeTypes: {
+    toCount?: string[],
+    fnToCount?: Function,
+    toExcludeFromVisit?: string[],
+    categories: any
+  }
+
+
+  fns: any // functions map
+  _nodeTypesToCheckFor: string[]
+
+  categoryMap: any
 
   // registry used to count occurences of each type
   counter: INodeVisitCounter = {
@@ -77,6 +73,25 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
     }
   }
 
+  /**
+   * Initialize
+   * @param options
+   */
+  init(options: any = {}) {
+    this._nodeTypes = {
+      categories: {
+        toCount: [
+          // always count:
+          'statement',
+          'declaration',
+          'expression'
+          // 'condition'
+        ]
+      }
+    }
+    this.categoryMap = defaults.categoryMap
+    super.init(options)
+  }
 
   /**
    * query:
@@ -89,9 +104,10 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
    * @param query
    */
   parseQuery(query: any = {}) {
-    const {
+    let {
       nodeTypes
     } = query
+    nodeTypes = nodeTypes || {}
     let categories = nodeTypes.categories
     nodeTypes.categories = categories || {}
     if (query.exclude) {
@@ -99,7 +115,7 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
       categories.toExcludeFromVisit.concat(query.exclude)
       query.nodeTypes.categories = categories
     }
-    this.nodeTypes = deepmerge(this.nodeTypes, nodeTypes)
+    this._nodeTypes = deepmerge(this._nodeTypes || {}, nodeTypes)
     this.resolveTypeCategories()
     return this
   }
@@ -111,8 +127,10 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
   protected resolveTypeCategories(): string[] | undefined {
     const categories = this.nodeTypes.categories
     if (isEmpty(categories)) return
-    return Object.keys(categories).map(key => {
+    const categoryNames = Object.keys(categories)
+    return categoryNames.map(key => {
       const resolvedList = this.resolveCategoryKey(key)
+      this.nodeTypes[key] = this.nodeTypes[key] || []
       return this.nodeTypes[key].concat(resolvedList)
     })
   }
@@ -122,8 +140,11 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
    * @param key
    */
   protected resolveCategoryKey(key: string) {
-    const list: string[] = this.nodeTypes.categories[key]
-    return isEmpty(list) ? [] : flatten(list.map(this.resolveTypeCategory))
+    let list: string[] = this.nodeTypes.categories[key] || []
+    const resolveTypeCategoryFun = this.resolveTypeCategory.bind(this)
+    if (isEmpty(list)) return []
+    list = Array.isArray(list) ? list : Object.keys(list)
+    return flatten(list.map(resolveTypeCategoryFun))
   }
 
   /**

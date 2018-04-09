@@ -41,7 +41,8 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
       })
     }
 
-    this.occurenceTester = this.createNodeTester('occurrence', node, options)
+    this.occurenceTester = this.createNodeTester('occurrences', node, options)
+
     if (!node) {
       this.error(`BaseTester: Missing node to test`, {
         node,

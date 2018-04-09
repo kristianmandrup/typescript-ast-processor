@@ -113,6 +113,6 @@ export const factories = {
   'decorator.member': decorators.member.createMemberDecoratorTester,
   'decorator.param': decorators.parameter.createParameterDecoratorTester,
 
-  occurences: occurrences.createNodeOccurrenceTester,
+  occurrences: occurrences.createNodeOccurrenceTester,
   identifier: identifier.createIndentifierNodeTester
 }

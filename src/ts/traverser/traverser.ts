@@ -53,16 +53,16 @@ export class ASTNodeTraverser extends Loggable {
   init(options: any = {}) {
     this.mode = options.mode || this.mode
     this.query = options.query
-    this.parseQuery(options.query)
     this.startNode = options.node
     this.fileName = options.fileName
-    this.what = new What(this._nodeTypes)
-    this.typer = new Typer(this._nodeTypes)
+    this.typer = new Typer()
+    this.what = new What(this.nodeTypes)
     this.factory = new VisitorFactory(options)
     this.visitorIteratorMethodName = options.visitorIteratorMethodName || 'map'
     this.registry = options.visitors || {}
     const createVisitorIterator = options.createVisitorIterator || this._createVisitorIterator
     this._createVisitorIterator = createVisitorIterator.bind(this)
+    this.parseQuery(options.query)
   }
 
   /**
@@ -90,7 +90,7 @@ export class ASTNodeTraverser extends Loggable {
   /**
    * The node types available for the typer
    */
-  protected get _nodeTypes() {
+  protected get nodeTypes() {
     return this.typer.nodeTypes
   }
 

@@ -44,7 +44,7 @@ export class NodeOccurrenceTester {
    *
    * @param traverseQuery
    */
-  public countInTree(query: any): number {
+  countInTree(query: any): number {
     return this.createNodeTraverser({
       ...this.options,
       query,
@@ -52,11 +52,11 @@ export class NodeOccurrenceTester {
     }).counter.visited
   }
 
-  public countOccurrence(options: any = {}): number {
-    const {
+  countOccurrence(options: any = {}): number {
+    let {
       nodeTypes
     } = options
-
+    nodeTypes = nodeTypes || {}
     if (!options.includeAll) {
       // default categories to exclude
       nodeTypes.exclude = nodeTypes.exclude || ['declaration']

@@ -33,9 +33,24 @@ export class PropertyNodesTester extends BaseNodeTester {
     return this.properties.length
   }
 
+  get propertiesInfo() {
+    return this.properties.map((prop: ts.PropertyAssignment) => {
+      return this.createPropertyAssignmentTester(prop).info()
+    }, {})
+  }
+
+  get propertyNames() {
+    return this.properties.map((prop: ts.PropertyAssignment) => {
+      return this.createPropertyAssignmentTester(prop).name
+    }, {})
+  }
+
+
   info() {
     return {
-      count: this.propertiesCount
+      count: this.propertiesCount,
+      propertyNames: this.propertyNames,
+      // properties: this.propertiesInfo
     }
   }
 

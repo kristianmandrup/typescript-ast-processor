@@ -1,18 +1,15 @@
 import * as ts from 'typescript'
 import { Loggable } from '../../loggable';
-import { NodeTester } from '../../node/tester';
 import {
   callFun
 } from '../../util'
 import { DataCollector } from '../../collector';
 
 export class BaseFactory extends Loggable {
-  nodeTester: NodeTester
   collector: DataCollector
 
   constructor(options: any) {
     super(options)
-    this.nodeTester = new NodeTester(options)
     this.collector = options.collector
   }
 
@@ -21,7 +18,7 @@ export class BaseFactory extends Loggable {
   }
 
   isNamed(node: any, name: string | RegExp) {
-    if (!this.nodeTester.test(node, 'name', 'Identifier')) return false
+    if (!node.name) return false
     const nodeName = node.name.getText()
     return this.nameMatch(nodeName, name)
   }
@@ -35,7 +32,6 @@ export class BaseFactory extends Loggable {
     } = details
 
     const {
-      test, // object containing defs of tests (guards) to perform
       cbs
     } = options
 
@@ -47,12 +43,6 @@ export class BaseFactory extends Loggable {
     return {
       [label]: (node: ts.MethodSignature, state: any = {}, opts: any = {}) => {
         if (name && !this.isNamed(node, name)) return
-
-        // create test
-        const nodeTest = this.nodeTester.create(node, test)
-        const testKeys = Object.keys(test)
-        // perform nodeTest for every key (nodeProp) of propMap
-        if (nodeTest && !testKeys.every(nodeTest)) return
 
         // custom cb
         if (fnHandler && !fnHandler(details, node, state, opts)) return
@@ -77,4 +67,3 @@ export class BaseFactory extends Loggable {
     }
   }
 }
-
