@@ -1,5 +1,4 @@
 import {
-  node,
   testerFor,
   query
 } from '../_imports'

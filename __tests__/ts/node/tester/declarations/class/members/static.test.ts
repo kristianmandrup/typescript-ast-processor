@@ -12,7 +12,7 @@ describe('class', () => {
     context('members/static file', () => {
       const tester = testerFor({
         fileName: 'members/static',
-        type: 'class',
+        type: 'declarations/class',
         factoryName: 'class.method',
         traverse: (statements: any[]) => {
           // find first static

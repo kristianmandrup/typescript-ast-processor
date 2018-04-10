@@ -11,7 +11,7 @@ describe('class', () => {
     context('members/none file', () => {
       const tester = testerFor({
         fileName: 'members/methods',
-        type: 'class',
+        type: 'declarations/class',
         factoryName: 'class.method',
         traverse: (statements: any[]) => {
           // find first getter

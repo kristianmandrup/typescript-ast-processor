@@ -1,6 +1,3 @@
-import * as ts from 'typescript'
-import { BaseNodeTester } from '../../../base'
-
 import {
   createGetAccessorTester
 } from './getter'

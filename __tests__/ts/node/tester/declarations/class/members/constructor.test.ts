@@ -13,7 +13,7 @@ describe('class', () => {
       context('members/constructor file', () => {
         const tester = testerFor({
           fileName: 'members/constructor',
-          type: 'class',
+          type: 'declarations/class',
           factoryName: 'class.constructor',
           traverse: (statements: any[]) => {
             // find constructor

@@ -12,8 +12,8 @@ describe('class', () => {
     describe('all', () => {
       context('none file', () => {
         const tester = testerFor({
-          fileName: 'none',
-          type: 'members',
+          fileName: 'members/none',
+          type: 'declarations/class',
           traverse: (statements: any[]) => {
             // find first getter
             return statements[0].members[1]

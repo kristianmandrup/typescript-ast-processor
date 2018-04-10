@@ -1,11 +1,8 @@
 import { ExpressionWithTypeArguments, Identifier } from 'typescript'
-import { IndentifierNodeTester } from '../../identifier';
-import {
-  toList
-} from '../../../../util'
+import { IndentifierNodeTester } from '../../../identifier';
 import {
   queryNode
-} from '../../util'
+} from '../../../util'
 
 export function createClassHeritageClauseTester(node: any, options: any = {}) {
   return new HeritageClauseTester(node, options)

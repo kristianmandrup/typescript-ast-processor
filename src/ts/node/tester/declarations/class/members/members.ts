@@ -1,8 +1,8 @@
 import * as ts from 'typescript'
-import { BaseNodeTester } from '../../base'
+import { BaseNodeTester } from '../../../base'
 import {
   isEmpty
-} from '../../../../util'
+} from '../../../../../util'
 
 export function createClassMembersTester(node: any, options: any = {}) {
   return new ClassMembersTester(node, options)

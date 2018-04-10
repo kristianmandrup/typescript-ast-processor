@@ -12,7 +12,7 @@ describe('class', () => {
     context('members/setter file', () => {
       const tester = testerFor({
         fileName: 'members/setter',
-        type: 'class',
+        type: 'declarations/class',
         factoryName: 'class.setter',
         traverse: (statements: any[]) => {
           // find first getter
