@@ -210,6 +210,15 @@ export class ASTNodeTraverser extends Loggable {
     return this.visitedNodes.includes(node)
   }
 
+  get visitedNodesCount(): number {
+    return this.visitedNodes.length
+  }
+
+
+  lastVisitedNode() {
+    return this.visitedNodes[this.visitedNodesCount - 1]
+  }
+
   /**
    * Visit an AST node by passing it to each of the registered visitors
    * @param node
