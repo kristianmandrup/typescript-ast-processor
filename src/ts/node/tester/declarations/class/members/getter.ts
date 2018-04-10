@@ -13,8 +13,8 @@ export class GetAccessorTester extends MethodLikeTester {
     super(node, options)
   }
 
-  test(query: any) {
-    super.test(query) && this.testAccess(query.access)
-  }
+  // test(query: any) {
+  //   super.test(query) && this.testAccess(query.access)
+  // }
 }
 

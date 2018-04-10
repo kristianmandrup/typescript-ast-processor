@@ -20,12 +20,19 @@ describe('class', () => {
         }
       })
 
-      describe('info', () => {
+      describe.only('info', () => {
         it('collects correct info', () => {
           const info = tester.info()
           logObj('info', info)
           expect(info).toEqual({
-
+            "parameters": {},
+            "returnType": "implicit:any",
+            "returnCount": 1,
+            "lastStatementReturn": false,
+            "arrow": false,
+            "nestedLevels": 1,
+            "name": "name",
+            "exported": false
           })
         })
       })
@@ -40,7 +47,7 @@ describe('class', () => {
       })
 
 
-      describe.only('testAccess(query)', () => {
+      describe.skip('testAccess(query)', () => {
         context('has getter and setter for name', () => {
           it('anyOf: name - true ', () => {
             const res = tester.testAccess(query.members.getters.anyOf)

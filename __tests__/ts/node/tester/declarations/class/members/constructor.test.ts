@@ -26,7 +26,14 @@ describe('class', () => {
             const info = tester.info()
             logObj('info', info)
             expect(info).toEqual({
-
+              "parameters": {},
+              "returnType": "implicit:any",
+              "returnCount": 1,
+              "lastStatementReturn": false,
+              "arrow": false,
+              "nestedLevels": 1,
+              "name": "constructor",
+              "exported": false
             })
           })
         })

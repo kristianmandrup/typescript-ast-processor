@@ -15,5 +15,9 @@ export class ConstructorTester extends MethodLikeTester {
   constructor(node: any, options: any) {
     super(node, options)
   }
+
+  get name() {
+    return 'constructor'
+  }
 }
 

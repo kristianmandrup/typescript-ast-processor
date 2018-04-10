@@ -1,7 +1,8 @@
 import {
   testerFor,
   query,
-  context
+  context,
+  logObj
 } from '../_imports'
 
 const { log } = console
@@ -19,6 +20,23 @@ describe('class', () => {
         }
       })
 
+      describe.only('info', () => {
+        it('collects correct info', () => {
+          const info = tester.info()
+          logObj('info', info)
+          expect(info).toEqual({
+            "parameters": {},
+            "returnType": "void",
+            "returnCount": 1,
+            "lastStatementReturn": false,
+            "arrow": false,
+            "nestedLevels": 1,
+            "name": "y",
+            "exported": false
+          })
+        })
+      })
+
       describe.skip('not', () => {
         describe('testMethods(query)', () => {
           it('not anyOf: A - true', () => {
@@ -30,7 +48,7 @@ describe('class', () => {
         })
       })
 
-      describe.only('testMethods(query)', () => {
+      describe.skip('testMethods(query)', () => {
         context('has getter and setter for name', () => {
           it('anyOf: name - true ', () => {
             const res = tester.testMethods(query.members.methods.anyOf)
