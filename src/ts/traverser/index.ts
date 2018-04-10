@@ -6,4 +6,4 @@ export {
 export {
   CountingASTNodeTraverser,
   createCountingASTNodeTraverser
-} from './counting-traverser'
+} from './count-traverser'

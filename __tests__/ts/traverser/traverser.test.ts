@@ -1,0 +1,21 @@
+// init(options)
+// registerVisitors(registry)
+// registerVisitor(name: string, visitor: Function)
+// visitorIterator
+// nodeDisplayInfo(node)
+// typeOf(node)
+// skipped(node)
+// typeNameFor(typeName: string, fnName?: string)
+// wasVisited(node: any)
+// willVisit(node: any)
+// wasVisitedBefore(node: any)
+// visit(nextNode?: ts.Node)
+// shouldTraverseChildNodes(node: ts.Node)
+// shouldTraverseAncestor(node: ts.Node)
+// shouldExcludeNodeFromVisit(node: any)
+// shouldVisitNode(node: any)
+// traverseNextMethod
+// traverseNext(node: any)
+// traverseChildNodes(node: ts.Node)
+// traverseAncestor(node: ts.Node)
+
