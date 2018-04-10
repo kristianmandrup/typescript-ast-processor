@@ -20,18 +20,60 @@ describe('class', () => {
         }
       })
 
-      const query: any = {
-        noMatch: {
-          anyOf: ['unknown']
+      const query = {
+        binary: {
+          notMatch: {
+            not: {
+              name: 'unknown'
+            }
+          }
         },
-        anyOf: {
-          anyOf: ['hello']
+        matches: {
+          match: {
+            name: 'name',
+            access: {
+              exactly: 'protected',
+            }
+          },
+          noMatch: {
+            name: 'unknown',
+          }
         },
-        allOf: {
-          allOf: ['hello']
+        access: {
+          exactly: 'protected',
+          anyOf: [
+            'private', 'public'
+          ],
+          notAny: [
+            'public'
+          ]
+        },
+        name: {
+          hasAny: {
+            anyOf: ['name']
+          },
+          notAny: {
+            anyOf: ['unknown']
+          },
+          hasAll: {
+            allOf: ['name']
+          }
+        },
+        parameters: {
+          hasAny: {
+            anyOf: ['v', 'x']
+          },
+          notAny: {
+            anyOf: ['a', 'b']
+          },
+          notAll: {
+            allOf: ['v', 'x']
+          },
+          haveAll: {
+            allOf: ['v']
+          }
         }
       }
-
 
       it('is static', () => {
         expect(tester.isStatic).toBeTruthy()
@@ -45,26 +87,58 @@ describe('class', () => {
         })
       })
 
-      describe.skip('not', () => {
-        describe('testStatics(query)', () => {
-          it('not anyOf: A - true', () => {
-            const result = tester.testStatics(query.anyOf)
+      describe('testStatic(query)', () => {
+        context('not a static member', () => {
+          const tester = testerFor({
+            fileName: 'members/static',
+            type: 'declarations/class',
+            factoryName: 'class.method',
+            traverse: (statements: any[]) => {
+              // find first static
+              return statements[0].members[0]
+            }
+          })
+
+          it('is static', () => {
+            const result = tester.testStatic(true)
+            expect(result).toBe(true)
+          })
+
+          it('is not not static', () => {
+            const result = tester.testStatic(false)
+            expect(result).toBe(true)
+          })
+        })
+
+        context('a non-static member', () => {
+          const tester = testerFor({
+            fileName: 'members/static',
+            type: 'declarations/class',
+            factoryName: 'class.method',
+            traverse: (statements: any[]) => {
+              // find first non-static
+              return statements[0].members[1]
+            }
+          })
+
+          it('is not static', () => {
+            const result = tester.testStatic(true)
             expect(result).toBe(true)
           })
         })
       })
 
-      describe.skip('query(query)', () => {
-        it('members: anyOf: Ix, Iy - false', () => {
-          const res = tester.query(query.anyOf)
+      describe('query(query)', () => {
+        it('anyOf: Ix, Iy - false', () => {
+          const res = tester.query(query.matches.match)
           expect(res.implements).toEqual(['Ix'])
           expect(res.result).toBe(true)
         })
       })
 
-      describe.skip('test(query)', () => {
-        it('members: anyOf: Ix, Iy - false', () => {
-          const res = tester.test(query.anyOf)
+      describe('test(query)', () => {
+        it('anyOf: Ix, Iy - false', () => {
+          const res = tester.test(query.matches.match)
           expect(res).toBe(true)
         })
       })
