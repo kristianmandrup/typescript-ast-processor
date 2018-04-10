@@ -19,7 +19,7 @@ describe('function declaration', () => {
       //   return a - b
       // }
 
-      describe.skip('not', () => {
+      describe('not', () => {
         describe('testMethods(query)', () => {
           it('not anyOf: A - true', () => {
             const result = tester.testParameters({
@@ -68,14 +68,46 @@ describe('function declaration', () => {
         })
       })
 
+      describe('isAnonymous', () => {
+        context('anonymous function node', () => {
+          const tester: any = testerFor({
+            fileName: 'basic-function',
+            type: 'function/declaration',
+            factoryName: 'function.decl',
+            traverse: (statements: any[]) => {
+              // find first getter
+              return statements[1] // TODO: go deeper into expression
+            }
+          })
+
+          it('is anonymous', () => {
+            const res = tester.isAnonymous
+            expect(res).toBe(true)
+          })
+        })
+
+        context('named function node', () => {
+          const tester: any = testerFor({
+            fileName: 'basic-function',
+            type: 'function/declaration',
+            factoryName: 'function.decl',
+            statementIndex: 1
+          })
+
+          it('is not anonymous', () => {
+            const res = tester.isAnonymous
+            expect(res).toBe(false)
+          })
+        })
+      })
+
       describe('testParameters(query)', () => {
         context('has matching parameter name', () => {
 
           // TODO: Fix
           // WTF are the query parameters!?
-          it.only('anyOf: name - true ', () => {
+          it('anyOf: name - true ', () => {
             const res = tester.testParameters(query.parameters)
-            log('should match', res)
             expect(res.result).toBe(true)
           })
         })

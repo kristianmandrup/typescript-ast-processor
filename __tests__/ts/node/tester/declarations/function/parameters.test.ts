@@ -17,7 +17,7 @@ describe('parameters', () => {
     describe('info()', () => {
       it('collects correct info', () => {
         const info = tester.info()
-        logObj(info)
+        logObj('info', info)
         expect(info).toEqual({
         })
       })
@@ -27,9 +27,7 @@ describe('parameters', () => {
       context('has matching parameter name', () => {
         it('anyOf: name - true ', () => {
           const res = tester.test(query.parameters)
-          log('should match', { res })
           expect(res).not.toBe(false)
-          // expect(res.result).toBe(true)
         })
       })
     })

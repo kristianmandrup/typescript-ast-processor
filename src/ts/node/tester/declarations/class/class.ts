@@ -1,6 +1,7 @@
 import { IndentifierNodeTester } from '../../identifier';
 import { IDetailsTester } from '../../../details/base';
 import { INodeTester } from '../../base';
+import { DeclarationNodeTester } from '../declaration';
 
 /**
  * Factory to create class tester to query and collect data for class node
@@ -11,10 +12,11 @@ export function createClassTester(node: any, options: any = {}) {
   return new ClassTester(node, options)
 }
 
-export class ClassTester extends IndentifierNodeTester {
+export class ClassTester extends DeclarationNodeTester {
   heritageNodeTester: INodeTester
   memberNodesTester: any // INodeTester
   classDetailsTester: IDetailsTester
+  identifierNodeTester: any
   /**
    * Create class tester
    * @param node
@@ -25,6 +27,18 @@ export class ClassTester extends IndentifierNodeTester {
     this.heritageNodeTester = this.createNodeTester('class.heritage', node, options)
     this.memberNodesTester = this.createNodeTester('class.members', node, options)
     this.classDetailsTester = this.createDetailsTester('class', node, options)
+
+    // NOTE: anonymous function has no ID
+    if (this.hasId(node)) {
+      this.identifierNodeTester = this.createNodeTester('identifier', node, options)
+    }
+  }
+
+  /**
+   * TODO: Really test if this function is anonomous or NOT
+  */
+  hasId(node: any) {
+    return true
   }
 
   /**
@@ -37,6 +51,34 @@ export class ClassTester extends IndentifierNodeTester {
       heritage: this.heritage
     }
   }
+
+  /**
+   * Whether function is named
+  */
+  get isNamed(): boolean {
+    return Boolean(this.identifierNodeTester)
+  }
+
+  testName(query: any) {
+    if (!query || !this.isNamed) return true
+    return this.identifierNodeTester ? this.identifierNodeTester.testName(query) : false
+  }
+
+  /**
+   * Whether function is anonymous
+   */
+  get isAnonymous(): boolean {
+    return !this.isNamed
+  }
+
+  get name() {
+    return this.identifierNodeTester ? this.identifierNodeTester.name : undefined
+  }
+
+  get isExported() {
+    return this.identifierNodeTester ? this.identifierNodeTester.isExported : undefined
+  }
+
 
   get abstract() {
     return this.testAbstract(true)

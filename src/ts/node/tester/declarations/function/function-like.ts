@@ -134,8 +134,22 @@ export class FunctionLikeNodeTester extends BaseNodeTester {
     return this.functionTester.is('generator')
   }
 
+  /**
+   * Whether function is named
+  */
+  get isNamed(): boolean {
+    return Boolean(this.identifierNodeTester)
+  }
+
+  /**
+   * Whether function is anonymous
+   */
+  get isAnonymous(): boolean {
+    return !this.isNamed
+  }
+
   testName(query: any) {
-    if (!query) return true
+    if (!query || !this.isNamed) return true
     return this.identifierNodeTester ? this.identifierNodeTester.testName(query) : false
   }
 
