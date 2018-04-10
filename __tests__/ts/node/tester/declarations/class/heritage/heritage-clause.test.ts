@@ -1,7 +1,10 @@
 import {
-  testerFor,
-  query
+  testerFor
 } from '../_imports'
+import {
+  heritage as query
+} from './query'
+
 
 const { log } = console
 

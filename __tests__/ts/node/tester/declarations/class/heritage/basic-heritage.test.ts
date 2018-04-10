@@ -1,7 +1,9 @@
 import {
   testerFor,
-  query
 } from '../_imports'
+import {
+  heritage as query
+} from './query'
 
 const { log } = console
 
@@ -109,12 +111,12 @@ describe('class heritage', () => {
 
       describe('test(query)', () => {
         it('empty query = true', () => {
-          const res = tester.test(query.heritage.none)
+          const res = tester.test(query.none)
           expect(res.result).toEqual(true)
         })
 
         it('extends: anyOf A and implements: anyOf: Ix, Iy - false', () => {
-          const res = tester.test(query.heritage.extendsAndImplements)
+          const res = tester.test(query.extendsAndImplements)
           expect(res.result).toEqual(false)
         })
       })

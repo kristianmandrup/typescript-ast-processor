@@ -1,8 +1,10 @@
 import {
   testerFor,
-  query,
   context
 } from '../_imports'
+import {
+  heritage as query
+} from './query'
 
 const { log } = console
 
@@ -21,7 +23,7 @@ describe('class heritage', () => {
         describe('not', () => {
           describe('testExtends(query)', () => {
             it('not anyOf: A - true', () => {
-              const result = tester.testExtends(query.heritage.notExtends.extends)
+              const result = tester.testExtends(query.notExtends.extends)
               expect(result).toBe(true)
             })
           })
@@ -46,7 +48,7 @@ describe('class heritage', () => {
 
         describe('test(query)', () => {
           it('extends: anyOf A and implements: anyOf: Ix, Iy - false', () => {
-            const res = tester.test(query.heritage.onlyExtends)
+            const res = tester.test(query.onlyExtends)
             expect(res.extends).toEqual('A')
             expect(res.result).toEqual(true)
           })
@@ -54,7 +56,7 @@ describe('class heritage', () => {
 
         describe('test(query)', () => {
           it('extends: anyOf A and implements: anyOf: Ix, Iy - false', () => {
-            const res = tester.test(query.heritage.extendsAndImplements)
+            const res = tester.test(query.extendsAndImplements)
             expect(res.extends).toEqual('A')
             expect(res.result).toEqual(false)
           })

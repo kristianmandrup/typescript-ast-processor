@@ -21,6 +21,23 @@ describe('class', () => {
           }
         })
 
+        const query: any = {
+          noMatch: {
+            params: {
+              names: {
+                anyOf: ['unknown']
+              }
+            }
+          },
+          anyOf: {
+            params: {
+              names: {
+                anyOf: ['name']
+              }
+            }
+          }
+        }
+
         describe('info', () => {
           it('collects correct info', () => {
             const info = tester.info()
@@ -41,9 +58,24 @@ describe('class', () => {
         describe.skip('not', () => {
           describe('testConstructor(query)', () => {
             it('not anyOf: name - true', () => {
-              const result = tester.testConstructor(query.members.constructor.anyOf)
+              const result = tester.testConstructor(query.anyOf)
               expect(result).toBe(true)
             })
+          })
+        })
+
+        describe.skip('query(query)', () => {
+          it('members: anyOf: Ix, Iy - false', () => {
+            const res = tester.query(query.anyOf)
+            expect(res.implements).toEqual(['Ix'])
+            expect(res.result).toBe(true)
+          })
+        })
+
+        describe.skip('test(query)', () => {
+          it('members: anyOf: Ix, Iy - false', () => {
+            const res = tester.test(query.anyOf)
+            expect(res).toBe(true)
           })
         })
       })

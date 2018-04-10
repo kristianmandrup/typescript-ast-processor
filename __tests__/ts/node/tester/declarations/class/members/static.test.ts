@@ -20,6 +20,19 @@ describe('class', () => {
         }
       })
 
+      const query: any = {
+        noMatch: {
+          anyOf: ['unknown']
+        },
+        anyOf: {
+          anyOf: ['hello']
+        },
+        allOf: {
+          allOf: ['hello']
+        }
+      }
+
+
       it('is static', () => {
         expect(tester.isStatic).toBeTruthy()
       })
@@ -35,9 +48,24 @@ describe('class', () => {
       describe.skip('not', () => {
         describe('testStatics(query)', () => {
           it('not anyOf: A - true', () => {
-            const result = tester.testStatics(query.members.statics.anyOf)
+            const result = tester.testStatics(query.anyOf)
             expect(result).toBe(true)
           })
+        })
+      })
+
+      describe.skip('query(query)', () => {
+        it('members: anyOf: Ix, Iy - false', () => {
+          const res = tester.query(query.anyOf)
+          expect(res.implements).toEqual(['Ix'])
+          expect(res.result).toBe(true)
+        })
+      })
+
+      describe.skip('test(query)', () => {
+        it('members: anyOf: Ix, Iy - false', () => {
+          const res = tester.test(query.anyOf)
+          expect(res).toBe(true)
         })
       })
     })
