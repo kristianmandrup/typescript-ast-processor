@@ -20,17 +20,17 @@ export function isArguments(nodes: any[], options: any = {}) {
   return true
 }
 
-export function createArgumentsTester(node: any, options: any = {}): ArgumentsTester | undefined {
+export function createArgumentNodesTester(node: any, options: any = {}): ArgumentNodesTester | undefined {
   if (!isArguments(node, options)) {
     console.error('Not an arguments node', {
       node
     })
     return
   }
-  return new ArgumentsTester(node, options)
+  return new ArgumentNodesTester(node, options)
 }
 
-export class ArgumentsTester extends BaseNodeTester {
+export class ArgumentNodesTester extends BaseNodeTester {
   // argument: ArgumentTester
   nodes: any[]
   _items: any[]

@@ -1,7 +1,7 @@
 export {
   FunctionLikeNodeTester,
   createFunctionTester
-} from './function-declaration'
+} from './function-like'
 
 import * as parameters from './parameters'
 

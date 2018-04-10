@@ -15,9 +15,9 @@ export function isArgument(node: any) {
  * @param node parameter node to test
  * @param options extra options
  */
-export function createArgumentTester(node: any, options: any = {}) {
+export function createArgumentNodeTester(node: any, options: any = {}) {
   // if (!isArgument(node)) return
-  return new ArgumentTester(node, options)
+  return new ArgumentNodeTester(node, options)
 }
 
 /**
@@ -26,7 +26,7 @@ export function createArgumentTester(node: any, options: any = {}) {
  *
  * Should be/use generic NodeTester instead
  */
-export class ArgumentTester extends BaseNodeTester {
+export class ArgumentNodeTester extends BaseNodeTester {
   identifierNodeTester: any // INodeTester // IndentifierNodeTester
 
   /**
