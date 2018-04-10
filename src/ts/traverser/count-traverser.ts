@@ -51,7 +51,7 @@ const defaults = {
 }
 
 export class CountingASTNodeTraverser extends ASTNodeTraverser {
-  _nodeTypes: {
+  protected _nodeTypes: {
     toCount?: string[],
     fnToCount?: Function,
     toExcludeFromVisit?: string[],
@@ -60,7 +60,7 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
 
 
   fns: any // functions map
-  _nodeTypesToCheckFor: string[]
+  protected _nodeTypesToCheckFor: string[]
 
   categoryMap: any
 

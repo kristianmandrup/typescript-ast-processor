@@ -1,8 +1,9 @@
 export {
+  node,
   createSrcFile,
   fixturesPath,
   fixtureFile,
   context,
-  node,
-  loadAstNode
+  loadAstNode,
+  traverser
 } from '../'
