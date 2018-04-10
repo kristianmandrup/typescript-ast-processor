@@ -10,7 +10,9 @@ describe('class heritage', () => {
     describe('basic', () => {
       const tester = testerFor({
         fileName: 'basic-class',
-        type: 'heritage'
+        type: 'declarations/class',
+        factoryName: 'decl.class',
+        statementIndex: 0 // final class declaration that extends and implements
       })
 
       describe('test', () => {

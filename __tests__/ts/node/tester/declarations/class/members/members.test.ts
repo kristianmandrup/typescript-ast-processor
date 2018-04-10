@@ -16,7 +16,7 @@ describe('class', () => {
           type: 'declarations/class',
           traverse: (statements: any[]) => {
             // find first getter
-            return statements[0].members[1]
+            return statements[0].members
           }
         })
 
@@ -33,10 +33,12 @@ describe('class', () => {
 
     context('accessors file', () => {
       const tester = testerFor({
-        type: 'accessors'
-      })
-      it('is a class', () => {
-        expect(tester.isClass).toBeTruthy()
+        fileName: 'members/accessors',
+        type: 'declarations/class',
+        traverse: (statements: any[]) => {
+          // find first getter
+          return statements[0].members
+        }
       })
 
       describe.only('test(query)', () => {

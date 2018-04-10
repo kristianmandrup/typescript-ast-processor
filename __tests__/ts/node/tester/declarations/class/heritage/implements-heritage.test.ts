@@ -13,7 +13,9 @@ describe('class heritage', () => {
       context('basic-class file', () => {
         const tester = testerFor({
           fileName: 'basic-class',
-          type: 'heritage'
+          type: 'declarations/class',
+          factoryName: 'decl.class',
+          statementIndex: 0 // final class declaration that extends and implements
         })
 
         describe('not', () => {
@@ -28,8 +30,10 @@ describe('class heritage', () => {
 
       context('implements-class file', () => {
         const tester = testerFor({
-          fileName: 'implements-class',
-          type: 'heritage'
+          fileName: 'heritage/implements-class',
+          type: 'declarations/class',
+          factoryName: 'decl.class',
+          statementIndex: 0 // final class declaration that extends and implements
         })
 
         describe('testImplements(query)', () => {

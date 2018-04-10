@@ -11,12 +11,10 @@ describe('class heritage', () => {
     describe('extends', () => {
       context('extends-and-implements file', () => {
         const tester = testerFor({
-          fileName: 'extends-and-implements',
-          type: 'heritage'
-        })
-
-        log({
-          node: tester.node
+          fileName: 'heritage/extends-and-implements',
+          type: 'declarations/class',
+          factoryName: 'decl.class',
+          statementIndex: 3 // final class declaration that extends and implements
         })
 
         describe('test(query)', () => {

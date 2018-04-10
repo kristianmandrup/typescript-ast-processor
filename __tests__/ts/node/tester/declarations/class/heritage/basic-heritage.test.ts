@@ -10,7 +10,9 @@ describe('class heritage', () => {
     describe('basic', () => {
       const tester = testerFor({
         fileName: 'basic-class',
-        type: 'class'
+        type: 'declarations/class',
+        factoryName: 'decl.class',
+        statementIndex: 0
       })
 
       describe('info', () => {
@@ -34,7 +36,7 @@ describe('class heritage', () => {
 
       describe('extends', () => {
         it('is undefined', () => {
-          expect(tester.extends).toBeUndefined()
+          expect(tester.extends).toEqual([])
         })
       })
 
