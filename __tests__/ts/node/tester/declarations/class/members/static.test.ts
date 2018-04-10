@@ -128,6 +128,45 @@ describe('class', () => {
         })
       })
 
+      describe('testAccess(query)', () => {
+        context('has matching access', () => {
+          const tester = testerFor({
+            fileName: 'members/static',
+            type: 'declarations/class',
+            factoryName: 'class.static',
+            traverse: (statements: any[]) => {
+              // find first setter with matching access for query
+              return statements[0].members[0]
+            }
+          })
+
+          it('anyOf: name - true ', () => {
+            const res = tester.testAccess(query.access.anyOf)
+            log('should match', { res })
+            expect(res).not.toBe(false)
+            expect(res.result).toBe(true)
+          })
+        })
+
+        context('has NO matching access', () => {
+          const tester = testerFor({
+            fileName: 'members/static',
+            type: 'declarations/class',
+            factoryName: 'class.static',
+            traverse: (statements: any[]) => {
+              // find first setter with non-matching access for query
+              return statements[0].members[1]
+            }
+          })
+
+          it('anyOf: name - true ', () => {
+            const res = tester.testAccess(query.access.exactly)
+            log('no match', { res })
+            expect(res).toBe(false)
+          })
+        })
+      })
+
       describe('query(query)', () => {
         it('anyOf: Ix, Iy - false', () => {
           const res = tester.query(query.matches.match)

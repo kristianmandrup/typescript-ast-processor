@@ -75,7 +75,7 @@ describe('class', () => {
       }
 
 
-      describe.only('info', () => {
+      describe('info', () => {
         it('collects correct info', () => {
           const info = tester.info()
           logObj('info', info)
@@ -88,15 +88,6 @@ describe('class', () => {
             "nestedLevels": 1,
             "name": "name",
             "exported": false
-          })
-        })
-      })
-
-      describe.skip('not', () => {
-        describe('testAccess(query)', () => {
-          it('not anyOf: A - true', () => {
-            const result = tester.testAccess(query.binary.notMatch)
-            expect(result).toBe(true)
           })
         })
       })
@@ -130,8 +121,18 @@ describe('class', () => {
         })
       })
 
-      describe.skip('testAccess(query)', () => {
-        context('has getter and setter for name', () => {
+      describe('testAccess(query)', () => {
+        context('has matching access', () => {
+          const tester = testerFor({
+            fileName: 'members/setter',
+            type: 'declarations/class',
+            factoryName: 'class.setter',
+            traverse: (statements: any[]) => {
+              // find first setter with matching access for query
+              return statements[0].members[0]
+            }
+          })
+
           it('anyOf: name - true ', () => {
             const res = tester.testAccess(query.access.anyOf)
             log('should match', { res })
@@ -140,9 +141,19 @@ describe('class', () => {
           })
         })
 
-        context('has no matching accessors for unknown', () => {
+        context('has NO matching access', () => {
+          const tester = testerFor({
+            fileName: 'members/access',
+            type: 'declarations/class',
+            factoryName: 'class.setter',
+            traverse: (statements: any[]) => {
+              // find first setter with non-matching access for query
+              return statements[0].members[1]
+            }
+          })
+
           it('anyOf: name - true ', () => {
-            const res = tester.testAccess(query.access)
+            const res = tester.testAccess(query.access.exactly)
             log('no match', { res })
             expect(res).toBe(false)
           })

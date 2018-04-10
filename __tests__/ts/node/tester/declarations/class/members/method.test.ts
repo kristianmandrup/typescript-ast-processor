@@ -89,6 +89,25 @@ describe('class', () => {
         })
       })
 
+      describe('testAccess(query)', () => {
+        context('has getter and setter for name', () => {
+          it('anyOf: name - true ', () => {
+            const res = tester.testAccess(query.access.anyOf)
+            log('should match', { res })
+            expect(res).not.toBe(false)
+            expect(res.result).toBe(true)
+          })
+        })
+
+        context('has no matching accessors for unknown', () => {
+          it('anyOf: name - true ', () => {
+            const res = tester.testAccess(query.access.exactly)
+            log('no match', { res })
+            expect(res).toBe(false)
+          })
+        })
+      })
+
       describe('testParameters(query)', () => {
         it('parameters: notAny: false', () => {
           const res = tester.testParameters(query.parameters.notAny)

@@ -102,7 +102,17 @@ describe('class', () => {
       })
 
       describe('testAccess(query)', () => {
-        context('has getter and setter for name', () => {
+        context('has matching access', () => {
+          const tester = testerFor({
+            fileName: 'members/setter',
+            type: 'declarations/class',
+            factoryName: 'class.setter',
+            traverse: (statements: any[]) => {
+              // find first setter with matching access for query
+              return statements[0].members[0]
+            }
+          })
+
           it('anyOf: name - true ', () => {
             const res = tester.testAccess(query.access.anyOf)
             log('should match', { res })
@@ -111,7 +121,17 @@ describe('class', () => {
           })
         })
 
-        context('has no matching accessors for unknown', () => {
+        context('has NO matching access', () => {
+          const tester = testerFor({
+            fileName: 'members/access',
+            type: 'declarations/class',
+            factoryName: 'class.setter',
+            traverse: (statements: any[]) => {
+              // find first setter with non-matching access for query
+              return statements[0].members[1]
+            }
+          })
+
           it('anyOf: name - true ', () => {
             const res = tester.testAccess(query.access.exactly)
             log('no match', { res })
