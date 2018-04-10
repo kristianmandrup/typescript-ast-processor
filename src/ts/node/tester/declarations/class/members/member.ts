@@ -1,5 +1,5 @@
 import * as ts from 'typescript'
-import { BaseNodeTester } from '../../base'
+import { BaseNodeTester } from '../../../base'
 
 import {
   createGetAccessorTester
@@ -7,9 +7,9 @@ import {
 import {
   createSetAccessorTester
 } from './setter'
-import { IndentifierNodeTester } from '../../identifier';
+import { IndentifierNodeTester } from '../../../identifier';
 
-export function createClassMemberTester(node: any, options: any = {}): BaseNodeTester | undefined {
+export function createClassMemberTester(node: any, options: any = {}): any {
   //new MemberTester(node, options)
   return createGetAccessorTester(node, options) &&
     createSetAccessorTester(node, options)
@@ -17,5 +17,8 @@ export function createClassMemberTester(node: any, options: any = {}): BaseNodeT
 }
 
 export class MemberTester extends IndentifierNodeTester {
+  constructor(node: any, options: any) {
+    super(node, options)
+  }
 
 }

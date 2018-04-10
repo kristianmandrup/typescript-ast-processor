@@ -1,4 +1,4 @@
-import { BaseNodeTester } from "../base";
+import { BaseNodeTester } from '../base'
 
 export function createFunctionTester(node: any, options: any = {}) {
   return new DeclarationNodeTester(node, options)

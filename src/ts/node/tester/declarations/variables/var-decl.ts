@@ -1,7 +1,7 @@
-import { BaseNodeTester } from '../base';
+import { BaseNodeTester } from '../../base';
 import {
   IndentifierNodeTester
-} from '../identifier';
+} from '../../identifier';
 
 // import { api as detailsApi } from '../../details';
 

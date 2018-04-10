@@ -1,7 +1,6 @@
-import * as ts from 'typescript'
-import { IndentifierNodeTester } from '../identifier';
-import { IDetailsTester } from '../../details/base';
-import { INodeTester } from '../base';
+import { IndentifierNodeTester } from '../../identifier';
+import { IDetailsTester } from '../../../details/base';
+import { INodeTester } from '../../base';
 
 /**
  * Factory to create class tester to query and collect data for class node

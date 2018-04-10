@@ -1,4 +1,6 @@
-import { BaseNodeTester, INodeTester } from '../../base';
+import {
+  BaseNodeTester
+} from '../../base';
 import {
   testName
 } from '../../util'

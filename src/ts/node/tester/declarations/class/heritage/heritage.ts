@@ -1,12 +1,12 @@
 import * as ts from 'typescript'
-import { BaseNodeTester } from '../../base'
+import { BaseNodeTester } from '../../../base'
 import {
   createClassHeritageClauseTester
 } from './clause';
 import {
   flatten,
   isEmpty
-} from '../../../../util'
+} from '../../../../../util'
 
 export function createClassHeritageTester(node: any, options: any = {}): ClassHeritageTester {
   return new ClassHeritageTester(node, options)

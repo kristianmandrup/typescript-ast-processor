@@ -1,6 +1,5 @@
-import { BaseNodeTester } from '../../base';
-import { createBinaryExprTester, BinaryExprTester } from '../../../details/binary-expr';
-import { IDetailsTester } from '../../../details/base';
+import { BaseNodeTester } from '../../base'
+import { createBinaryExprTester, BinaryExprTester } from '../../../details/binary-expr'
 
 /**
  * Factory to create a BinaryExpressionNode tester

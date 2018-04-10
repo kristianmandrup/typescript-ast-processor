@@ -1,5 +1,5 @@
-import { BaseNodeTester, INodeTester } from '../../base';
-import { IndentifierNodeTester, createIndentifierNodeTester } from '../../identifier';
+import { BaseNodeTester } from '../../base';
+import { IndentifierNodeTester } from '../../identifier';
 
 /**
  * Factory to create a VariableDeclaration tester

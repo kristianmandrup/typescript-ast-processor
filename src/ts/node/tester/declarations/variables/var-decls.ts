@@ -1,5 +1,4 @@
-import * as ts from 'typescript'
-import { BaseNodeTester } from '../base';
+import { BaseNodeTester } from '../../base';
 
 /**
  * Factory to create a Variable declarations tester

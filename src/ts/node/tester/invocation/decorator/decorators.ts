@@ -1,4 +1,4 @@
-import { NodesTester } from '../generic'
+import { NodesTester } from '../../generic'
 
 export function createClassDecoratorsTester(node: any, options: any = {}): ClassDecoratorsTester {
   return new ClassDecoratorsTester(node, options)

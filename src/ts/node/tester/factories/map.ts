@@ -1,14 +1,12 @@
 import * as tester from '../exports'
 const {
-  classes,
-  functions,
   type,
   initializer,
-  variables,
+  declarations,
   statements,
   literals,
   expressions,
-  decorators,
+  invocation,
   occurrences,
   identifier,
   generic
@@ -23,13 +21,25 @@ const {
   expression
 } = statements
 
-const funCall = functions.call
-const funDecl = functions.declaration
+const {
+  functionCall,
+  argument,
+  decorator
+} = invocation
+
+const {
+  classDecl,
+  functionDecl,
+  variables
+} = declarations
+
+const funCall = functionCall
+const funDecl = functionDecl
 
 const {
   heritage,
   members
-} = classes
+} = classDecl
 
 const {
   accessors
@@ -42,7 +52,7 @@ export const factories = {
   'nodes': generic.createNodesTester, // alias
 
   // class
-  'decl.class': classes.createClassTester,
+  'decl.class': classDecl.createClassTester,
   'class.heritage': heritage.createClassHeritageTester,
 
   'class.members': members.createClassMembersTester,
@@ -56,11 +66,11 @@ export const factories = {
   // function
   // - call
   'function.call': funCall.createFunctionCallNodeTester,
-  'function.arguments': funCall.createArgumentsTester,
-  'function.argument': funCall.createArgumentTester,
+  'function.arguments': argument.createArgumentNodesTester,
+  'function.argument': argument.createArgumentNodesTester,
 
   // - decl
-  'function.decl': funDecl.createFunctionTester,
+  'function.decl': funDecl.functionLike.createFunctionLikeNodeTester,
   'function.parameters': funDecl.parameters.createParametersTester,
   'function.parameter': funDecl.parameters.createParameterTester,
 
@@ -109,9 +119,9 @@ export const factories = {
   'expr.assignment': expressions.binary.createAssignmentNodeTester,
 
   // decorators
-  'decorator.class': decorators.class.createClassDecoratorTester,
-  'decorator.member': decorators.member.createMemberNodeDecoratorTester,
-  'decorator.param': decorators.parameter.createParameterDecoratorTester,
+  'decorator.class': decorator.class.createClassDecoratorTester,
+  'decorator.member': decorator.member.createMemberDecoratorTester,
+  'decorator.param': decorator.parameter.createParameterDecoratorTester,
 
   occurrences: occurrences.createNodeOccurrenceTester,
   identifier: identifier.createIndentifierNodeTester

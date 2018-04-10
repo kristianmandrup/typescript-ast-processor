@@ -1,9 +1,5 @@
 import {
-  createIndentifierNodeTester,
-  IndentifierNodeTester
-} from '../../identifier'
-import {
-  BaseNodeTester, INodeTester
+  BaseNodeTester
 } from '../../base';
 
 export function isArgument(node: any) {

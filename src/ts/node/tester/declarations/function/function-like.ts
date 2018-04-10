@@ -9,7 +9,7 @@ export function isFunctionLike(node: any) {
   return ts.isFunctionLike(node)
 }
 
-export function createFunctionTester(node: any, options: any = {}) {
+export function createFunctionLikeNodeTester(node: any, options: any = {}) {
   if (!isFunctionLike(node)) return
   return new FunctionLikeNodeTester(node, options)
 }

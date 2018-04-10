@@ -1,6 +1,6 @@
-import { FunctionCallNodeTester } from '../functions/call/function-call'
+import { FunctionCallNodeTester } from '../function'
 // import { INodeTester } from '../base';
-import { IndentifierNodeTester } from '../identifier';
+// import { IndentifierNodeTester } from '../identifier';
 
 export function createDecoratorTester(node: any, options: any = {}): DecoratorNodeTester {
   return new DecoratorNodeTester(node, options)
@@ -8,12 +8,12 @@ export function createDecoratorTester(node: any, options: any = {}): DecoratorNo
 
 export class DecoratorNodeTester extends FunctionCallNodeTester {
   targetNode: any
-  identifierTester: IndentifierNodeTester // INodeTester
+  identifierTester: any // IndentifierNodeTester // INodeTester
 
   constructor(node: any, options: any) {
     super(node, options)
     this.targetNode = options.targetNode
-    this.identifierTester = this.createNodeTester('identifier', node, options) as IndentifierNodeTester
+    this.identifierTester = this.createNodeTester('identifier', node, options) // as IndentifierNodeTester
   }
 
   get targetId() {

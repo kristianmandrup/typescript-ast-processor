@@ -3,7 +3,7 @@ import * as literals from './literals'
 import * as generic from './generic'
 import * as initializer from './initializer'
 import * as statements from './statements'
-import * as functionCall from './function-call'
+import * as invocation from './invocation'
 import * as declarations from './declarations'
 import * as identifier from './identifier'
 import * as type from './type'
@@ -21,5 +21,5 @@ export {
   type,
   expressions,
   occurrences,
-  functionCall
+  invocation
 }

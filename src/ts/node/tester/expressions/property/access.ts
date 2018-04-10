@@ -1,4 +1,4 @@
-import { BaseNodeTester } from "../../base";
+import { BaseNodeTester } from '../../base'
 
 // PropertyAccessExpression
 
