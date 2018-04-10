@@ -1,14 +1,9 @@
-export {
-  createFunctionCallNodeTester,
-  FunctionCallNodeTester
-} from './function'
+import * as decorators from './decorators'
+import * as arguments from './arguments'
+import * as functionCall from './function'
 
 export {
-  createArgumentNodesTester,
-  ArgumentNodesTester
-} from './arguments'
-
-export {
-  createArgumentNodeTester,
-  ArgumentNodeTester
-} from './arguments'
+  decorators,
+  arguments,
+  functionCall
+}
