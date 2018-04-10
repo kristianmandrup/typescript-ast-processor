@@ -1,7 +1,7 @@
-import { BaseNodeTester } from '../../base';
 import {
   IndentifierNodeTester
 } from '../../identifier';
+import { DeclarationNodeTester } from '../declaration';
 
 // import { api as detailsApi } from '../../details';
 
@@ -21,7 +21,7 @@ export function createVariableDeclarationTester(node: any, options: any) {
  *
  * Perhaps extend IdentifierNodeTester ??
  */
-export class VariableDeclarationNodeTester extends BaseNodeTester {
+export class VariableDeclarationNodeTester extends DeclarationNodeTester {
   identifierNodeTester: IndentifierNodeTester
   typeTester: any
 

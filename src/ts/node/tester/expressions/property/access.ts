@@ -1,4 +1,10 @@
 import { BaseNodeTester } from '../../base'
+import {
+  isEmpty
+} from '../../../../util'
+import {
+  testName
+} from '../../util'
 
 // PropertyAccessExpression
 
@@ -19,5 +25,69 @@ export function createPropertyAccessNodeTester(node: any, options: any = {}) {
  * TODO
  */
 export class PropertyAccessNodeTester extends BaseNodeTester {
+  nested: any
+  identifierNodeTester: any
+  nestedNodeTester: any
 
+  constructor(node: any, options: any) {
+    super(node, options)
+    const nested = node.node
+    this.nested = nested
+    this.identifierNodeTester = this.createNodeTester('identifier', node.name, options)
+    this.nestedNodeTester = this.createNodeTester('property.access', nested, options)
+  }
+
+  /**
+   * Get name of node
+   */
+  get name() {
+    return this.identifierNodeTester.name
+  }
+
+  /**
+   * Nested info
+   */
+  get nestedInfo() {
+    return this.nestedNodeTester.info()
+  }
+
+  /**
+   * Get info
+   */
+  info() {
+    return {
+      name: this.name,
+      nested: this.nestedInfo
+    }
+  }
+
+  /**
+   * TODO: perhaps instead slice and dice query.path and
+   * call tests w first and remainder of query list
+   * @param query
+   */
+  test(query: any) {
+    return this.testName(query.name) && this.testNestedNames(query.path)
+  }
+
+  /**
+   * Test current-level name of access node
+   * @param query
+   */
+  testName(query: any) {
+    return testName(this.name, query)
+  }
+
+  /**
+   * Test dot path
+   * @param dotQuery
+   */
+  testNestedNames(dotQuery: any) {
+    if (!dotQuery) return true
+    const dotQueryList = Array.isArray(dotQuery) ? dotQuery : dotQuery.split('.')
+    if (isEmpty(dotQueryList)) return true
+    const nameQuery = dotQueryList[0]
+    const remainder = dotQueryList.splice(1)
+    return testName(this.name, nameQuery) && this.nestedNodeTester.testNestedNames(remainder)
+  }
 }

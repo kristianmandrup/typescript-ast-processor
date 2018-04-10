@@ -1,6 +1,6 @@
 import * as ts from 'typescript'
-import { createPropertyAssignmentTester } from './property-assignment';
-import { BaseNodeTester } from '../../base';
+import { createPropertyAssignmentTester } from './assignment';
+import { BaseNodeTester } from '../../../base';
 
 /**
  * Factory to create a statement tester

@@ -1,4 +1,3 @@
-import { IndentifierNodeTester } from '../../identifier';
 import { IDetailsTester } from '../../../details/base';
 import { INodeTester } from '../../base';
 import { DeclarationNodeTester } from '../declaration';
@@ -47,7 +46,7 @@ export class ClassTester extends DeclarationNodeTester {
   info() {
     return {
       ...super.info(),
-      abstract: this.abstract,
+      abstract: this.isAbstract,
       heritage: this.heritage
     }
   }
@@ -71,19 +70,33 @@ export class ClassTester extends DeclarationNodeTester {
     return !this.isNamed
   }
 
+  /**
+   * The name of the class (if not anonymous)
+   */
   get name() {
+    if (!this.isNamed) return undefined
     return this.identifierNodeTester ? this.identifierNodeTester.name : undefined
   }
 
+  /**
+   * Whether class declaration exported (only possible if named)
+   *
+   */
   get isExported() {
-    return this.identifierNodeTester ? this.identifierNodeTester.isExported : undefined
+    if (!this.isNamed) return false
+    return this.identifierNodeTester ? this.identifierNodeTester.isExported : false
   }
 
-
-  get abstract() {
-    return this.testAbstract(true)
+  /**
+   * whether class is abstract
+   */
+  get isAbstract() {
+    return this.classDetailsTester.is('abstract')
   }
 
+  /**
+   * Heritage of the class
+   */
   get heritage() {
     return this.heritageNodeTester.info()
   }
@@ -139,10 +152,6 @@ export class ClassTester extends DeclarationNodeTester {
   testAbstract(query: any) {
     query = query.abstract || query
     return this.isAbstract === query
-  }
-
-  get isAbstract() {
-    return this.classDetailsTester.is('abstract')
   }
 }
 

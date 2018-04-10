@@ -2,8 +2,9 @@ import * as ts from 'typescript'
 import {
   isEmpty
 } from '../../../../util'
-import { INodeTester, BaseNodeTester } from '../../base';
+import { INodeTester } from '../../base';
 import { IDetailsTester } from '../../../details/base';
+import { DeclarationNodeTester } from '../declaration';
 
 export function isFunctionLike(node: any) {
   return ts.isFunctionLike(node)
@@ -18,7 +19,7 @@ export function createFunctionLikeNodeTester(node: any, options: any = {}) {
  * For function, arrow function or method
  * TODO: Use BlockStatementTester for adding nesting levels support and testing function block
  */
-export class FunctionLikeNodeTester extends BaseNodeTester {
+export class FunctionLikeNodeTester extends DeclarationNodeTester {
   functionTester: IDetailsTester
   identifierNodeTester: any
 
