@@ -20,7 +20,38 @@ describe('class', () => {
         }
       })
 
-      describe.only('info', () => {
+      const query: any = {
+        names: {
+          hasAny: {
+            anyOf: ['y', 'x']
+          },
+          notAny: {
+            anyOf: ['a', 'b']
+          },
+          notAll: {
+            allOf: ['y', 'x']
+          },
+          haveAll: {
+            allOf: ['y']
+          }
+        },
+        parameters: {
+          hasAny: {
+            anyOf: ['v', 'x']
+          },
+          notAny: {
+            anyOf: ['a', 'b']
+          },
+          notAll: {
+            allOf: ['v', 'x']
+          },
+          haveAll: {
+            allOf: ['v']
+          }
+        }
+      }
+
+      describe('info', () => {
         it('collects correct info', () => {
           const info = tester.info()
           logObj('info', info)
@@ -32,46 +63,41 @@ describe('class', () => {
             "arrow": false,
             "nestedLevels": 1,
             "name": "y",
-            "exported": false
           })
         })
       })
 
-      describe.skip('not', () => {
-        describe('testMethods(query)', () => {
-          it('not anyOf: A - true', () => {
-            const result = tester.testMethods({
-              not: query.members.methods.anyOf
-            })
-            expect(result).toBe(true)
-          })
+      describe('testName(query)', () => {
+        it('name: notAny: false', () => {
+          const res = tester.testName(query.identifiers.notAny)
+          expect(res.result).toBe(false)
+        })
+
+        it('name: hasAny: true', () => {
+          const res = tester.testName(query.identifiers.hasAny)
+          expect(res.result).toBe(true)
+        })
+
+        it('name: notAll: false', () => {
+          const res = tester.testName(query.identifiers.notAll)
+          expect(res.result).toBe(false)
+        })
+
+        it('name: hasAll: true', () => {
+          const res = tester.testName(query.identifiers.hasAll)
+          expect(res.result).toBe(true)
         })
       })
 
-      describe.skip('testMethods(query)', () => {
-        context('has getter and setter for name', () => {
-          it('anyOf: name - true ', () => {
-            const res = tester.testMethods(query.members.methods.anyOf)
-            log('should match', { res })
-            expect(res).not.toBe(false)
-            expect(res.result).toBe(true)
-          })
+      describe('testParameters(query)', () => {
+        it('parameters: notAny: false', () => {
+          const res = tester.testParameters(query.parameters.notAny)
+          expect(res.result).toBe(false)
         })
 
-        context('has no matching methods for unknown', () => {
-          it('anyOf: name - true ', () => {
-            const res = tester.testMethods(query.members.methods.noMatch)
-            log('no match', { res })
-            expect(res).toBe(false)
-          })
-        })
-      })
-
-      describe.skip('test(query)', () => {
-        it('members: anyOf: Ix, Iy - false', () => {
-          const res = tester.test(query.members)
-          // expect(res.implements).toEqual(['Ix'])
-          // expect(res.result).toBe(true)
+        it('parameters: hasAny: false', () => {
+          const res = tester.testParameters(query.parameters.hasAny)
+          expect(res.result).toBe(true)
         })
       })
     })

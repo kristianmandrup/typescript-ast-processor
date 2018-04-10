@@ -60,6 +60,11 @@ export class FunctionLikeNodeTester extends BaseNodeTester {
     return true
   }
 
+
+  get isExportable() {
+    return true
+  }
+
   get name() {
     return this.identifierNodeTester ? this.identifierNodeTester.name : undefined
   }
@@ -104,7 +109,9 @@ export class FunctionLikeNodeTester extends BaseNodeTester {
     }
     if (this.name) {
       obj.name = this.name
-      obj.exported = this.isExported
+      if (this.isExportable) {
+        obj.exported = this.isExported
+      }
     }
     return obj
   }

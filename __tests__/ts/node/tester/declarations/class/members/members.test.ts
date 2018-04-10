@@ -20,10 +20,36 @@ describe('class', () => {
           }
         })
 
+        const query: any = {
+          identifiers: {
+            noMatch: {
+              anyOf: ['unknown']
+            },
+            anyOf: {
+              anyOf: ['hello']
+            },
+            allOf: {
+              allOf: ['hello']
+            },
+            onlyAccessors: {
+              noMatch: {
+                anyOf: ['unknown']
+              },
+              anyOf: {
+                anyOf: ['name']
+              },
+              allOf: {
+                allOf: ['name']
+              }
+            }
+          }
+        }
+
+
         describe.skip('not', () => {
           describe('testAccessors(query)', () => {
             it('not anyOf: A - true', () => {
-              const result = tester.test(query.members.onlyAccessors.anyOf)
+              const result = tester.test(query.onlyAccessors.anyOf)
               expect(result).toBe(true)
             })
           })

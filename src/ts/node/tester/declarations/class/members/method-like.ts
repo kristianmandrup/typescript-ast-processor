@@ -21,6 +21,20 @@ export class MethodLikeTester extends functionLike.FunctionLikeNodeTester {
     this.accessTester = this.createDetailsTester('access', node, options)
   }
 
+  /**
+   * A member is never exported
+   */
+  get isExportable() {
+    return false
+  }
+
+  /**
+   * A member (ie. such as a method like) is never exported
+   */
+  get isExported() {
+    return false
+  }
+
   test(query: any) {
     super.test(query) && this.testAccess(query.access)
   }

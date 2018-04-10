@@ -18,4 +18,17 @@ export class MemberTester extends IndentifierNodeTester {
     super(node, options)
   }
 
+  /**
+   * A member is never exported
+   */
+  get isExportable() {
+    return false
+  }
+
+  /**
+   * A member is never exported
+   */
+  get isExported() {
+    return false
+  }
 }
