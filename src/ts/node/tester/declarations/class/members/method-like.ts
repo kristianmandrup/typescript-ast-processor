@@ -39,6 +39,10 @@ export class MethodLikeTester extends functionLike.FunctionLikeNodeTester {
     super.test(query) && this.testAccess(query.access)
   }
 
+  /**
+   * Test access level, such as private, protected etc
+   * @param query
+   */
   testAccess(query: any) {
     this.accessTester.test(this.node, query)
   }

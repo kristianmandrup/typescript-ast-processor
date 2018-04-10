@@ -69,35 +69,35 @@ describe('class', () => {
 
       describe('testName(query)', () => {
         it('name: notAny: false', () => {
-          const res = tester.testName(query.identifiers.notAny)
-          expect(res.result).toBe(false)
+          const res = tester.testName(query.names.notAny)
+          expect(res).toBe(false)
         })
 
         it('name: hasAny: true', () => {
-          const res = tester.testName(query.identifiers.hasAny)
-          expect(res.result).toBe(true)
+          const res = tester.testName(query.names.hasAny)
+          expect(res).toBe(true)
         })
 
         it('name: notAll: false', () => {
-          const res = tester.testName(query.identifiers.notAll)
-          expect(res.result).toBe(false)
+          const res = tester.testName(query.names.notAll)
+          expect(res).toBe(false)
         })
 
         it('name: hasAll: true', () => {
-          const res = tester.testName(query.identifiers.hasAll)
-          expect(res.result).toBe(true)
+          const res = tester.testName(query.names.hasAll)
+          expect(res).toBe(true)
         })
       })
 
       describe('testParameters(query)', () => {
         it('parameters: notAny: false', () => {
           const res = tester.testParameters(query.parameters.notAny)
-          expect(res.result).toBe(false)
+          expect(res).toBe(false)
         })
 
         it('parameters: hasAny: false', () => {
           const res = tester.testParameters(query.parameters.hasAny)
-          expect(res.result).toBe(true)
+          expect(res).toBe(true)
         })
       })
     })

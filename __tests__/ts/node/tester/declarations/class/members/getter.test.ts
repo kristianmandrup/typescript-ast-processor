@@ -20,6 +20,19 @@ describe('class', () => {
         }
       })
 
+      const query = {
+        noMatch: {
+          anyOf: ['unknown']
+        },
+        anyOf: {
+          anyOf: ['name']
+        },
+        allOf: {
+          allOf: ['name']
+        },
+      }
+
+
       describe.only('info', () => {
         it('collects correct info', () => {
           const info = tester.info()
@@ -40,7 +53,7 @@ describe('class', () => {
       describe.skip('not', () => {
         describe('testAccess(query)', () => {
           it('not anyOf: A - true', () => {
-            const result = tester.testAccess(query.members.getters.anyOf)
+            const result = tester.testAccess(query.anyOf)
             expect(result).toBe(true)
           })
         })
@@ -50,7 +63,7 @@ describe('class', () => {
       describe.skip('testAccess(query)', () => {
         context('has getter and setter for name', () => {
           it('anyOf: name - true ', () => {
-            const res = tester.testAccess(query.members.getters.anyOf)
+            const res = tester.testAccess(query.anyOf)
             log('should match', { res })
             expect(res).not.toBe(false)
             expect(res.result).toBe(true)
@@ -59,18 +72,25 @@ describe('class', () => {
 
         context('has no matching accessors for unknown', () => {
           it('anyOf: name - true ', () => {
-            const res = tester.testAccess(query.members.getters.noMatch)
+            const res = tester.testAccess(query.noMatch)
             log('no match', { res })
             expect(res).toBe(false)
           })
         })
       })
 
+      describe.skip('query(query)', () => {
+        it('members: anyOf: Ix, Iy - false', () => {
+          const res = tester.query(query.anyOf)
+          expect(res.implements).toEqual(['Ix'])
+          expect(res.result).toBe(true)
+        })
+      })
+
       describe.skip('test(query)', () => {
         it('members: anyOf: Ix, Iy - false', () => {
-          const res = tester.test(query.members)
-          // expect(res.implements).toEqual(['Ix'])
-          // expect(res.result).toBe(true)
+          const res = tester.test(query.anyOf)
+          expect(res).toBe(true)
         })
       })
     })

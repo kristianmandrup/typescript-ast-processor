@@ -14,8 +14,11 @@ export function createClassMemberTester(node: any, options: any = {}): any {
 }
 
 export class MemberTester extends IndentifierNodeTester {
+  accessTester: any
+
   constructor(node: any, options: any) {
     super(node, options)
+    this.accessTester = this.createDetailsTester('access', node, options)
   }
 
   /**
@@ -30,5 +33,13 @@ export class MemberTester extends IndentifierNodeTester {
    */
   get isExported() {
     return false
+  }
+
+  /**
+   * Test access level, such as private, protected etc
+   * @param query
+   */
+  testAccess(query: any) {
+    this.accessTester.test(this.node, query)
   }
 }
