@@ -223,8 +223,7 @@ export class ASTNodeTraverser extends Loggable {
    * Get the type of a node
    * @param node
    */
-  // protected
-  typeOf(node: any): string {
+  protected typeOf(node: any): string {
     return this.kindOf(node)
   }
 

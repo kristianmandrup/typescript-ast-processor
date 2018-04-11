@@ -32,6 +32,7 @@ export function isEmpty(val: any) {
   if (isStr(val)) {
     return val.trim().length === 0
   }
-  const testObj = Array.isArray(val) ? val : Object.keys(val)
-  return testObj.length === 0
+  if (Array.isArray(val)) return val
+
+  if (isObject(val)) return Object.keys(val).length === 0
 }

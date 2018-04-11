@@ -23,12 +23,13 @@ describe('traverser: count-traverser', () => {
         })
 
         it('initializes traverser with categories of nodeTypes', () => {
-          expect(countTraverser['nodeTypes'].categories).toEqual({
-
-          })
+          const categoriesMap = countTraverser['nodeTypes'].categories
+          const catKeys = Object.keys(categoriesMap)
+          expect(catKeys.length).toBeGreaterThan(1)
         })
       })
     })
+
 
     // parseQuery(query)
     describe('parseQuery(query)', () => {
@@ -50,41 +51,18 @@ describe('traverser: count-traverser', () => {
 
         beforeEach(() => {
           ctx.nodeTypes = new Object(countTraverser['nodeTypes'])
-          countTraverser.parseQuery({})
+          countTraverser.parseQuery({
+            nodetypes: {
+              x: [
+                'x'
+              ]
+            }
+          })
         })
 
-        it('updates nodeTypes', () => {
-          expect(countTraverser['nodeTypes']).not.toBe(ctx.nodeTypes)
-        })
-      })
-    })
-
-
-    // resolveTypeCategories
-    describe('resolveTypeCategories', () => {
-      context('can be resolved', () => {
-        it('nodeTypes unchanged', () => {
-          const result = countTraverser['resolveTypeCategories']()
-          expect(result).toEqual({})
-        })
-      })
-    })
-
-    // resolveCategoryKey(key)
-    describe('resolveCategoryKey(key)', () => {
-      context('key can be resolved', () => {
-        it('resolves key', () => {
-          const key = 'x'
-          const result = countTraverser['resolveCategoryKey'](key)
-          expect(result).toEqual({})
-        })
-      })
-
-      context('key can NOT be resolved', () => {
-        it('throws', () => {
-          const key = 'x'
-          const count = () => countTraverser['resolveCategoryKey'](key)
-          expect(count).toThrow()
+        // TODO: improve (refactor?!)
+        it('updates _nodeTypes', () => {
+          expect(countTraverser['_nodeTypes']).not.toEqual(ctx.nodeTypes)
         })
       })
     })
@@ -101,10 +79,47 @@ describe('traverser: count-traverser', () => {
 
       context('category can NOT be resolved', () => {
         it('throws', () => {
-          const categoryName = 'x'
+          const categoryName = 'loop'
           const resolve = () => countTraverser['resolveTypeCategory'](categoryName)
+          const expected = [
+            'IterationStatement'
+          ]
+
           expect(resolve).not.toThrow()
-          expect(resolve()).toEqual({})
+          expect(resolve()).toEqual(expected)
+        })
+      })
+    })
+
+    // resolveCategoryKey(key)
+    describe.only('resolveCategoryKey(key)', () => {
+      context('key can be resolved', () => {
+        it('resolves key', () => {
+          const key = 'loop'
+          const expected = [
+            'IterationStatement'
+          ]
+          const result = countTraverser['resolveCategoryKey'](key)
+          expect(result).toEqual(expected)
+        })
+      })
+
+      context('key can NOT be resolved', () => {
+        it('returns empty list []', () => {
+          const key = 'x'
+          const result = countTraverser['resolveCategoryKey'](key)
+          expect(result).toEqual([])
+        })
+      })
+    })
+
+    // resolveTypeCategories
+    describe('resolveTypeCategories', () => {
+      context('can be resolved', () => {
+        it('nodeTypes unchanged', () => {
+          const result = countTraverser['resolveTypeCategories']()
+          const expected = {}
+          expect(result).toEqual(expected)
         })
       })
     })

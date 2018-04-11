@@ -6,12 +6,29 @@ import {
 
 import {
   isEmpty,
+  isArray,
   isFunction,
+  isObject,
   flatten,
   nodeTypeCheckName,
   lowercaseFirst,
   callFun
 } from '../util'
+
+function resolveValueToList(val: any): any[] {
+  if (isArray(val)) return val
+  if (isObject(val)) return flattenObjToList(val)
+  return []
+}
+
+function flattenObjToList(obj: any): any[] {
+  return Object.keys(obj).reduce((acc: any[], key: string) => {
+    const val = obj[key]
+    const list = resolveValueToList(val)
+    acc.concat(list)
+    return acc
+  }, [])
+}
 
 export function createCountingASTNodeTraverser(options: any) {
   return new CountingASTNodeTraverser(options)
@@ -70,7 +87,7 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
   reset() {
     super.reset()
     this.fns = {}
-    this.categoryMap = {}
+    this.categoryMap = defaults.categoryMap
     this._nodeTypesToCheckFor = []
     this.counter = {
       visited: 0,
@@ -133,29 +150,41 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
   /**
    * Resolve type categories to be exluded
    */
-  protected resolveTypeCategories(): string[] | undefined {
+  protected resolveTypeCategories(): any[] | undefined {
     const categories = this.nodeTypes.categories
     if (isEmpty(categories)) return
     const categoryNames = Object.keys(categories)
     return categoryNames.map(key => {
       const resolvedList = this.resolveCategoryKey(key)
+      if (isEmpty(resolvedList)) {
+        return {}
+      }
       this.nodeTypes[key] = this.nodeTypes[key] || []
-      return this.nodeTypes[key].concat(resolvedList)
+      this.nodeTypes[key].concat(resolvedList)
+      const keyList = this.nodeTypes[key]
+      return {
+        [key]: keyList
+      }
+
     })
   }
 
   /**
-   * Resolve list for category key, such as
+   * Resolve list for category key, such a loop.for
    * @param key
    */
   protected resolveCategoryKey(key: string) {
-    let list: string[] = this.nodeTypes.categories[key] || []
+    const keyPaths = key.split('.')
+    let category: any[] = keyPaths.reduce((acc, path) => {
+      return isObject(acc) ? acc[path] || [] : []
+    }, this.nodeTypes.categories) || []
+
     const resolveTypeCategoryFun = this.resolveTypeCategory.bind(this)
-    if (isEmpty(list)) return []
+    if (isEmpty(category)) return []
+    category = isObject(category) ? flattenObjToList(category) : category
 
     // TODO: test that this is the way...
-    list = Array.isArray(list) ? list : Object.keys(list)
-    return flatten(list.map(resolveTypeCategoryFun))
+    return flatten(category.map(resolveTypeCategoryFun).filter((item: any) => item))
   }
 
   /**
@@ -186,7 +215,7 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
    * Handler for when node visiting was skipped
    * @param node
    */
-  protected skipped(node: any) {
+  protected skipped(node: any): any {
     super.skipped(node)
     this.inc('skipped')
   }
@@ -210,14 +239,14 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
    * Use iterate through node types to check for and see if this node matches any of those types
    * @param node
    */
-  protected typeOf(node: any): string | undefined {
+  protected typeOf(node: any): string {
     let fnName
     const typeName = this.nodeTypesToCheckFor.find(type => {
       fnName = nodeTypeCheckName(type)
       const fn = ts[fnName]
       return callFun(fn, node)
     })
-    return typeName && this.typeNameFor(typeName, fnName)
+    return typeName && this.typeNameFor(typeName, fnName) || 'unknown'
   }
 
   /**
@@ -253,10 +282,11 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
    * Handler for just after node was visited
    * @param node
    */
-  protected wasVisited(node: any) {
+  protected wasVisited(node: any): any {
     super.wasVisited(node)
     this.inc('visited')
     this.visitedNodes.push(node)
+    return this
   }
 
   /**
