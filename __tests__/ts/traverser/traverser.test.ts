@@ -6,16 +6,16 @@ import {
 
 describe('traverser: count-traverser', () => {
   context('count-traverser file', () => {
-    const filePath = 'traverser/count-traverser'
+    const filePath = 'traverser/traverser.ts'
     const astNode: any = loadAstNode(filePath)
-    const $traverser = traverser.createCountingASTNodeTraverser(astNode)
+    const $traverser = traverser.createASTNodeTraverser(astNode)
 
     const registries = {
       valid: {
-
+        class: (node: any) => node
       },
       invalid: {
-
+        oops: 32
       }
     }
 
@@ -32,9 +32,9 @@ describe('traverser: count-traverser', () => {
         })
 
         it('initializes traverser with categories of nodeTypes', () => {
-          expect($traverser['nodeTypes'].categories).toEqual({
-
-          })
+          const categoriesMap = $traverser['nodeTypes'].categories
+          const catKeys = Object.keys(categoriesMap)
+          expect(catKeys.length).toBeGreaterThan(1)
         })
       })
     })
@@ -43,15 +43,14 @@ describe('traverser: count-traverser', () => {
     describe('registerVisitors(registry)', () => {
       context('valid registry', () => {
         it('registers', () => {
-          expect($traverser.registerVisitors(registries.valid)).toEqual({
-          })
+          const registry = $traverser.registerVisitors(registries.valid)
+          expect(registry.class).toEqual(registries.valid.class)
         })
       })
 
       context('invalid registry', () => {
         it('throws', () => {
-          expect($traverser.registerVisitors(registries.valid)).toEqual({
-          })
+          expect(() => $traverser.registerVisitors(registries.invalid)).toThrow()
         })
       })
     })
@@ -60,22 +59,22 @@ describe('traverser: count-traverser', () => {
     describe('registerVisitor(name, visitor)', () => {
       context('valid name/registry', () => {
         it('registers', () => {
-          expect($traverser.registerVisitors(registries.valid)).toEqual({
-          })
+          const registry = $traverser.registerVisitor('class', registries.valid.class)
+          expect(registry.class).toBe(registries.valid.class)
         })
       })
 
       context('invalid name', () => {
         it('throws', () => {
-          expect($traverser.registerVisitors(registries.valid)).toEqual({
-          })
+          const register = () => $traverser.registerVisitor('', registries.valid.class)
+          expect(register).toThrow()
         })
       })
 
       context('invalid registry', () => {
         it('throws', () => {
-          expect($traverser.registerVisitors(registries.valid)).toEqual({
-          })
+          const register = () => $traverser.registerVisitor('x', undefined)
+          expect(register).toThrow()
         })
       })
     })
@@ -92,21 +91,24 @@ describe('traverser: count-traverser', () => {
     // nodeDisplayInfo(node)
     describe('nodeDisplayInfo(node)', () => {
       it('displays node info', () => {
-        expect($traverser.nodeDisplayInfo(astNode)).toBeDefined()
+        expect($traverser.nodeDisplayInfo(astNode)).toEqual({
+          kind: 'SourceFile'
+        })
       })
     })
 
     // typeOf(node)
     describe('typeOf(node)', () => {
       it('gets node type', () => {
-        expect($traverser['typeOf'](astNode)).toBeDefined()
+        const type = $traverser.typeOf(astNode) // $traverser['typeOf'](astNode)
+        expect(type).toEqual('SourceFile')
       })
     })
 
     // skipped(node)
     describe('skipped(node)', () => {
       it('does nothing', () => {
-        expect($traverser['skipped'](astNode)).toBeUndefined()
+        expect($traverser['skipped'](astNode)).toBe($traverser)
       })
     })
 
@@ -125,17 +127,16 @@ describe('traverser: count-traverser', () => {
     })
 
     // wasVisited(node)
-    describe('wasVisited(node)', () => {
-      it('increases visited count', () => {
-        const countBefore = $traverser.counter.visited
-        $traverser['wasVisited'](astNode)
-        expect($traverser.counter.visited).toBe(countBefore + 1)
+    describe.skip('wasVisited(node)', () => {
+      it('does nothing', () => {
+        expect($traverser['wasVisited'](astNode)).toBeDefined()
       })
     })
 
     // willVisit(node)
-    describe('willVisit(node)', () => {
-      it.skip('does nothing', () => {
+    describe.skip('willVisit(node)', () => {
+      it('does nothing', () => {
+        expect($traverser['willVisit'](astNode)).toBeDefined()
       })
     })
 
@@ -151,6 +152,41 @@ describe('traverser: count-traverser', () => {
           $traverser.visitedNodes.push(astNode)
           const visitedBefore = $traverser['wasVisitedBefore'](astNode)
           expect(visitedBefore).toBeTruthy()
+        })
+      })
+    })
+
+
+    describe('get:visitedNodesCount', () => {
+      context('no nodes have been visited', () => {
+        it('is 0', () => {
+          expect($traverser.visitedNodesCount).toBe(0)
+        })
+      })
+
+      context('no nodes have been visited', () => {
+        // it('is 1', () => {
+        it('is still 0', () => {
+          $traverser.visit(astNode)
+          expect($traverser.visitedNodesCount).toBe(0)
+        })
+      })
+    })
+
+    context('FIX: we do NOT yet keep track of visited nodes in this traverser!!', () => {
+      describe('get:lastVisitedNode', () => {
+        context('no nodes have been visited', () => {
+          it('is none', () => {
+            expect($traverser.lastVisitedNode).toBeUndefined()
+          })
+        })
+
+        context('one node has been visited', () => {
+          it('is last node visited', () => {
+            // it('is still none', () => {
+            $traverser.visit(astNode)
+            expect($traverser.lastVisitedNode).toBe(astNode)
+          })
         })
       })
     })
@@ -209,6 +245,7 @@ describe('traverser: count-traverser', () => {
 
       context('ancestor traversal mode', () => {
         it(`is 'traverseAncestor'`, () => {
+          $traverser.setMode('ancestor')
           expect($traverser['traverseNextMethod']).toBe('traverseAncestor')
         })
       })
@@ -216,39 +253,57 @@ describe('traverser: count-traverser', () => {
 
     // traverseNext(node)
     describe('traverseNext(node)', () => {
+      const stmt1 = astNode.statements[1]
+      const stmt2 = astNode.statements[2]
+
       context('child traversal mode', () => {
         it(`traverses to next child/sibling node`, () => {
-          const stmt1 = astNode.statements[1]
-          const stmt2 = astNode.statements[2]
-          expect($traverser['traverseNext'](stmt1)).toBe(stmt2)
+          $traverser['traverseNext'](stmt1)
+          const lastNode = $traverser.lastVisitedNode
+          const lastType = $traverser.kindOf(lastNode)
+          expect(lastType).toBe('x')
+          // expect($traverser.lastVisitedNode).toBe(stmt2)
         })
       })
 
       context('ancestor traversal mode', () => {
         it(`traverses to ancestor node`, () => {
-          const stmt1 = astNode.statements[1]
-          expect($traverser['traverseNext'](stmt1)).toBe(astNode)
+          $traverser.setMode('ancestor')
+          $traverser['traverseNext'](stmt1)
+          const lastNode = $traverser.lastVisitedNode
+          const lastType = $traverser.kindOf(lastNode)
+          expect(lastType).toBe('SourceFile')
+          // expect($traverser.lastVisitedNode).toBe(astNode)
         })
       })
     })
 
     // traverseChildNodes(node)
-    describe('traverseNext(node)', () => {
+    describe('traverseChildNodes(node)', () => {
+      const stmt1 = astNode.statements[1]
+
       context('child traversal mode', () => {
         it(`traverses to next child/sibling node`, () => {
-          const stmt1 = astNode.statements[1]
-          const stmt2 = astNode.statements[2]
-          expect($traverser['traverseChildNodes'](stmt1)).toBe(stmt2)
+          $traverser['traverseChildNodes'](stmt1)
+          const lastNode = $traverser.lastVisitedNode
+          const lastType = $traverser.kindOf(lastNode)
+          expect(lastType).toBe('NumericLiteral')
         })
       })
     })
 
     // traverseAncestor(node: ts.Node)
     describe('traverseAncestor(node)', () => {
+      const stmt1 = astNode.statements[1]
+
       context('ancestor traversal mode', () => {
         it(`traverses to ancestor node`, () => {
-          const stmt1 = astNode.statements[1]
-          expect($traverser['traverseAncestor'](stmt1)).toBe(astNode)
+          $traverser.setMode('ancestor')
+          $traverser['traverseAncestor'](stmt1)
+
+          const lastNode = $traverser.lastVisitedNode
+          const lastType = $traverser.kindOf(lastNode)
+          expect(lastType).toBe('SourceFile')
         })
       })
     })

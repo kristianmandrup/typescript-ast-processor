@@ -8,6 +8,20 @@ export function enumKeys(E: any) {
   return Object.keys(E).filter(k => typeof E[k as any] === 'number')
 }
 
+/**
+ * TODO: duplicate!
+ * Get the enum key for an enum value in an enum structure
+ * TODO: cache keys for next lookup in same enum?
+ * @param enumRef
+ * @param enumValue
+ */
+export function enumKey(enumRef: any, enumValue: any): string | undefined {
+  for (var enumMember in enumRef) {
+    if (enumRef[enumMember] == enumValue) return enumMember
+  }
+  return undefined
+}
+
 export function keysOf(val: any) {
   if (isArray(val)) return val
   if (isObject(val)) return Object.keys(val)

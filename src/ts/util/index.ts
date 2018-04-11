@@ -10,7 +10,8 @@ export {
   enumKeys,
   toList,
   flatMap,
-  flatten
+  flatten,
+  enumKey
 } from './collection'
 
 export {
@@ -33,6 +34,7 @@ export {
 
 export {
   isStr,
+  isNonEmptyStr,
   isArray,
   isDefined,
   isEmpty,

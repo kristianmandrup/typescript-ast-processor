@@ -4,8 +4,13 @@ import { What } from '../node/what';
 import { VisitorFactory } from '../visitor/factory';
 import { Typer } from '../node/typer';
 import {
-  assignKeyDefined
+  assignKeyDefined,
+  enumKey
 } from '../util'
+import {
+  isFunction,
+  isNonEmptyStr
+} from '../../../src/ts/util';
 
 export function createASTNodeTraverser(options: any) {
   return new ASTNodeTraverser(options)
@@ -33,8 +38,9 @@ export class ASTNodeTraverser extends Loggable {
 
   startNode: any
   visitedNodes: any[]
+  _lastVisitedNode: any
   query: any
-  mode: TraverseMode.Children
+  mode: TraverseMode | undefined
 
   /**
    * Create an AST Node Traverser
@@ -45,8 +51,22 @@ export class ASTNodeTraverser extends Loggable {
     this.init(options)
   }
 
+  setMode(modeLabel: string): any {
+    this.mode = this.resolveMode(modeLabel)
+  }
+
+  protected resolveMode(modeLabel: string): TraverseMode | undefined {
+    if (/child/.test(modeLabel)) return TraverseMode.Children
+    if (/parent/.test(modeLabel) || /ancestor/.test(modeLabel)) return TraverseMode.Ancestor
+    this.error('Traverse mode could not be resolved', {
+      mode: modeLabel
+    })
+    return undefined
+  }
+
   reset() {
     this.nestingLevel = 0
+    this._lastVisitedNode = undefined
     this.visitedNodes = []
     this.mode = TraverseMode.Children
     this.state = {}
@@ -114,8 +134,12 @@ export class ASTNodeTraverser extends Loggable {
    * Register a full registry (map) of visitors, adding it to current registry
    * @param registry
    */
-  registerVisitors(registry: any) {
-    Object.assign(this.registry, registry)
+  registerVisitors(registry: any): any {
+    const keys = Object.keys(registry)
+    keys.map((key: string) => {
+      this.registerVisitor(key, registry[key])
+    })
+    return this.registry
   }
 
   /**
@@ -123,8 +147,19 @@ export class ASTNodeTraverser extends Loggable {
    * @param name
    * @param visitor
    */
-  registerVisitor(name: string, visitor: Function) {
+  registerVisitor(name: string, visitor: Function): any {
+    if (!isNonEmptyStr(name) || !isFunction(visitor)) {
+      this.onInvalidVisitorRegistration(name, visitor)
+    }
     this.registry[name] = visitor
+    return this.registry
+  }
+
+  protected onInvalidVisitorRegistration(name: any, visitor: any): any {
+    this.error('Invalid visitor registration', {
+      name,
+      visitor
+    })
   }
 
   /**
@@ -166,15 +201,31 @@ export class ASTNodeTraverser extends Loggable {
    * @param node the ndoe to display info for
    */
   nodeDisplayInfo(node: any) {
-    return { kind: String(node.kind) }
+    return {
+      kind: this.kindOf(node)
+    }
+  }
+
+  /**
+   * Determine kind of node
+   * @param node
+   */
+  kindOf(node: any): string {
+    if (!node) {
+      this.error('kindOf: Invalid node', {
+        node
+      })
+    }
+    return enumKey(ts.SyntaxKind, node.kind) || 'unknown'
   }
 
   /**
    * Get the type of a node
    * @param node
    */
-  protected typeOf(node: any): string | undefined {
-    return node.kind || 'unknown'
+  // protected
+  typeOf(node: any): string {
+    return this.kindOf(node)
   }
 
   /**
@@ -183,6 +234,7 @@ export class ASTNodeTraverser extends Loggable {
    */
   protected skipped(node: any) {
     this.log('skipped', this.nodeDisplayInfo(node))
+    return this
   }
 
   /**
@@ -200,7 +252,15 @@ export class ASTNodeTraverser extends Loggable {
    * @param node
    */
   protected wasVisited(node: any) {
-    this.log('visited', this.nodeDisplayInfo(node))
+    if (node) {
+      this.log('visited', this.nodeDisplayInfo(node))
+      this._lastVisitedNode = node
+    } else {
+      this.log('mysterious node!!', {
+        node
+      })
+    }
+    return this
   }
 
   /**
@@ -222,9 +282,8 @@ export class ASTNodeTraverser extends Loggable {
     return this.visitedNodes.length
   }
 
-
-  lastVisitedNode() {
-    return this.visitedNodes[this.visitedNodesCount - 1]
+  get lastVisitedNode() {
+    return this._lastVisitedNode || this.visitedNodes[this.visitedNodesCount - 1]
   }
 
   /**
@@ -249,7 +308,7 @@ export class ASTNodeTraverser extends Loggable {
    * @param node
    */
   protected shouldTraverseChildNodes(node: ts.Node) {
-    true
+    return true
   }
 
   /**
@@ -257,7 +316,7 @@ export class ASTNodeTraverser extends Loggable {
    * @param node
    */
   protected shouldTraverseAncestor(node: ts.Node) {
-    true
+    return true
   }
 
   /**

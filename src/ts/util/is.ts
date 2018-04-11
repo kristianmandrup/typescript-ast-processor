@@ -10,6 +10,10 @@ export function isStr(val: any) {
   return typeof val === 'string'
 }
 
+export function isNonEmptyStr(val: any) {
+  return typeof val === 'string' && !isEmpty(val)
+}
+
 export function isRegExp(val: any) {
   return val instanceof RegExp
 }
@@ -25,6 +29,9 @@ export function isObject(obj: any) {
 // on string or object
 export function isEmpty(val: any) {
   if (!isDefined(val)) return true
-  const testObj = isStr(val) || Array.isArray(val) ? val : Object.keys(val)
+  if (isStr(val)) {
+    return val.trim().length === 0
+  }
+  const testObj = Array.isArray(val) ? val : Object.keys(val)
   return testObj.length === 0
 }

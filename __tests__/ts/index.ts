@@ -16,6 +16,9 @@ export {
 export const fixturesPath = path.join(__dirname, '../fixtures')
 
 export function fixtureFile(filePath: string) {
+  if (!/ts$/.test(filePath)) {
+    filePath = filePath + '.ts'
+  }
   return path.resolve(path.join(fixturesPath, filePath))
 }
 
