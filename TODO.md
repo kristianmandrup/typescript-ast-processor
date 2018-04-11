@@ -27,45 +27,13 @@
 
 ## WIP
 
-- Created basic Instrumentation skeleton, needs much more work
+- Created basic `Instrumentation` skeleton, needs much more work
 
 ### Tests
 
 - Started writing full test suite (much work and cleanup/refactor left to do...)
 
-## ASTNodeTraverser include, exclude and count
-
-Add exclude and inclusion list of types to ignore (or exlusively include).
-This is useful f.ex to only visit `ReturnStatement` nodes within a `statements` container where each such `ReturnStatement` is not inside any new declaration.
-
-```js
-count: ['ReturnStatement'],
-exclude: {
-  list: categories.declaration
-  expressions: [/Declaration$/]
-}
-```
-
-This way we can easily count how many "valid" return statements are within a certain scope.
-We should have a specialized visitor/collector for these count cases.
-
 ## Node testers (query engine)
 
-Write test suite for all Node testers, fix all bugs.
-Add a way to pass down custom NodeTester factories all the way down:
-
-```js
-export class ClassNodeProcessor extends IndentifierNodeProcessor {
-  constructor(node: any, options: any = {}) {
-    nodeTester = options.factories.nodeProcessor
-    createFunctionLikeNodeProcessor = this.nodeTester.createFunctionLikeNodeProcessor || this.createFunctionLikeNodeProcessor
-}
-```
-
-## BinaryExpression testers
-
-We need to finish testers for `BinaryExpression` used for assignment
-
-## Literal testers (Object, Array)
-
-We need to finish testers for `Literals` such as `Object` and `Array` literals (typically used for assignment or in initializers for variable declarations)
+Skeleton test suite for all Node testers has been done. Needs extensive testing
+to ensure it works in edge cases.

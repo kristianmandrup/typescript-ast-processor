@@ -39,9 +39,9 @@ export class ClassNodeTester extends BaseNodeTester {
 
   constructor(node: any, options: any = {}) {
     super(node, options)
-    this.heritageNodeTester = this.createTester('node:class.heritage', node, options)
-    this.membersNodeTester = this.createCategoryTester('node', 'class.members', node, options)
-    this.classDetailsTester = this.createTester('details:class', node, options)
+    this.heritageNodeTester = this.createNodeTester('class.heritage', node, options)
+    this.membersNodeTester = this.createNodeTester('class.members', node, options)
+    this.classDetailsTester = this.createDetailsTester('class', node, options)
   }
 }
 ```

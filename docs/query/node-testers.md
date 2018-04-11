@@ -30,19 +30,54 @@ const hasElseBlock = tester.query({
 // ...
 ```
 
-## Status
+## Extending or Creating Node testers
 
-Currently most work has gone into the `ClassTester` and `FunctionLikeNodeTester` since these are the complex, yet most essential constructs for many usecases.
+- extend a suitable node tester such as `BaseNodeTester`
+- call `super(node, options)`
+- create testers needed to test node properties
+- add required methods for `INodeTester` api
+  - `info()` - return info object
+  - `test(query)` - run `query`, return `true` if query matches, `false` if not
+  - `query(query)` - run query and return query result as an object, with match result for each sub query
 
-When they work, the rest should be rather easy to add and can use patterns and utilities developed for the more complex testers.
+### Example
+
+```js
+export class ClassNodeProcessor extends IndentifierNodeProcessor {
+  memberTester: any
+
+  constructor(node: any, options: any = {}) {
+    super(node, options)
+    memberTester = this.createNodeTester('class.member', node, options)
+  }
+
+  info() {
+    return {
+      // info obj
+    }
+  }
+
+  test(query: any) {
+    return true
+  }
+
+  query(query: any) {
+    return {
+      // query result
+    }
+  }
+}
+```
 
 ## TODO
 
-We need to rename all node testers so as not to "conflict" with node details testers of similar names and make it clear which is which. We might instead call `ClassTester` for `ClassQuery` and rename the `testXyz` methods to `queryXyz` in the process.
+We need to rename node testers so as not to "conflict" with node details testers of similar names and make it clear which is which. We might instead call `ClassTester` for `ClassQuery` and rename the `testXyz` methods to `queryXyz` in the process.
 
 ## Info
 
 To collect and aggregate data, all testers have an `info()` method which returns the aggregated data of the subtree as a (nested) object.
+
+Perhaps info should be a getter (`get`) and/or `async`?
 
 ### Example: Class info
 
@@ -77,7 +112,7 @@ Here we test on the `info` result in a jest test:
   info() {
     return {
       name: this.name,
-      parameters: this.parameters.info(),
+      parameters: this.parametersInfo,
       returnType: this.returnType,
       exported: this.isExported,
       declaration: this.isDecl,
