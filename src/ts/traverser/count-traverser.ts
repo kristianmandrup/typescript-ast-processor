@@ -55,7 +55,7 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
     toCount?: string[],
     fnToCount?: Function,
     toExcludeFromVisit?: string[],
-    categories: any
+    categories?: any
   }
 
 
@@ -65,11 +65,19 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
   categoryMap: any
 
   // registry used to count occurences of each type
-  counter: INodeVisitCounter = {
-    visited: 0,
-    skipped: 0,
-    // types of node visited
-    types: {
+  counter: INodeVisitCounter
+
+  reset() {
+    super.reset()
+    this.fns = {}
+    this.categoryMap = {}
+    this._nodeTypesToCheckFor = []
+    this.counter = {
+      visited: 0,
+      skipped: 0,
+      // types of node visited
+      types: {
+      }
     }
   }
 
@@ -78,6 +86,7 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
    * @param options
    */
   init(options: any = {}) {
+    this.reset()
     this._nodeTypes = {
       categories: {
         toCount: [

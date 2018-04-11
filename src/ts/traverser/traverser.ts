@@ -29,7 +29,7 @@ export class ASTNodeTraverser extends Loggable {
   typer: Typer
   factory: VisitorFactory
   registry: any = {} // object
-  nestingLevel: number = 0
+  nestingLevel: number
 
   startNode: any
   visitedNodes: any[]
@@ -45,12 +45,20 @@ export class ASTNodeTraverser extends Loggable {
     this.init(options)
   }
 
+  reset() {
+    this.nestingLevel = 0
+    this.visitedNodes = []
+    this.mode = TraverseMode.Children
+    this.state = {}
+  }
+
   /**
    * Initialize with options object
    * Customize to suit your needs ;)
    * @param options
    */
   init(options: any = {}) {
+    this.reset()
     this.mode = options.mode || this.mode
     this.query = options.query
     this.startNode = options.node

@@ -19,6 +19,9 @@ describe('traverser: count-traverser', () => {
       }
     }
 
+    beforeEach(() => {
+      $traverser.reset()
+    })
 
     // init(options)
     describe('init(options)', () => {
