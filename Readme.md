@@ -321,6 +321,10 @@ A `Replacer` (as in `TypeWiz`) can be used to replace code in a source file dire
 
 In the near future we will include support for direct AST modification, using the typescript AST instrumentation/mutation API "under the hood".
 
+## Testing
+
+See [Testing](docs/testing.md)
+
 ## Tool integration
 
 We will try to make it easy to integrate other tools, so that this design is intent bases without making assumptions about underlying use or implementation.
