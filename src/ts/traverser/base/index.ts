@@ -118,7 +118,7 @@ export class ASTNodeTraverser extends Loggable {
   /**
    * The node types available for the typer
    */
-  protected get nodeTypes() {
+  get nodeTypes() {
     return this.typer.nodeTypes
   }
 

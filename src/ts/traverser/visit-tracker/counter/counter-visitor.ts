@@ -5,16 +5,10 @@ import {
 
 import {
   NodeTypeCounter
-} from './node-counter'
+} from './node-type-counter'
 
 import {
   isEmpty,
-  isArray,
-  isFunction,
-  isNonEmptyStr,
-  isObject,
-  // isDefined,
-  lowercaseFirst
 } from '../../../util'
 
 export function createCountingASTNodeTraverser(options: any) {
@@ -24,6 +18,7 @@ export function createCountingASTNodeTraverser(options: any) {
 export class CountingASTNodeTraverser extends ASTNodeTraverser {
   fns: any // functions map
   nodeTypeCounter: NodeTypeCounter
+  nodeTypesToCheckFor: string[]
 
   constructor(options: any) {
     super(options)
@@ -42,6 +37,7 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
   init(options: any = {}) {
     super.init(options)
     this.nodeTypeCounter.init()
+    this.nodeTypesToCheckFor = this.resolveNodeTypesToCheckFor
   }
 
   inc(key: string, counter?: any): any {
@@ -97,27 +93,8 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
     return toCount.concat(this.nodeTypes.toExcludeFromVisit || [])
   }
 
-  /**
-   * return cached list of node types to check for
-   */
-  protected get nodeTypesToCheckFor(): any[] {
-    this._nodeTypesToCheckFor = this._nodeTypesToCheckFor || this.resolveNodeTypesToCheckFor
-    return this._nodeTypesToCheckFor
-  }
-
-  /**
-   * Use iterate through node types to check for and see if this node matches any of those types
-   * @param node
-   */
-  protected typeOf(node: any): string {
-    return super.typeOf(node)
-    // let fnName
-    // const typeName = this.nodeTypesToCheckFor.find(type => {
-    //   fnName = nodeTypeCheckName(type)
-    //   const fn = ts[fnName]
-    //   return callFun(fn, node)
-    // })
-    // return typeName && this.typeNameFor(typeName, fnName) || 'unknown'
+  counterFor(key: string) {
+    return this.nodeTypeCounter.counterFor(key)
   }
 
   /**

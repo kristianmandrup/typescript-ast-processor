@@ -30,7 +30,6 @@ describe('traverser: count-traverser', () => {
       return countTraverser['typeOf'](node)
     }
 
-
     beforeEach(() => {
       countTraverser.reset()
     })
@@ -361,7 +360,7 @@ describe('traverser: count-traverser', () => {
         })
 
         it('increases count for type in counter map', () => {
-          expect(countTraverser.counter[type]).toBe(1)
+          expect(countTraverser.counterFor(type)).toBe(1)
         })
       })
 
@@ -371,7 +370,7 @@ describe('traverser: count-traverser', () => {
         })
 
         it('does NOT count node type', () => {
-          expect(countTraverser.counter[type]).toBe(0)
+          expect(countTraverser.counterFor(type)).toBe(0)
         })
       })
     })
