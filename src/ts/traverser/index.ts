@@ -1,9 +1,9 @@
 export {
   ASTNodeTraverser,
   createASTNodeTraverser
-} from './traverser'
+} from './base'
 
 export {
   CountingASTNodeTraverser,
   createCountingASTNodeTraverser
-} from './count-traverser'
+} from './visit-tracker'

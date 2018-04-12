@@ -1,16 +1,16 @@
 import * as ts from 'typescript'
-import { Loggable } from '../loggable';
-import { What } from '../node/what';
-import { VisitorFactory } from '../visitor/factory';
-import { Typer } from '../node/typer';
+import { Loggable } from '../../loggable';
+import { What } from '../../node/what';
+import { VisitorFactory } from '../../visitor/factory';
+import { Typer } from '../../node/typer';
 import {
   assignKeyDefined,
   enumKey
-} from '../util'
+} from '../../util'
 import {
   isFunction,
   isNonEmptyStr
-} from '../../../src/ts/util';
+} from '../../../../src/ts/util';
 
 export function createASTNodeTraverser(options: any) {
   return new ASTNodeTraverser(options)
