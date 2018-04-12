@@ -210,7 +210,7 @@ export class ASTNodeTraverser extends Loggable {
    * Determine kind of node
    * @param node
    */
-  kindOf(node: any): string {
+  protected kindOf(node: any): string {
     if (!node) {
       this.error('kindOf: Invalid node', {
         node
@@ -291,7 +291,14 @@ export class ASTNodeTraverser extends Loggable {
    */
   visit(nextNode?: ts.Node) {
     const node = nextNode || this.startNode
-    assignKeyDefined(node, 'nodeType', this.typeOf(node))
+    // assignKeyDefined(node, 'nodeType', this.typeOf(node))
+    const type = this.typeOf(node)
+    node.nodeType = type
+    console.log('visit', {
+      nodeType: node.nodeType,
+      type
+    })
+
     if (!this.shouldVisitNode(node)) {
       this.skipped(node)
       return

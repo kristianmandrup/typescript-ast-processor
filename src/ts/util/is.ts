@@ -32,7 +32,8 @@ export function isEmpty(val: any) {
   if (isStr(val)) {
     return val.trim().length === 0
   }
-  if (Array.isArray(val)) return val
+  if (Array.isArray(val)) return val.length === 0
 
   if (isObject(val)) return Object.keys(val).length === 0
+  return false
 }

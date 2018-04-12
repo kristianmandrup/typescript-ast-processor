@@ -5,5 +5,6 @@ export {
   fixtureFile,
   context,
   loadAstNode,
-  traverser
+  traverser,
+  log
 } from '../'

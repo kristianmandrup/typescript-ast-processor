@@ -10,6 +10,10 @@ describe('traverser: count-traverser', () => {
     const astNode: any = loadAstNode(filePath)
     const $traverser = traverser.createASTNodeTraverser(astNode)
 
+    function typeOf(node: any) {
+      return $traverser['typeOf'](node)
+    }
+
     const registries = {
       valid: {
         class: (node: any) => node
@@ -100,7 +104,7 @@ describe('traverser: count-traverser', () => {
     // typeOf(node)
     describe('typeOf(node)', () => {
       it('gets node type', () => {
-        const type = $traverser.typeOf(astNode) // $traverser['typeOf'](astNode)
+        const type = typeOf(astNode) // $traverser['typeOf'](astNode)
         expect(type).toEqual('SourceFile')
       })
     })
@@ -260,7 +264,7 @@ describe('traverser: count-traverser', () => {
         it(`traverses to next child/sibling node`, () => {
           $traverser['traverseNext'](stmt1)
           const lastNode = $traverser.lastVisitedNode
-          const lastType = $traverser.kindOf(lastNode)
+          const lastType = $traverser['kindOf'](lastNode)
           expect(lastType).toBe('x')
           // expect($traverser.lastVisitedNode).toBe(stmt2)
         })
@@ -271,7 +275,7 @@ describe('traverser: count-traverser', () => {
           $traverser.setMode('ancestor')
           $traverser['traverseNext'](stmt1)
           const lastNode = $traverser.lastVisitedNode
-          const lastType = $traverser.kindOf(lastNode)
+          const lastType = typeOf(lastNode)
           expect(lastType).toBe('SourceFile')
           // expect($traverser.lastVisitedNode).toBe(astNode)
         })
@@ -286,7 +290,7 @@ describe('traverser: count-traverser', () => {
         it(`traverses to next child/sibling node`, () => {
           $traverser['traverseChildNodes'](stmt1)
           const lastNode = $traverser.lastVisitedNode
-          const lastType = $traverser.kindOf(lastNode)
+          const lastType = typeOf(lastNode)
           expect(lastType).toBe('NumericLiteral')
         })
       })
@@ -302,7 +306,7 @@ describe('traverser: count-traverser', () => {
           $traverser['traverseAncestor'](stmt1)
 
           const lastNode = $traverser.lastVisitedNode
-          const lastType = $traverser.kindOf(lastNode)
+          const lastType = typeOf(lastNode)
           expect(lastType).toBe('SourceFile')
         })
       })

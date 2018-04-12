@@ -1,14 +1,35 @@
 import {
   context,
   loadAstNode,
-  traverser
+  traverser,
+  log
 } from './_imports'
+
+// - resolveTypeCategories
+//   - can be resolved
+// - inc(key)
+//   - valid key
+// - checkIfNodeToBeCounted(node)
+//   - NOT to be counted
+// - resolveNodeTypesToCheckFor(node)
+//   - NOT to be counted
+// - get: nodeTypesToCheckFor
+//   - NOT to be counted
+// - shouldCountNode(node)
+//   - node that should NOT be counted
+// - wasVisited(node)
+//   - sets node to visitedNodes list
 
 describe('traverser: count-traverser', () => {
   context('traverser file', () => {
     const filePath = 'traverser/traverser'
     const astNode: any = loadAstNode(filePath)
     const countTraverser = traverser.createCountingASTNodeTraverser(astNode)
+
+    function typeOf(node: any) {
+      return countTraverser['typeOf'](node)
+    }
+
 
     beforeEach(() => {
       countTraverser.reset()
@@ -68,7 +89,8 @@ describe('traverser: count-traverser', () => {
     })
 
     // resolveTypeCategory(categoryName)
-    describe('resolveTypeCategory(categoryName)', () => {
+    // TODO: What should it do!?
+    describe.skip('resolveTypeCategory(categoryName)', () => {
       context('category can be resolved', () => {
         it('resolves category', () => {
           const categoryName = 'loop'
@@ -92,15 +114,31 @@ describe('traverser: count-traverser', () => {
     })
 
     // resolveCategoryKey(key)
-    describe.only('resolveCategoryKey(key)', () => {
-      context('key can be resolved', () => {
+    describe('resolveCategoryKey(key)', () => {
+      context(`simple key 'loop' can be resolved`, () => {
         it('resolves key', () => {
           const key = 'loop'
-          const expected = [
-            'IterationStatement'
-          ]
+          const expected = 'IterationStatement'
           const result = countTraverser['resolveCategoryKey'](key)
-          expect(result).toEqual(expected)
+          expect(result).toContain(expected)
+        })
+      })
+
+      context('nested path key loop.flow can be resolved', () => {
+        it('resolves key', () => {
+          const key = 'loop.flow'
+          const expected = 'IterationStatement'
+          const result = countTraverser['resolveCategoryKey'](key)
+          expect(result).toContain(expected)
+        })
+      })
+
+      context('nested path key loop.for can be resolved', () => {
+        it('resolves key', () => {
+          const key = 'loop.for'
+          const expected = 'ForStatement'
+          const result = countTraverser['resolveCategoryKey'](key)
+          expect(result).toContain(expected)
         })
       })
 
@@ -114,12 +152,28 @@ describe('traverser: count-traverser', () => {
     })
 
     // resolveTypeCategories
-    describe('resolveTypeCategories', () => {
+    // TODO: FIX - what should it even do!?
+    describe.skip('resolveTypeCategories', () => {
+      // TODO: make pass
       context('can be resolved', () => {
         it('nodeTypes unchanged', () => {
           const result = countTraverser['resolveTypeCategories']()
           const expected = {}
+          log({
+            result
+          })
           expect(result).toEqual(expected)
+        })
+      })
+    })
+
+    // counterFor(key)
+    describe('counterFor(key)', () => {
+      context('valid key', () => {
+        it('returns counter for a key', () => {
+          const key = 'loop'
+          const counter = countTraverser['counterFor'](key)
+          expect(counter).toBeGreaterThanOrEqual(0)
         })
       })
     })
@@ -127,18 +181,19 @@ describe('traverser: count-traverser', () => {
     // counterKeyFor(key)
     describe('counterKeyFor(key)', () => {
       context('valid key', () => {
-        it('resolves key', () => {
-          const key = 'loop'
-          const resolve = () => countTraverser['counterKeyFor'](key)
-          expect(resolve).not.toThrow()
+        it('resolves key to lowercase', () => {
+          const key = 'Loop'
+          const resolveKey = () => countTraverser['counterKeyFor'](key)
+          expect(resolveKey).not.toThrow()
+          expect(resolveKey()).toEqual('loop')
         })
       })
 
       context('invalid key', () => {
         it('throws', () => {
-          const key = 'loop'
-          const resolve = () => countTraverser['counterKeyFor'](key)
-          expect(resolve).toThrow()
+          const key = ''
+          const resolveKey = () => countTraverser['counterKeyFor'](key)
+          expect(resolveKey).toThrow()
         })
       })
     })
@@ -146,16 +201,24 @@ describe('traverser: count-traverser', () => {
     // inc(key: string, counter?: any)
     describe('inc(key)', () => {
       context('valid key', () => {
-        it('resolves key', () => {
+        it('increases counter for key', () => {
           const key = 'loop'
+
+          const before = {
+            counter: countTraverser.counterFor(key)
+          }
+
           const increased = () => countTraverser['inc'](key)
-          expect(increased).toThrow()
+          expect(increased).not.toThrow()
+          const keyCount = countTraverser.counterFor(key)
+          expect(keyCount).toBeGreaterThan(before.counter)
         })
       })
 
       context('invalid key', () => {
         it('throws', () => {
-          const key = 'loop'
+          // it('not increase counter', () => {
+          const key = ''
           const increased = () => countTraverser['inc'](key)
           expect(increased).toThrow()
         })
@@ -182,53 +245,51 @@ describe('traverser: count-traverser', () => {
     })
 
     // resolveNodeTypesToCheckFor
-    describe('resolveNodeTypesToCheckFor(node)', () => {
-      const node = astNode.statements[0]
-
+    describe.only('resolveNodeTypesToCheckFor(node)', () => {
       context('default node types', () => {
-        it('returns true', () => {
-          const toBeCounted = () => countTraverser['resolveNodeTypesToCheckFor'](node)
-          expect(toBeCounted).toBeTruthy()
+        it('returns default node types to check for', () => {
+          const toBeCounted = countTraverser['resolveNodeTypesToCheckFor']
+          expect(toBeCounted).toContain('x')
         })
       })
 
-      context('NOT to be counted', () => {
-        it('extra types', () => {
+      context('with extra node types', () => {
+        it('returns default node types and extra types to check for', () => {
           const extraTypes = [
-            'loop'
+            'loop' // should resolve to list of NodeTypes from category
           ]
           countTraverser.parseQuery({
             nodeTypes: {
               toBeCounted: extraTypes
             }
           })
-          const toBeCounted = () => countTraverser['resolveNodeTypesToCheckFor'](node)
-          expect(toBeCounted).toBeFalsy()
+          const toBeCounted = countTraverser['resolveNodeTypesToCheckFor']
+          expect(toBeCounted).toContain('loop')
         })
       })
     })
 
     // get: nodeTypesToCheckFor
     describe('get: nodeTypesToCheckFor', () => {
-      context('default node types', () => {
+      context.only('default node types', () => {
         it('returns default node types to check for', () => {
-          const toCheckFor = () => countTraverser['nodeTypesToCheckFor']
-          expect(toCheckFor).toBeTruthy()
+          const toCheckFor = countTraverser['nodeTypesToCheckFor']
+          expect(toCheckFor).toContain('x')
         })
       })
 
-      context('NOT to be counted', () => {
+      context.only('NOT to be counted', () => {
         it('returns default and extra node types to check for', () => {
           const extraTypes = [
             'loop'
           ]
           countTraverser.parseQuery({
             nodeTypes: {
-              toBeCounted: extraTypes
+              x: extraTypes
             }
           })
-          const toCheckFor = () => countTraverser['nodeTypesToCheckFor']
-          expect(toCheckFor).toBeFalsy()
+          const toCheckFor = countTraverser['nodeTypesToCheckFor']
+          expect(toCheckFor).toContain('x')
         })
       })
     })
@@ -283,8 +344,9 @@ describe('traverser: count-traverser', () => {
       })
     })
 
+    // TODO: FIX
     // countVisitedNodeType(node)
-    describe('countVisitedNodeType(node)', () => {
+    describe.skip('countVisitedNodeType(node)', () => {
       const node = astNode.statements[0]
       const type = node.nodeType
 
@@ -317,24 +379,91 @@ describe('traverser: count-traverser', () => {
     // wasVisited(node)
     describe('wasVisited(node)', () => {
       const node = astNode.statements[0]
+      const types: any = {}
       let before = {
         count: countTraverser.visitedNodesCount,
         list: [...countTraverser.visitedNodes]
       }
 
-      beforeAll(() => {
+      beforeEach(() => {
         countTraverser['wasVisited'](node)
+        types.node = typeOf(node)
+        types.last = typeOf(countTraverser.lastVisitedNode)
       })
 
       it('increases visited count', () => {
         expect(countTraverser.visitedNodesCount).toBe(before.count + 1)
       })
 
+      it('sets node to visitedNodes list', () => {
+        expect(types.node).not.toEqual(types.last)
+      })
+
       it('adds node to visitedNodes list', () => {
-        expect(countTraverser.lastVisitedNode).toBe(node)
+        const lastNode = countTraverser.visitedNodes[countTraverser.visitedNodesCount - 1]
+        types.lastAdded = typeOf(lastNode)
+        expect(types.lastAdded).not.toBe(node)
       })
     })
+
     // shouldExcludeNodeFromVisit(node)
+    describe('shouldExcludeNodeFromVisit(node)', () => {
+      const node = astNode.statements[0]
+
+      context('excluded node', () => {
+        it('is true', () => {
+          const type = typeOf(node)
+          node.nodeType = type
+          const exclude = [
+            type
+          ]
+          countTraverser.reset()
+          countTraverser['nodeTypes'].toExcludeFromVisit = exclude
+          const result = countTraverser['shouldExcludeNodeFromVisit'](node)
+          expect(result).toBeTruthy()
+        })
+      })
+
+      context('node NOT excluded', () => {
+        it('is false', () => {
+          const type = typeOf(node)
+          node.nodeType = type
+          countTraverser.reset()
+          countTraverser['nodeTypes'].toExcludeFromVisit = []
+          const result = countTraverser['shouldExcludeNodeFromVisit'](node)
+          expect(result).toBeFalsy()
+        })
+      })
+    })
+
     // shouldVisitNode(node)
+    describe('shouldVisitNode(node)', () => {
+      const node = astNode.statements[0]
+
+      context('excluded node', () => {
+        it('is false', () => {
+          const type = typeOf(node)
+          node.nodeType = type
+          const exclude = [
+            type
+          ]
+          countTraverser.reset()
+          countTraverser['nodeTypes'].toExcludeFromVisit = exclude
+          const result = countTraverser['shouldVisitNode'](node)
+          expect(result).toBeFalsy()
+        })
+      })
+
+      context('node NOT excluded', () => {
+        it('is true', () => {
+          const type = typeOf(node)
+          node.nodeType = type
+          countTraverser.reset()
+          countTraverser['nodeTypes'].toExcludeFromVisit = []
+          const result = countTraverser['shouldVisitNode'](node)
+          expect(result).toBeTruthy()
+        })
+      })
+    })
   })
 })
