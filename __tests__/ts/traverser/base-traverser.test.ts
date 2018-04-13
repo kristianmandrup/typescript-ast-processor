@@ -44,9 +44,48 @@ describe('traverser: count-traverser', () => {
     })
 
     describe('findFirst(nodeTypeMatcher)', () => {
+      it('finds first node matching on nodeType', () => {
+        const nodeType = 'Identifier'
+        const found: any = $traverser.findFirst(nodeType)
+        expect(found).toBeDefined()
+        expect(found.nodeType).toBe(nodeType)
+      })
     })
 
     describe('matchesType(node, nodeTypeMatcher)', () => {
+      describe('name match', () => {
+        it('matches on same name', () => {
+          const nodeType = 'Identifier'
+          const foundNode: any = $traverser.findFirst(nodeType)
+          const match: boolean = $traverser.matchesType(foundNode, nodeType)
+          expect(match).toBeTruthy()
+        })
+
+        it('mis-matches on different name', () => {
+          const nodeType = 'Identifier'
+          const foundNode: any = $traverser.findFirst(nodeType)
+          const match: boolean = $traverser.matchesType(foundNode, nodeType)
+          expect(match).toBeTruthy()
+        })
+      })
+
+      describe('RegExp match', () => {
+        it('matches on expr match', () => {
+          const matchExpr = /^Id/
+          const nodeType = 'Identifier'
+          const foundNode: any = $traverser.findFirst(nodeType)
+          const match: boolean = $traverser.matchesType(foundNode, matchExpr)
+          expect(match).toBeTruthy()
+        })
+
+        it('mis-matches on expr mis-match', () => {
+          const badExpr = /oops/
+          const nodeType = 'Identifier'
+          const foundNode: any = $traverser.findFirst(nodeType)
+          const match: boolean = $traverser.matchesType(foundNode, badExpr)
+          expect(match).toBeFalsy()
+        })
+      })
     })
 
     // registerVisitors(registry)

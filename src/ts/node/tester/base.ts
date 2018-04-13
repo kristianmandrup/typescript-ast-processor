@@ -20,7 +20,7 @@ export interface INodeTester {
 
 export abstract class BaseNodeTester extends Loggable implements INodeTester {
   factories: any = {}
-  _occurenceTester: any // INodeOccurrenceTester
+  _occurrenceTester: any // INodeOccurrenceTester
 
   /**
    * Create BaseTester
@@ -49,9 +49,9 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
   /**
    * Create new or return Occurrence Node Tester
    */
-  get occurenceTester() {
-    this._occurenceTester = this._occurenceTester || this.createNodeTester('occurrences', this.node, this.options)
-    return this._occurenceTester
+  get occurrenceTester() {
+    this._occurrenceTester = this._occurrenceTester || this.createNodeTester('occurrences', this.node, this.options)
+    return this._occurrenceTester
   }
 
 
@@ -132,7 +132,7 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    * @param traverseQuery
    */
   countInTree(query: any): number {
-    return this.occurenceTester.countInTree(query)
+    return this.occurrenceTester.countInTree(query)
   }
 
   /**
@@ -141,7 +141,7 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    * @param options
    */
   countOccurrence(options: any = {}): number {
-    return this.occurenceTester.countOccurrence(options)
+    return this.occurrenceTester.countOccurrence(options)
   }
 
   /**
