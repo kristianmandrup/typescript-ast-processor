@@ -4,13 +4,8 @@ import {
   testOr,
   testAnd,
   testNot,
-  testName,
   testNames,
 } from './util'
-import {
-  isEmpty,
-} from '../../util'
-import { INodeOccurrenceTester } from './occurrence';
 import { IDetailsTester } from '../details/base';
 
 export interface INodeTester {
@@ -25,7 +20,7 @@ export interface INodeTester {
 
 export abstract class BaseNodeTester extends Loggable implements INodeTester {
   factories: any = {}
-  occurenceTester: any // INodeOccurrenceTester
+  _occurenceTester: any // INodeOccurrenceTester
 
   /**
    * Create BaseTester
@@ -41,8 +36,6 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
       })
     }
 
-    this.occurenceTester = this.createNodeTester('occurrences', node, options)
-
     if (!node) {
       this.error(`BaseTester: Missing node to test`, {
         node,
@@ -52,6 +45,15 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
     }
     this.node = node
   }
+
+  /**
+   * Create new or return Occurrence Node Tester
+   */
+  get occurenceTester() {
+    this._occurenceTester = this._occurenceTester || this.createNodeTester('occurrences', this.node, this.options)
+    return this._occurenceTester
+  }
+
 
   protected createTester(name: string, node: any, options: any = {}): INodeTester | IDetailsTester {
     const factory = /details:/.test(name) ? 'createDetailsTester' : 'createNodeTester'

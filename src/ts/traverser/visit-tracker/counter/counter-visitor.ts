@@ -50,6 +50,9 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
     return this
   }
 
+  /**
+   * The counter map for node types counted
+   */
   get counter() {
     return this.nodeTypeCounter.counter
   }

@@ -24,6 +24,7 @@ describe('occurrence', () => {
       query,
       options
     }
+    const token = 'continue'
 
     describe('createNodeTraverser(options)', () => {
       it('creates a node traverser that has a nodeTypeCounter', () => {
@@ -32,35 +33,76 @@ describe('occurrence', () => {
       })
     })
 
-    describe.only('visited(opts)', () => {
+    describe('visited(opts)', () => {
       it('returns a traverser where nodes have been visited', () => {
         const visitedTraverser = tester.visited(opts)
-        log({
-          counter: visitedTraverser.counter
-        })
+        // log({
+        //   counter: visitedTraverser.counter
+        // })
         expect(visitedTraverser.counter).toBeDefined()
+        expect(visitedTraverser.counter.visited).toBeGreaterThan(1)
       })
     })
 
     describe('counter(opts)', () => {
       it('returns the counter of a traverser where nodes have been visited', () => {
         const counter = tester.counter(opts)
-        expect(counter.visited).toBeGreaterThan(0)
+        expect(counter.visited).toBeGreaterThan(1)
       })
     })
 
     describe('countInTree(query: any)', () => {
       it('is not exported', () => {
         const counted = tester.countInTree(query)
-        expect(counted).toBe(2)
+        expect(counted).toBeGreaterThan(1)
       })
     })
 
-    describe('countOccurenceOf(token, options)', () => {
-      it('counts occurences', () => {
-        const occurrences = tester.countOccurenceOf('continue', {
+    describe('createTokenTester(token, options)', () => {
+      const tokenTesterFun = tester.createTokenTester(token, options)
+
+      it('is a function', () => {
+        expect(typeof tokenTesterFun).toBe('function')
+      })
+    })
+
+    describe('createTokenTesterFun(token, options)', () => {
+      const tokenTesterFun = tester.createTokenTesterFun(token, options)
+
+      it('is a function', () => {
+        expect(typeof tokenTesterFun).toBe('function')
+      })
+
+      describe('token tester', () => {
+        it('returns true for a continue token node', () => {
+          const continueNode = tester.findFirst('continue')
+          expect(tokenTesterFun(continueNode)).toBeTruthy()
         })
-        expect(occurrences).toBe(2)
+
+        it('returns false for a non-continue token node', () => {
+          const nonContinueNode = tester.node
+          expect(tokenTesterFun(nonContinueNode)).toBeFalsy()
+        })
+      })
+    })
+
+    describe('createTokenTester(token, options)', () => {
+      it('creates a token tester function', () => {
+        const counted = tester.createTokenTester(token, options)
+        expect(counted).toBeGreaterThan(1)
+      })
+    })
+
+    describe.only('countOccurenceOf(token, options)', () => {
+      context('has 2 continue tokens', () => {
+        it('counts exactly 2 occurences', () => {
+          const occurrences = tester.countOccurenceOf(token, {
+          })
+          log({
+            occurrences
+          })
+          expect(occurrences).toBe(2)
+        })
       })
     })
 

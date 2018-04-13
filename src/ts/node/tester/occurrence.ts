@@ -1,6 +1,9 @@
 import {
   createCountingASTNodeTraverser
 } from '../../traverser'
+import { isNonEmptyStr } from '../../util';
+import { BaseNodeTester } from './base';
+import { Loggable } from '../../loggable';
 
 export interface INodeOccurrenceTester {
   countInTree(query: any): number
@@ -15,12 +18,20 @@ export function createNodeOccurrenceTester(node: any, options: any = {}) {
  * Counts occurences of specific types (or categories) of nodes
  * Within an AST sub-structure
  */
-export class NodeOccurrenceTester {
-  protected factories: any
+export class NodeOccurrenceTester extends BaseNodeTester {
+  factories: any
 
-  constructor(protected node: any, protected options: any = {}) {
+  constructor(node: any, options: any = {}) {
+    super(node, options)
     this.factories = options.factories
+  }
 
+  /**
+   *
+   * @param nodeType
+   */
+  findFirst(nodeType: any) {
+    return this.createNodeTraverser(this.options).findFirst(nodeType)
   }
 
   /**
@@ -47,13 +58,14 @@ export class NodeOccurrenceTester {
    *
    * @param traverseQuery
    */
-  countInTree(query: any): number {
+  countInTree(query: any, type: string = 'visited'): number {
     const opts = {
       ...this.options,
       query,
       node: this.node
     }
-    return this.counter(opts).visited || 0
+    const counter = this.counter(opts)
+    return counter[type] || 0
   }
 
   /**
@@ -104,21 +116,48 @@ export class NodeOccurrenceTester {
   }
 
   // protected
-  createExprTester(token: string = 'break', options: any = {}) {
+  /**
+   * Count occurences of a particular token
+   * @param token
+   * @param options
+   */
+  countOccurenceOf(token: string, options: any = {}): number {
+    return this.countOccurrence({
+      nodeTypes: {
+        // function that given a node determines if it should be counted or not
+        toCount: this.createTokenTester(token, options)
+      }
+    })
+  }
+
+  /**
+   * Create a token tester
+   * @param token
+   * @param options
+   */
+  createTokenTester(token: string, options: any = {}) {
+    return this.createTokenTesterFun(token, {
+      ...options,
+      exclude: ['loop'] // exclude any nested loops
+    })
+  }
+
+  // protected
+  /**
+   * Create an expression tester function
+   * @param token
+   * @param options
+   */
+  createTokenTesterFun(token: string, options: any = {}) {
+    if (!isNonEmptyStr(token)) {
+      this.error('Invalid or missing token', {
+        token
+      })
+    }
     return (node: any) => {
       const exprTester = this.createExpressionTester({ ...options, node })
       return exprTester.is(token, node)
     }
-  }
-
-  // protected
-  countOccurenceOf(token: string, options: any = {}): number {
-    return this.countOccurrence({
-      tester: this.createExprTester(token, {
-        ...options,
-        exclude: ['loop'] // exclude any nested loops
-      })
-    })
   }
 }
 

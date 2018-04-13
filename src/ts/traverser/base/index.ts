@@ -9,8 +9,9 @@ import {
 } from '../../util'
 import {
   isFunction,
-  isNonEmptyStr
+  isNonEmptyStr,
 } from '../../../../src/ts/util';
+import { isRegExp } from 'util';
 
 export function createASTNodeTraverser(options: any) {
   return new ASTNodeTraverser(options)
@@ -38,6 +39,7 @@ export class ASTNodeTraverser extends Loggable {
 
   startNode: any
   visitedNodes: any[]
+  visitedNodesMap: any = {}
   _lastVisitedNode: any
   query: any
   mode: TraverseMode | undefined
@@ -68,6 +70,7 @@ export class ASTNodeTraverser extends Loggable {
     this.nestingLevel = 0
     this._lastVisitedNode = undefined
     this.visitedNodes = []
+    this.visitedNodesMap = {}
     this.mode = TraverseMode.Children
     this.state = {}
   }
@@ -91,6 +94,39 @@ export class ASTNodeTraverser extends Loggable {
     const createVisitorIterator = options.createVisitorIterator || this._createVisitorIterator
     this._createVisitorIterator = createVisitorIterator.bind(this)
   }
+
+  /**
+   * Test if a match expression matches type of node
+   * @param node
+   * @param nodeTypeMatcher
+   */
+  matchesType(node: any, nodeTypeMatcher: any) {
+    const { nodeType } = node
+    if (isNonEmptyStr(nodeTypeMatcher)) {
+      return nodeType === nodeTypeMatcher
+    }
+    if (isRegExp(nodeTypeMatcher)) {
+      return nodeTypeMatcher.test(nodeType)
+    }
+    return false
+  }
+
+  /**
+   * Find first node matching a given nodeType
+   * @param nodeType
+   */
+  findFirst(nodeTypeMatcher: any) {
+    let foundNode
+    this.onVisited = (node: any) => {
+      if (this.matchesType(node, nodeTypeMatcher)) {
+        foundNode = node
+        this.shouldVisitNode = () => false
+      }
+    }
+    this.visit()
+    return foundNode
+  }
+
 
   /**
    * query:
@@ -246,13 +282,47 @@ export class ASTNodeTraverser extends Loggable {
   }
 
   /**
+   *
+   * @param node
+   */
+  protected onVisited(node: any) {
+
+  }
+
+  protected visitedNodesListFor(nodeType: string) {
+    return this.visitedNodesMap[nodeType] || []
+  }
+
+  protected visitNodeType(nodeType: string, node: any) {
+    if (!nodeType) return
+    const list = this.visitedNodesListFor(nodeType)
+    if (Array.isArray(list)) {
+      // this.log('visitNodeType', {
+      //   nodeType,
+      //   node,
+      //   list
+      // })
+      list.push(node)
+      this.visitedNodesMap[nodeType] = list
+    }
+    return this
+  }
+
+  /**
    * Handler for just after node was visited
    * @param node
    */
   protected wasVisited(node: any) {
     if (node) {
+      const { nodeType } = node
+
       this.log('visited', this.nodeDisplayInfo(node))
       this._lastVisitedNode = node
+
+      this.visitedNodes.push(node)
+      // add to map of node types encountered
+      this.visitNodeType(nodeType, node)
+      this.onVisited(node)
     } else {
       this.log('mysterious node!!', {
         node
@@ -276,10 +346,16 @@ export class ASTNodeTraverser extends Loggable {
     return this.visitedNodes.includes(node)
   }
 
+  /**
+   *
+   */
   get visitedNodesCount(): number {
     return this.visitedNodes.length
   }
 
+  /**
+   *
+   */
   get lastVisitedNode() {
     return this._lastVisitedNode || this.visitedNodes[this.visitedNodesCount - 1]
   }
@@ -293,11 +369,6 @@ export class ASTNodeTraverser extends Loggable {
     // assignKeyDefined(node, 'nodeType', this.typeOf(node))
     const type = this.typeOf(node)
     node.nodeType = type
-    console.log('visit', {
-      nodeType: node.nodeType,
-      type
-    })
-
     if (!this.shouldVisitNode(node)) {
       this.skipped(node)
       return

@@ -43,6 +43,12 @@ describe('traverser: count-traverser', () => {
       })
     })
 
+    describe('findFirst(nodeTypeMatcher)', () => {
+    })
+
+    describe('matchesType(node, nodeTypeMatcher)', () => {
+    })
+
     // registerVisitors(registry)
     describe('registerVisitors(registry)', () => {
       context('valid registry', () => {
