@@ -289,13 +289,13 @@ export class ASTNodeTraverser extends Loggable {
 
   }
 
-  protected visitedNodesListFor(nodeType: string) {
+  visitedNodesFor(nodeType: string) {
     return this.visitedNodesMap[nodeType] || []
   }
 
   protected visitNodeType(nodeType: string, node: any) {
     if (!nodeType) return
-    const list = this.visitedNodesListFor(nodeType)
+    const list = this.visitedNodesFor(nodeType)
     if (Array.isArray(list)) {
       // this.log('visitNodeType', {
       //   nodeType,

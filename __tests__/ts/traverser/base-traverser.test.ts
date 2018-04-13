@@ -176,9 +176,42 @@ describe('traverser: count-traverser', () => {
     })
 
     // wasVisited(node)
-    describe.skip('wasVisited(node)', () => {
-      it('does nothing', () => {
-        expect($traverser['wasVisited'](astNode)).toBeDefined()
+    describe('wasVisited(node)', () => {
+      const { nodeType } = astNode
+
+      beforeEach(() => {
+        $traverser.reset()
+      })
+
+      it('adds node to visitedNodes', () => {
+        const initialCount = $traverser.visitedNodesCount
+        $traverser['wasVisited'](astNode)
+        expect($traverser.visitedNodesCount).toBe(initialCount + 1)
+      })
+
+      it('adds node to visitedNodes type map', () => {
+        $traverser['wasVisited'](astNode)
+        expect($traverser.visitedNodesMap[nodeType][0]).toBe(astNode)
+      })
+    })
+
+    describe('visitedNodesFor', () => {
+      const nodeType = astNode.nodeType
+      beforeEach(() => {
+        $traverser.reset()
+      })
+
+      context('no nodes visited', () => {
+        it('returns empty list', () => {
+          expect($traverser.visitedNodesFor(nodeType)).toEqual([])
+        })
+      })
+
+      context('node was visited', () => {
+        it('returns non-empty node list', () => {
+          $traverser['wasVisited'](astNode)
+          expect($traverser.visitedNodesFor(nodeType)).not.toEqual([])
+        })
       })
     })
 
