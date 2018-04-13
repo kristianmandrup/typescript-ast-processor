@@ -2,13 +2,15 @@ import {
   node,
   context,
   loadAstNode,
-  logObj
+  logObj,
+  log
 } from '../'
 
 export {
   node,
   context,
-  logObj
+  logObj,
+  log
 }
 
 const {

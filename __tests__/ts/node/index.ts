@@ -5,5 +5,6 @@ export {
   context,
   node,
   loadAstNode,
-  logObj
+  logObj,
+  log
 } from '../'

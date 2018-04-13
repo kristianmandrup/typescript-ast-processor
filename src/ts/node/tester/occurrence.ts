@@ -53,11 +53,25 @@ export class NodeOccurrenceTester {
       query,
       node: this.node
     }
-    // TODO: fix/improve
+    return this.counter(opts).visited || 0
+  }
+
+  /**
+   * Visit all nodes in AST sub-tree
+   * @param opts
+   */
+  visited(opts = {}) {
     const nodeTraverser = this.createNodeTraverser(opts)
     nodeTraverser.visit()
-    const counter = nodeTraverser.counter || {}
-    return counter.visited || 0
+    return nodeTraverser
+  }
+
+  /**
+   * Get the traverse counter map after having visited all nodes in AST sub-tree
+   * @param opts
+   */
+  counter(opts = {}) {
+    return this.visited(opts).counter || {}
   }
 
   /**

@@ -1,7 +1,8 @@
 import {
   testerFor,
   context,
-  logObj
+  logObj,
+  log
 } from './_imports'
 
 describe('occurrence', () => {
@@ -18,6 +19,11 @@ describe('occurrence', () => {
 
     const options = {}
     const query = {}
+    const opts = {
+      node: tester.node,
+      query,
+      options
+    }
 
     describe('createNodeTraverser(options)', () => {
       it('creates a node traverser that has a nodeTypeCounter', () => {
@@ -26,7 +32,31 @@ describe('occurrence', () => {
       })
     })
 
-    describe.only('countOccurenceOf(token, options)', () => {
+    describe.only('visited(opts)', () => {
+      it('returns a traverser where nodes have been visited', () => {
+        const visitedTraverser = tester.visited(opts)
+        log({
+          counter: visitedTraverser.counter
+        })
+        expect(visitedTraverser.counter).toBeDefined()
+      })
+    })
+
+    describe('counter(opts)', () => {
+      it('returns the counter of a traverser where nodes have been visited', () => {
+        const counter = tester.counter(opts)
+        expect(counter.visited).toBeGreaterThan(0)
+      })
+    })
+
+    describe('countInTree(query: any)', () => {
+      it('is not exported', () => {
+        const counted = tester.countInTree(query)
+        expect(counted).toBe(2)
+      })
+    })
+
+    describe('countOccurenceOf(token, options)', () => {
       it('counts occurences', () => {
         const occurrences = tester.countOccurenceOf('continue', {
         })
@@ -38,13 +68,6 @@ describe('occurrence', () => {
       it('counts occurences', () => {
         const occurrences = tester.countOccurrence(options)
         expect(occurrences).toBe(2)
-      })
-    })
-
-    describe('countInTree(query: any)', () => {
-      it('is not exported', () => {
-        const counted = tester.countInTree(query)
-        expect(counted).toBe(2)
       })
     })
   })
