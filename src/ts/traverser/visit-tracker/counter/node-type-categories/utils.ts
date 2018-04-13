@@ -1,7 +1,7 @@
 import {
   isArray,
   isObject,
-} from '../../../../../util'
+} from '../../../../util'
 
 export const defaults = {
   categoryMap: {

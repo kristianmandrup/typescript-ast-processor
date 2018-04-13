@@ -64,7 +64,7 @@ export class NodeTypeCounter extends Loggable {
     this.reset()
   }
 
-  setNodeTypes(nodeTypes: any) {
+  setNodeTypes(nodeTypes: any = {}) {
     this._nodeTypes = deepmerge(this._nodeTypes || {}, nodeTypes)
     this.resolveTypeCategories(nodeTypes)
   }

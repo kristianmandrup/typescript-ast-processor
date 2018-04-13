@@ -1,4 +1,3 @@
-import * as ts from 'typescript'
 import {
   ASTNodeTraverser
 } from '../../base'
@@ -22,7 +21,6 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
 
   constructor(options: any) {
     super(options)
-    this.nodeTypeCounter = new NodeTypeCounter(this.nodeTypes, options)
   }
 
   reset() {
@@ -36,10 +34,17 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
    */
   init(options: any = {}) {
     super.init(options)
+    this.nodeTypeCounter = new NodeTypeCounter(this.nodeTypes, options)
     this.nodeTypeCounter.init()
     this.nodeTypesToCheckFor = this.resolveNodeTypesToCheckFor
+    this.parseQuery(options.query)
   }
 
+  /**
+   * Increase node tyoe counter
+   * @param key
+   * @param counter
+   */
   inc(key: string, counter?: any): any {
     this.nodeTypeCounter.inc(key, counter)
     return this

@@ -4,5 +4,6 @@ export {
   fixtureFile,
   context,
   node,
-  loadAstNode
+  loadAstNode,
+  logObj
 } from '../'

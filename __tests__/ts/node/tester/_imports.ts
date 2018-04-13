@@ -1,14 +1,14 @@
 import {
   node,
-  fixtureFile,
-  createSrcFile,
   context,
-  loadAstNode
+  loadAstNode,
+  logObj
 } from '../'
 
 export {
   node,
-  context
+  context,
+  logObj
 }
 
 const {

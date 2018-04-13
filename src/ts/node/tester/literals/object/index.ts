@@ -3,8 +3,9 @@ export {
   ObjectLiteralTester
 } from './object'
 
+import * as properties from './properties'
+
 export {
-  createPropertyNodesTester,
-  PropertyNodesTester
-} from './properties'
+  properties
+}
 

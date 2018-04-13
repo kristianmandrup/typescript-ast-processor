@@ -90,7 +90,6 @@ export class ASTNodeTraverser extends Loggable {
     this.registry = options.visitors || {}
     const createVisitorIterator = options.createVisitorIterator || this._createVisitorIterator
     this._createVisitorIterator = createVisitorIterator.bind(this)
-    this.parseQuery(options.query)
   }
 
   /**
