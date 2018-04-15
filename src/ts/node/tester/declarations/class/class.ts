@@ -1,6 +1,7 @@
 import { IDetailsTester } from '../../../details/base'
 import { INodeTester } from '../../base'
 import { DeclarationNodeTester } from '../declaration'
+import { isDefined } from '../../../../util'
 
 /**
  * Factory to create class tester to query and collect data for class node
@@ -11,11 +12,14 @@ export function createClassTester(node: any, options: any = {}) {
   return new ClassTester(node, options)
 }
 
+function isQuery(query: any) {
+  return isDefined(query)
+}
+
 export class ClassTester extends DeclarationNodeTester {
   heritageNodeTester: INodeTester
   memberNodesTester: any // INodeTester
   classDetailsTester: IDetailsTester
-  identifierNodeTester: any
   /**
    * Create class tester
    * @param node
@@ -23,33 +27,9 @@ export class ClassTester extends DeclarationNodeTester {
    */
   constructor(node: any, options: any = {}) {
     super(node, options)
-    this.heritageNodeTester = this.createNodeTester(
-      'class.heritage',
-      node,
-      options,
-    )
-    this.memberNodesTester = this.createNodeTester(
-      'class.members',
-      node,
-      options,
-    )
-    this.classDetailsTester = this.createDetailsTester('class', node, options)
-
-    // NOTE: anonymous function has no ID
-    if (this.hasId(node)) {
-      this.identifierNodeTester = this.createNodeTester(
-        'identifier',
-        node,
-        options,
-      )
-    }
-  }
-
-  /**
-   * TODO: Really test if this function is anonomous or NOT
-   */
-  hasId(node: any) {
-    return true
+    this.setTester({ name: 'heritage', factory: 'class.heritage' })
+    this.setTester({ name: 'members', factory: 'class.members' })
+    this.setTester({ name: 'class', factory: 'class', type: 'details' })
   }
 
   /**
@@ -58,68 +38,28 @@ export class ClassTester extends DeclarationNodeTester {
   info() {
     return {
       ...super.info(),
-      // TODO: move to DeclarationTester!!
-      name: this.name,
-      exported: this.isExported,
       abstract: this.isAbstract,
       heritage: this.heritage,
     }
   }
 
   /**
-   * Whether function is named
-   */
-  get isNamed(): boolean {
-    return Boolean(this.identifierNodeTester)
-  }
-
-  testName(query: any) {
-    if (!query || !this.isNamed) return true
-    return this.identifierNodeTester
-      ? this.identifierNodeTester.testName(query)
-      : false
-  }
-
-  /**
-   * Whether function is anonymous
-   */
-  get isAnonymous(): boolean {
-    return !this.isNamed
-  }
-
-  /**
-   * The name of the class (if not anonymous)
-   */
-  get name() {
-    if (!this.isNamed) return undefined
-    return this.identifierNodeTester
-      ? this.identifierNodeTester.name
-      : undefined
-  }
-
-  /**
-   * Whether class declaration exported (only possible if named)
-   *
-   */
-  get isExported() {
-    if (!this.isNamed) return false
-    return this.identifierNodeTester
-      ? this.identifierNodeTester.isExported
-      : false
-  }
-
-  /**
    * whether class is abstract
    */
   get isAbstract() {
-    return this.classDetailsTester.is('abstract')
+    return this.getTester({
+      type: 'details',
+      name: 'class',
+    }).is('abstract')
   }
 
   /**
    * Heritage of the class
    */
   get heritage() {
-    return this.heritageNodeTester.info()
+    return this.getTester({
+      name: 'heritage',
+    }).info()
   }
 
   /**
@@ -129,6 +69,7 @@ export class ClassTester extends DeclarationNodeTester {
   test(query: any): any {
     return (
       this.testName(query) &&
+      this.testExported(query) &&
       this.testAbstract(query) &&
       this.testImplements(query) &&
       this.testExtends(query) &&
@@ -141,7 +82,11 @@ export class ClassTester extends DeclarationNodeTester {
    * @param query
    */
   testMembers(query: any) {
-    this.memberNodesTester.test(query.members || query)
+    return this.doTest({
+      query,
+      name: 'members',
+      test: 'testMembers',
+    })
   }
 
   /**
@@ -149,7 +94,11 @@ export class ClassTester extends DeclarationNodeTester {
    * @param query
    */
   testAccessors(query: any) {
-    this.memberNodesTester.testAccessors(query.accessors || query)
+    return this.doTest({
+      query,
+      name: 'members',
+      test: 'testAccessors',
+    })
   }
 
   /**
@@ -157,7 +106,11 @@ export class ClassTester extends DeclarationNodeTester {
    * @param query
    */
   testImplements(query: any) {
-    this.heritageNodeTester.test(query.implements || query)
+    this.doTest({
+      query,
+      qprop: 'implements',
+      name: 'heritage',
+    })
   }
 
   /**
@@ -165,7 +118,11 @@ export class ClassTester extends DeclarationNodeTester {
    * @param query
    */
   testExtends(query: any) {
-    this.heritageNodeTester.test(query.extends || query)
+    this.doTest({
+      query,
+      qprop: 'extends',
+      name: 'heritage',
+    })
   }
 
   /**

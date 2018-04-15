@@ -8,6 +8,11 @@ function resolveStatementIndex(opts: any = {}): number {
   return opts.statementIndex || 0
 }
 
+/**
+ * Retrieve the node to use
+ * @param sourceFile
+ * @param opts
+ */
 function getNode(sourceFile: any, opts: any = {}) {
   const { index, traverse } = opts
   const statements = sourceFile.statements
@@ -16,7 +21,12 @@ function getNode(sourceFile: any, opts: any = {}) {
   return node
 }
 
-function resolveTester(srcFile: string, opts: any = {}) {
+/**
+ * Resolve Node tester using source file
+ * @param srcFile
+ * @param opts
+ */
+function resolveNodeTester(srcFile: string, opts: any = {}) {
   const node = getNode(srcFile, opts)
   return opts.factory(node, {
     logging: true,
@@ -24,6 +34,10 @@ function resolveTester(srcFile: string, opts: any = {}) {
   })
 }
 
+/**
+ * Resolve category based on type
+ * @param type
+ */
 function resolveCategory(type: string): string | undefined {
   switch (type) {
     case 'class':
@@ -40,6 +54,10 @@ function resolveCategory(type: string): string | undefined {
   return
 }
 
+/**
+ * Resolve Node Tester factory
+ * @param opts
+ */
 function resolveFactory(opts: any = {}) {
   let { factory, factoryName, type } = opts
   factoryName = factoryName || type
@@ -84,14 +102,14 @@ export function testerFor(opts: any = {}): any {
       const traverse =
         traversers[label] || (traverseToIndex && traverseToIndex(index))
 
-      const tester = resolveTester(srcFile, { factory, index, traverse })
+      const tester = resolveNodeTester(srcFile, { factory, index, traverse })
       acc[label] = tester
       return acc
     }, {})
   }
 
   if (!isNaN(statementIndex) || traverse) {
-    return resolveTester(srcFile, {
+    return resolveNodeTester(srcFile, {
       factory,
       index: statementIndex,
       traverse,

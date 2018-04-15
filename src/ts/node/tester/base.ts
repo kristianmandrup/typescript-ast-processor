@@ -1,4 +1,4 @@
-import { Loggable } from '../../loggable';
+import { Loggable } from '../../loggable'
 import {
   resolveArrayIteratorFindMethod,
   testOr,
@@ -6,7 +6,7 @@ import {
   testNot,
   testNames,
 } from './util'
-import { IDetailsTester } from '../details/base';
+import { IDetailsTester } from '../details/base'
 
 export interface INodeTester {
   parentBlocks?: any[]
@@ -18,7 +18,14 @@ export interface INodeTester {
   info(): any
 }
 
+import { isDefined } from '../../util'
+
 export abstract class BaseNodeTester extends Loggable implements INodeTester {
+  // maps of testers used by tester
+  testers: any = {
+    node: {},
+    details: {},
+  }
   factories: any = {}
   _occurrenceTester: any // INodeOccurrenceTester
 
@@ -32,7 +39,7 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
     this.factories = options.factories
     if (!this.factories) {
       this.error('Missing factories in options', {
-        options
+        options,
       })
     }
 
@@ -40,23 +47,93 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
       this.error(`BaseTester: Missing node to test`, {
         node,
         options,
-        constructor: this.constructor.name
+        constructor: this.constructor.name,
       })
     }
     this.node = node
+  }
+
+  isQuery(query: any) {
+    return isDefined(query)
+  }
+
+  setTester(opts: any = {}) {
+    const { type = 'node', name, factory, node, options } = opts
+    this.testers[type][name] = this.createNodeTester(
+      factory,
+      node || this.node,
+      options || this.options,
+    )
+    return this
+  }
+
+  doTest(opts: any = {}) {
+    const { query, name, qprop, type = 'node', test = 'test' } = opts
+
+    const propQuery = query[qprop || name]
+    if (!this.isQuery(propQuery)) return true
+
+    const typeTesters = this.testers[type]
+    if (!typeTesters) {
+      this.error('doTest: invalid type', {
+        type,
+      })
+    }
+    const namedTester = typeTesters[name]
+    if (!namedTester) {
+      this.log('doTest: invalid property', {
+        name,
+      })
+    }
+    return namedTester[test](propQuery)
+  }
+
+  getTester(opts: any = {}) {
+    const { name, type = 'node' } = opts
+    const typeTesters = this.testers[type]
+    if (!typeTesters) {
+      this.error('doTest: invalid type', {
+        type,
+      })
+    }
+    const namedTester = typeTesters[name]
+    if (!namedTester) {
+      this.log('doTest: invalid property', {
+        name,
+      })
+    }
+
+    return namedTester
+  }
+
+  getProp(opts: any = {}) {
+    this.getTester(opts)[opts.property]
   }
 
   /**
    * Create new or return Occurrence Node Tester
    */
   get occurrenceTester() {
-    this._occurrenceTester = this._occurrenceTester || this.createNodeTester('occurrences', this.node, this.options)
+    this._occurrenceTester =
+      this._occurrenceTester ||
+      this.createNodeTester('occurrences', this.node, this.options)
     return this._occurrenceTester
   }
 
-
-  protected createTester(name: string, node: any, options: any = {}): INodeTester | IDetailsTester {
-    const factory = /details:/.test(name) ? 'createDetailsTester' : 'createNodeTester'
+  /**
+   * Creates either a Node or Details tester
+   * @param name
+   * @param node
+   * @param options
+   */
+  protected createTester(
+    name: string,
+    node: any,
+    options: any = {},
+  ): INodeTester | IDetailsTester {
+    const factory = /details:/.test(name)
+      ? 'createDetailsTester'
+      : 'createNodeTester'
     name = name.replace(/\w+:/, '')
     return this[factory](name, node, options)
   }
@@ -67,7 +144,12 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    * @param node
    * @param options
    */
-  protected createCategoryTester(category: string, name: string, node: any, options: any = {}): any {
+  protected createCategoryTester(
+    category: string,
+    name: string,
+    node: any,
+    options: any = {},
+  ): any {
     const factoryCategory = this.factories[category]
     if (!factoryCategory) {
       this.error('Invalid factory category', {
@@ -85,7 +167,11 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    * @param node
    * @param options
    */
-  protected createNodeTester(name: string, node: any, options: any = {}): INodeTester {
+  protected createNodeTester(
+    name: string,
+    node: any,
+    options: any = {},
+  ): INodeTester {
     return this.createCategoryTester('tester', name, node, options)
   }
 
@@ -95,7 +181,11 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    * @param node
    * @param options
    */
-  protected createDetailsTester(name: string, node: any, options: any = {}): IDetailsTester {
+  protected createDetailsTester(
+    name: string,
+    node: any,
+    options: any = {},
+  ): IDetailsTester {
     return this.createCategoryTester('details', name, node, options)
   }
 
@@ -188,9 +278,12 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
       return (queryExpr: any) => testNames(nodes, queryExpr)
     }
     const createTester = options.createTester || createNamesTester
-    return this.createListTester(this.node, Object.assign(options, {
-      createTester
-    }))
+    return this.createListTester(
+      this.node,
+      Object.assign(options, {
+        createTester,
+      }),
+    )
   }
 
   /**
@@ -234,4 +327,3 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
     return testOr(query, tester)
   }
 }
-
