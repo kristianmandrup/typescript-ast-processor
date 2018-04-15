@@ -48,7 +48,7 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    * Initialize
    * @param node
    */
-  init(node: any) {
+  init(node?: any) {
     if (!this.factories) {
       this.error('Missing factories in options', {
         options: this.options,
@@ -63,7 +63,13 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
       })
     }
     this.node = node
+    this.initProps()
   }
+
+  /**
+   * Override in subclass to initialize props!
+   */
+  initProps() {}
 
   /**
    * Test if valid query
@@ -257,10 +263,15 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
     return this.doQuery(query)
   }
 
+  protected resolvePropTester(prop: string) {
+    const testFnName = `test${camelize(prop)}`
+    const queryFnName = `query${camelize(prop)}`
+    return this[testFnName] || this[queryFnName]
+  }
+
   public doQuery(query: any) {
     return this.props.reduce((acc: any, prop: string) => {
-      const testFnName = `test${camelize(prop)}`
-      const tester = this[testFnName]
+      const tester = this.resolvePropTester(prop)
       if (!tester) return acc
       acc[prop] = tester(query)
       return acc
