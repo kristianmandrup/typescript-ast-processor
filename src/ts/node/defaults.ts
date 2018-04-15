@@ -1,10 +1,6 @@
-import {
-  details,
-  tester
-} from './factories'
+import { details, node } from './factories'
 
 export const factories = {
   details,
-  tester
+  node,
 }
-

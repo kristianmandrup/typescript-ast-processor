@@ -57,9 +57,14 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
     return isDefined(query)
   }
 
+  /**
+   * Set a tester (helper) on the node tester
+   * @param opts
+   */
   setTester(opts: any = {}) {
     const { type = 'node', name, factory, node, options } = opts
-    this.testers[type][name] = this.createNodeTester(
+    this.testers[type][name || factory] = this.createCategoryTester(
+      type,
       factory,
       node || this.node,
       options || this.options,
@@ -67,6 +72,10 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
     return this
   }
 
+  /**
+   * Perform a test using a node tester
+   * @param opts
+   */
   doTest(opts: any = {}) {
     const { query, name, qprop, type = 'node', test = 'test' } = opts
 
@@ -83,31 +92,51 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
     if (!namedTester) {
       this.log('doTest: invalid property', {
         name,
+        type,
+        testers: typeTesters,
       })
     }
     return namedTester[test](propQuery)
   }
 
+  /**
+   * Get a registered tester
+   * @param opts
+   */
   getTester(opts: any = {}) {
     const { name, type = 'node' } = opts
     const typeTesters = this.testers[type]
     if (!typeTesters) {
-      this.error('doTest: invalid type', {
+      this.error('getTester: invalid type', {
         type,
+        testers: this.testers,
       })
     }
     const namedTester = typeTesters[name]
     if (!namedTester) {
-      this.log('doTest: invalid property', {
+      this.log('getTester: invalid name', {
         name,
+        testers: typeTesters,
       })
     }
 
     return namedTester
   }
 
+  /**
+   * Check if tester is available
+   * @param opts
+   */
+  hasTester(opts: any = {}) {
+    return Boolean(this.getTester(opts))
+  }
+
+  /**
+   * Get a property of a tester
+   * @param opts
+   */
   getProp(opts: any = {}) {
-    this.getTester(opts)[opts.property]
+    return this.getTester(opts)[opts.property]
   }
 
   /**
@@ -172,7 +201,7 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
     node: any,
     options: any = {},
   ): INodeTester {
-    return this.createCategoryTester('tester', name, node, options)
+    return this.createCategoryTester('node', name, node, options)
   }
 
   /**

@@ -13,10 +13,15 @@ export class DeclarationNodeTester extends BaseNodeTester {
 
   constructor(node: any, options: any = {}) {
     super(node, options)
-    if (!this.hasId(node)) return
+    if (!this.node.name) {
+      this.log('declaration missing name:', {
+        node,
+      })
+      return
+    }
     this.setTester({
-      type: 'node',
       name: 'identifier',
+      factory: 'identifier',
     })
   }
 
@@ -32,27 +37,6 @@ export class DeclarationNodeTester extends BaseNodeTester {
    */
   hasId(node: any) {
     return !this.isAnonymous
-  }
-
-  /**
-   * Check if tester is available
-   * @param opts
-   */
-  hasTester(opts: any = {}) {
-    const { name, type = 'node' } = opts
-    const typeTesters = this.testers[type]
-    if (!typeTesters) {
-      this.error('doTest: invalid type', {
-        type,
-      })
-    }
-    const namedTester = typeTesters[name]
-    if (!namedTester) {
-      this.log('doTest: invalid property', {
-        name,
-      })
-    }
-    return Boolean(namedTester)
   }
 
   /**

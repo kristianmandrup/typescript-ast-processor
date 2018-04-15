@@ -1,7 +1,4 @@
 import { factories as details } from './details'
-import { factories as tester } from './tester'
+import { factories as node } from './tester'
 
-export {
-  details,
-  tester
-}
+export { details, node }

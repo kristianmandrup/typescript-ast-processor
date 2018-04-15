@@ -12,10 +12,6 @@ export function createClassTester(node: any, options: any = {}) {
   return new ClassTester(node, options)
 }
 
-function isQuery(query: any) {
-  return isDefined(query)
-}
-
 export class ClassTester extends DeclarationNodeTester {
   heritageNodeTester: INodeTester
   memberNodesTester: any // INodeTester
