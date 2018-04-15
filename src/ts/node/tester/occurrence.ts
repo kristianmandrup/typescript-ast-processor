@@ -1,9 +1,6 @@
-import {
-  createCountingASTNodeTraverser
-} from '../../traverser'
-import { isNonEmptyStr } from '../../util';
-import { BaseNodeTester } from './base';
-import { Loggable } from '../../loggable';
+import { createCountingASTNodeTraverser } from '../../traverser'
+import { isNonEmptyStr } from '../../util'
+import { BaseNodeTester } from './base'
 
 export interface INodeOccurrenceTester {
   countInTree(query: any): number
@@ -40,7 +37,8 @@ export class NodeOccurrenceTester extends BaseNodeTester {
    * @param options
    */
   createNodeTraverser(options: any = {}) {
-    const createNodeTraverser = options.createNodeTraverser || createCountingASTNodeTraverser
+    const createNodeTraverser =
+      options.createNodeTraverser || createCountingASTNodeTraverser
     return createNodeTraverser(options)
   }
 
@@ -62,7 +60,7 @@ export class NodeOccurrenceTester extends BaseNodeTester {
     const opts = {
       ...this.options,
       query,
-      node: this.node
+      node: this.node,
     }
     const counter = this.counter(opts)
     return counter[type] || 0
@@ -93,16 +91,14 @@ export class NodeOccurrenceTester extends BaseNodeTester {
    * @param options
    */
   countOccurrence(options: any = {}): number {
-    let {
-      nodeTypes
-    } = options
+    let { nodeTypes } = options
     nodeTypes = nodeTypes || {}
     if (!options.includeAll) {
       // default categories to exclude
       nodeTypes.exclude = nodeTypes.exclude || ['declaration']
     }
     return this.countInTree({
-      nodeTypes
+      nodeTypes,
     })
   }
 
@@ -112,7 +108,10 @@ export class NodeOccurrenceTester extends BaseNodeTester {
    */
   // protected
   createExpressionTester(options: any = {}) {
-    return this.factories.details.createTester('expression', { ...options, node: this.node })
+    return this.factories.details.createTester('expression', {
+      ...options,
+      node: this.node,
+    })
   }
 
   // protected
@@ -125,8 +124,8 @@ export class NodeOccurrenceTester extends BaseNodeTester {
     return this.countOccurrence({
       nodeTypes: {
         // function that given a node determines if it should be counted or not
-        toCount: this.createTokenTester(token, options)
-      }
+        toCount: this.createTokenTester(token, options),
+      },
     })
   }
 
@@ -138,7 +137,7 @@ export class NodeOccurrenceTester extends BaseNodeTester {
   createTokenTester(token: string, options: any = {}) {
     return this.createTokenTesterFun(token, {
       ...options,
-      exclude: ['loop'] // exclude any nested loops
+      exclude: ['loop'], // exclude any nested loops
     })
   }
 
@@ -151,7 +150,7 @@ export class NodeOccurrenceTester extends BaseNodeTester {
   createTokenTesterFun(token: string, options: any = {}) {
     if (!isNonEmptyStr(token)) {
       this.error('Invalid or missing token', {
-        token
+        token,
       })
     }
     return (node: any) => {
@@ -160,4 +159,3 @@ export class NodeOccurrenceTester extends BaseNodeTester {
     }
   }
 }
-

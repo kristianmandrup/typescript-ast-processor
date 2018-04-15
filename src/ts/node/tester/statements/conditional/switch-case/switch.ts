@@ -1,6 +1,6 @@
 import * as ts from 'typescript'
-import { BaseNodeTester, INodeTester } from '../../../base';
-import { ICaseBlockTester } from './case-block';
+import { BaseNodeTester, INodeTester } from '../../../base'
+import { ICaseBlockTester } from './case-block'
 
 export function isSwitchStatement(node: any) {
   return ts.isSwitchStatement(node)
@@ -16,27 +16,58 @@ export class SwitchStatementTester extends BaseNodeTester {
 
   constructor(node: any, options: any) {
     super(node, options)
-    this.caseBlockTester = this.createCaseBlockTester(node.caseBlock, options) as ICaseBlockTester
+    this.caseBlockTester = this.createCaseBlockTester(
+      node.caseBlock,
+      options,
+    ) as ICaseBlockTester
   }
 
+  /**
+   * Create a case clause block tester
+   * @param node
+   * @param options
+   */
   createCaseBlockTester(node: any, options: any): INodeTester {
     return this.createNodeTester('case.block', node, options) // as CaseBlockTester
   }
 
+  /**
+   * Whether switch has default case clause
+   */
   get hasDefault() {
     return Boolean(this.caseBlockTester.defaultCase)
   }
 
+  /**
+   * Number of case clauses
+   */
   get caseCount(): number {
     return this.caseBlockTester.clauseKeys.length
   }
 
+  /**
+   * Full info of case clauses
+   */
   get caseClausesInfo(): any[] {
     return this.caseBlockTester.clausesInfo
   }
 
+  /**
+   * Keys of case clauses
+   */
   get caseClausesKeys(): string[] {
     return this.caseBlockTester.clauseKeys
+  }
+
+  /**
+   * Return cases info
+   */
+  get cases() {
+    return {
+      count: this.caseCount,
+      keys: this.caseClausesKeys,
+      clauses: this.caseClausesInfo,
+    }
   }
 
   /**
@@ -46,12 +77,8 @@ export class SwitchStatementTester extends BaseNodeTester {
     return {
       ...super.info(),
       conditionalType: 'switch',
-      cases: {
-        count: this.caseCount,
-        keys: this.caseClausesKeys,
-        clauses: this.caseClausesInfo,
-      },
-      defaultCase: this.hasDefault
+      cases: this.cases,
+      defaultCase: this.hasDefault,
     }
   }
 

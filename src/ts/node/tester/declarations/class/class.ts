@@ -63,14 +63,26 @@ export class ClassTester extends DeclarationNodeTester {
    * @param query
    */
   test(query: any): any {
+    const result = this.query(query)
     return (
-      this.testName(query) &&
-      this.testExported(query) &&
-      this.testAbstract(query) &&
-      this.testImplements(query) &&
-      this.testExtends(query) &&
-      this.testMembers(query)
+      result.name &&
+      result.exported &&
+      result.abstract &&
+      result.implements &&
+      result.extends &&
+      result.members
     )
+  }
+
+  query(query: any) {
+    return {
+      name: this.testName(query),
+      exported: this.testExported(query),
+      abstract: this.testAbstract(query),
+      implements: this.testImplements(query),
+      extends: this.testExtends(query),
+      members: this.testMembers(query),
+    }
   }
 
   /**

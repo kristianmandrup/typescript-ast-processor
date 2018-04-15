@@ -1,12 +1,15 @@
 import * as ts from 'typescript'
-import { LoopNodeTester } from './loop';
+import { LoopNodeTester } from './loop'
 
 /**
  * Factory to create a While loop tester
  * @param node
  * @param options
  */
-export function createWhileLoopTester(node: any, options: any = {}): WhileLoopTester {
+export function createWhileLoopTester(
+  node: any,
+  options: any = {},
+): WhileLoopTester {
   return new WhileLoopTester(node, options)
 }
 
@@ -18,10 +21,16 @@ export class WhileLoopTester extends LoopNodeTester {
     super(node, options)
   }
 
+  /**
+   * TODO: move to and use details tester for loop
+   */
   get isWhileThen() {
     return ts.isWhileStatement(this.node)
   }
 
+  /**
+   * TODO: move to and use details tester for loop
+   */
   get isDoWhile() {
     return ts.isDoStatement(this.node)
   }
@@ -33,7 +42,7 @@ export class WhileLoopTester extends LoopNodeTester {
     if (this.isWhileThen) return 'whileDo'
     if (this.isDoWhile) return 'doWhile'
     this.error('forType: unknown type of for loop', {
-      node: this.node
+      node: this.node,
     })
     return 'unknown'
   }
@@ -44,8 +53,7 @@ export class WhileLoopTester extends LoopNodeTester {
       loopType: 'while',
       whileType: this.whileType,
       whileThen: this.isWhileThen,
-      doWhile: this.isDoWhile
+      doWhile: this.isDoWhile,
     }
   }
 }
-

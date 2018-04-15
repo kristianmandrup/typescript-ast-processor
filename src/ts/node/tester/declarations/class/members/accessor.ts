@@ -14,6 +14,10 @@ export class AccessorTester extends MethodLikeTester {
     super(node, options)
   }
 
+  /**
+   * Initialize
+   * @param node
+   */
   init(node: any) {
     this.setTester({
       name: 'member',

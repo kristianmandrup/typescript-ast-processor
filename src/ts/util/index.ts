@@ -1,9 +1,4 @@
-export {
-  assign,
-  assignDefined,
-  assignKeyDefined,
-  assignTruthy
-} from './assign'
+export { assign, assignDefined, assignKeyDefined, assignTruthy } from './assign'
 
 export {
   keysOf,
@@ -11,25 +6,20 @@ export {
   toList,
   flatMap,
   flatten,
-  enumKey
+  enumKey,
 } from './collection'
 
-export {
-  onGuard
-} from './guard'
+export { onGuard } from './guard'
 
-export {
-  callFun
-} from './function'
+export { callFun } from './function'
 
-export {
-  stringifyObj
-} from './format'
+export { stringifyObj } from './format'
 
 export {
   nodeTypeCheckName,
   capitalizeFirst,
   lowercaseFirst,
+  camelize,
 } from './name'
 
 export {
@@ -40,5 +30,5 @@ export {
   isEmpty,
   isObject,
   isFunction,
-  isRegExp
+  isRegExp,
 } from './is'

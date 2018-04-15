@@ -1,11 +1,14 @@
-import { BlockStatementNodeTester } from '../block';
+import { BlockStatementNodeTester } from '../block'
 
 /**
  * Factory to create a For loop tester
  * @param node
  * @param options
  */
-export function createLoopNodeTester(node: any, options: any = {}): LoopNodeTester {
+export function createLoopNodeTester(
+  node: any,
+  options: any = {},
+): LoopNodeTester {
   return new LoopNodeTester(node, options)
 }
 
@@ -18,10 +21,20 @@ export class LoopNodeTester extends BlockStatementNodeTester {
     super(node, options)
   }
 
+  /**
+   * Create expression details node tester (duplicate)
+   * @param node
+   * @param options
+   */
   protected createExpressionTester(node: any, options: any = {}) {
     return this.createDetailsTester('expression', node, options)
   }
 
+  /**
+   * FIX: duplicate
+   * @param token
+   * @param options
+   */
   protected createExprTester(token: string = 'break', options: any = {}) {
     return (node: any) => {
       const exprTester = this.createExpressionTester(node, options)
@@ -29,12 +42,17 @@ export class LoopNodeTester extends BlockStatementNodeTester {
     }
   }
 
+  /**
+   * Count occurences of token (duplicate)
+   * @param token
+   * @param options
+   */
   protected countOccurenceOf(token: string, options: any = {}): number {
     return this.countOccurrence({
       tester: this.createExprTester(token, {
         ...options,
-        exclude: ['switch', 'loop'] // exclude any nested switch or loop
-      })
+        exclude: ['switch', 'loop'], // exclude any nested switch or loop
+      }),
     })
   }
 

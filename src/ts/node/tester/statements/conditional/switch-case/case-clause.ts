@@ -1,16 +1,17 @@
 import * as ts from 'typescript'
-import { BaseNodeTester } from '../../../base';
-
+import { BaseNodeTester } from '../../../base'
 
 export function isCaseClause(node: any) {
   return ts.isCaseClause(node)
 }
 
-export function createCaseClauseTester(node: any, options: any = {}): CaseClauseTester {
+export function createCaseClauseTester(
+  node: any,
+  options: any = {},
+): CaseClauseTester {
   // if (!isCaseClause(node)) return
   return new CaseClauseTester(node, options)
 }
-
 
 export class CaseClauseTester extends BaseNodeTester {
   expression: any
@@ -21,10 +22,20 @@ export class CaseClauseTester extends BaseNodeTester {
     this.expression = node.expression
   }
 
+  /**
+   * Create expression details node tester
+   * @param node
+   * @param options
+   */
   protected createExpressionTester(node: any, options: any = {}) {
     return this.createDetailsTester('expression', node, options)
   }
 
+  /**
+   * Create a node tester using an expression tester
+   * @param token
+   * @param options
+   */
   protected createExprTester(token: string = 'break', options: any = {}) {
     return (node: any) => {
       const exprTester = this.createExpressionTester(node, options)
@@ -32,12 +43,18 @@ export class CaseClauseTester extends BaseNodeTester {
     }
   }
 
+  /**
+   * Count occurrences of token
+   * TODO: generalize!?
+   * @param token
+   * @param options
+   */
   protected countOccurenceOf(token: string, options: any = {}): number {
     return this.countOccurrence({
       tester: this.createExprTester(token, {
         ...options,
-        exclude: ['switch', 'loop'] // exclude any nested switch or loop
-      })
+        exclude: ['switch', 'loop'], // exclude any nested switch or loop
+      }),
     })
   }
 
@@ -53,7 +70,9 @@ export class CaseClauseTester extends BaseNodeTester {
    * Find key used to trigger clause
    */
   get key() {
-    return ts.isLiteralExpression(this.expression) ? this.expression.getText() : 'unknown'
+    return ts.isLiteralExpression(this.expression)
+      ? this.expression.getText()
+      : 'unknown'
   }
 
   /**
@@ -63,7 +82,7 @@ export class CaseClauseTester extends BaseNodeTester {
   info() {
     return {
       key: this.key,
-      breakCount: this.breakCount
+      breakCount: this.breakCount,
     }
   }
 }

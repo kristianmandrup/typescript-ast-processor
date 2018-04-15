@@ -5,6 +5,7 @@ import {
   testAnd,
   testNot,
   testNames,
+  camelize,
 } from './util'
 import { IDetailsTester } from '../details/base'
 
@@ -21,6 +22,9 @@ export interface INodeTester {
 import { isDefined } from '../../util'
 
 export abstract class BaseNodeTester extends Loggable implements INodeTester {
+  // properties to test, query and gather info for
+  props: any = {}
+  queryResult: any
   // maps of testers used by tester
   testers: any = {
     node: {},
@@ -37,22 +41,34 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
   constructor(public node: any, options: any) {
     super(options)
     this.factories = options.factories
+    this.init(node)
+  }
+
+  /**
+   * Initialize
+   * @param node
+   */
+  init(node: any) {
     if (!this.factories) {
       this.error('Missing factories in options', {
-        options,
+        options: this.options,
       })
     }
 
     if (!node) {
       this.error(`BaseTester: Missing node to test`, {
         node,
-        options,
+        options: this.options,
         constructor: this.constructor.name,
       })
     }
     this.node = node
   }
 
+  /**
+   * Test if valid query
+   * @param query
+   */
   isQuery(query: any) {
     return isDefined(query)
   }
@@ -226,7 +242,10 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    * @param query
    */
   public test(query: any): any {
-    return true
+    const queryResult = this.doQuery(query)
+    return Object.keys(queryResult).every((key: string) =>
+      Boolean(queryResult[key]),
+    )
   }
 
   /**
@@ -235,7 +254,17 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    * @returns { Object } node information
    */
   public query(query: any): any {
-    return {}
+    return this.doQuery(query)
+  }
+
+  public doQuery(query: any) {
+    return this.props.reduce((acc: any, prop: string) => {
+      const testFnName = `test${camelize(prop)}`
+      const tester = this[testFnName]
+      if (!tester) return acc
+      acc[prop] = tester(query)
+      return acc
+    }, {})
   }
 
   /**
@@ -244,7 +273,9 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    * @returns { Object } node information
    */
   public info(): any {
-    return {}
+    return this.props.reduce((acc: any, prop: string) => {
+      acc[prop] = this[prop]
+    }, {})
   }
 
   /**

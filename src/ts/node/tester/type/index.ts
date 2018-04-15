@@ -1,5 +1,5 @@
-import { BaseNodeTester } from './base'
-import { IDetailsTester } from '../details/base';
+import { BaseNodeTester } from '../base'
+import { PrimitiveTypes } from './primitives'
 
 /**
  * Factory to create type node tester
@@ -12,8 +12,7 @@ export function createTypeNodeTester(node: any, options: any = {}) {
 }
 
 export class TypeNodeTester extends BaseNodeTester {
-  typeTester: IDetailsTester
-
+  primitives: any
   /**
    * Create a TypeNodeTester instance, used to query a type node
    * @param node
@@ -21,7 +20,19 @@ export class TypeNodeTester extends BaseNodeTester {
    */
   constructor(node: any, options: any) {
     super(node, options)
-    this.typeTester = this.createDetailsTester('type', node, options)
+    this.init(node)
+  }
+
+  /**
+   * Initialize
+   * @param node
+   */
+  init(node: any) {
+    this.setTester({
+      factory: 'type',
+      type: 'details',
+    })
+    this.primitives = new PrimitiveTypes()
   }
 
   /**
@@ -33,7 +44,7 @@ export class TypeNodeTester extends BaseNodeTester {
       union: this.isUnionType,
       unionTypes: this.unionTypes,
       primitive: this.isPrimitive,
-      complex: this.isComplex //
+      complex: this.isComplex,
     }
   }
 
@@ -57,7 +68,7 @@ export class TypeNodeTester extends BaseNodeTester {
    * Type can be expressed as a simple type name
    */
   get isPrimitive() {
-    return this.primitiveTypes.includes(this.typeName)
+    return this.primitives.primitiveTypes.includes(this.typeName)
   }
 
   /**
@@ -65,6 +76,13 @@ export class TypeNodeTester extends BaseNodeTester {
    */
   get isComplex() {
     return !this.isPrimitive
+  }
+
+  /**
+   * Get the type tester
+   */
+  get typeTester() {
+    return this.getTester({ name: 'type', type: 'details' })
   }
 
   /**
@@ -77,19 +95,11 @@ export class TypeNodeTester extends BaseNodeTester {
   }
 
   /**
-   * List of simple types used to determine if type is a simply/primitive type
+   * type match
+   * @param type
    */
-  protected get primitiveTypes(): string[] {
-    return [
-      'string',
-      'number',
-      'boolean',
-      'array',
-      'object',
-      'symbol',
-      'void',
-      'any'
-    ]
+  isType(type: string) {
+    return this.typeTester.forNode(this.node).is(type)
   }
 
   /**
@@ -97,14 +107,7 @@ export class TypeNodeTester extends BaseNodeTester {
    * @param type
    */
   protected testType(type: string): boolean {
-    return Boolean(!type || this.validatePrimitiveType(type) && this.typeTester.forNode(this.node).is(type))
-  }
-
-  /**
-   * Validate if type (to test) is a primitive type
-   * @param type
-   */
-  protected validatePrimitiveType(type: string): boolean {
-    return this.primitiveTypes.includes(type)
+    if (!type) return false
+    return this.primitives.validatePrimitiveType(type) && this.isType(type)
   }
 }

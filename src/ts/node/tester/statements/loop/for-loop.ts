@@ -1,15 +1,16 @@
 import * as ts from 'typescript'
-import {
-  testName
-} from '../../util'
-import { LoopNodeTester } from './loop';
+import { testName } from '../../util'
+import { LoopNodeTester } from './loop'
 
 /**
  * Factory to create a For loop tester
  * @param node
  * @param options
  */
-export function createForLoopTester(node: any, options: any = {}): ForLoopNodeTester {
+export function createForLoopTester(
+  node: any,
+  options: any = {},
+): ForLoopNodeTester {
   return new ForLoopNodeTester(node, options)
 }
 
@@ -51,7 +52,7 @@ export class ForLoopNodeTester extends LoopNodeTester {
     if (this.isForIn) return 'in'
     if (this.isForOf) return 'of'
     this.error('forType: unknown type of for loop', {
-      node: this.node
+      node: this.node,
     })
     return 'unknown'
   }
@@ -63,7 +64,7 @@ export class ForLoopNodeTester extends LoopNodeTester {
       for: this.isFor,
       forOf: this.isForOf,
       forIn: this.isForIn,
-      forType: this.forType
+      forType: this.forType,
     }
   }
 
@@ -74,8 +75,11 @@ export class ForLoopNodeTester extends LoopNodeTester {
     return super.test(query) && this.testForType(query.type)
   }
 
+  /**
+   * Test if type of for loop matches query
+   * @param query
+   */
   testForType(query: any) {
     return testName(this.forType, query)
   }
 }
-

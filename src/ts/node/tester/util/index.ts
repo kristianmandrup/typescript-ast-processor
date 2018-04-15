@@ -1,34 +1,19 @@
-export {
-  enumKey
-} from './enum'
+export { enumKey } from './enum'
 export {
   idDetails,
   typeName,
   initializerDetails,
-  IInitializerDetails
+  IInitializerDetails,
 } from './id'
-export {
-  nameOf,
-  createNameTest,
-  nameMatch,
-} from './name'
-export {
-  createValueTest,
-  valueMatch,
-  testValue
-} from './value'
-export {
-  queryNode
-} from './query'
+export { nameOf, createNameTest, nameMatch } from './name'
+export { createValueTest, valueMatch, testValue } from './value'
+export { queryNode } from './query'
 export {
   testNames,
   testName,
   testNot,
   testOr,
   testAnd,
-  resolveArrayIteratorFindMethod
+  resolveArrayIteratorFindMethod,
 } from './test'
-export {
-  stringifyObj
-} from '../../../util'
-
+export { stringifyObj, camelize } from '../../../util'

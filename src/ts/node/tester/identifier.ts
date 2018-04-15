@@ -1,12 +1,7 @@
 import * as ts from 'typescript'
 import { BaseNodeTester } from './base'
-import {
-  testName,
-  nameOf,
-  createNameTest,
-  nameMatch
-} from '../tester/util'
-import { IDetailsTester } from '../details/base';
+import { testName, nameOf, createNameTest, nameMatch } from '../tester/util'
+import { IDetailsTester } from '../details/base'
 
 export function createIndentifierNodeTester(node: any, options: any = {}) {
   return new IndentifierNodeTester(node, options)
@@ -24,9 +19,13 @@ export class IndentifierNodeTester extends BaseNodeTester {
    */
   constructor(node: any, options: any) {
     super(node, options)
+    this.init(node)
+  }
+
+  init(node: any) {
     this.idNode = this.idNodeFor(node)
-    this.exportTester = this.createDetailsTester('identifier', node, options)
-    this.identifierTester = this.createDetailsTester('identifier', this.idNode, options)
+    this.exportTester = this.createDetailsTester('identifier', node)
+    this.identifierTester = this.createDetailsTester('identifier', this.idNode)
   }
 
   /**
@@ -37,13 +36,18 @@ export class IndentifierNodeTester extends BaseNodeTester {
     if (ts.isArrowFunction(node)) {
       return this.idNodeFor(node.parent)
     }
-    return node.declarationList ? node.declarationList.declarations[0] : (node.name || node)
+    return node.declarationList
+      ? node.declarationList.declarations[0]
+      : node.name || node
   }
 
+  /**
+   * Get node info/data
+   */
   info() {
     return {
       name: this.name,
-      exported: this.isExported
+      exported: this.isExported,
     }
   }
 
@@ -54,6 +58,10 @@ export class IndentifierNodeTester extends BaseNodeTester {
     return this.nameOf(this.idNode)
   }
 
+  /**
+   * Get name of node
+   * @param node
+   */
   nameOf(node: any) {
     return nameOf(node)
   }
