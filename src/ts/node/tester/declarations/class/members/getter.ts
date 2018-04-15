@@ -1,20 +1,26 @@
-import {
-  isMemberType
-} from './types'
-import { MethodLikeTester } from './method-like';
+import { isMemberType } from './types'
+import { AccessorTester } from './accessor'
 
-export function createGetAccessorTester(node: any, options: any = {}): GetAccessorTester | undefined {
+export function createGetAccessorTester(
+  node: any,
+  options: any = {},
+): GetAccessorTester | undefined {
   if (!isMemberType(node, 'getter')) return
   return new GetAccessorTester(node, options)
 }
 
-export class GetAccessorTester extends MethodLikeTester {
+export class GetAccessorTester extends AccessorTester {
   constructor(node: any, options: any) {
     super(node, options)
   }
 
-  // test(query: any) {
-  //   super.test(query) && this.testAccess(query.access)
-  // }
+  /**
+   * Info
+   */
+  info() {
+    return {
+      ...super.info(),
+      getter: true,
+    }
+  }
 }
-

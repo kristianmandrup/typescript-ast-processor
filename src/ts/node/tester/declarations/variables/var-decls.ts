@@ -1,4 +1,4 @@
-import { BaseNodeTester } from '../../base';
+import { BaseNodeTester } from '../../base'
 
 /**
  * Factory to create a Variable declarations tester
@@ -11,32 +11,34 @@ export function createVariableDeclarationsTester(node: any, options: any) {
 
 export class VariableDeclarationNodesTester extends BaseNodeTester {
   declarations: any[]
+  varDeclarationTesters: any[]
 
   constructor(node: any, options: any) {
     super(node, options)
+    this.init(node)
+  }
+
+  /**
+   * Initialize
+   * @param node
+   */
+  init(node: any) {
     this.declarations = node.declarations || node.parent.declarations || node
+    this.varDeclarationTesters = this.declarations.map(
+      this.createVariableDeclarationTester.bind(this),
+    )
   }
 
   /**
    * Create a variable declaration node tester
-   * TODO: make more generic and reuse pattern
    * @param node
    */
   createVariableDeclarationTester(node: any) {
-    return this.createNodeTester('decl.var', node, this.options)
-  }
-
-  /**
-   * Return list of testers for each node in collection
-   * TODO: make more generic and reuse pattern
-   */
-  get varDeclarationTesters() {
-    return this.declarations.map(this.createVariableDeclarationTester.bind(this))
+    return this.createNodeTester('decl.var', node)
   }
 
   /**
    * Count nodes
-   * TODO: make more generic and reuse pattern
    */
   get declarationsCount() {
     return this.declarations.length
@@ -65,7 +67,7 @@ export class VariableDeclarationNodesTester extends BaseNodeTester {
   info() {
     return {
       count: this.declarationsCount,
-      names: this.names
+      names: this.names,
     }
   }
 

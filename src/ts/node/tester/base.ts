@@ -198,9 +198,11 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    */
   protected createNodeTester(
     name: string,
-    node: any,
-    options: any = {},
+    node?: any,
+    options?: any,
   ): INodeTester {
+    node = node || this.node
+    options = options || this.options
     return this.createCategoryTester('node', name, node, options)
   }
 

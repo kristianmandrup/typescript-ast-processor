@@ -13,15 +13,15 @@ export class DeclarationNodeTester extends BaseNodeTester {
 
   constructor(node: any, options: any = {}) {
     super(node, options)
-    if (!this.node.name) {
-      this.log('declaration missing name:', {
-        node,
-      })
-      return
-    }
+    this.init(node)
+  }
+
+  init(node: any) {
+    if (!this.hasId) return
     this.setTester({
       name: 'identifier',
       factory: 'identifier',
+      // node: node.name,
     })
   }
 
@@ -29,14 +29,14 @@ export class DeclarationNodeTester extends BaseNodeTester {
    * Whether function is anonymous
    */
   get isAnonymous(): boolean {
-    return !this.isNamed
+    return !this.hasId
   }
 
   /**
    * Whether not anonymous
    */
   hasId(node: any) {
-    return !this.isAnonymous
+    return this.node.name
   }
 
   /**
@@ -51,13 +51,15 @@ export class DeclarationNodeTester extends BaseNodeTester {
    * @param query
    */
   testName(query: any) {
-    if (!this.isNamed) return true
-    return this.doTest({
-      query,
-      qprop: 'name',
-      name: 'identifier',
-      test: 'testName',
-    })
+    return (
+      this.isNamed &&
+      this.doTest({
+        query,
+        qprop: 'name',
+        name: 'identifier',
+        test: 'testName',
+      })
+    )
   }
 
   /**
@@ -76,18 +78,27 @@ export class DeclarationNodeTester extends BaseNodeTester {
    *
    */
   get isExported() {
-    if (!this.isNamed) return false
-    return this.getProp({
-      name: 'identifier',
-      property: 'isExported',
-    })
+    return (
+      this.isNamed &&
+      this.getProp({
+        name: 'identifier',
+        property: 'isExported',
+      })
+    )
   }
 
+  /**
+   * Test exported (true|false) via query
+   * @param query
+   */
   testExported(query: any) {
     if (!this.isQuery(query.exported)) return true
     return this.isExported === query.exported
   }
 
+  /**
+   * Get declaration node info/data
+   */
   info() {
     return {
       ...super.info(),
@@ -96,6 +107,13 @@ export class DeclarationNodeTester extends BaseNodeTester {
     }
   }
 
+  /**
+   * Match node via query:
+   * - name (name query)
+   * - exported (true|false)
+   * @param query
+   * @returns { boolean }
+   */
   test(query: any): any {
     return super.test(query) && this.testName(query) && this.testExported(query)
   }

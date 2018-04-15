@@ -1,9 +1,10 @@
-import {
-  isMemberType
-} from './types'
-import { MethodLikeTester } from './method-like';
+import { isMemberType } from './types'
+import { MethodLikeTester } from './method-like'
 
-export function createConstructorTester(node: any, options: any = {}): ConstructorTester | undefined {
+export function createConstructorTester(
+  node: any,
+  options: any = {},
+): ConstructorTester | undefined {
   if (!isMemberType(node, 'constructor')) return
   return new ConstructorTester(node, options)
 }
@@ -19,5 +20,14 @@ export class ConstructorTester extends MethodLikeTester {
   get name() {
     return 'constructor'
   }
-}
 
+  /**
+   * Info
+   */
+  info() {
+    return {
+      ...super.info(),
+      constructor: true,
+    }
+  }
+}

@@ -1,16 +1,12 @@
 import * as ts from 'typescript'
 import { BaseNodeTester } from '../../../base'
-import {
-  isEmpty
-} from '../../../../../util'
+import { isEmpty } from '../../../../../util'
 
 export function createClassMembersTester(node: any, options: any = {}) {
   return new ClassMembersTester(node, options)
 }
 
-import {
-  memberType
-} from './types'
+import { memberType } from './types'
 
 export class ClassMembersTester extends BaseNodeTester {
   nodes: any[]
@@ -28,11 +24,20 @@ export class ClassMembersTester extends BaseNodeTester {
    */
   constructor(node: any, options: any) {
     super(node, options)
+    this.init(node)
+  }
+
+  /**
+   * TODO: cleanup!!
+   * @param node
+   */
+  init(node: any) {
     const members = Array.isArray(node) ? node : node.members
-    this.isMembersNode(members) || this.error('ClassMembersTester: invalid members node', {
-      node,
-      members
-    })
+    this.isMembersNode(members) ||
+      this.error('ClassMembersTester: invalid members node', {
+        node,
+        members,
+      })
     this.nodes = members
   }
 
@@ -50,9 +55,11 @@ export class ClassMembersTester extends BaseNodeTester {
   }
 
   test(query: any): any {
-    return this.testProperties(query.properties) &&
+    return (
+      this.testProperties(query.properties) &&
       this.testAccessors(query.accessors) &&
       this.testMethods(query.methods)
+    )
   }
 
   createMemberTester(member: any) {
@@ -71,13 +78,16 @@ export class ClassMembersTester extends BaseNodeTester {
     const mappedMembers: any[] = members.map((member: any) => {
       const memberTester = this.createMemberTester(member)
       if (!memberTester) {
-        return this.error('ClassMembersTester: no tester registered for member', {
-          member
-        })
+        return this.error(
+          'ClassMembersTester: no tester registered for member',
+          {
+            member,
+          },
+        )
       }
       return memberTester.test(query)
     })
-    const matchingMembers = mappedMembers.filter(val => val)
+    const matchingMembers = mappedMembers.filter((val) => val)
     return matchingMembers.length > 0 ? matchingMembers : false
   }
 
@@ -107,7 +117,8 @@ export class ClassMembersTester extends BaseNodeTester {
   }
 
   get constructors() {
-    this._constructors = this._constructors || this.membersOf(memberType.constructor)
+    this._constructors =
+      this._constructors || this.membersOf(memberType.constructor)
     return this._constructors
   }
 

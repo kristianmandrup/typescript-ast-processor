@@ -1,7 +1,5 @@
-import {
-  IndentifierNodeTester
-} from '../../identifier';
-import { DeclarationNodeTester } from '../declaration';
+import { IndentifierNodeTester } from '../../identifier'
+import { DeclarationNodeTester } from '../declaration'
 
 // import { api as detailsApi } from '../../details';
 
@@ -22,25 +20,54 @@ export function createVariableDeclarationTester(node: any, options: any) {
  * Perhaps extend IdentifierNodeTester ??
  */
 export class VariableDeclarationNodeTester extends DeclarationNodeTester {
-  identifierNodeTester: IndentifierNodeTester
-  typeTester: any
-
   constructor(node: any, options: any) {
     super(node, options)
-    this.identifierNodeTester = this.createNodeTester('identifier', node.name, this.options) as IndentifierNodeTester
-
-    // TODO: perhaps use NodeTypeTester
-    if (node.type) {
-      this.typeTester = this.createDetailsTester('type', node.type, options) // as TypeTester
-    }
+    this.init(node)
   }
 
   /**
-   * TODO: perhaps use TypeNodeTester instead!
+   * Initialize
+   * @param node
+   */
+  init(node: any) {
+    if (!node.type) return
+    this.setTester({
+      factory: 'type',
+      node: node.type,
+    })
+  }
+
+  /**
+   * Get the type tester
+   */
+  get typeTester() {
+    return this.getTester({
+      name: 'type',
+    })
+  }
+
+  /**
+   * Determine the variable declaration type
    */
   get varType(): string {
-    const detectedType = this.typeTester ? this.typeTester.matches() : undefined
-    return detectedType || 'unknown'
+    if (!this.typeTester) return this.unknownType
+    return this.typeTester.matches() || this.unknownType
+  }
+
+  /**
+   * Unknown type
+   */
+  get unknownType() {
+    return 'unknown'
+  }
+
+  /**
+   * Test on matching variable declaration type
+   * @param query
+   */
+  testVarType(query: any) {
+    if (!this.isQuery(query.varType)) return true
+    return this.varType === query.varType
   }
 
   /**
@@ -58,15 +85,16 @@ export class VariableDeclarationNodeTester extends DeclarationNodeTester {
   info() {
     return {
       name: this.name,
-      varType: this.varType
+      varType: this.varType,
     }
   }
 
   /**
-   *  * TODO: Call the relevant VariableDeclaration tester that matches the particular type of VariableDeclaration (if available)
+   * TODO: Call the relevant VariableDeclaration tester that
+   * matches the particular type of VariableDeclaration (if available)
    * @param query
    */
   test(query: any): any {
-    return this.identifierNodeTester.test(query.id)
+    return super.test(query) && this.testVarType(query)
   }
 }
