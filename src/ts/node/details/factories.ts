@@ -1,57 +1,57 @@
 import * as details from './exports'
-import {
-  callFun
-} from '../../util'
+import { callFun } from '../../util'
 
-const factories = {
-  'expression': details.expression.createExpressionTester,
+const $factories = {
+  expression: details.expression.createExpressionTester,
   'expr.binary': details.binary.createBinaryExprTester,
   'function.call': details.call.createCallTester,
   identifier: details.identifier.createIdentifierTester,
   variable: details.variable.createVariableTester,
   class: details.class.createClassDetailsTester,
   namespace: details.namespace.createNamespaceTester,
-  'function': details.function.createFunctionTester,
+  function: details.function.createFunctionTester,
   access: details.access.createAccessTester,
-  type: details.type.createTypeTester
+  type: details.type.createTypeTester,
 }
 
-export {
-  factories as map
-}
+export { $factories as map }
 
-import {
-  isEmpty
-} from '../../util'
+import { isEmpty } from '../../util'
 
-import {
-  IDetailsTester
-} from './base'
+import { IDetailsTester } from './base'
 
 export type IDetailsTesterFactory = (options: any) => IDetailsTester
 
-export function factoryFor(name: string, $factoryMap?: any): IDetailsTesterFactory {
-  $factoryMap = $factoryMap || factories
+export function factoryFor(
+  name: string,
+  $factoryMap?: any,
+): IDetailsTesterFactory {
+  $factoryMap = $factoryMap || $factories
   return $factoryMap[name]
 }
 
-export function createTester(factoryName: string, node: any, options: any = {}): IDetailsTester | undefined {
-  const factories = options.factories || options.factories || {}
-  if (isEmpty(factories)) {
+export function createTester(
+  factoryName: string,
+  node: any,
+  options: any = {},
+): IDetailsTester | undefined {
+  const factories = options.factories
+  const map = factories ? factories.details.map : $factories
+  if (isEmpty(map)) {
     throw new Error('createTester: Missing factories')
   }
-  const map = factories.details.map
+
   const testerFactory = factoryFor(factoryName, map)
   if (!testerFactory) {
     console.error('No such factory', {
       factoryName,
       map,
-      factories
+      factories,
     })
   }
   const factoryOpts = {
     node,
-    ...options
+    ...options,
   }
   return callFun(testerFactory, factoryOpts)
 }

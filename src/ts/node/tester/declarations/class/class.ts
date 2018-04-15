@@ -23,6 +23,11 @@ export class ClassTester extends DeclarationNodeTester {
    */
   constructor(node: any, options: any = {}) {
     super(node, options)
+    this.init(node)
+  }
+
+  init(node: any) {
+    super.init(node)
     this.setTester({ name: 'heritage', factory: 'class.heritage' })
     this.setTester({ name: 'members', factory: 'class.members' })
     this.setTester({ name: 'class', factory: 'class', type: 'details' })

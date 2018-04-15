@@ -17,7 +17,12 @@ export class DeclarationNodeTester extends BaseNodeTester {
   }
 
   init(node: any) {
-    if (!this.hasId) return
+    if (!this.hasId) {
+      this.log('declarations missing id', {
+        node,
+      })
+      return
+    }
     this.setTester({
       name: 'identifier',
       factory: 'identifier',

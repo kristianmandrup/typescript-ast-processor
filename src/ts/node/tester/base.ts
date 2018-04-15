@@ -267,14 +267,19 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
     }, {})
   }
 
+  get propKeys() {
+    return Object.keys(this.props)
+  }
+
   /**
    * Return object with node information
    * Subclass should always override or extend
    * @returns { Object } node information
    */
   public info(): any {
-    return this.props.reduce((acc: any, prop: string) => {
-      acc[prop] = this[prop]
+    return this.propKeys.reduce((acc: any, propName: string) => {
+      acc[propName] = this[propName]
+      return acc
     }, {})
   }
 
