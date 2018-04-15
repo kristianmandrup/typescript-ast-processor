@@ -1,4 +1,4 @@
-import { Loggable } from '../../loggable'
+import { Loggable } from '../../../loggable'
 import {
   resolveArrayIteratorFindMethod,
   testOr,
@@ -6,8 +6,8 @@ import {
   testNot,
   testNames,
   camelize,
-} from './util'
-import { IDetailsTester } from '../details/base'
+} from '../util'
+import { IDetailsTester } from '../../details/base'
 
 export interface INodeTester {
   parentBlocks?: any[]
@@ -19,7 +19,7 @@ export interface INodeTester {
   info(): any
 }
 
-import { isDefined } from '../../util'
+import { isDefined } from '../../../util'
 
 export abstract class BaseNodeTester extends Loggable implements INodeTester {
   // properties to test, query and gather info for
@@ -45,10 +45,10 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
   }
 
   /**
-   * Initialize
+   * Validate node tester before initialization
    * @param node
    */
-  init(node?: any) {
+  validateInit(node: any) {
     if (!this.factories) {
       this.error('Missing factories in options', {
         options: this.options,
@@ -62,6 +62,14 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
         constructor: this.constructor.name,
       })
     }
+  }
+
+  /**
+   * Initialize
+   * @param node
+   */
+  init(node?: any) {
+    this.validateInit(node)
     this.node = node
     this.initProps()
   }
@@ -69,7 +77,9 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
   /**
    * Override in subclass to initialize props!
    */
-  initProps() {}
+  initProps() {
+    this.props = {}
+  }
 
   /**
    * Test if valid query
@@ -278,6 +288,9 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
     }, {})
   }
 
+  /**
+   * Get property keys
+   */
   get propKeys() {
     return Object.keys(this.props)
   }

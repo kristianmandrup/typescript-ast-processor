@@ -2,7 +2,7 @@
 
 It is essential you understand the `BaseNodeTester` and use it to great effect.
 
-Note: This is still open to further improvement!
+Note: This is still open to further improvement! The `BaseNodeTester` is currently way too big and needs to be refactored, perhaps using delegate (helper) classes.
 
 ```js
 export abstract class BaseNodeTester extends Loggable implements INodeTester {
@@ -21,7 +21,7 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    * @param node
    */
   init(node?: any) {
-    // ...
+    this.validateInit(node)
     this.node = node
     this.initProps()
   }
@@ -29,8 +29,14 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
   /**
    * Override in subclass to initialize props!
    */
-  initProps() {}
+  initProps() {
+    this.props = {}
+  }
 
+
+  /**
+   * Get property keys
+   */
   get propKeys() {
     return Object.keys(this.props)
   }
