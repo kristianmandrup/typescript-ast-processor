@@ -103,6 +103,10 @@ Now when you process the loaded AST, the visitors will be visited and data colle
 ```js
 // run registered visitors on AST
 loader.loadSourceFile(fileName).process()
+
+// or simply
+loader.process(fileName)
+
 const { collector, instrumentor } = processor
 collector.collectData()
 instrumentor.instrument()

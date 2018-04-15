@@ -1,12 +1,12 @@
 import * as ts from 'typescript'
-import { BaseDetailsTester } from './base';
+import {BaseDetailsTester} from './base'
 
-export function createIdentifierTester(options: any) {
+export function createIdentifierTester(options : any) {
   return new IdentifierTester(options)
 }
 
 export class IdentifierTester extends BaseDetailsTester {
-  constructor(options: any) {
+  constructor(options : any) {
     super(options)
   }
 
@@ -14,9 +14,7 @@ export class IdentifierTester extends BaseDetailsTester {
   // NOTE: You can also test on existence of localSymbol.exportSymbol
 
   get syntaxMap() {
-    return {
-      exported: ts.SyntaxKind.ExportKeyword
-    }
+    return {exported: ts.SyntaxKind.ExportKeyword}
   }
 
   /**
@@ -24,6 +22,6 @@ export class IdentifierTester extends BaseDetailsTester {
    * @param node identifier node to test
    */
   exported(node?: any) {
-    return this.has('exported', { node })
+    return this.has('exported', {node})
   }
 }

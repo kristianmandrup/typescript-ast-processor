@@ -125,6 +125,12 @@ Here we test on the `info` result in a jest test:
 A typical `info` result would be:
 
 ```js
+export function minus(a: number, b: number = 32): any {
+}
+
+```
+
+```js
 {
   "name": "minus",
   "parameters": {

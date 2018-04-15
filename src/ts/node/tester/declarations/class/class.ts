@@ -1,6 +1,6 @@
-import { IDetailsTester } from '../../../details/base';
-import { INodeTester } from '../../base';
-import { DeclarationNodeTester } from '../declaration';
+import { IDetailsTester } from '../../../details/base'
+import { INodeTester } from '../../base'
+import { DeclarationNodeTester } from '../declaration'
 
 /**
  * Factory to create class tester to query and collect data for class node
@@ -23,19 +23,31 @@ export class ClassTester extends DeclarationNodeTester {
    */
   constructor(node: any, options: any = {}) {
     super(node, options)
-    this.heritageNodeTester = this.createNodeTester('class.heritage', node, options)
-    this.memberNodesTester = this.createNodeTester('class.members', node, options)
+    this.heritageNodeTester = this.createNodeTester(
+      'class.heritage',
+      node,
+      options,
+    )
+    this.memberNodesTester = this.createNodeTester(
+      'class.members',
+      node,
+      options,
+    )
     this.classDetailsTester = this.createDetailsTester('class', node, options)
 
     // NOTE: anonymous function has no ID
     if (this.hasId(node)) {
-      this.identifierNodeTester = this.createNodeTester('identifier', node, options)
+      this.identifierNodeTester = this.createNodeTester(
+        'identifier',
+        node,
+        options,
+      )
     }
   }
 
   /**
    * TODO: Really test if this function is anonomous or NOT
-  */
+   */
   hasId(node: any) {
     return true
   }
@@ -46,21 +58,26 @@ export class ClassTester extends DeclarationNodeTester {
   info() {
     return {
       ...super.info(),
+      // TODO: move to DeclarationTester!!
+      name: this.name,
+      exported: this.isExported,
       abstract: this.isAbstract,
-      heritage: this.heritage
+      heritage: this.heritage,
     }
   }
 
   /**
    * Whether function is named
-  */
+   */
   get isNamed(): boolean {
     return Boolean(this.identifierNodeTester)
   }
 
   testName(query: any) {
     if (!query || !this.isNamed) return true
-    return this.identifierNodeTester ? this.identifierNodeTester.testName(query) : false
+    return this.identifierNodeTester
+      ? this.identifierNodeTester.testName(query)
+      : false
   }
 
   /**
@@ -75,7 +92,9 @@ export class ClassTester extends DeclarationNodeTester {
    */
   get name() {
     if (!this.isNamed) return undefined
-    return this.identifierNodeTester ? this.identifierNodeTester.name : undefined
+    return this.identifierNodeTester
+      ? this.identifierNodeTester.name
+      : undefined
   }
 
   /**
@@ -84,7 +103,9 @@ export class ClassTester extends DeclarationNodeTester {
    */
   get isExported() {
     if (!this.isNamed) return false
-    return this.identifierNodeTester ? this.identifierNodeTester.isExported : false
+    return this.identifierNodeTester
+      ? this.identifierNodeTester.isExported
+      : false
   }
 
   /**
@@ -106,11 +127,13 @@ export class ClassTester extends DeclarationNodeTester {
    * @param query
    */
   test(query: any): any {
-    return this.testName(query) &&
+    return (
+      this.testName(query) &&
       this.testAbstract(query) &&
       this.testImplements(query) &&
       this.testExtends(query) &&
       this.testMembers(query)
+    )
   }
 
   /**
@@ -154,4 +177,3 @@ export class ClassTester extends DeclarationNodeTester {
     return this.isAbstract === query
   }
 }
-

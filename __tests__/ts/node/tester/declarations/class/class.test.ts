@@ -1,29 +1,24 @@
-import {
-  testerFor,
-  query,
-  logObj
-} from './_imports'
+import { testerFor, query, logObj } from './_imports'
 
 const { log } = console
 
-// 'decl.class': classes.createClassTester,
-// 'class.heritage': heritage.createClassHeritageTester,
-
-// 'class.members': members.createClassMembersTester,
-// 'class.member': members.createClassMemberTester,
-// 'class.property': members.createPropertyTester,
-// 'class.getter': accessors.createGetAccessorTester,
-// 'class.setter': accessors.createSetAccessorTester,
-// 'class.constructor': members.createConstructorTester,
-// 'class.method': members.createMethodTester,
+// 'decl.class': classes.createClassTester, 'class.heritage':
+// heritage.createClassHeritageTester, 'class.members':
+// members.createClassMembersTester, 'class.member':
+// members.createClassMemberTester, 'class.property':
+// members.createPropertyTester, 'class.getter':
+// accessors.createGetAccessorTester, 'class.setter':
+// accessors.createSetAccessorTester, 'class.constructor':
+// members.createConstructorTester, 'class.method': members.createMethodTester,
 
 describe('class', () => {
   describe('basic', () => {
     const tester = testerFor({
       fileName: 'basic-class',
       factoryName: 'decl.class',
+      category: 'declarations',
       type: 'class',
-      statementIndex: 0
+      statementIndex: 0,
     })
 
     it('is named Abs', () => {
@@ -66,7 +61,6 @@ describe('class', () => {
     })
 
     describe('testMembers', () => {
-
       it.skip('empty query - always true', () => {
         expect(tester.testMembers(query.empty)).toBeTruthy()
       })
@@ -76,11 +70,8 @@ describe('class', () => {
       })
     })
 
-
-    describe('test', () => {
-    })
+    describe('test', () => {})
   })
-
 
   describe('abstract', () => {
     const tester = testerFor({
@@ -104,13 +95,12 @@ describe('class', () => {
     })
   })
 
-
   describe('extends', () => {
     const tester = testerFor({
       fileName: 'heritage/extends-class',
       factoryName: 'decl.class',
       type: 'class',
-      statementIndex: 1
+      statementIndex: 1,
     })
 
     it('is named Abs', () => {
@@ -131,7 +121,7 @@ describe('class', () => {
       fileName: 'heritage/implements-class',
       factoryName: 'decl.class',
       type: 'class',
-      statementIndex: 1
+      statementIndex: 1,
     })
 
     it('is named Abs', () => {
@@ -148,6 +138,3 @@ describe('class', () => {
     })
   })
 })
-
-
-

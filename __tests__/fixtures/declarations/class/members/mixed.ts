@@ -1,10 +1,7 @@
 export class A {
-  constructor(public name: string) {
-  }
+  constructor(public name : string) {}
 
-  public x() {
-
-  }
+  public x(a : any) {}
 
   get y() {
     return 'y'
