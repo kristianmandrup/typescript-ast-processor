@@ -2,22 +2,46 @@ import { FunctionCallNodeTester } from '../function'
 // import { INodeTester } from '../base';
 // import { IndentifierNodeTester } from '../identifier';
 
-export function createDecoratorTester(node: any, options: any = {}): DecoratorNodeTester {
+export function createDecoratorTester(
+  node: any,
+  options: any = {},
+): DecoratorNodeTester {
   return new DecoratorNodeTester(node, options)
 }
 
 export class DecoratorNodeTester extends FunctionCallNodeTester {
   targetNode: any
-  identifierTester: any // IndentifierNodeTester // INodeTester
-
   constructor(node: any, options: any) {
     super(node, options)
-    this.targetNode = options.targetNode
-    this.identifierTester = this.createNodeTester('identifier', node, options) // as IndentifierNodeTester
+    this.init(node)
   }
 
+  /**
+   * Initialize
+   * @param node
+   */
+  init(node: any) {
+    super.init(node)
+    this.targetNode = this.options.targetNode
+    this.setTester({
+      name: 'identifier',
+    })
+  }
+
+  /**
+   * Retrieve registered properties node tester
+   */
+  get idNodeTester(): any {
+    return this.getTester({
+      name: 'identifier',
+    })
+  }
+
+  /**
+   * Get name of target node (ie the node decorated)
+   */
   get targetId() {
-    return this.identifierTester.nameOf(this.targetNode)
+    return this.idNodeTester.nameOf(this.targetNode)
   }
 
   get type() {
@@ -27,7 +51,7 @@ export class DecoratorNodeTester extends FunctionCallNodeTester {
   get target() {
     return {
       id: this.targetId,
-      type: this.type
+      type: this.type,
     }
   }
 
@@ -35,7 +59,7 @@ export class DecoratorNodeTester extends FunctionCallNodeTester {
     return {
       ...super.info(),
       decorator: true,
-      target: this.target
+      target: this.target,
     }
   }
 }

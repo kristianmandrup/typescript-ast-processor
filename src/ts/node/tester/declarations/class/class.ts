@@ -1,7 +1,4 @@
-import { IDetailsTester } from '../../../details/base'
-import { INodeTester } from '../../base'
 import { DeclarationNodeTester } from '../declaration'
-import { isDefined } from '../../../../util'
 
 /**
  * Factory to create class tester to query and collect data for class node
@@ -9,13 +6,10 @@ import { isDefined } from '../../../../util'
  * @param options
  */
 export function createClassTester(node: any, options: any = {}) {
-  return new ClassTester(node, options)
+  return new ClassNodeTester(node, options)
 }
 
-export class ClassTester extends DeclarationNodeTester {
-  heritageNodeTester: INodeTester
-  memberNodesTester: any // INodeTester
-  classDetailsTester: IDetailsTester
+export class ClassNodeTester extends DeclarationNodeTester {
   /**
    * Create class tester
    * @param node
@@ -27,14 +21,10 @@ export class ClassTester extends DeclarationNodeTester {
   }
 
   /**
-   * Initialize
-   * @param node
+   * Query/info properties
    */
-  init(node: any) {
-    super.init(node)
-    this.setTester({ name: 'heritage', factory: 'class.heritage' })
-    this.setTester({ name: 'members', factory: 'class.members' })
-    this.setTester({ name: 'class', factory: 'class', type: 'details' })
+  get qprops() {
+    return ['name', 'exported', 'abstract', 'implements', 'extends', 'members']
   }
 
   /**
@@ -49,105 +39,78 @@ export class ClassTester extends DeclarationNodeTester {
   }
 
   /**
-   * whether class is abstract
+   * Get class node details tester
    */
-  get isAbstract() {
+  get classTester() {
     return this.getTester({
       type: 'details',
       name: 'class',
-    }).is('abstract')
+    })
+  }
+
+  /**
+   * whether class is abstract
+   */
+  get isAbstract() {
+    return this.classTester.is('abstract')
+  }
+
+  get heritageTester() {
+    return this.getTester({
+      name: 'heritage',
+    })
   }
 
   /**
    * Heritage of the class
    */
   get heritage() {
-    return this.getTester({
-      name: 'heritage',
-    }).info()
+    return this.heritageTester.info()
   }
 
   /**
-   * Query class
-   * @param query
+   * Testers map
    */
-  test(query: any): any {
-    const result = this.query(query)
-    return (
-      result.name &&
-      result.exported &&
-      result.abstract &&
-      result.implements &&
-      result.extends &&
-      result.members
-    )
-  }
-
-  query(query: any) {
+  get testerMap() {
     return {
-      name: this.testName(query),
-      exported: this.testExported(query),
-      abstract: this.testAbstract(query),
-      implements: this.testImplements(query),
-      extends: this.testExtends(query),
-      members: this.testMembers(query),
+      heritage: 'class.heritage',
+      members: 'class.members',
+      class: {
+        factory: 'class.members',
+        type: 'details',
+      },
     }
   }
 
   /**
-   * Query all class members
-   * @param query
+   * test map used to create test/query methods
    */
-  testMembers(query: any) {
-    return this.doTest({
-      query,
-      name: 'members',
-      test: 'testMembers',
-    })
-  }
-
-  /**
-   * Query all class members
-   * @param query
-   */
-  testAccessors(query: any) {
-    return this.doTest({
-      query,
-      name: 'members',
-      test: 'testAccessors',
-    })
-  }
-
-  /**
-   * Query what interfaces class implements
-   * @param query
-   */
-  testImplements(query: any) {
-    this.doTest({
-      query,
-      qprop: 'implements',
-      name: 'heritage',
-    })
-  }
-
-  /**
-   * Query which class the class node extends
-   * @param query
-   */
-  testExtends(query: any) {
-    this.doTest({
-      query,
-      qprop: 'extends',
-      name: 'heritage',
-    })
-  }
-
-  /**
-   * Query if class node is abstract
-   * @param query
-   */
-  testAbstract(query: any) {
-    query = query.abstract || query
-    return this.isAbstract === query
+  get testMethodMap() {
+    return {
+      members: {
+        // Query all class members
+        name: 'members',
+        test: 'testMembers',
+      },
+      accessors: {
+        // query accessors (getters/setters)
+        name: 'members',
+        test: 'testAccessors',
+      },
+      implements: {
+        // Query what interfaces class implements
+        qprop: 'implements',
+        name: 'heritage',
+      },
+      extends: {
+        qprop: 'extends',
+        name: 'heritage',
+      },
+      // test if abstract matches query true|false
+      // see testAbstract
+      abstract: {
+        bool: 'isAbstract',
+      },
+    }
   }
 }

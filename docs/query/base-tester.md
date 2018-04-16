@@ -24,12 +24,17 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
     this.validateInit(node)
     this.node = node
     this.initProps()
+    this.setTesters()
+    this.initQueries()
+    this.initInfoProps()
+    this.initPropTesters()
   }
 
   /**
    * Override in subclass to initialize props!
    */
   initProps() {
+    super.initProps()
     this.props = {}
   }
 
@@ -90,11 +95,12 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
   }
 ```
 
-You should add an `initProps()` method to your node tester, called by `init()`
-
-* add an getter (info) method for each property such as `get name()`
+* add a `testerMap` getter that returns map of tester definitions
+* add a `testMethodMap` getter that returns map of test method definitions
+* add an `initProps()` method to your node tester
+* add a getter (info) method for each property such as `get name()`
 * add property query methods for each property, such as:
-  * `queryName(query)`
+  * `queryName(query)` or `testName(query)`
 
 It could look something like the following:
 
@@ -109,16 +115,137 @@ export class MyNodeTester extends BaseNodeTester {
     }
   }
 
+  /**
+   * Get details node tester to test for id
+   */
   get idTester() {
     this.getTester({ name: 'identifier', type: 'details' })
   }
 
+  /**
+   * Get name of node via node id details tester
+   */
   get name() {
     return this.idTester.name
   }
 
+  /**
+   * Use utility method to query on name of node
+   */
   queryName(query: any) {
     return queryName(this.name, query)
+  }
+}
+```
+
+## Example: Class Node Tester
+
+`ClassNodeTester` is a good example leveraging `BaseNodeTester`
+
+```js
+export class ClassNodeTester extends DeclarationNodeTester {
+  /**
+   * Create class tester
+   * @param node
+   * @param options
+   */
+  constructor(node: any, options: any = {}) {
+    super(node, options)
+    this.init(node)
+  }
+
+  /**
+   * Query/info properties
+   */
+  get qprops() {
+    return ['name', 'exported', 'abstract', 'implements', 'extends', 'members']
+  }
+
+  /**
+   * Collect all info for class node
+   */
+  info() {
+    return {
+      ...super.info(),
+      abstract: this.isAbstract,
+      heritage: this.heritage,
+    }
+  }
+
+  /**
+   * Get class node details tester
+   */
+  get classTester() {
+    return this.getTester({
+      type: 'details',
+      name: 'class',
+    })
+  }
+
+  /**
+   * whether class is abstract
+   */
+  get isAbstract() {
+    return this.classTester.is('abstract')
+  }
+
+  get heritageTester() {
+    return this.getTester({
+      name: 'heritage',
+    })
+  }
+
+  /**
+   * Heritage of the class
+   */
+  get heritage() {
+    return this.heritageTester.info()
+  }
+
+  /**
+   * Testers map
+   */
+  get testerMap() {
+    return {
+      heritage: 'class.heritage',
+      members: 'class.members',
+      class: {
+        factory: 'class.members',
+        type: 'details',
+      },
+    }
+  }
+
+  /**
+   * test map used to create test/query methods
+   */
+  get testMethodMap() {
+    return {
+      members: {
+        // Query all class members
+        name: 'members',
+        test: 'testMembers',
+      },
+      accessors: {
+        // query accessors (getters/setters)
+        name: 'members',
+        test: 'testAccessors',
+      },
+      implements: {
+        // Query what interfaces class implements
+        qprop: 'implements',
+        name: 'heritage',
+      },
+      extends: {
+        qprop: 'extends',
+        name: 'heritage',
+      },
+      // test if abstract matches query true|false
+      // see testAbstract
+      abstract: {
+        bool: 'isAbstract',
+      },
+    }
   }
 }
 ```

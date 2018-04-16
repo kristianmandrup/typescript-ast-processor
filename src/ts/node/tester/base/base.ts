@@ -19,7 +19,7 @@ export interface INodeTester {
   info(): any
 }
 
-import { isDefined } from '../../../util'
+import { isDefined, isStr, capitalize } from '../../../util'
 
 export abstract class BaseNodeTester extends Loggable implements INodeTester {
   // properties to test, query and gather info for
@@ -74,6 +74,7 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
     this.validateInit(node)
     this.node = node
     this.initProps()
+    this.setTesters()
     this.initQueries()
     this.initInfoProps()
     this.initPropTesters()
@@ -94,7 +95,24 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
   /**
    * Initialize prop testers (query methods)
    */
-  initPropTesters() {}
+  initPropTesters() {
+    const testMethodMap = this.testMethodMap
+    this.propKeys.map((key: string) => {
+      const fnName = `test${capitalize(key)}`
+      const test = testMethodMap[key]
+      const fn = (query: any) => {
+        this.runTest({
+          ...test,
+          query,
+        })
+      }
+      this[fnName] = fn
+    })
+  }
+
+  get testMethodMap() {
+    return {}
+  }
 
   set props(props: any) {
     this._props = Array.isArray(props)
@@ -139,15 +157,39 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
     return this
   }
 
+  setTesters() {
+    Object.keys(this.testerMap).map((key: string) => {
+      const val = this.testerMap[key]
+      const data = isStr(val) ? { factory: val } : val
+      this.setTester({
+        name: key,
+        ...data,
+      })
+    })
+  }
+
+  get testerMap() {
+    return {}
+  }
+
   /**
    * Perform a test using a node tester
    * @param opts
    */
   runTest(opts: any = {}) {
-    const { query, name, qprop, type = 'node', test = 'test' } = opts
+    const { query, name, bool, qprop, type = 'node', test = 'test' } = opts
 
     const propQuery = query[qprop || name]
     if (!this.isQuery(propQuery)) return true
+
+    if (bool) {
+      if (typeof bool !== 'string') {
+        this.error('Invalid bool: must be a method name', {
+          opts,
+        })
+      }
+      return this[bool] === propQuery
+    }
 
     const typeTesters = this.testers[type]
     if (!typeTesters) {
