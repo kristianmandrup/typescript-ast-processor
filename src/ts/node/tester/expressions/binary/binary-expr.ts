@@ -1,5 +1,8 @@
 import { BaseNodeTester } from '../../base'
-import { createBinaryExprTester, BinaryExprTester } from '../../../details/binary-expr'
+import {
+  createBinaryExprTester,
+  BinaryExprTester,
+} from '../../../details/binary-expr'
 
 /**
  * Factory to create a BinaryExpressionNode tester
@@ -17,11 +20,14 @@ export function createBinaryExpressionNodeTester(node: any, options: any) {
  * @param operator
  * @param options
  */
-export function createBinaryOperatorTester(operator: string, options: any = {}) {
+export function createBinaryOperatorTester(
+  operator: string,
+  options: any = {},
+) {
   return (node: any) => {
     const binaryTester = createBinaryExprTester({ ...options, node })
     return binaryTester.test({
-      [operator]: true
+      [operator]: true,
     })
   }
 }
@@ -31,8 +37,6 @@ export function createBinaryOperatorTester(operator: string, options: any = {}) 
  * Also check use of parenthesis for dev score
  */
 export class BinaryExpressionNodeTester extends BaseNodeTester {
-  binaryTester: BinaryExprTester // IDetailsTester
-
   typeMap = {
     '()': 'ParenthesesExpression',
   }
@@ -44,7 +48,21 @@ export class BinaryExpressionNodeTester extends BaseNodeTester {
    */
   constructor(node: any, options: any) {
     super(node, options)
-    this.binaryTester = this.createDetailsTester('expr.binary', node, options) as BinaryExprTester
+  }
+
+  init(node: any) {
+    this.setTester({
+      name: 'binary',
+      factory: 'expr.binary',
+      type: 'details',
+      node,
+    })
+  }
+
+  get binaryTester() {
+    return this.getTester({
+      name: 'binary',
+    })
   }
 
   /**
@@ -67,9 +85,7 @@ export class BinaryExpressionNodeTester extends BaseNodeTester {
    * Get the list of available binary operators
    */
   get operators() {
-    return [
-      ...Object.keys(this.binaryTester.syntaxMap)
-    ]
+    return [...Object.keys(this.binaryTester.syntaxMap)]
   }
 
   /**
@@ -89,8 +105,8 @@ export class BinaryExpressionNodeTester extends BaseNodeTester {
     return {
       occurences: {
         parenthesised: this.countOccurrence('ParenthesesExpression'),
-        ...this.operatorInfo
-      }
+        ...this.operatorInfo,
+      },
     }
   }
 

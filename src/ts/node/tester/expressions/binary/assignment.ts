@@ -1,9 +1,5 @@
-import {
-  BaseNodeTester
-} from '../../base';
-import {
-  testName
-} from '../../util'
+import { BaseNodeTester } from '../../base'
+import { testName } from '../../util'
 
 /**
  * Factory to create a BinaryExpressionNode tester
@@ -17,13 +13,42 @@ export function createAssignmentNodeTester(node: any, options: any) {
 }
 
 export class AssignmentNodeTester extends BaseNodeTester {
-  identifierNodeTester: any // INodeTester
-  binaryExprTester: any // IDetailsTester
-
   constructor(node: any, options: any) {
     super(node, options)
-    this.identifierNodeTester = this.createNodeTester('identifier', node.left, this.options)
-    this.binaryExprTester = this.createDetailsTester('expr.binary', node, options)
+    this.init(node)
+  }
+
+  init(node: any) {
+    this.setTester({
+      factory: 'identifier',
+      node: node.left,
+    })
+
+    this.setTester({
+      name: 'binary',
+      factory: 'expr.binary',
+      type: 'details',
+      node,
+    })
+  }
+
+  /**
+   * Binary tester
+   */
+  get binaryTester() {
+    return this.getTester({
+      name: 'binary',
+      type: 'details',
+    })
+  }
+
+  /**
+   * id Tester
+   */
+  get idNodeTester() {
+    return this.getTester({
+      name: 'identifier',
+    })
   }
 
   /**
@@ -32,28 +57,31 @@ export class AssignmentNodeTester extends BaseNodeTester {
    * @param options
    */
   createAssignmentTester(node: any, options: any) {
-    const binaryTester: any = this.createDetailsTester('expr.binary', node, options)
+    const binaryTester: any = this.createDetailsTester(
+      'expr.binary',
+      node,
+      options,
+    )
     if (binaryTester.assignment(node)) return
     return this.createNodeTester('assignment', node, options)
   }
-
 
   /**
    * Get name of identifier being assigned to
    */
   get name() {
-    return this.identifierNodeTester.name
+    return this.idNodeTester.name
   }
 
   get assignmentType(): string {
-    return this.binaryExprTester.anyAssignment(this.node) || 'unknown'
+    return this.binaryTester.anyAssignment(this.node) || 'unknown'
   }
 
   info() {
     return {
       name: this.name,
       assignmentType: this.assignmentType,
-      value: null // TODO
+      value: null, // TODO
     }
   }
 
@@ -63,7 +91,7 @@ export class AssignmentNodeTester extends BaseNodeTester {
    */
   testDetails(query: any): any {
     return {
-      name: this.identifierNodeTester.test(query.name)
+      name: this.idNodeTester.test(query.name),
     }
   }
 
@@ -80,7 +108,7 @@ export class AssignmentNodeTester extends BaseNodeTester {
   }
 
   testName(query: any) {
-    return this.identifierNodeTester.test(query.name)
+    return this.idNodeTester.test(query.name)
   }
 
   /**

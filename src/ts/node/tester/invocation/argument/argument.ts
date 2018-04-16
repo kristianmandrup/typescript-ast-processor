@@ -1,6 +1,4 @@
-import {
-  BaseNodeTester
-} from '../../base';
+import { BaseNodeTester } from '../../base'
 
 export function isArgument(node: any) {
   return true
@@ -33,21 +31,38 @@ export class ArgumentNodeTester extends BaseNodeTester {
   constructor(node: any, options: any) {
     super(node, options)
     // TODO: make generic to allow for any kind of expression
-    if (node.name) {
-      this.identifierNodeTester = this.createNodeTester('identifier', node.name, options)
-    }
   }
 
+  init(node: any) {
+    if (!node.name) return
+    this.setTester({
+      name: 'identifier',
+      node: node.name,
+    })
+  }
+
+  /**
+   * Retrieve registered id node tester
+   */
+  get idNodeTester(): any {
+    return this.getTester({
+      name: 'identifier',
+    })
+  }
+
+  /**
+   * Get name of (id reference) argument
+   */
   get name() {
-    return this.identifierNodeTester ? this.identifierNodeTester.name : undefined
+    if (!this.identifierNodeTester) return
+    return this.identifierNodeTester.name
   }
 
   /**
    * Collect info for Argument node
    */
   info() {
-    let obj: any = {
-    }
+    let obj: any = {}
     if (this.name) {
       obj.name = this.name
     }

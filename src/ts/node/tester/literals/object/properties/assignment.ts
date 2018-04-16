@@ -24,7 +24,7 @@ export class PropertyAssignmentNodeTester extends BaseNodeTester {
   }
 
   /**
-   * Retrieve registered properties node tester
+   * Retrieve registered id node tester
    */
   get idNodeTester(): any {
     return this.getTester({

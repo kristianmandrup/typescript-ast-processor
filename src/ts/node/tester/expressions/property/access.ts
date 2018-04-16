@@ -1,10 +1,6 @@
 import { BaseNodeTester } from '../../base'
-import {
-  isEmpty
-} from '../../../../util'
-import {
-  testName
-} from '../../util'
+import { isEmpty } from '../../../../util'
+import { testName } from '../../util'
 
 // PropertyAccessExpression
 
@@ -20,7 +16,6 @@ export function createPropertyAccessNodeTester(node: any, options: any = {}) {
   return new PropertyAccessNodeTester(node, options)
 }
 
-
 /**
  * TODO
  */
@@ -31,10 +26,22 @@ export class PropertyAccessNodeTester extends BaseNodeTester {
 
   constructor(node: any, options: any) {
     super(node, options)
+    this.init(node)
+  }
+
+  init(node: any) {
+    super.init(node)
     const nested = node.node
     this.nested = nested
-    this.identifierNodeTester = this.createNodeTester('identifier', node.name, options)
-    this.nestedNodeTester = this.createNodeTester('property.access', nested, options)
+    this.setTester({
+      name: 'identifier',
+      node,
+    })
+    this.setTester({
+      name: 'nested',
+      factory: 'property.access',
+      node: nested,
+    })
   }
 
   /**
@@ -57,7 +64,7 @@ export class PropertyAccessNodeTester extends BaseNodeTester {
   info() {
     return {
       name: this.name,
-      nested: this.nestedInfo
+      nested: this.nestedInfo,
     }
   }
 
@@ -84,10 +91,15 @@ export class PropertyAccessNodeTester extends BaseNodeTester {
    */
   testNestedNames(dotQuery: any) {
     if (!dotQuery) return true
-    const dotQueryList = Array.isArray(dotQuery) ? dotQuery : dotQuery.split('.')
+    const dotQueryList = Array.isArray(dotQuery)
+      ? dotQuery
+      : dotQuery.split('.')
     if (isEmpty(dotQueryList)) return true
     const nameQuery = dotQueryList[0]
     const remainder = dotQueryList.splice(1)
-    return testName(this.name, nameQuery) && this.nestedNodeTester.testNestedNames(remainder)
+    return (
+      testName(this.name, nameQuery) &&
+      this.nestedNodeTester.testNestedNames(remainder)
+    )
   }
 }

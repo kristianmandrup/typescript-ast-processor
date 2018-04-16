@@ -25,8 +25,6 @@ export class DeclarationNodeTester extends BaseNodeTester {
     }
     this.setTester({
       name: 'identifier',
-      factory: 'identifier',
-      // node: node.name,
     })
   }
 
@@ -58,7 +56,7 @@ export class DeclarationNodeTester extends BaseNodeTester {
   testName(query: any) {
     return (
       this.isNamed &&
-      this.doTest({
+      this.runTest({
         query,
         qprop: 'name',
         name: 'identifier',

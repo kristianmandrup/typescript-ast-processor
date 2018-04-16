@@ -110,10 +110,17 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
     })
   }
 
+  /**
+   * Test method map used to generate test methods (that mostly call node and detail testers)
+   * NOTE: Subclass override
+   */
   get testMethodMap() {
     return {}
   }
 
+  /**
+   * Set props
+   */
   set props(props: any) {
     this._props = Array.isArray(props)
       ? props
