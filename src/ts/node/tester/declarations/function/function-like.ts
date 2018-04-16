@@ -1,7 +1,5 @@
 import * as ts from 'typescript'
 import { isEmpty } from '../../../../util'
-import { INodeTester } from '../../base'
-import { IDetailsTester } from '../../../details/base'
 import { DeclarationNodeTester } from '../declaration'
 
 export function isFunctionLike(node: any) {

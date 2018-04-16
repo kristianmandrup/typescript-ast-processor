@@ -1,11 +1,18 @@
 import * as ts from 'typescript'
-import {IndentifierNodeTester} from '../../../identifier';
-import {testName, testNames, testValue, initializerDetails, IInitializerDetails} from '../../../util'
+import { IndentifierNodeTester } from '../../../identifier'
+import {
+  testName,
+  testNames,
+  testValue,
+  initializerDetails,
+  IInitializerDetails,
+} from '../../../util'
 
-import {TypeNodeTester} from '../../../type';
-import {api} from '../../../../details';
+import { TypeNodeTester } from '../../../type'
+import { api } from '../../../../details'
+import { BaseNodeTester } from '../../../base'
 
-export function isParameter(node : any) {
+export function isParameter(node: any) {
   return ts.isParameter(node)
 }
 
@@ -14,7 +21,7 @@ export function isParameter(node : any) {
  * @param node parameter node to test
  * @param options extra options
  */
-export function createParameterTester(node : any, options : any = {}) {
+export function createParameterTester(node: any, options: any = {}) {
   // if (!isParameter(node)) return
   return new ParameterTester(node, options)
 }
@@ -22,44 +29,116 @@ export function createParameterTester(node : any, options : any = {}) {
 /**
  * Parameter tester
  */
-export class ParameterTester extends IndentifierNodeTester {
-  typeNodeTester : TypeNodeTester
-  accessTester : api.access.AccessTester
+export class ParameterTester extends BaseNodeTester {
+  typeNodeTester: TypeNodeTester
+  accessTester: api.access.AccessTester
 
   /**
    * Create Parameter tester
    * @param node parameter node to test
    * @param options extra options
    */
-  constructor(node : any, options : any) {
+  constructor(node: any, options: any) {
     super(node, options)
-    if (node.type) {
-      this.typeNodeTester = this.createNodeTester('type', node.type, options)as TypeNodeTester
-    }
-    if (node.access) {
-      this.accessTester = this.createDetailsTester('access', node, options)as api.access.AccessTester
-    }
+  }
+
+  init(node: any) {
+    this.setAccessTester(node)
+      .setNodeTester(node)
+      .setIdTester(node)
+  }
+
+  get qprops() {
+    return ['name', 'initializer', 'access', 'decorators', 'type']
+  }
+
+  setTypeTester(node: any): any {
+    if (!node.type) return
+    this.setTester({
+      name: 'type',
+      node: node.type,
+    })
+    return this
+  }
+
+  setAccessTester(node: any): any {
+    if (!node.access) return
+    this.setTester({
+      name: 'access',
+    })
+    return this
+  }
+
+  setIdTester(node: any): any {
+    if (!node.name) return
+    this.setTester({
+      name: 'identifier',
+    })
+    return this
+  }
+
+  /**
+   * id Tester
+   */
+  get idNodeTester() {
+    return this.getTester({
+      name: 'identifier',
+    })
+  }
+
+  /**
+   * Get name of functon if available
+   */
+  get name(): string | undefined {
+    if (!this.idNodeTester) return
+    return this.idNodeTester.name
   }
 
   /**
    * Collect info for Parameter node
    */
   info() {
-    return {name: this.name, type: this.type, initializer: this.initializerInfo}
+    return {
+      name: this.name,
+      type: this.type,
+      initializer: this.initializerInfo,
+    }
   }
 
   get type() {
-    return this.typeNodeTester
-      ? this.typeNodeTester.typeName
-      : 'implicit:any'
+    if (!this.typeNodeTester) return 'implicit:any'
+    return this.typeNodeTester.typeName
+  }
+
+  /**
+   * Whether function is named
+   */
+  get isNamed(): boolean {
+    return Boolean(this.idNodeTester)
+  }
+
+  /**
+   * Test name of parameter
+   * @param query
+   */
+  testName(query: any): boolean {
+    if (!query || !this.isNamed) return true
+    return this.idNodeTester ? this.idNodeTester.testName(query) : false
   }
 
   /**
    * Execute query on node
+   * TODO: refactor using props
    * @param query
    */
-  test(query : any) {
-    return this.testName(query.name) && this.testType(query.type) && this.testInitializer(query.initializer) && this.testDecorators(query.decorators)
+  test(query: any): boolean {
+    return false
+    //  (
+    //   this.testName(query.name) &&
+    //   this.testType(query.type) &&
+    //   this.testInitializer(query.initializer) &&
+    //   this.testDecorators(query.decorators)
+    // )
   }
 
   /**
@@ -67,7 +146,7 @@ export class ParameterTester extends IndentifierNodeTester {
    * @param type the type node
    * @param query query
    */
-  queryType(type : any, query : any) {
+  queryType(type: any, query: any) {
     query = query.type || query
     return testName(type, query)
   }
@@ -77,7 +156,7 @@ export class ParameterTester extends IndentifierNodeTester {
    * @param value
    * @param query
    */
-  queryValue(value : any, query : any) {
+  queryValue(value: any, query: any) {
     query = query.value || query
     return testValue(value, query.value)
   }
@@ -86,12 +165,12 @@ export class ParameterTester extends IndentifierNodeTester {
    * Query initializer info collected
    * @param query the query
    */
-  testInitializer(query : any) {
+  testInitializer(query: any) {
     query = query.initializer || query
     const init = this.initializerInfo as IInitializerDetails
     return {
       type: this.queryType(init.type, query.type),
-      value: this.queryValue(init.value, query.value)
+      value: this.queryValue(init.value, query.value),
     }
   }
 
@@ -120,7 +199,7 @@ export class ParameterTester extends IndentifierNodeTester {
    * Query the decorators of the parameter node
    * @param query
    */
-  testDecorators(query : any) {
+  testDecorators(query: any) {
     query = query.decorators || query
     return testNames(this.decorators, query)
   }
@@ -129,7 +208,7 @@ export class ParameterTester extends IndentifierNodeTester {
    * TODO
    * @param query
    */
-  testType(query : any) {
+  testType(query: any) {
     return false
   }
 }
