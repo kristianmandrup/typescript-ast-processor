@@ -23,7 +23,9 @@ import { isDefined } from '../../../util'
 
 export abstract class BaseNodeTester extends Loggable implements INodeTester {
   // properties to test, query and gather info for
-  props: any = {}
+  _props: string[] = []
+  qprops: string[] = []
+  queries: any
   queryResult: any
   // maps of testers used by tester
   testers: any = {
@@ -72,13 +74,46 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
     this.validateInit(node)
     this.node = node
     this.initProps()
+    this.initQueries()
+    this.initInfoProps()
+    this.initPropTesters()
   }
 
   /**
    * Override in subclass to initialize props!
    */
   initProps() {
-    this.props = {}
+    this.props = this.qprops || []
+  }
+
+  /**
+   * Set info props used to gather property info
+   */
+  initInfoProps() {}
+
+  /**
+   * Initialize prop testers (query methods)
+   */
+  initPropTesters() {}
+
+  set props(props: any) {
+    this._props = Array.isArray(props)
+      ? props
+      : Object.keys(props).filter((prop) => prop)
+  }
+
+  /**
+   * Get registered props
+   */
+  get props() {
+    return this._props || []
+  }
+
+  /**
+   * Initialize queries object
+   */
+  initQueries() {
+    this.queries = this.resolveQueries()
   }
 
   /**
@@ -108,7 +143,7 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    * Perform a test using a node tester
    * @param opts
    */
-  doTest(opts: any = {}) {
+  runTest(opts: any = {}) {
     const { query, name, qprop, type = 'node', test = 'test' } = opts
 
     const propQuery = query[qprop || name]
@@ -257,11 +292,8 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    * Subclass should always override or extend
    * @param query
    */
-  public test(query: any): any {
-    const queryResult = this.doQuery(query)
-    return Object.keys(queryResult).every((key: string) =>
-      Boolean(queryResult[key]),
-    )
+  test(query: any) {
+    return this.runTests(query)
   }
 
   /**
@@ -270,21 +302,55 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    * @returns { Object } node information
    */
   public query(query: any): any {
-    return this.doQuery(query)
+    return this.runQueries(query)
   }
 
+  /**
+   * Resolve property testers
+   * @param prop
+   */
   protected resolvePropTester(prop: string) {
     const testFnName = `test${camelize(prop)}`
     const queryFnName = `query${camelize(prop)}`
-    return this[testFnName] || this[queryFnName]
+    return this[queryFnName] || this[testFnName]
   }
 
-  public doQuery(query: any) {
+  /**
+   * Resolves queries
+   */
+  protected resolveQueries() {
     return this.props.reduce((acc: any, prop: string) => {
       const tester = this.resolvePropTester(prop)
       if (!tester) return acc
-      acc[prop] = tester(query)
+      acc[prop] = tester.bind(this)
       return acc
+    }, {})
+  }
+
+  /**
+   * Performs property queries using each of the resolved query functions
+   * See resolveQueries
+   * @param query
+   */
+  public runQueries(query: any) {
+    const queryKeys = Object.keys(this.queries)
+    return queryKeys.reduce((acc: any, key: string) => {
+      const queryFn = this.queries[key]
+      acc[key] = queryFn(query)
+      return acc
+    }, {})
+  }
+
+  /**
+   * Performs property queries using each of the resolved query functions
+   * See resolveQueries
+   * @param query
+   */
+  public runTests(query: any) {
+    const queryKeys = Object.keys(this.queries)
+    return queryKeys.every((key: string) => {
+      const queryFn = this.queries[key]
+      return Boolean(queryFn(query))
     }, {})
   }
 
@@ -292,7 +358,7 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    * Get property keys
    */
   get propKeys() {
-    return Object.keys(this.props)
+    return this.props
   }
 
   /**

@@ -15,6 +15,13 @@ export class AccessorTester extends MethodLikeTester {
   }
 
   /**
+   * Initialize props
+   */
+  initProps() {
+    this.props = ['member']
+  }
+
+  /**
    * Initialize
    * @param node
    */
@@ -30,7 +37,7 @@ export class AccessorTester extends MethodLikeTester {
    * @param query
    */
   testMember(query: any) {
-    return this.doTest({
+    return this.runTest({
       query,
       name: 'member',
     })
@@ -51,6 +58,6 @@ export class AccessorTester extends MethodLikeTester {
    * @param query
    */
   test(query: any) {
-    super.test(query) && this.testMember(query)
+    return super.test(query) && this.runTests(query)
   }
 }

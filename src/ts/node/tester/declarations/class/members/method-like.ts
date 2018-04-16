@@ -1,6 +1,5 @@
 import { functionLike } from '../../function'
 import { isMemberType } from './types'
-import { IDetailsTester } from '../../../../details/base'
 
 export function createMethodTester(node: any, options: any = {}) {
   if (!isMemberType(node, 'method')) return
@@ -8,9 +7,7 @@ export function createMethodTester(node: any, options: any = {}) {
 }
 
 export class MethodLikeTester extends functionLike.FunctionLikeNodeTester {
-  // inherited
-  // parameters: ParametersTester
-  accessTester: IDetailsTester
+  // inherited ParametersTester
 
   constructor(node: any, options: any) {
     super(node, options)
@@ -22,7 +19,11 @@ export class MethodLikeTester extends functionLike.FunctionLikeNodeTester {
    * @param node
    */
   init(node: any) {
-    this.accessTester = this.createDetailsTester('access', node)
+    this.setTester({
+      name: 'access',
+      type: 'details',
+      node,
+    })
   }
 
   /**
@@ -36,7 +37,7 @@ export class MethodLikeTester extends functionLike.FunctionLikeNodeTester {
    * A member (ie. such as a method like) is never exported
    */
   get isExported() {
-    return false
+    return this.isExportable
   }
 
   /**
@@ -44,7 +45,7 @@ export class MethodLikeTester extends functionLike.FunctionLikeNodeTester {
    * @param query
    */
   test(query: any) {
-    super.test(query) && this.testAccess(query)
+    super.test(query) && this.runTests(query)
   }
 
   /**
@@ -52,7 +53,10 @@ export class MethodLikeTester extends functionLike.FunctionLikeNodeTester {
    * @param query
    */
   testAccess(query: any) {
-    this.accessTester.test(this.node, query.access || query)
+    return this.runTest({
+      query,
+      name: 'access',
+    })
   }
 
   /**

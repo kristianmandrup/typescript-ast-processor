@@ -1,4 +1,4 @@
-import { BaseNodeTester, INodeTester } from '../../base';
+import { BaseNodeTester, INodeTester } from '../../base'
 
 /**
  * Factory to create a VariableDeclaration tester
@@ -17,26 +17,56 @@ export function createObjectLiteralTester(node: any, options: any) {
  *  - initializer - which can be an ObjectLiteral itself!
  */
 export class ObjectLiteralTester extends BaseNodeTester {
-  propertiesNodeTester: INodeTester
   properties: any[] = []
 
   constructor(node: any, options: any) {
     super(node, options)
+    this.init(node)
+  }
+
+  /**
+   * Initialize
+   * @param node
+   */
+  init(node: any) {
+    super.init(node)
     const properties = node.properties || []
     this.properties = properties
     if (this.hasProperties) {
-      this.propertiesNodeTester = this.createNodeTester('object.properties', properties, this.options)
+      this.setTester({
+        factory: 'object.properties',
+        name: 'properties',
+        node: properties,
+      })
     }
   }
 
+  /**
+   * Whether object has any properties
+   */
   get hasProperties() {
     return this.propertyCount > 0
   }
 
+  /**
+   * Number of object properties
+   */
   get propertyCount() {
     return this.properties.length
   }
 
+  /**
+   * Retrieve registered properties node tester
+   */
+  get propertiesNodeTester(): any {
+    return this.getTester({
+      name: 'properties',
+    }).info()
+  }
+
+  /**
+   * Info for all properties
+   */
   get propertiesInfo() {
     if (!this.hasProperties) return []
     return this.propertiesNodeTester.info()
@@ -48,12 +78,19 @@ export class ObjectLiteralTester extends BaseNodeTester {
    */
   test(query: any): any {
     if (!this.propertiesNodeTester) return false
-    return this.propertiesNodeTester.test(query.properties)
+    return this.runTest({
+      query,
+      qprop: 'properties',
+      name: 'properties',
+    })
   }
 
+  /**
+   * object info
+   */
   info() {
     return {
-      properties: this.propertiesInfo
+      properties: this.propertiesInfo,
     }
   }
 }

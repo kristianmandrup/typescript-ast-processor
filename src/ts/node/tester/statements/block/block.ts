@@ -1,14 +1,15 @@
 import { BaseNodeTester } from '../../base'
-import {
-  findParentBlocks
-} from '../util'
+import { findParentBlocks } from '../util'
 
 /**
  * Factory to create a Block node tester
  * @param node
  * @param options
  */
-export function createBlockNodeTester(node: any, options: any = {}): BlockNodeTester {
+export function createBlockNodeTester(
+  node: any,
+  options: any = {},
+): BlockNodeTester {
   // if (!isSwitchStatement(node)) return
   return new BlockNodeTester(node, options)
 }
@@ -52,18 +53,18 @@ export class BlockNodeTester extends BaseNodeTester {
    */
   info() {
     return {
-      nestedLevels: this.nestedLevels
+      nestedLevels: this.nestedLevels,
     }
   }
 
   /**
    * Query whether on else block on/off and nesting levels
    */
-  test(query: any) {
+  test(query: any): boolean {
     return this.testNestingLevels(query.nested)
   }
 
-  testNestingLevels(query: any) {
-    this.testCount(query, this.nestedLevels)
+  testNestingLevels(query: any): boolean {
+    return this.testCount(query, this.nestedLevels)
   }
 }

@@ -1,7 +1,10 @@
 import * as ts from 'typescript'
-import { BlockStatementNodeTester } from '../block';
+import { BlockStatementNodeTester } from '../block'
 
-export function createTryCatchFinallyTester(node: any, options: any = {}): TryCatchFinallyTester {
+export function createTryCatchFinallyTester(
+  node: any,
+  options: any = {},
+): TryCatchFinallyTester {
   return new TryCatchFinallyTester(node, options)
 }
 
@@ -17,33 +20,54 @@ export class TryCatchFinallyTester extends BlockStatementNodeTester {
     this.finallyBlock = node.finallyBlock
   }
 
-  get hasCatch() {
+  /**
+   * Whether try statement has one or more catch blocks
+   */
+  get hasCatch(): boolean {
     return Boolean(this.catchClause)
   }
 
-  get hasFinally() {
+  /**
+   * Whether try statement has one or more finally blocks
+   */
+  get hasFinally(): boolean {
     return Boolean(this.finallyBlock)
   }
 
-  testCatch(query: any) {
+  /**
+   * Whether catch block(s) matches query
+   */
+  testCatch(query: any): boolean {
     return this.hasCatch === query
   }
 
-  testFinally(query: any) {
+  /**
+   * Whether finally block(s) matches query
+   */
+  testFinally(query: any): boolean {
     return this.hasFinally === query
   }
 
-  test(query: any) {
-    return super.test(query) &&
+  /**
+   * Whether try statement matches query
+   */
+  test(query: any): boolean {
+    return (
+      super.test(query) &&
       this.testCatch(query.catch) &&
       this.testFinally(query.finally)
+    )
   }
 
+  /**
+   * Info of try statement
+   * TODO: should collect info on each block
+   */
   info() {
     return {
       ...super.info(),
       catch: this.hasCatch,
-      finally: this.hasFinally
+      finally: this.hasFinally,
     }
   }
 }

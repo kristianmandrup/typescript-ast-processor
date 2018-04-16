@@ -1,17 +1,5 @@
 import * as ts from 'typescript'
-import { BaseNodeTester } from '../base';
-import { NodesTester } from '../generic';
-
-// TODO
-function createLiteralTester(node: any, options: any) {
-  return {
-    test(query: any) {
-      return true
-    },
-    name: 'unknown'
-  }
-}
-
+import { BaseNodeTester } from '../base'
 
 /**
  * Factory to create a VariableDeclaration tester
@@ -31,14 +19,29 @@ export function createArrayLiteralTester(node: any, options: any) {
  */
 export class ArrayLiteralTester extends BaseNodeTester {
   items: any[]
-  itemsTester: NodesTester
 
   constructor(node: any, options: any) {
     super(node, options)
+    this.init(node)
+  }
+
+  /**
+   * Initialize
+   * @param node
+   */
+  init(node: any) {
+    super.init(node)
     const items = node.elements || []
     this.items = items
     if (this.hasItems) {
-      this.itemsTester = this.createNodeTester('list', items, options) as NodesTester
+      this.setTester({
+        name: 'list',
+        node: items,
+      })
+      this.setTester({
+        name: 'literal',
+        node,
+      })
     }
   }
 
@@ -47,15 +50,6 @@ export class ArrayLiteralTester extends BaseNodeTester {
    */
   get hasItems() {
     return this.itemsCount > 0
-  }
-
-  /**
-   * Create tester for single Item Assignment node
-   * @param propNode
-   */
-  createItemTester(itemNode: any) {
-    if (!ts.isLiteralExpression(itemNode)) return
-    return createLiteralTester(itemNode, this.options)
   }
 
   /**
@@ -75,7 +69,7 @@ export class ArrayLiteralTester extends BaseNodeTester {
    */
   info() {
     return {
-      count: this.itemsCount
+      count: this.itemsCount,
     }
   }
 
@@ -101,7 +95,11 @@ export class ArrayLiteralTester extends BaseNodeTester {
    * @param query
    */
   testItems(query: any) {
-    this.itemsTester.test(query.properties)
+    return this.runTest({
+      query,
+      name: 'list',
+      qprop: 'properties',
+    })
   }
 
   /**
@@ -111,12 +109,45 @@ export class ArrayLiteralTester extends BaseNodeTester {
    */
   testReduceItems(query: any) {
     return this.items.reduce((acc: any, item: any) => {
-      const itemTester = this.createItemTester(item)
-      if (itemTester) {
-        const name = itemTester.name
-        acc[name] = itemTester.test(query.item)
+      const test = this.testItem(item, query)
+      if (test) {
+        acc[test.name] = test.result
       }
       return acc
     }, {})
+  }
+
+  /**
+   * Test a single item
+   * @param item
+   * @param query
+   */
+  testItem(item: any, query: any) {
+    const itemTester = this.createItemTester(item)
+    if (!itemTester) return
+    return {
+      result: itemTester.test(query.item),
+      name: itemTester.name,
+    }
+  }
+
+  /**
+   * Create tester for single Item Assignment node
+   * @param propNode
+   */
+  createItemTester(itemNode: any) {
+    if (!ts.isLiteralExpression(itemNode)) return
+    return this.createLiteralTester(itemNode)
+  }
+
+  /**
+   * Create literal node tester
+   * @param node
+   */
+  createLiteralTester(node: any) {
+    return this.getTester({
+      name: 'literal',
+      node,
+    })
   }
 }

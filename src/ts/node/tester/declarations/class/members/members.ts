@@ -1,6 +1,11 @@
 import * as ts from 'typescript'
 import { BaseNodeTester } from '../../../base'
-import { isEmpty } from '../../../../../util'
+import {
+  isEmpty,
+  capitalize,
+  pluralize,
+  singularize,
+} from '../../../../../util'
 
 export function createClassMembersTester(node: any, options: any = {}) {
   return new ClassMembersTester(node, options)
@@ -10,12 +15,12 @@ import { memberType } from './types'
 
 export class ClassMembersTester extends BaseNodeTester {
   nodes: any[]
-  _accessors: any[]
-  _getters: any[]
-  _setters: any[]
-  _methods: any[]
-  _properties: any[]
-  _constructors: any[]
+  accessors: any[]
+  getters: any[]
+  setters: any[]
+  methods: any[]
+  properties: any[]
+  constructors: any[]
 
   /**
    *
@@ -32,20 +37,28 @@ export class ClassMembersTester extends BaseNodeTester {
    * @param node
    */
   init(node: any) {
+    this.nodes = this.validatedMembers(node)
+  }
+
+  /**
+   * Find members of node and validate them
+   * @param node
+   */
+  validatedMembers(node: any) {
     const members = Array.isArray(node) ? node : node.members
-    this.isMembersNode(members) ||
+    this.isValidMembers(members) ||
       this.error('ClassMembersTester: invalid members node', {
         node,
         members,
       })
-    this.nodes = members
+    return members
   }
 
-  validMembers(node: any) {
-    return Array.isArray(node) ? node : node.members
-  }
-
-  isMembersNode(members: any) {
+  /**
+   * Check is valid list of class members
+   * @param members
+   */
+  isValidMembers(members: any) {
     return Array.isArray(members)
   }
 
@@ -54,18 +67,60 @@ export class ClassMembersTester extends BaseNodeTester {
     return this.nodes
   }
 
-  test(query: any): any {
-    return (
-      this.testProperties(query.properties) &&
-      this.testAccessors(query.accessors) &&
-      this.testMethods(query.methods)
-    )
+  /**
+   * Query properties
+   */
+  get qprops() {
+    return [
+      'properties',
+      'accessors',
+      'methods',
+      'getters',
+      'setters',
+      'properties',
+      'constructors',
+    ]
   }
 
+  /**
+   * Initialize info properties
+   */
+  initInfoProps() {
+    this.qprops.map((name: string) => {
+      const plural = pluralize(name)
+      const singular = singularize(name)
+      this[plural] = this.membersOf(memberType[singular])
+    })
+    this.accessors = this.getters.concat(this.setters)
+  }
+
+  /**
+   * Creates methods of the form:
+   * - testXYZ(query)
+   * Using props
+   */
+  initPropTesters() {
+    this.qprops.map((name: string) => {
+      const fnName = `test${capitalize(name)}`
+      const fn = (query: any) => {
+        return this._testMembers(this[name], query)
+      }
+      this[fnName] = fn.bind(this)
+    })
+  }
+
+  /**
+   * Create a member node tester
+   * @param member
+   */
   createMemberTester(member: any) {
     return this.createTester('class.member', member, this.options)
   }
 
+  /**
+   * Retrieve node has members of specific kind
+   * @param kind
+   */
   membersOf(kind: ts.SyntaxKind) {
     if (!this.members) return []
     return this.members.filter((member: any) => {
@@ -73,7 +128,7 @@ export class ClassMembersTester extends BaseNodeTester {
     })
   }
 
-  testMembers(members: any[], query: any) {
+  protected _testMembers(members: any[], query: any) {
     if (isEmpty(query)) return true
     const mappedMembers: any[] = members.map((member: any) => {
       const memberTester = this.createMemberTester(member)
@@ -89,52 +144,5 @@ export class ClassMembersTester extends BaseNodeTester {
     })
     const matchingMembers = mappedMembers.filter((val) => val)
     return matchingMembers.length > 0 ? matchingMembers : false
-  }
-
-  get accessors() {
-    this._accessors = this._accessors || this.getters.concat(this.setters)
-    return this._accessors
-  }
-
-  get getters() {
-    this._getters = this._getters || this.membersOf(memberType.getter)
-    return this._getters
-  }
-
-  get setters() {
-    this._setters = this._setters || this.membersOf(memberType.setter)
-    return this._setters
-  }
-
-  get methods() {
-    this._methods = this._methods || this.membersOf(memberType.method)
-    return this._methods
-  }
-
-  get properties() {
-    this._properties = this._properties || this.membersOf(memberType.property)
-    return this._properties
-  }
-
-  get constructors() {
-    this._constructors =
-      this._constructors || this.membersOf(memberType.constructor)
-    return this._constructors
-  }
-
-  testProperties(query: any) {
-    return this.testMembers(this.properties, query)
-  }
-
-  testAccessors(query: any) {
-    return this.testMembers(this.accessors, query)
-  }
-
-  testMethods(query: any) {
-    return this.testMembers(this.methods, query)
-  }
-
-  testConstructors(query: any) {
-    return this.testMembers(this.methods, query)
   }
 }

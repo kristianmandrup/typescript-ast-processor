@@ -71,7 +71,7 @@ export class ForLoopNodeTester extends LoopNodeTester {
   /**
    * Query whether on else block on/off and nesting levels
    */
-  test(query: any) {
+  test(query: any): boolean {
     return super.test(query) && this.testForType(query.type)
   }
 

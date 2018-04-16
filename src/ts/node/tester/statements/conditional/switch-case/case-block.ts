@@ -41,14 +41,14 @@ export class CaseBlockTester extends BaseNodeTester {
   /**
    * Get info for all case clauses
    */
-  get clausesInfo() {
+  get clausesInfo(): any[] {
     return this.clauseNodes.map(this.clauseInfo)
   }
 
   /**
    * Get keys of all case clauses
    */
-  get clauseKeys() {
+  get clauseKeys(): string[] {
     return this.clausesInfo.map((info: any) => info.name)
   }
 
@@ -73,14 +73,14 @@ export class CaseBlockTester extends BaseNodeTester {
   /**
    * Get number of case clause nodes
    */
-  get caseCount() {
+  get caseCount(): number {
     return this.clauseNodes.length
   }
 
   /**
    * Get default case clause node
    */
-  get defaultCase() {
+  get defaultCase(): any {
     // this.createDefaultClauseTester
     return this.defaultClauseNode
   }
@@ -88,12 +88,12 @@ export class CaseBlockTester extends BaseNodeTester {
   /**
    * Whether case block has a default clause
    */
-  get hasDefaultCase() {
+  get hasDefaultCase(): boolean {
     // this.createDefaultClauseTester
     return Boolean(this.defaultClauseNode)
   }
 
-  get cases() {
+  get cases(): any {
     return {
       keys: this.clauseKeys,
       count: this.caseCount,
@@ -105,7 +105,7 @@ export class CaseBlockTester extends BaseNodeTester {
    * - cases
    * - default
    */
-  info() {
+  info(): any {
     return {
       cases: this.cases,
       default: this.hasDefaultCase,
@@ -117,15 +117,15 @@ export class CaseBlockTester extends BaseNodeTester {
    * TODO: test case causes in detail
    * @param query
    */
-  test(query: any) {
-    this.testCaseCount(query.cases)
+  test(query: any): boolean {
+    return this.testCaseCount(query.cases)
   }
 
   /**
    * Test if number of cases matches query
    * @param query
    */
-  testCaseCount(query: any) {
+  testCaseCount(query: any): boolean {
     return this.testCount(query, this.caseCount)
   }
 }

@@ -1,7 +1,10 @@
 import * as ts from 'typescript'
-import { BlockStatementNodeTester } from '../block';
+import { BlockStatementNodeTester } from '../block'
 
-export function createIfThenElseTester(node: any, options: any = {}): IfThenElseTester {
+export function createIfThenElseTester(
+  node: any,
+  options: any = {},
+): IfThenElseTester {
   return new IfThenElseTester(node, options)
 }
 
@@ -34,7 +37,7 @@ export class IfThenElseTester extends BlockStatementNodeTester {
     return {
       ...super.info(),
       conditionalType: 'if',
-      else: this.hasElse
+      else: this.hasElse,
     }
   }
 
@@ -42,7 +45,7 @@ export class IfThenElseTester extends BlockStatementNodeTester {
    * Query whether on else block on/off and nesting levels
    */
   test(query: any) {
-    return this.testElse(query.else) && super.test(query.nested)
+    return super.test(query.nested) && this.testElse(query.else)
   }
 
   /**

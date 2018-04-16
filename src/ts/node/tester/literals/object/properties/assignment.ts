@@ -1,5 +1,5 @@
-import { BaseNodeTester } from '../../../base';
-import { IndentifierNodeTester } from '../../../identifier';
+import { BaseNodeTester } from '../../../base'
+import { IndentifierNodeTester } from '../../../identifier'
 
 /**
  * Factory to create a VariableDeclaration tester
@@ -11,18 +11,32 @@ export function createPropertyAssignmentTester(node: any, options: any) {
 }
 
 export class PropertyAssignmentNodeTester extends BaseNodeTester {
-  identifierTester: IndentifierNodeTester // INodeTester // IndentifierNodeTester
-
   constructor(node: any, options: any) {
     super(node, options)
-    this.identifierTester = this.createNodeTester('identifier', node.name, this.options) as IndentifierNodeTester
+    this.init(node)
+  }
+
+  init(node: any) {
+    this.setTester({
+      name: 'identifier',
+      node: node.name,
+    })
   }
 
   /**
-   * id of identifier node
+   * Retrieve registered properties node tester
+   */
+  get idNodeTester(): any {
+    return this.getTester({
+      name: 'identifier',
+    })
+  }
+
+  /**
+   * id of identifier node (property name assigned to)
    */
   get name() {
-    return this.identifierTester.name
+    return this.idNodeTester.name
   }
 
   /**
@@ -30,8 +44,20 @@ export class PropertyAssignmentNodeTester extends BaseNodeTester {
    */
   info() {
     return {
-      name: this.name
+      name: this.name,
     }
+  }
+
+  /**
+   * Test name/id of property assigned to
+   * @param query
+   */
+  testName(query: any) {
+    return this.runTest({
+      query,
+      qprop: 'name',
+      name: 'identifier',
+    })
   }
 
   /**
@@ -39,6 +65,6 @@ export class PropertyAssignmentNodeTester extends BaseNodeTester {
    * @param query
    */
   test(query: any): any {
-    return this.identifierTester.test(query.id)
+    return this.testName(query)
   }
 }

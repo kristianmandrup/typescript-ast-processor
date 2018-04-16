@@ -24,14 +24,14 @@ export class WhileLoopTester extends LoopNodeTester {
   /**
    * TODO: move to and use details tester for loop
    */
-  get isWhileThen() {
+  get isWhileThen(): boolean {
     return ts.isWhileStatement(this.node)
   }
 
   /**
    * TODO: move to and use details tester for loop
    */
-  get isDoWhile() {
+  get isDoWhile(): boolean {
     return ts.isDoStatement(this.node)
   }
 
@@ -47,7 +47,7 @@ export class WhileLoopTester extends LoopNodeTester {
     return 'unknown'
   }
 
-  info() {
+  info(): any {
     return {
       ...super.info(),
       loopType: 'while',

@@ -62,14 +62,14 @@ export class CaseClauseTester extends BaseNodeTester {
    * Count number of break statements within
    * TODO: also exlude any nested for/while loops
    */
-  get breakCount() {
+  get breakCount(): number {
     return this.countOccurenceOf('break')
   }
 
   /**
    * Find key used to trigger clause
    */
-  get key() {
+  get key(): string {
     return ts.isLiteralExpression(this.expression)
       ? this.expression.getText()
       : 'unknown'
@@ -79,7 +79,7 @@ export class CaseClauseTester extends BaseNodeTester {
    * Get info of case clause
    * - key: condition used to trigger clause
    */
-  info() {
+  info(): any {
     return {
       key: this.key,
       breakCount: this.breakCount,

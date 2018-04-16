@@ -20,17 +20,19 @@ export class ClassHeritageTester extends BaseNodeTester {
     super(node, options)
   }
 
-  init(node: any) {
+  /**
+   * Init info props
+   */
+  initInfoProps() {
     this.implementNames = this.resolveImplementNames()
     this.implements = this.resolveImplements()
     this.extendNames = this.resolveExtendNames()
     this.heritage = this.heritageClauses
   }
 
-  get heritageClauses() {
-    return this.node.heritageClauses || []
-  }
-
+  /**
+   * Get info
+   */
   info(): any {
     const info: any = {
       implements: this.implements,
@@ -42,15 +44,56 @@ export class ClassHeritageTester extends BaseNodeTester {
     return info
   }
 
-  get isEmpty() {
-    return !this.extends && this.implements.number === 0
+  get heritageClauses() {
+    return this.node.heritageClauses || []
   }
 
+  /**
+   * Whether the heritage is completely "empty", ie. no extends or implements
+   */
+  get isEmpty() {
+    return !this.hasAny
+  }
+
+  /**
+   * Whether the heritage has any extends or implements
+   */
+  get hasAny() {
+    return this.hasExtends || this.hasAnyImplements
+  }
+
+  /**
+   * Whether the heritage has any implements
+   */
+  get hasAnyImplements() {
+    return this.implements.number > 0
+  }
+
+  /**
+   * Whether the heritage has an extends
+   */
+  get hasExtends() {
+    return Boolean(this.extends)
+  }
+
+  /**
+   * Get info on the extended if any
+   * Note: can only extend a single class!
+   */
   get extends() {
-    // can only extend a single class!
+    return this.extendName
+  }
+
+  /**
+   * Get the class name extended if any
+   */
+  get extendName() {
     return this.extendNames[0]
   }
 
+  /**
+   * Resolve the implements if any
+   */
   protected resolveImplements() {
     return {
       names: this.implementNames,
@@ -58,18 +101,36 @@ export class ClassHeritageTester extends BaseNodeTester {
     }
   }
 
+  /**
+   * Resolve names of interfaces implemented
+   */
   protected resolveImplementNames() {
     return this.namesOf(this.implementClauses)
   }
 
+  /**
+   * Resolve names of class extended
+   */
   protected resolveExtendNames() {
     return this.namesOf(this.extendClauses)
   }
 
+  /**
+   * Resolve names of heritage clause
+   * @param clause
+   */
+  protected namesOfClause(clause: ts.HeritageClause) {
+    return this.createHeritageClauseTester(clause).names
+  }
+
+  /**
+   * Resolve the names of each heritage clause
+   * @param clauses
+   */
   protected namesOf(clauses: ts.HeritageClause[]) {
     return flatten(
       clauses.map((extendClause: ts.HeritageClause) => {
-        return this.createHeritageClauseTester(extendClause).names
+        return this.namesOfClause(extendClause)
       }),
     )
   }
@@ -85,6 +146,13 @@ export class ClassHeritageTester extends BaseNodeTester {
     return this.heritage.filter(
       (clause: ts.HeritageClause) => clause.token === kind,
     )
+  }
+
+  /**
+   * Get the first (only) extends clause if any
+   */
+  get extendClause() {
+    return this.extendClauses[0]
   }
 
   /**
@@ -156,25 +224,5 @@ export class ClassHeritageTester extends BaseNodeTester {
   testImplements(query: any) {
     const tester = this.implementsQuery.bind(this)
     return this.testNot(query, tester)
-  }
-
-  /**
-   * Test if node matches query
-   * @param query
-   */
-  test(query: any) {
-    const result = this.query(query)
-    return Boolean(result.extends && result.implements)
-  }
-
-  /**
-   * Execute query on heritage clauses
-   * @param query
-   */
-  query(query: any) {
-    return {
-      extends: this.testExtends(query.extends),
-      implements: this.testImplements(query.implements),
-    }
   }
 }

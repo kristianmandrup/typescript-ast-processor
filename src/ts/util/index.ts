@@ -20,6 +20,9 @@ export {
   capitalizeFirst,
   lowercaseFirst,
   camelize,
+  capitalize,
+  pluralize,
+  singularize,
 } from './name'
 
 export {

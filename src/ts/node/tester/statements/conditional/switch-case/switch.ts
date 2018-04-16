@@ -34,7 +34,7 @@ export class SwitchStatementTester extends BaseNodeTester {
   /**
    * Whether switch has default case clause
    */
-  get hasDefault() {
+  get hasDefault(): boolean {
     return Boolean(this.caseBlockTester.defaultCase)
   }
 
@@ -62,7 +62,7 @@ export class SwitchStatementTester extends BaseNodeTester {
   /**
    * Return cases info
    */
-  get cases() {
+  get cases(): any {
     return {
       count: this.caseCount,
       keys: this.caseClausesKeys,
@@ -73,7 +73,7 @@ export class SwitchStatementTester extends BaseNodeTester {
   /**
    * Get basic info including else on/off and nested levels
    */
-  info() {
+  info(): any {
     return {
       ...super.info(),
       conditionalType: 'switch',
@@ -82,11 +82,19 @@ export class SwitchStatementTester extends BaseNodeTester {
     }
   }
 
-  test(query: any) {
+  /**
+   * run query
+   * @param query
+   */
+  test(query: any): boolean {
     return this.testCaseBlock(query.cases)
   }
 
-  testCaseBlock(query: any) {
+  /**
+   * Test case block
+   * @param query
+   */
+  testCaseBlock(query: any): boolean {
     if (!query) return true
     return this.caseBlockTester ? this.caseBlockTester.test(query) : false
   }

@@ -1,4 +1,4 @@
-import { BaseNodeTester } from "../../base";
+import { BaseNodeTester } from '../../base'
 
 /**
  * Factory to create ternary condition node tester
@@ -6,7 +6,10 @@ import { BaseNodeTester } from "../../base";
  * @param node
  * @param options
  */
-export function createTernaryNodeTester(node: any, options: any = {}): TernaryNodeTester {
+export function createTernaryNodeTester(
+  node: any,
+  options: any = {},
+): TernaryNodeTester {
   return new TernaryNodeTester(node, options)
 }
 
@@ -23,14 +26,15 @@ export class TernaryNodeTester extends BaseNodeTester {
   /**
    * Get basic info including else on/off and nested levels
    */
-  info() {
+  info(): any {
     return {
       ...super.info(),
-      conditionalType: 'ternary'
+      conditionalType: 'ternary',
     }
   }
 
   /**
+   * TODO
    * Query whether on else block on/off and nesting levels
    */
   test(query: any) {

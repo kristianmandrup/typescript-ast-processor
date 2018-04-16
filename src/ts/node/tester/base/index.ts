@@ -1,1 +1,1 @@
-export { BaseNodeTester } from './base'
+export { BaseNodeTester, INodeTester } from './base'

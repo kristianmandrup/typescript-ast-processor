@@ -60,21 +60,21 @@ export class LoopNodeTester extends BlockStatementNodeTester {
    * Count number of break statements within
    * TODO: also exlude any nested for/while loops
    */
-  get breakCount() {
+  get breakCount(): number {
     return this.countOccurenceOf('break')
   }
 
   /**
    * Count number of continue statements within
    */
-  get continueCount() {
+  get continueCount(): number {
     return this.countOccurenceOf('continue')
   }
 
   /**
    * Get generic loop info
    */
-  info() {
+  info(): any {
     return {
       ...super.info(),
       loop: true,

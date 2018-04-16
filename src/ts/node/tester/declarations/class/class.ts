@@ -26,6 +26,10 @@ export class ClassTester extends DeclarationNodeTester {
     this.init(node)
   }
 
+  /**
+   * Initialize
+   * @param node
+   */
   init(node: any) {
     super.init(node)
     this.setTester({ name: 'heritage', factory: 'class.heritage' })
