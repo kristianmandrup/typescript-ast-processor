@@ -4,9 +4,12 @@ import {
   testOr,
   testAnd,
   testNot,
-  testNames,
   camelize,
+  testName,
+  testNames,
+  testValue,
 } from '../util'
+
 import { IDetailsTester } from '../../details/base'
 
 export interface INodeTester {
@@ -100,11 +103,16 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
     this.propKeys.map((key: string) => {
       const fnName = `test${capitalize(key)}`
       const test = testMethodMap[key]
-      const fn = (query: any) => {
-        this.runTest({
-          ...test,
-          query,
-        })
+      let fn
+      if (typeof test === 'function') {
+        fn = test.bind(this)
+      } else {
+        fn = (query: any) => {
+          this.runTest({
+            ...test,
+            query,
+          })
+        }
       }
       this[fnName] = fn
     })
@@ -154,12 +162,37 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    * @param opts
    */
   setTester(opts: any = {}) {
-    const { type = 'node', name, factory, node, options } = opts
-    this.testers[type][name || factory] = this.createCategoryTester(
+    let { type = 'node', name, factory, when, node, options } = opts
+    node = node || this.node
+    options = options || this.options
+    factory = factory || name
+    name = name || factory
+
+    const names = name.split(':')
+    let facPrefix = names[0]
+    if (['node', 'details'].includes(facPrefix)) {
+      type = facPrefix
+      name = names[1]
+    }
+
+    const fac = factory.split(':')
+    facPrefix = fac[0]
+    if (['node', 'details'].includes(facPrefix)) {
+      type = facPrefix
+      factory = fac[1]
+    }
+
+    node = node[name] || node
+    if (when) {
+      when = when.bind(this)
+      if (!when(node)) return
+    }
+
+    this.testers[type][factory] = this.createCategoryTester(
       type,
       factory,
-      node || this.node,
-      options || this.options,
+      node,
+      options,
     )
     return this
   }
@@ -215,12 +248,37 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
     return namedTester[test](propQuery)
   }
 
+  queryName(name: string, query: any) {
+    return testName(name, query)
+  }
+
+  queryNames(names: string[], query: any) {
+    return testNames(names, query)
+  }
+
+  queryValue(value: any, query: any) {
+    return testValue(value, query)
+  }
+
   /**
    * Get a registered tester
    * @param opts
    */
   getTester(opts: any = {}) {
-    const { name, type = 'node' } = opts
+    opts = isStr(opts)
+      ? {
+          name: opts,
+        }
+      : opts
+
+    let { name, type = 'node' } = opts
+    const names = name.split(':')
+    let typePrefix = names[0]
+    if (['node', 'details'].includes(typePrefix)) {
+      type = typePrefix
+      name = names[1]
+    }
+
     const typeTesters = this.testers[type]
     if (!typeTesters) {
       this.error('getTester: invalid type', {
@@ -252,7 +310,22 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    * @param opts
    */
   getProp(opts: any = {}) {
-    return this.getTester(opts)[opts.property]
+    const property = opts.property || opts.prop || 'info'
+    const fun = opts.fun
+    const is = opts.is
+    const tester = this.getTester(opts)
+    if (!tester) return
+    let res
+    if (is) {
+      res = tester.is(is)
+    }
+    if (fun) {
+      res = tester[fun]()
+    }
+    if (property) {
+      res = tester[property]
+    }
+    return res || opts.default
   }
 
   /**

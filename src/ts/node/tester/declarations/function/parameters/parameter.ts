@@ -1,5 +1,4 @@
 import * as ts from 'typescript'
-import { IndentifierNodeTester } from '../../../identifier'
 import {
   testName,
   testNames,
@@ -42,56 +41,45 @@ export class ParameterTester extends BaseNodeTester {
     super(node, options)
   }
 
-  init(node: any) {
-    this.setAccessTester(node)
-      .setNodeTester(node)
-      .setIdTester(node)
-  }
-
   get qprops() {
     return ['name', 'initializer', 'access', 'decorators', 'type']
   }
 
-  setTypeTester(node: any): any {
-    if (!node.type) return
-    this.setTester({
-      name: 'type',
-      node: node.type,
-    })
-    return this
+  get testerMap() {
+    return {
+      type: 'type',
+      access: 'access',
+      id: 'identifier',
+    }
   }
 
-  setAccessTester(node: any): any {
-    if (!node.access) return
-    this.setTester({
-      name: 'access',
-    })
-    return this
-  }
-
-  setIdTester(node: any): any {
-    if (!node.name) return
-    this.setTester({
-      name: 'identifier',
-    })
-    return this
+  get testMethodMap() {
+    return {
+      name: {
+        name: 'id',
+        test: 'testName',
+      },
+      initializer: this.testInitializer,
+      decorators: this.testDecorators,
+      type: this.testType,
+    }
   }
 
   /**
    * id Tester
    */
   get idNodeTester() {
-    return this.getTester({
-      name: 'identifier',
-    })
+    return this.getTester('id')
   }
 
   /**
    * Get name of functon if available
    */
   get name(): string | undefined {
-    if (!this.idNodeTester) return
-    return this.idNodeTester.name
+    return this.getProp({
+      name: 'id',
+      prop: 'name',
+    })
   }
 
   /**
@@ -106,8 +94,11 @@ export class ParameterTester extends BaseNodeTester {
   }
 
   get type() {
-    if (!this.typeNodeTester) return 'implicit:any'
-    return this.typeNodeTester.typeName
+    return this.getProp({
+      name: 'type',
+      prop: 'typeName',
+      default: 'implicit:any',
+    })
   }
 
   /**
@@ -118,37 +109,12 @@ export class ParameterTester extends BaseNodeTester {
   }
 
   /**
-   * Test name of parameter
-   * @param query
-   */
-  testName(query: any): boolean {
-    if (!query || !this.isNamed) return true
-    return this.idNodeTester ? this.idNodeTester.testName(query) : false
-  }
-
-  /**
-   * Execute query on node
-   * TODO: refactor using props
-   * @param query
-   */
-  test(query: any): boolean {
-    return false
-    //  (
-    //   this.testName(query.name) &&
-    //   this.testType(query.type) &&
-    //   this.testInitializer(query.initializer) &&
-    //   this.testDecorators(query.decorators)
-    // )
-  }
-
-  /**
    * Query the parameter type
    * @param type the type node
    * @param query query
    */
   queryType(type: any, query: any) {
-    query = query.type || query
-    return testName(type, query)
+    return this.queryName(type, query.type)
   }
 
   /**

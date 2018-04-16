@@ -19,7 +19,7 @@ export class TypeNodeTester extends BaseNodeTester {
    * @param options
    */
   constructor(node: any, options: any) {
-    super(node, options)
+    super(node.type || node, options)
     this.init(node)
   }
 

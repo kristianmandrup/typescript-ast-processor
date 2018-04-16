@@ -1,6 +1,4 @@
-import {
-  isFunction
-} from '../../../util'
+import { isFunction } from '../../../util'
 
 /**
  * Similar to nameMatch but for non-string values
@@ -26,6 +24,6 @@ export function createValueTest(query: any) {
 }
 
 export function testValue(value: any, query: any): boolean {
-  const nameTest = createValueTest(query.value || query)
-  return nameTest(value)
+  const valueTest = createValueTest(query.value || query)
+  return valueTest(value)
 }

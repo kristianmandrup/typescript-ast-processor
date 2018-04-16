@@ -1,5 +1,4 @@
 import * as ts from 'typescript'
-import { isEmpty } from '../../../../util'
 import { DeclarationNodeTester } from '../declaration'
 
 export function isFunctionLike(node: any) {
@@ -21,36 +20,17 @@ export class FunctionLikeNodeTester extends DeclarationNodeTester {
     this.init(node)
   }
 
-  init(node: any) {
-    const { type, parameters } = node
-
-    // NOTE: anonymous function has no ID
-    if (this.hasId(node)) {
-      this.setTester({
+  get testerMap() {
+    return {
+      parameters: 'function.parameters',
+      type: 'type',
+      block: 'block',
+      function: 'details:function',
+      id: {
         name: 'identifier',
-      })
+        when: this.hasId,
+      },
     }
-
-    if (parameters) {
-      this.setTester({
-        factory: 'function.parameters',
-        node: parameters,
-      })
-    }
-
-    this.setTester({
-      name: 'function',
-      type: 'details',
-    })
-
-    if (type) {
-      this.setTester({
-        name: 'type',
-      })
-    }
-    this.setTester({
-      name: 'block',
-    })
   }
 
   /**
@@ -68,66 +48,62 @@ export class FunctionLikeNodeTester extends DeclarationNodeTester {
    * id Tester
    */
   get idNodeTester() {
-    return this.getTester({
-      name: 'identifier',
-    })
+    return this.getTester('id')
   }
 
   /**
    * block node tester
    */
   get blockNodeTester() {
-    return this.getTester({
-      name: 'block',
-    })
+    return this.getTester('block')
   }
 
   /**
    * block node tester
    */
   get parameterNodesTester() {
-    return this.getTester({
-      name: 'function.parameters',
-    })
+    return this.getTester('parameters')
   }
 
   /**
    * Function details tester
    */
   get functionTester() {
-    return this.getTester({
-      name: 'function',
-      type: 'details',
-    })
+    return this.getTester('details:function')
   }
 
   /**
    * block node tester
    */
   get typeNodeTester() {
-    return this.getTester({
-      name: 'type',
-    })
+    return this.getTester('type')
   }
 
   /**
    * Get name of functon if available
    */
   get name(): string | undefined {
-    if (!this.idNodeTester) return
-    return this.idNodeTester.name
+    return this.getProp({
+      name: 'id',
+      prop: 'name',
+    })
   }
 
   get isExported() {
-    if (!this.idNodeTester) return
-    return this.idNodeTester.isExported
+    return this.getProp({
+      name: 'id',
+      prop: 'isExported',
+    })
   }
 
   /**
    * Determine how many levels deep the if is nested
    */
   get nestedLevels() {
-    return this.blockNodeTester.nestedLevels
+    return this.getProp({
+      name: 'block',
+      prop: 'nestedLevels',
+    })
   }
 
   /**
@@ -157,6 +133,7 @@ export class FunctionLikeNodeTester extends DeclarationNodeTester {
       generator: this.isGenerator,
       nestedLevels: this.nestedLevels,
     }
+
     if (this.name) {
       obj.name = this.name
       if (this.isExportable) {
@@ -170,21 +147,30 @@ export class FunctionLikeNodeTester extends DeclarationNodeTester {
    * Get paramters info
    */
   get parametersInfo() {
-    return this.parameterNodesTester ? this.parameterNodesTester.info() : {}
+    return this.getProp({
+      name: 'parameter',
+      fun: 'info',
+    })
   }
 
   /**
    * Determine if function is an arrow function
    */
   get isArrow(): boolean {
-    return this.functionTester.is('arrow')
+    return this.getProp({
+      name: 'function',
+      is: 'arrow',
+    })
   }
 
   /**
    * Determine if function is a generator function with asterisk (function*)
    */
   get isGenerator(): boolean {
-    return this.functionTester.is('generator')
+    return this.getProp({
+      name: 'function',
+      is: 'generator',
+    })
   }
 
   /**
@@ -201,62 +187,26 @@ export class FunctionLikeNodeTester extends DeclarationNodeTester {
     return !this.isNamed
   }
 
-  /**
-   * Test name of parameter
-   * @param query
-   */
-  testName(query: any) {
-    if (!query || !this.isNamed) return true
-    return this.identifierNodeTester
-      ? this.identifierNodeTester.testName(query)
-      : false
-  }
-
-  /**
-   * Perform query on function node
-   * @param query
-   */
-  test(query: any) {
-    return (
-      this.testName(query.name) &&
-      this.testType(query.type) && // async, arrow or normal
-      this.testParameters(query.parameters) &&
-      this.testReturnType(query.returnType)
-    )
-  }
-
-  /**
-   * Query on the return type of function node
-   * @param query
-   */
-  testReturnType(query: any) {
-    return this.typeNodeTester.test(query)
+  get testMethodMap() {
+    return {
+      name: {
+        name: 'id',
+        test: 'testName',
+      },
+      parameters: 'parameters',
+      returnType: 'type',
+      functionType: 'details:function',
+    }
   }
 
   /**
    * Get the return type. If none specified, return implicit:any
    */
   get returnType() {
-    return this.typeNodeTester ? this.typeNodeTester.typeName : 'implicit:any'
-  }
-
-  /**
-   * Query the return type of function node
-   * @param query
-   */
-  testType(query: any) {
-    if (isEmpty(this.modifiers)) return true
-    return this.functionTester.test(this.node, query)
-  }
-
-  /**
-   * Query the parameters of function node
-   * @param query
-   */
-  testParameters(query: any) {
-    if (!query) return true
-    return this.parameterNodesTester
-      ? this.parameterNodesTester.test(query)
-      : false
+    return this.getProp({
+      name: 'type',
+      prop: 'typeName',
+      default: 'implicit:any',
+    })
   }
 }

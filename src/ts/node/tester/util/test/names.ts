@@ -1,11 +1,6 @@
-import {
-  isStr
-} from '../../../../util'
+import { isStr } from '../../../../util'
 
-import {
-  createNameTest,
-  nameOf
-} from '../name'
+import { createNameTest, nameOf } from '../name'
 
 /**
  * Test names that match query
@@ -14,7 +9,10 @@ import {
  */
 export function testNames(names: string[], query: any): any[] {
   query = query.names || query
-  return names.map(createNameTest(query))
+  return names.reduce((acc: any, name: string) => {
+    acc[name] = createNameTest(query)
+    return acc
+  }, {})
 }
 
 /**
