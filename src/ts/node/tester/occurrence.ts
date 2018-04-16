@@ -52,7 +52,6 @@ export class NodeOccurrenceTester extends BaseNodeTester {
    *  - nodeTypes:
    *    - toCount
    *    - toExclude
-   *    - exclude
    *
    * @param traverseQuery
    */
