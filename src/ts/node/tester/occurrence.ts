@@ -1,5 +1,5 @@
 import { createCountingASTNodeTraverser } from '../../traverser'
-import { isNonEmptyStr } from '../../util'
+import { isNonEmptyStr, isEmpty } from '../../util'
 import { BaseNodeTester } from './base'
 
 export interface INodeOccurrenceTester {
@@ -96,6 +96,11 @@ export class NodeOccurrenceTester extends BaseNodeTester {
       // default categories to exclude
       nodeTypes.exclude = nodeTypes.exclude || ['declaration']
     }
+    if (isEmpty(nodeTypes)) {
+      this.error('Warning: empty nodeTypes - nothing to count')
+      return 0
+    }
+
     return this.countInTree({
       nodeTypes,
     })

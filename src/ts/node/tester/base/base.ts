@@ -14,6 +14,7 @@ import { isDefined } from '../../../util'
 import { createTesterFactory } from './tester-factory'
 import { createTesterRegistry } from './tester-registry'
 import { createQueryEngine } from './query-engine'
+import { createNodeCounter } from './node-counter'
 
 export abstract class BaseNodeTester extends Loggable implements INodeTester {
   // properties to test, query and gather info for
@@ -24,6 +25,7 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
   factory: any
   testerRegistry: any
   queryEngine: any
+  nodeCounter: any
 
   /**
    * Create BaseTester
@@ -39,7 +41,8 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    * Validate node tester before initialization
    * @param node
    */
-  validateInit(node: any) {
+  validateInit(node?: any) {
+    node = node || this.node
     this.factory.init()
     if (!node) {
       this.error(`BaseTester: Missing node to test`, {
@@ -71,9 +74,16 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
   }
 
   configure() {
-    this.factory = createTesterFactory(this.node, this.options)
-    this.testerRegistry = createTesterRegistry(this.options)
-    this.queryEngine = createQueryEngine(this, this.options)
+    const { options, node } = this
+
+    this.nodeCounter = createNodeCounter(this, options)
+    this.factory = createTesterFactory(node, options)
+    this.testerRegistry = createTesterRegistry(options)
+    this.queryEngine = createQueryEngine(this, options)
+  }
+
+  countOccurrence(opts: any = {}) {
+    return this.nodeCounter.countOccurrence(opts)
   }
 
   /**

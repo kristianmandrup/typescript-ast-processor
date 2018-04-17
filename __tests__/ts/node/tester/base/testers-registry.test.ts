@@ -20,5 +20,15 @@ describe('TestersRegistry', () => {
     describe('setTesters', () => {})
     describe('getTester', () => {})
     describe('hasTester', () => {})
+
+    describe('getProp(opts)', () => {
+      it('gets the tester prop', () => {
+        expect(
+          tester.getProp({
+            name: 'identifier',
+          }),
+        ).toBeDefined()
+      })
+    })
   })
 })

@@ -63,12 +63,8 @@ export class TesterRegistry extends Loggable {
       if (!when(node)) return
     }
 
-    this.testers[type][factory] = this.createCategoryTester(
-      type,
-      factory,
-      node,
-      options,
-    )
+    const tester = this.createCategoryTester(type, factory, node, options)
+    this.testers[type][factory] = tester
     return this
   }
 

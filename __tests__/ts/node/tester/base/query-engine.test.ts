@@ -65,5 +65,8 @@ describe('QueryEngine', () => {
 
     describe('query', () => {})
     describe('queryValue', () => {})
+
+    describe('queryItems', () => {})
+    describe('arrayIteratorFindMethod', () => {})
   })
 })
