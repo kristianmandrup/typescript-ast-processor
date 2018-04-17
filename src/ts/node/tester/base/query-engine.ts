@@ -1,6 +1,5 @@
 import { Loggable } from '../../../loggable'
 import { capitalize } from '../../../util'
-import { resolveArrayIteratorFindMethod } from '../util'
 import {
   camelize,
   testOr,
@@ -78,14 +77,6 @@ export class QueryEngine extends Loggable {
   }
 
   /**
-   * return a generic method to test an array-like structure
-   * @param obj
-   */
-  arrayIteratorFindMethod(obj: any): any {
-    return resolveArrayIteratorFindMethod(obj, this.options)
-  }
-
-  /**
    * Create tester for testing items and test using query
    * By default creates a name tester
    * You can override by passing a createTester factory function
@@ -98,42 +89,6 @@ export class QueryEngine extends Loggable {
   queryItems(items: any[], query: any, options: any = {}) {
     options = Object.assign(options, { items })
     return this.tester.factory.createTesterFor(options).test(query)
-  }
-
-  /**
-   * Perform a test using a node tester
-   * @param opts
-   */
-  runTest(opts: any = {}) {
-    const { query, name, bool, qprop, type = 'node', test = 'test' } = opts
-
-    const propQuery = query[qprop || name]
-    if (!this.isQuery(propQuery)) return true
-
-    if (bool) {
-      if (typeof bool !== 'string') {
-        this.error('Invalid bool: must be a method name', {
-          opts,
-        })
-      }
-      return this[bool] === propQuery
-    }
-
-    const typeTesters = this.testers[type]
-    if (!typeTesters) {
-      this.error('doTest: invalid type', {
-        type,
-      })
-    }
-    const namedTester = typeTesters[name]
-    if (!namedTester) {
-      this.log('doTest: invalid property', {
-        name,
-        type,
-        testers: typeTesters,
-      })
-    }
-    return namedTester[test](propQuery)
   }
 
   queryName(name: string, query: any) {
@@ -218,7 +173,8 @@ export class QueryEngine extends Loggable {
   resolvePropTester(prop: string) {
     const testFnName = `test${camelize(prop)}`
     const queryFnName = `query${camelize(prop)}`
-    return this[queryFnName] || this[testFnName]
+    const ctx = this.tester
+    return ctx[queryFnName] || ctx[testFnName]
   }
 
   /**
@@ -258,5 +214,41 @@ export class QueryEngine extends Loggable {
       const queryFn = this.queries[key]
       return Boolean(queryFn(query.key || query))
     }, {})
+  }
+
+  /**
+   * Perform a test using a node tester
+   * @param opts
+   */
+  runTest(opts: any = {}) {
+    const { query, name, bool, qprop, type = 'node', test = 'test' } = opts
+
+    const propQuery = query[qprop || name]
+    if (!this.isQuery(propQuery)) return true
+
+    if (bool) {
+      if (typeof bool !== 'string') {
+        this.error('Invalid bool: must be a method name', {
+          opts,
+        })
+      }
+      return this[bool] === propQuery
+    }
+
+    const typeTesters = this.testers[type]
+    if (!typeTesters) {
+      this.error('doTest: invalid type', {
+        type,
+      })
+    }
+    const namedTester = typeTesters[name]
+    if (!namedTester) {
+      this.log('doTest: invalid property', {
+        name,
+        type,
+        testers: typeTesters,
+      })
+    }
+    return namedTester[test](propQuery)
   }
 }

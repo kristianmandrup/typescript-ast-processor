@@ -38,6 +38,28 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
   }
 
   /**
+   * caption used for error logging, debugging and testing
+   */
+  get caption() {
+    return this.constructor.name
+  }
+
+  /**
+   * The basic tester category
+   */
+  get category() {
+    return 'NodeTester'
+  }
+
+  /**
+   * set a tester
+   * @param opts
+   */
+  setTester(opts: any) {
+    return this.factory.setTester(opts)
+  }
+
+  /**
    * Validate node tester before initialization
    * @param node
    */

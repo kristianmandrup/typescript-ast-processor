@@ -1,12 +1,13 @@
+import { Logger } from './logger'
+
 interface ILogger {
   log: Function
   error: Function
 }
 
 const defaults = {
-  logOn: true
+  logOn: true,
 }
-
 
 export class Loggable {
   options: any
@@ -20,7 +21,18 @@ export class Loggable {
   constructor(options: any) {
     this.options = options
     this.logOn = options.logOn || defaults.logOn
-    this.logger = options.logger || console
+    this.logger = this.createLogger()
+  }
+
+  get defaultCreateLogger() {
+    return new Logger(this, this.options)
+  }
+
+  createLogger() {
+    const { logger, createLogger } = this.options
+    if (createLogger) return createLogger(this, this.options)
+    if (this.defaultCreateLogger) return this.defaultCreateLogger
+    return logger || console
   }
 
   /**

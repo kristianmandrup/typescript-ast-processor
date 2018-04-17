@@ -1,15 +1,7 @@
 import * as ts from 'typescript'
 import { Loggable } from '../../loggable'
-import {
-  callFun,
-  toList,
-  isStr,
-  isFunction,
-  lowercaseFirst
-} from '../../util'
-import {
-  queryNode
-} from '../tester/util/query'
+import { callFun, toList, isStr, isFunction, lowercaseFirst } from '../../util'
+import { queryNode } from '../tester/util/query'
 
 export interface IDetailsTester {
   forNode(node: any): IDetailsTester
@@ -38,6 +30,14 @@ export class BaseDetailsTester extends Loggable {
       }
       return acc
     }, {})
+  }
+
+  get caption() {
+    return this.constructor.name
+  }
+
+  get category() {
+    return 'NodeDetailsTester'
   }
 
   get maps() {
@@ -96,7 +96,7 @@ export class BaseDetailsTester extends Loggable {
     const node: ts.Node = this.nodeOf(options)
     const method = options.method || 'anyOf'
     return this.test(node, {
-      [method]: names
+      [method]: names,
     })
   }
 
@@ -111,7 +111,7 @@ export class BaseDetailsTester extends Loggable {
       this.error('modifiersOf: Missing modifierKey', {
         modifierKey,
         this: this.modifierKey,
-        options
+        options,
       })
     }
     return node[modifierKey] || []
@@ -133,7 +133,9 @@ export class BaseDetailsTester extends Loggable {
   findMatch(modifiers: any, key: ts.SyntaxKind | string) {
     modifiers = toList(modifiers)
     const modifier: ts.SyntaxKind = this.resolveModifier(key)
-    return modifiers.find((nodeModifier: any) => (nodeModifier.kind || nodeModifier) === modifier)
+    return modifiers.find(
+      (nodeModifier: any) => (nodeModifier.kind || nodeModifier) === modifier,
+    )
   }
 
   /**
@@ -170,9 +172,14 @@ export class BaseDetailsTester extends Loggable {
     const flag = this.isFlag(key)
     if (modf) return this.hasModifier(key, options)
     if (flag) return this.hasFlag(key, options)
-    return this.error(`has: unknown has key argument, must be a ts modifier or flag`, {
-      key
-    }) && false
+    return (
+      this.error(
+        `has: unknown has key argument, must be a ts modifier or flag`,
+        {
+          key,
+        },
+      ) && false
+    )
   }
 
   /**
@@ -185,7 +192,7 @@ export class BaseDetailsTester extends Loggable {
     const node: ts.Node = this.nodeOf(options)
     if (!node) {
       this.error('hasModifier: Missing node', {
-        node
+        node,
       })
     }
     const modifiers = this.modifiersOf(node, options)
@@ -272,4 +279,3 @@ export class BaseDetailsTester extends Loggable {
     return callFun(fun, node)
   }
 }
-
