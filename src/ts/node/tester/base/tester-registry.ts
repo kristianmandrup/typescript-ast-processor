@@ -70,7 +70,8 @@ export class TesterRegistry extends Loggable {
    * @param name
    * @param factory
    */
-  resolveTypeNameAndFactory(name: string, factory: string) {
+  resolveTypeNameAndFactory(name: string, factory?: string) {
+    factory = factory || name
     const $name = this.resolveTypeAndName(name)
     const $factory = this.resolveTypeAndName(factory)
     const type = $name.type || $factory.type
