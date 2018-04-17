@@ -48,7 +48,7 @@ export class TesterFactory extends Loggable {
    * Create a tester object using ListTester to test a collection for matching names
    * @param options
    */
-  createTesterFor(options: any) {
+  createListTesterFor(options: any) {
     const createNamesTester = (nodes: any[]) => {
       return (queryExpr: any) => testNames(nodes, queryExpr)
     }

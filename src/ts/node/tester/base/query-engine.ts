@@ -214,11 +214,11 @@ export class QueryEngine extends Loggable {
    * See resolveQueries
    * @param query
    */
-  runQueries(query: any) {
+  runQueries(query: any): any {
     const queryKeys = Object.keys(this.queries)
     return queryKeys.reduce((acc: any, key: string) => {
       const queryFn = this.queries[key]
-      acc[key] = queryFn(query)
+      acc[key] = queryFn(query.key || query)
       return acc
     }, {})
   }
@@ -228,11 +228,11 @@ export class QueryEngine extends Loggable {
    * See resolveQueries
    * @param query
    */
-  runTests(query: any) {
+  runTests(query: any): any {
     const queryKeys = Object.keys(this.queries)
     return queryKeys.every((key: string) => {
       const queryFn = this.queries[key]
-      return Boolean(queryFn(query))
+      return Boolean(queryFn(query.key || query))
     }, {})
   }
 }

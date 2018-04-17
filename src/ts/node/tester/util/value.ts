@@ -6,7 +6,7 @@ import { isFunction } from '../../../util'
  * @param matcher
  */
 export function valueMatch(value: any, matcher: any | Function) {
-  if (isFunction(matcher)) (matcher as Function)(value)
+  if (isFunction(matcher)) return (matcher as Function)(value)
   return value === matcher
 }
 
