@@ -38,11 +38,70 @@ describe('TestersRegistry', () => {
       })
     })
 
-    describe('createCategoryTester', () => {})
-    describe('createNodeTester', () => {})
-    describe('createDetailsTester', () => {})
+    describe('createCategoryTester', () => {
+      it('creates a details tester', () => {
+        const funcTester = factory.createCategoryTester(
+          'details',
+          'function',
+          tester.node,
+        )
+        expect(funcTester).toBeDefined()
+        expect(funcTester.category).toBe('NodeDetailsTester')
+      })
 
-    describe('createListTester', () => {})
-    describe('createListTesterFor', () => {})
+      it('creates a node tester', () => {
+        const funcTester = factory.createCategoryTester(
+          'node',
+          'decl.function',
+          tester.node,
+        )
+        expect(funcTester).toBeDefined()
+        expect(funcTester.category).toBe('NodeTester')
+      })
+    })
+
+    describe('createNodeTester', () => {
+      it('creates a node tester', () => {
+        const funcTester = factory.createNodeTester(
+          'decl.function',
+          tester.node,
+        )
+        expect(funcTester).toBeDefined()
+        expect(funcTester.category).toBe('NodeTester')
+      })
+    })
+
+    describe('createDetailsTester', () => {
+      it('creates a details tester', () => {
+        const funcTester: any = factory.createDetailsTester(
+          'function',
+          tester.node,
+        )
+        expect(funcTester).toBeDefined()
+        expect(funcTester.category).toBe('NodeDetailsTester')
+      })
+    })
+
+    describe('createListTester', () => {
+      it('creates a details tester', () => {
+        const listTester: any = factory.createListTester(tester.node)
+        expect(listTester).toBeDefined()
+        expect(listTester.category).toBe('NodeTester')
+        expect(listTester.caption).toBe('ListNodeTester')
+      })
+    })
+
+    describe('createListTesterFor', () => {
+      it('creates a list tester', () => {
+        const node = tester.node
+        const listTester: any = factory.createListTesterFor({
+          node,
+        })
+        expect(listTester).toBeDefined()
+        expect(listTester.category).toBe('NodeTester')
+        expect(listTester.caption).toBe('ListNodeTester')
+        expect(listTester.node).toBe(node)
+      })
+    })
   })
 })

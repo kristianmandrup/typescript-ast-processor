@@ -53,7 +53,8 @@ export class TesterFactory extends Loggable {
       return (queryExpr: any) => testNames(nodes, queryExpr)
     }
     const createTester = options.createTester || createNamesTester
-    return this.createListTester(this.node, {
+    const node = options.node || this.node
+    return this.createListTester(node, {
       ...options,
       createTester,
     })

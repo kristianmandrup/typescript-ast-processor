@@ -1,5 +1,6 @@
 import { Loggable } from '../../../loggable'
-import { capitalize } from '../../../util'
+import { capitalize, isFunction } from '../../../util'
+import { findDerived } from 'find-derived'
 import {
   camelize,
   testOr,
@@ -23,6 +24,7 @@ export class QueryEngine extends Loggable {
   queries: any
   queryResult: any
   testMethodMap: any
+  testMethods: any
   propKeys: any
   isQuery: Function
   testers: any
@@ -72,7 +74,8 @@ export class QueryEngine extends Loggable {
           })
         }
       }
-      this[fnName] = fn
+      this.testMethods = this.testMethods || {}
+      this.testMethods[fnName] = fn
     })
   }
 
@@ -173,8 +176,9 @@ export class QueryEngine extends Loggable {
   resolvePropTester(prop: string) {
     const testFnName = `test${camelize(prop)}`
     const queryFnName = `query${camelize(prop)}`
-    const ctx = this.tester
-    return ctx[queryFnName] || ctx[testFnName]
+    return findDerived([this.tester, this.testMethods || {}], (ctx: any) => {
+      return ctx[queryFnName] || ctx[testFnName]
+    })
   }
 
   /**
@@ -216,6 +220,17 @@ export class QueryEngine extends Loggable {
     }, {})
   }
 
+  evalBoolTest(bool: any, propQuery: any, opts: any = {}) {
+    if (typeof bool !== 'string') {
+      this.error('Invalid bool: must be a method name', {
+        bool,
+        propQuery,
+        opts,
+      })
+    }
+    return this[bool] === propQuery
+  }
+
   /**
    * Perform a test using a node tester
    * @param opts
@@ -227,12 +242,7 @@ export class QueryEngine extends Loggable {
     if (!this.isQuery(propQuery)) return true
 
     if (bool) {
-      if (typeof bool !== 'string') {
-        this.error('Invalid bool: must be a method name', {
-          opts,
-        })
-      }
-      return this[bool] === propQuery
+      this.evalBoolTest(bool, propQuery, opts)
     }
 
     const typeTesters = this.testers[type]
@@ -243,12 +253,18 @@ export class QueryEngine extends Loggable {
     }
     const namedTester = typeTesters[name]
     if (!namedTester) {
-      this.log('doTest: invalid property', {
+      this.error('doTest: invalid property', {
         name,
         type,
         testers: typeTesters,
       })
     }
-    return namedTester[test](propQuery)
+    const testFn = namedTester[test]
+    if (!isFunction(testFn)) {
+      this.error('invalid test function', {
+        test,
+      })
+    }
+    return testFn(propQuery)
   }
 }

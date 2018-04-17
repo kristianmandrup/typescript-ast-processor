@@ -31,12 +31,56 @@ export class TesterRegistry extends Loggable {
     this.testerMap = tester.testerMap
   }
 
+  /**
+   * Initialize all testers to be used
+   */
   init() {
     this.setTesters()
   }
 
+  /**
+   * Resolve factory name
+   * @param factory
+   */
   resolveFactoryName(factory: string) {
     return this.factoryMap[factory] || factory
+  }
+
+  /**
+   * Resolve type and name
+   * @param name
+   */
+  resolveTypeAndName(name: string): any {
+    const names = name.split(':')
+    let facPrefix = names[0]
+    if (['node', 'details'].includes(facPrefix)) {
+      name = names[1]
+      return {
+        type: facPrefix,
+        name,
+      }
+    }
+    return {
+      name: names[1] || name,
+    }
+  }
+
+  /**
+   * Resolve type, name and factory
+   * @param name
+   * @param factory
+   */
+  resolveTypeNameAndFactory(name: string, factory: string) {
+    const $name = this.resolveTypeAndName(name)
+    const $factory = this.resolveTypeAndName(factory)
+    const type = $name.type || $factory.type
+    name = $name.name
+    factory = this.resolveFactoryName($factory.name)
+    return {
+      name,
+      type,
+      factory,
+    }
   }
 
   /**
@@ -49,22 +93,10 @@ export class TesterRegistry extends Loggable {
     options = options || this.options
     factory = factory || name
     name = name || factory
-
-    const names = name.split(':')
-    let facPrefix = names[0]
-    if (['node', 'details'].includes(facPrefix)) {
-      type = facPrefix
-      name = names[1]
-    }
-
-    const fac = factory.split(':')
-    facPrefix = fac[0]
-    if (['node', 'details'].includes(facPrefix)) {
-      type = facPrefix
-      factory = fac[1]
-    }
-
-    factory = this.resolveFactoryName(factory)
+    const resolved = this.resolveTypeNameAndFactory(name, factory)
+    name = resolved.name
+    type = resolved.type || type
+    factory = resolved.factory
 
     node = node[name] || node
     if (when) {

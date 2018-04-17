@@ -1,20 +1,27 @@
 {
   "name": "typescript-ast-traverser",
   "version": "0.1.0",
-  "description":
-    "Traverse a TypeScript AST using visitors, collect data and take action",
+  "description": "Traverse a TypeScript AST using visitors, collect data and take action",
   "main": "dist",
   "scripts": {
     "test": "jest"
   },
-  "keywords": ["typescript", "exported", "refs"],
+  "keywords": [
+    "typescript",
+    "exported",
+    "refs"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/kristianmandrup/typescript-ast-traverser.git"
   },
   "author": "Kristian Mandrup <kmandrup@gmail.com>",
   "jest": {
-    "moduleFileExtensions": ["ts", "tsx", "js"],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
     "transform": {
       "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
@@ -27,6 +34,7 @@
     "deepmerge": "^2.1.0",
     "eslint-traverser": "^1.5.2",
     "estree-walker": "^0.5.1",
+    "find-derived": "^0.1.0",
     "inversify": "^4.11.1",
     "json-query": "^2.2.2",
     "reflect-metadata": "^0.1.12",
