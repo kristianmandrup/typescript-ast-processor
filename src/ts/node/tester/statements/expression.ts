@@ -1,5 +1,5 @@
-import { BaseNodeTester } from "../base";
-import { IDetailsTester } from "../../details/base";
+import { BaseNodeTester } from '../base'
+import { IDetailsTester } from '../../details/base'
 
 /**
  * Factory to create a statement tester
@@ -29,7 +29,7 @@ export class ExpressionStatementNodeTester extends BaseNodeTester {
 
   // TODO: avoid duplication!!!
   protected createExpressionTester(node: any, options: any = {}) {
-    return this.createDetailsTester('expression', node, options)
+    return this.factory.createDetailsTester('expression', node, options)
   }
 
   protected createExprTester(token: string = 'typeof', options: any = {}) {
@@ -45,7 +45,7 @@ export class ExpressionStatementNodeTester extends BaseNodeTester {
    */
   protected countOccurrenceOf(token: string): number {
     return this.countOccurrence({
-      tester: this.createExprTester(token)
+      tester: this.createExprTester(token),
     })
   }
 
@@ -66,8 +66,8 @@ export class ExpressionStatementNodeTester extends BaseNodeTester {
       occurences: {
         typeof: this.typeofCount,
         delete: this.deleteCount,
-        not: this.notCount
-      }
+        not: this.notCount,
+      },
     }
   }
 }

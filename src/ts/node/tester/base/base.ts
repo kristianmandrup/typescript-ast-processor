@@ -52,6 +52,14 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
   }
 
   /**
+   * Delegate to query engine to test count
+   * @param query
+   */
+  testCount(query: any, count: number) {
+    return this.queryEngine.testCount(query, count)
+  }
+
+  /**
    * set a tester
    * @param opts
    */

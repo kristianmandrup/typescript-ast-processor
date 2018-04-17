@@ -27,7 +27,7 @@ export class LoopNodeTester extends BlockStatementNodeTester {
    * @param options
    */
   protected createExpressionTester(node: any, options: any = {}) {
-    return this.createDetailsTester('expression', node, options)
+    return this.factory.createDetailsTester('expression', node, options)
   }
 
   /**

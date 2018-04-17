@@ -24,8 +24,15 @@ export class IndentifierNodeTester extends BaseNodeTester {
 
   init(node: any) {
     this.idNode = this.idNodeFor(node)
-    this.exportTester = this.createDetailsTester('identifier', node)
-    this.identifierTester = this.createDetailsTester('identifier', this.idNode)
+    this.setTester({
+      name: 'exported',
+      factory: 'identifier',
+    })
+    this.setTester({
+      name: 'id',
+      factory: 'identifier',
+      node: this.idNode,
+    })
   }
 
   /**

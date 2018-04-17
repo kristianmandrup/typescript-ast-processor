@@ -80,7 +80,9 @@ export class TesterFactory extends Loggable {
    * @param node
    * @param options
    */
-  createTester(name: string, node: any, options: any = {}): any {
+  createTester(name: string, node?: any, options?: any): any {
+    node = node || this.node
+    options = options || this.options
     const { testerName, factory } = this.resolveFactoryName(name)
     return this[factory](testerName, node, options)
   }
@@ -94,9 +96,11 @@ export class TesterFactory extends Loggable {
   createCategoryTester(
     category: string,
     name: string,
-    node: any,
-    options: any = {},
+    node?: any,
+    options?: any,
   ): any {
+    node = node || this.node
+    options = options || this.options
     const factoryCategory = this.factories[category]
     if (!factoryCategory) {
       this.error('Invalid factory category', {
@@ -115,8 +119,6 @@ export class TesterFactory extends Loggable {
    * @param options
    */
   createNodeTester(name: string, node?: any, options?: any): INodeTester {
-    node = node || this.node
-    options = options || this.options
     return this.createCategoryTester('node', name, node, options)
   }
 
@@ -126,11 +128,7 @@ export class TesterFactory extends Loggable {
    * @param node
    * @param options
    */
-  createDetailsTester(
-    name: string,
-    node: any,
-    options: any = {},
-  ): IDetailsTester {
+  createDetailsTester(name: string, node?: any, options?: any): IDetailsTester {
     return this.createCategoryTester('details', name, node, options)
   }
 }

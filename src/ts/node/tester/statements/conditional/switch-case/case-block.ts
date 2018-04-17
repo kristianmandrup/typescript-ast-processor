@@ -27,7 +27,7 @@ export class CaseBlockTester extends BaseNodeTester {
    * @param options
    */
   createClauseTester(node: ts.CaseClause, options: any = {}) {
-    return this.createNodeTester('case.clause', node, options)
+    return this.factory.createNodeTester('case.clause', node, options)
   }
 
   /**

@@ -1,4 +1,4 @@
-import { BaseNodeTester } from '../base';
+import { BaseNodeTester } from '../base'
 
 /**
  * Factory to create a statement tester
@@ -18,7 +18,7 @@ export class StatementsTester extends BaseNodeTester {
   }
 
   createStatementTester(node: any, options: any) {
-    return this.createNodeTester('stmt', node, options)
+    return this.factory.createNodeTester('stmt', node, options)
   }
 
   get statementCount() {
@@ -27,7 +27,7 @@ export class StatementsTester extends BaseNodeTester {
 
   info() {
     return {
-      count: this.statementCount
+      count: this.statementCount,
     }
   }
 

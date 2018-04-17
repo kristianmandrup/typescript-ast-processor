@@ -28,7 +28,7 @@ export class SwitchStatementTester extends BaseNodeTester {
    * @param options
    */
   createCaseBlockTester(node: any, options: any): INodeTester {
-    return this.createNodeTester('case.block', node, options) // as CaseBlockTester
+    return this.factory.createNodeTester('case.block', node, options) // as CaseBlockTester
   }
 
   /**

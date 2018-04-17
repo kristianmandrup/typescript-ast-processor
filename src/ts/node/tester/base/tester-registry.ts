@@ -134,6 +134,7 @@ export class TesterRegistry extends Loggable {
   getProp(opts: any = {}) {
     const property = opts.property || opts.prop || 'info'
     const fun = opts.fun
+    const args = opts.args || []
     const is = opts.is
     const tester = this.getTester(opts)
     if (!tester) return
@@ -142,7 +143,7 @@ export class TesterRegistry extends Loggable {
       res = tester.is(is)
     }
     if (fun) {
-      res = tester[fun]()
+      res = tester[fun](...args)
     }
     if (property) {
       res = tester[property]

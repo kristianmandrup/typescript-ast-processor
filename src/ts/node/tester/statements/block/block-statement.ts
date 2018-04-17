@@ -11,11 +11,17 @@ export function createBlockStatementNodeTester(
 // Not sure if we need this distinction, looks to be the same node,
 // ie. an ifStatement thenStatement etc, are all block statement nodes!
 export class BlockStatementNodeTester extends BaseNodeTester {
-  blockNodeTester: INodeTester // BlockNodeTester
-
   constructor(node: any, options: any) {
     super(node, options)
-    this.blockNodeTester = this.createNodeTester('block', this.node, options) // as BlockNodeTester
+    this.init(node)
+  }
+
+  init(node: any) {
+    this.setTester('block')
+  }
+
+  get blockNodeTester() {
+    return this.getTester('block')
   }
 
   /**

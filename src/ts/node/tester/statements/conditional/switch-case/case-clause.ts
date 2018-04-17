@@ -28,7 +28,7 @@ export class CaseClauseTester extends BaseNodeTester {
    * @param options
    */
   protected createExpressionTester(node: any, options: any = {}) {
-    return this.createDetailsTester('expression', node, options)
+    return this.factory.createDetailsTester('expression', node, options)
   }
 
   /**
