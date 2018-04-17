@@ -38,7 +38,6 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
     this.props = {}
   }
 
-
   /**
    * Get property keys
    */
@@ -162,44 +161,24 @@ export class ClassNodeTester extends DeclarationNodeTester {
   }
 
   /**
-   * Collect all info for class node
-   */
-  info() {
-    return {
-      ...super.info(),
-      abstract: this.isAbstract,
-      heritage: this.heritage,
-    }
-  }
-
-  /**
-   * Get class node details tester
-   */
-  get classTester() {
-    return this.getTester({
-      type: 'details',
-      name: 'class',
-    })
-  }
-
-  /**
    * whether class is abstract
    */
   get isAbstract() {
-    return this.classTester.is('abstract')
+    return this.getProp({
+      name: 'details:class',
+      is: 'abstract',
+    })
   }
 
   get heritageTester() {
-    return this.getTester({
-      name: 'heritage',
-    })
+    return this.getTester('heritage')
   }
 
   /**
    * Heritage of the class
    */
   get heritage() {
-    return this.heritageTester.info()
+    return this.getProp('heritage') // by default will call .info
   }
 
   /**
@@ -207,12 +186,9 @@ export class ClassNodeTester extends DeclarationNodeTester {
    */
   get testerMap() {
     return {
-      heritage: 'class.heritage',
-      members: 'class.members',
-      class: {
-        factory: 'class.members',
-        type: 'details',
-      },
+      heritage: 'heritage',
+      members: 'members',
+      class: 'details:class',
     }
   }
 
@@ -247,5 +223,40 @@ export class ClassNodeTester extends DeclarationNodeTester {
       },
     }
   }
+}
+```
+
+### Class Heritage example
+
+```js
+export class ClassHeritageTester extends BaseNodeTester {
+  extendNames: string[]
+  implementNames: string[]
+  implements: any
+  heritage: any[]
+
+  constructor(node: any, options: any) {
+    super(node, options)
+  }
+
+  /**
+   * Init info props
+   */
+  initInfoProps() {
+    this.infoProps = this.infoPropsMap
+  }
+
+  /**
+   * Properties used to fill info object (see info() method)
+   */
+  get infoPropsMap() {
+    return {
+      implementNames: this.resolveImplementNames(),
+      implements: this.resolveImplements()
+      extendNames: this.resolveExtendNames()
+      heritage: this.heritageClauses
+    }
+  }
+  // ...
 }
 ```

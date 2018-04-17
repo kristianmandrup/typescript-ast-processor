@@ -102,6 +102,13 @@ Calls `getTester` with `opts` to get a registered tester, then uses options to d
 * `is` call `is` on tester with the `is` value as argument (only works on a details tester)
 * `fun` call a function on tester
 * `args` arguments list to pass to function if `fun` set
+* `default` default value to use if property value returned is undefined
+
+Retrieve node tester `class.heritage` and call `info()` to get the info
+
+```js
+getProp('class.heritage')
+```
 
 Retrieve details tester `function` and call `.is('async')` to get indication if this is an async function node.
 
@@ -117,7 +124,8 @@ Retrieve node tester `function` and call `.testName(args)` to get indication if 
 ```js
 getProp({
   name: 'function',
-  fun: 'testName',
+  fun: 'tesType',
+  default: 'implicit:any', // default if no type
 })
 ```
 

@@ -39,33 +39,24 @@ export class ClassNodeTester extends DeclarationNodeTester {
   }
 
   /**
-   * Get class node details tester
-   */
-  get classTester() {
-    return this.getTester({
-      type: 'details',
-      name: 'class',
-    })
-  }
-
-  /**
    * whether class is abstract
    */
   get isAbstract() {
-    return this.classTester.is('abstract')
+    return this.getProp({
+      name: 'details:class',
+      is: 'abstract',
+    })
   }
 
   get heritageTester() {
-    return this.getTester({
-      name: 'heritage',
-    })
+    return this.getTester('heritage')
   }
 
   /**
    * Heritage of the class
    */
   get heritage() {
-    return this.heritageTester.info()
+    return this.getProp('heritage') // by default will call .info
   }
 
   /**
@@ -73,12 +64,9 @@ export class ClassNodeTester extends DeclarationNodeTester {
    */
   get testerMap() {
     return {
-      heritage: 'class.heritage',
-      members: 'class.members',
-      class: {
-        factory: 'class.members',
-        type: 'details',
-      },
+      heritage: 'heritage',
+      members: 'members',
+      class: 'details:class',
     }
   }
 

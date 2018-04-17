@@ -181,7 +181,7 @@ export class QueryEngine extends Loggable {
    * Resolves queries
    */
   resolveQueries() {
-    return this.props.reduce((acc: any, prop: string) => {
+    return this.propKeys.reduce((acc: any, prop: string) => {
       const tester = this.resolvePropTester(prop)
       if (!tester) return acc
       acc[prop] = tester.bind(this)

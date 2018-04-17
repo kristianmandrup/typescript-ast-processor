@@ -10,6 +10,8 @@ export function createTesterRegistry(node: any, options: any = {}) {
   return new TesterRegistry(node, options)
 }
 
+import { factoryMap } from './factory-map'
+
 export class TesterRegistry extends Loggable {
   tester: any
   // maps of testers used by tester
@@ -20,6 +22,7 @@ export class TesterRegistry extends Loggable {
   node: any
   createCategoryTester: Function
   testerMap: any
+  factoryMap = factoryMap
 
   constructor(tester: any, node: any, options: any = {}) {
     super(options)
@@ -30,6 +33,10 @@ export class TesterRegistry extends Loggable {
 
   init() {
     this.setTesters()
+  }
+
+  resolveFactoryName(factory: string) {
+    return this.factoryMap[factory] || factory
   }
 
   /**
@@ -56,6 +63,8 @@ export class TesterRegistry extends Loggable {
       type = facPrefix
       factory = fac[1]
     }
+
+    factory = this.resolveFactoryName(factory)
 
     node = node[name] || node
     if (when) {
@@ -95,6 +104,7 @@ export class TesterRegistry extends Loggable {
 
     let { name, type = 'node' } = opts
     const names = name.split(':')
+
     let typePrefix = names[0]
     if (['node', 'details'].includes(typePrefix)) {
       type = typePrefix
@@ -129,9 +139,15 @@ export class TesterRegistry extends Loggable {
 
   /**
    * Get a property of a tester
-   * @param opts
+   * @param opts { String | Object }
    */
   getProp(opts: any = {}) {
+    if (isStr(opts)) {
+      opts = {
+        name: opts, // use as name
+      }
+    }
+
     const property = opts.property || opts.prop || 'info'
     const fun = opts.fun
     const args = opts.args || []
@@ -146,7 +162,11 @@ export class TesterRegistry extends Loggable {
       res = tester[fun](...args)
     }
     if (property) {
-      res = tester[property]
+      const fun = tester[property]
+      res = fun
+      if (typeof res === 'function') {
+        res = tester[property]()
+      }
     }
     return res || opts.default
   }

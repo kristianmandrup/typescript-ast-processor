@@ -20,14 +20,13 @@ export class ClassHeritageTester extends BaseNodeTester {
     super(node, options)
   }
 
-  /**
-   * Init info props
-   */
-  initInfoProps() {
-    this.implementNames = this.resolveImplementNames()
-    this.implements = this.resolveImplements()
-    this.extendNames = this.resolveExtendNames()
-    this.heritage = this.heritageClauses
+  get infoPropsMap() {
+    return {
+      implementNames: this.resolveImplementNames(),
+      implements: this.resolveImplements(),
+      extendNames: this.resolveExtendNames(),
+      heritage: this.heritageClauses,
+    }
   }
 
   /**
@@ -35,6 +34,7 @@ export class ClassHeritageTester extends BaseNodeTester {
    */
   info(): any {
     const info: any = {
+      ...super.info(),
       implements: this.implements,
       isEmpty: this.isEmpty,
     }
