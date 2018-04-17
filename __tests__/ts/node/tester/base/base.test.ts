@@ -12,7 +12,14 @@ describe('BaseNodeTester', () => {
 
     describe('init', () => {
       it('inits props', () => {
-        expect(tester.props).not.toBeUndefined()
+        expect(tester.props).toBeDefined()
+      })
+    })
+
+    describe('initProps', () => {
+      it('inits props', () => {
+        tester.initProps()
+        expect(tester.props).toBeDefined()
       })
     })
 
@@ -31,51 +38,19 @@ describe('BaseNodeTester', () => {
       })
     })
 
+    describe('configure', () => {})
+
+    describe('get:testMethodMap', () => {})
+
+    describe('get:testerMap', () => {})
+
+    describe('getTester', () => {})
+    describe('createTester', () => {})
+
     describe('initInfoProps', () => {
       it('props are empty object default', () => {
         expect(tester.initInfoProps()).toEqual({})
       })
-    })
-
-    describe('initPropTesters', () => {
-      context('empty testMethodMap', () => {
-        beforeAll(() => {
-          tester.initInfoProps()
-        })
-
-        it('does not create any test method', () => {
-          expect(tester.testName).not.toBeDefined()
-        })
-      })
-
-      context('has testMethodMap', () => {
-        beforeAll(() => {
-          tester.testMethodMap = () => {
-            return {
-              name() {
-                return 'named'
-              },
-            }
-          }
-          tester.initInfoProps()
-        })
-
-        it('creates testName method', () => {
-          expect(tester.testName).toBeDefined()
-        })
-      })
-    })
-
-    describe('setTesters', () => {
-      context('no testers in testerMap', () => {})
-
-      context('testers in testerMap', () => {})
-    })
-
-    describe('initQueries', () => {
-      context('no queries to be resolved', () => {})
-
-      context('queries to be resolved', () => {})
     })
 
     describe('set:props', () => {
@@ -95,60 +70,21 @@ describe('BaseNodeTester', () => {
       })
     })
 
+    describe('get:modifiers', () => {})
+
+    describe('get:props', () => {})
+
     describe('isQuery', () => {})
 
-    describe('setTester', () => {})
-    describe('setTesters', () => {})
-    describe('getTester', () => {})
-    describe('hasTester', () => {})
     describe('getProp', () => {})
-    describe('runTest', () => {})
-    describe('queryName', () => {})
-    describe('queryNames', () => {})
-    describe('queryValue', () => {})
 
-    describe('createTester', () => {})
-    describe('createCategoryTester', () => {})
-    describe('createNodeTester', () => {})
-    describe('createDetailsTester', () => {})
-    describe('test', () => {})
-    describe('query', () => {})
-    describe('queryValue', () => {})
-
-    describe('resolvePropTester', () => {})
-    describe('resolveQueries', () => {})
-    describe('runQueries', () => {})
-    describe('runTests', () => {})
     describe('propKeys', () => {})
 
     describe('info', () => {})
-    describe('countOccurrence', () => {})
-    describe('testCount', () => {})
 
-    describe('createListTester', () => {})
-    describe('createTesterFor', () => {})
+    describe('countOccurrence', () => {})
+
     describe('queryItems', () => {})
     describe('arrayIteratorFindMethod', () => {})
-
-    describe('testNot', () => {})
-    describe('testOr', () => {})
-    describe('testAnd', () => {})
-
-    describe('get:occurenceTester', () => {
-      context('no occurenceTester', () => {
-        it('creates an occurenceTester', () => {
-          const occurenceTester = tester.occurrenceTester
-          expect(occurenceTester).toBeDefined()
-        })
-      })
-
-      context('cached occurenceTester', () => {
-        it('returns cached occurenceTester', () => {
-          const cached = tester.occurrenceTester
-          const occurenceTester = tester.occurrenceTester
-          expect(occurenceTester).toBe(cached)
-        })
-      })
-    })
   })
 })

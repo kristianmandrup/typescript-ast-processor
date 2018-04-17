@@ -10,15 +10,12 @@ describe('TestersRegistry', () => {
       },
     })
 
-    describe('setTesters', () => {
-      context('no testers in testerMap', () => {})
+    describe('createTester', () => {})
+    describe('createCategoryTester', () => {})
+    describe('createNodeTester', () => {})
+    describe('createDetailsTester', () => {})
 
-      context('testers in testerMap', () => {})
-    })
-
-    describe('setTester', () => {})
-    describe('setTesters', () => {})
-    describe('getTester', () => {})
-    describe('hasTester', () => {})
+    describe('createListTester', () => {})
+    describe('createListTesterFor', () => {})
   })
 })

@@ -1,5 +1,6 @@
 import { Loggable } from '../../../loggable'
 import { capitalize } from '../../../util'
+import { resolveArrayIteratorFindMethod } from '../util'
 import {
   camelize,
   testOr,
@@ -74,6 +75,29 @@ export class QueryEngine extends Loggable {
       }
       this[fnName] = fn
     })
+  }
+
+  /**
+   * return a generic method to test an array-like structure
+   * @param obj
+   */
+  arrayIteratorFindMethod(obj: any): any {
+    return resolveArrayIteratorFindMethod(obj, this.options)
+  }
+
+  /**
+   * Create tester for testing items and test using query
+   * By default creates a name tester
+   * You can override by passing a createTester factory function
+   * A custom factory function must take a nodes collection as argument
+   * the function must return a function that takes a query expression argument
+   * and returns a query result on the nodes
+   * @param items set of nodes to query
+   * @param query the query expression
+   */
+  queryItems(items: any[], query: any, options: any = {}) {
+    options = Object.assign(options, { items })
+    return this.tester.factory.createTesterFor(options).test(query)
   }
 
   /**

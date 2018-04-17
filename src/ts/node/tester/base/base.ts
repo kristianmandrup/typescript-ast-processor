@@ -1,5 +1,4 @@
 import { Loggable } from '../../../loggable'
-import { resolveArrayIteratorFindMethod } from '../util'
 
 export interface INodeTester {
   parentBlocks?: any[]
@@ -13,7 +12,6 @@ export interface INodeTester {
 
 import { isDefined } from '../../../util'
 import { createTesterFactory } from './tester-factory'
-import { IDetailsTester } from '../../details/base'
 import { createTesterRegistry } from './tester-registry'
 import { createQueryEngine } from './query-engine'
 
@@ -154,45 +152,6 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
   }
 
   /**
-   * Convenience factory for creating a node tester
-   * @param name
-   * @param node
-   * @param options
-   */
-  protected createCategoryTester(
-    category: string,
-    name: string,
-    node: any,
-    options: any = {},
-  ): any {
-    return this.factory.createCategoryTester(name, node, options)
-  }
-
-  /**
-   * Convenience factory for creating a node tester
-   * @param name
-   * @param node
-   * @param options
-   */
-  createNodeTester(name: string, node?: any, options?: any): INodeTester {
-    return this.factory.createNodeTester(name, node, options)
-  }
-
-  /**
-   * Convenience factory for creating a node details tester
-   * @param name
-   * @param node
-   * @param options
-   */
-  createDetailsTester(
-    name: string,
-    node: any,
-    options: any = {},
-  ): IDetailsTester {
-    return this.factory.createNodeTester(name, node, options)
-  }
-
-  /**
    * Get property keys
    */
   get propKeys() {
@@ -217,29 +176,6 @@ export abstract class BaseNodeTester extends Loggable implements INodeTester {
    */
   get modifiers() {
     return this.node.modifiers || []
-  }
-
-  /**
-   * Create tester for testing items and test using query
-   * By default creates a name tester
-   * You can override by passing a createTester factory function
-   * A custom factory function must take a nodes collection as argument
-   * the function must return a function that takes a query expression argument
-   * and returns a query result on the nodes
-   * @param items set of nodes to query
-   * @param query the query expression
-   */
-  queryItems(items: any[], query: any, options: any = {}) {
-    options = Object.assign(options, { items })
-    return this.factory.createTesterFor(options).test(query)
-  }
-
-  /**
-   * return a generic method to test an array-like structure
-   * @param obj
-   */
-  arrayIteratorFindMethod(obj: any): any {
-    return resolveArrayIteratorFindMethod(obj, this.options)
   }
 
   test(query: any): boolean {
