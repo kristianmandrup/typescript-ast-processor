@@ -1,39 +1,50 @@
 import * as ts from 'typescript'
-import { Loggable } from '../../loggable';
-import {
-  callFun
-} from '../../util'
-import { DataCollector } from '../../collector';
+import { Loggable } from '../../loggable'
+import { callFun } from '../../util'
+import { DataCollector } from '../../collector'
 
 export class BaseFactory extends Loggable {
   collector: DataCollector
 
+  /**
+   * Create base visitor factory
+   * @constructor
+   * @param options
+   */
   constructor(options: any) {
     super(options)
     this.collector = options.collector
   }
 
+  /**
+   * Perform a name match
+   * @param nodeName
+   * @param name
+   */
   nameMatch(nodeName: string, name: string | RegExp) {
     return name instanceof RegExp ? name.test(nodeName) : name === nodeName
   }
 
+  /**
+   * Check if node matches name
+   * @param node
+   * @param name
+   */
   isNamed(node: any, name: string | RegExp) {
     if (!node.name) return false
     const nodeName = node.name.getText()
     return this.nameMatch(nodeName, name)
   }
 
+  /**
+   * Create generic visitor function map
+   * @param details
+   * @param fnHandler
+   */
   generic(details: any, fnHandler?: Function) {
-    let {
-      label,
-      types,
-      name,
-      options,
-    } = details
+    let { label, types, name, options } = details
 
-    const {
-      cbs
-    } = options
+    const { cbs } = options
 
     label = label || types.join('_')
     if (!label) {
@@ -51,7 +62,7 @@ export class BaseFactory extends Loggable {
           const info = { label, name }
           opts = Object.assign(opts, { info })
           const check = cbs.check
-          if (!check || check && check(node, opts)) {
+          if (!check || (check && check(node, opts))) {
             // call custom onVisit callback if
             callFun(cbs.onVisit, node, opts)
 
@@ -63,7 +74,7 @@ export class BaseFactory extends Loggable {
           const mathcingCollector = this.collector[label]
           callFun(mathcingCollector, node, state)
         }
-      }
+      },
     }
   }
 }

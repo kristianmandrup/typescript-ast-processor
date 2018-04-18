@@ -3,16 +3,19 @@ import { BaseReplacer } from './base'
 import { SrcFile } from '../../src-file'
 
 export class AddTypesToParamsReplacer extends BaseReplacer {
+  /**
+   * @constructor
+   * @param srcFile
+   */
   constructor(public srcFile: SrcFile) {
     super(srcFile)
   }
-
 
   replaceNodes(nodes: any) {
     const params: ts.ParameterDeclaration[] = nodes.params
     const node = nodes.node
 
-    const instrumentExpr = `$_$twiz(${params.join(',')});`;
+    const instrumentExpr = `$_$twiz(${params.join(',')});`
 
     // const preamble = `
     //     get ${name}() { return this._twiz_private_${name}; }
@@ -28,7 +31,6 @@ export class AddTypesToParamsReplacer extends BaseReplacer {
 
     // const instrumentExpr = `$_$twiz(${params.join(',')})`;
 
-
     const isShortArrow = true
 
     if (isShortArrow) {
@@ -39,4 +41,3 @@ export class AddTypesToParamsReplacer extends BaseReplacer {
     }
   }
 }
-

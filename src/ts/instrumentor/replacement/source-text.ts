@@ -1,4 +1,8 @@
-export function createSourceTextReplacement(start: number, end: number, text = '') {
+export function createSourceTextReplacement(
+  start: number,
+  end: number,
+  text = '',
+) {
   return new SourceTextReplacement(start, end, text)
 }
 
@@ -6,7 +10,18 @@ export function createSourceTextReplacement(start: number, end: number, text = '
  * Source text replacement using character positions
  */
 export class SourceTextReplacement {
-  constructor(readonly start: number, readonly end: number, readonly text = '') { }
+  /**
+   * Create source text replacement
+   * @constructor
+   * @param start
+   * @param end
+   * @param text
+   */
+  constructor(
+    readonly start: number,
+    readonly end: number,
+    readonly text = '',
+  ) {}
 
   /**
    * Insert code at character index
@@ -34,10 +49,18 @@ export class SourceTextReplacement {
  * @param source
  * @param replacements
  */
-export function applyReplacements(source: string, replacements: SourceTextReplacement[]) {
-  replacements = replacements.sort((r1, r2) => (r2.end !== r1.end ? r2.end - r1.end : r2.start - r1.start));
+export function applyReplacements(
+  source: string,
+  replacements: SourceTextReplacement[],
+) {
+  replacements = replacements.sort(
+    (r1, r2) => (r2.end !== r1.end ? r2.end - r1.end : r2.start - r1.start),
+  )
   for (const replacement of replacements) {
-    source = source.slice(0, replacement.start) + replacement.text + source.slice(replacement.end);
+    source =
+      source.slice(0, replacement.start) +
+      replacement.text +
+      source.slice(replacement.end)
   }
-  return source;
+  return source
 }

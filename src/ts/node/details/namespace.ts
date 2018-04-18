@@ -1,15 +1,23 @@
 import * as ts from 'typescript'
-import { BaseDetailsTester } from './base';
+import { BaseDetailsTester } from './base'
 
 export function createNamespaceTester(options: any) {
   return new NamespaceTester(options)
 }
 
 export class NamespaceTester extends BaseDetailsTester {
+  /**
+   * Create namespace details tester
+   * @constructor
+   * @param options
+   */
   constructor(options: any) {
     super(options)
   }
 
+  /**
+   * Flag map
+   */
   get flagMap() {
     return {
       namespace: ts.NodeFlags.Namespace,

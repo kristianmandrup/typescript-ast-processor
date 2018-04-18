@@ -16,9 +16,13 @@ export class BaseDetailsTester extends Loggable {
   syntaxMap: any
   flagMap: any
   funMap: any
+  maps: any
 
-  protected _maps: any
-
+  /**
+   * Create base details tester
+   * @constructor
+   * @param options
+   */
   constructor(options: any) {
     super(options)
     this.modifierKey = options.modifierKey || this.modifierKey
@@ -30,19 +34,23 @@ export class BaseDetailsTester extends Loggable {
       }
       return acc
     }, {})
+
+    this.maps = Object.assign({}, this.syntaxMap, this.flagMap)
   }
 
+  /**
+   * Caption for class using name of constructor
+   * Used for logging
+   */
   get caption() {
     return this.constructor.name
   }
 
+  /**
+   * instance category
+   */
   get category() {
     return 'NodeDetailsTester'
-  }
-
-  get maps() {
-    this._maps = this._maps || Object.assign({}, this.syntaxMap, this.flagMap)
-    return this._maps
   }
 
   /**

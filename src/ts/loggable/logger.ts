@@ -1,4 +1,9 @@
 export class Logger {
+  /**
+   * @constructor
+   * @param target target instance being logged
+   * @param options
+   */
   constructor(public target: any, public options: any = {}) {}
 
   get caption() {

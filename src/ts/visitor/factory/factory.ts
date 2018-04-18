@@ -1,7 +1,5 @@
 import { BaseFactory } from './base'
-import {
-  toList
-} from '../../util'
+import { toList } from '../../util'
 
 const defaults = {
   registry: {
@@ -18,8 +16,8 @@ const defaults = {
     setter: ['SetAccessor', 'MethodOrAccessor'],
     methodLike: 'MethodOrAccessor',
     class: 'ClassDeclaration',
-    namespace: 'NamespaceExportDeclaration'
-  }
+    namespace: 'NamespaceExportDeclaration',
+  },
 }
 
 export function createVisitorFactory(options: any) {
@@ -33,13 +31,22 @@ export class VisitorFactory extends BaseFactory {
     super(options)
   }
 
+  /**
+   * Register map of visitor factories
+   * @param registry
+   */
   registerAllFactories(registry: any) {
     registry = registry || defaults.registry
-    Object.keys(registry).map(key => {
+    Object.keys(registry).map((key) => {
       this.registerFactory(key, toList(registry[key]))
     })
   }
 
+  /**
+   * Register single visitor factory
+   * @param name
+   * @param types
+   */
   registerFactory(name: string, types: string[]) {
     // opts may contain test object and cbs object
     this.factory[name] = (name: string, opts: any = {}, cb: Function) => {
@@ -47,7 +54,7 @@ export class VisitorFactory extends BaseFactory {
         types,
         name,
         opts,
-        cb
+        cb,
       })
     }
   }

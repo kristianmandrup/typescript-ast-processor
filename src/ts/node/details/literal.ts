@@ -1,22 +1,30 @@
 import * as ts from 'typescript'
-import { BaseDetailsTester } from './base';
+import { BaseDetailsTester } from './base'
 
 export function createLiteralTester(options: any) {
   return new LiteralTester(options)
 }
 
 export class LiteralTester extends BaseDetailsTester {
+  /**
+   * Create literal details tester
+   * @constructor
+   * @param options
+   */
   constructor(options: any) {
     super(options)
   }
 
+  /**
+   * syntax map
+   */
   get syntaxMap() {
     return {
       number: ts.SyntaxKind.NumericLiteral,
       string: ts.SyntaxKind.StringLiteral,
       null: ts.SyntaxKind.NullKeyword,
       array: ts.SyntaxKind.ArrayLiteralExpression,
-      object: ts.SyntaxKind.ObjectLiteralExpression
+      object: ts.SyntaxKind.ObjectLiteralExpression,
     }
   }
 

@@ -1,17 +1,14 @@
 import * as ts from 'typescript'
-import { Loggable } from '../../loggable';
-import { What } from '../../node/what';
-import { VisitorFactory } from '../../visitor/factory';
-import { Typer } from '../../node/typer';
+import { Loggable } from '../../loggable'
+import { What } from '../../node/what'
+import { VisitorFactory } from '../../visitor/factory'
+import { Typer } from '../../node/typer'
 import {
-  assignKeyDefined,
-  enumKey
+  // assignKeyDefined,
+  enumKey,
 } from '../../util'
-import {
-  isFunction,
-  isNonEmptyStr,
-} from '../../../../src/ts/util';
-import { isRegExp } from 'util';
+import { isFunction, isNonEmptyStr } from '../../../../src/ts/util'
+import { isRegExp } from 'util'
 
 export function createASTNodeTraverser(options: any) {
   return new ASTNodeTraverser(options)
@@ -19,11 +16,11 @@ export function createASTNodeTraverser(options: any) {
 
 enum TraverseMode {
   Children,
-  Ancestor
+  Ancestor,
 }
 export interface IExtraOptions {
-  arrow?: boolean;
-  parens?: [number, number];
+  arrow?: boolean
+  parens?: [number, number]
 }
 
 export class ASTNodeTraverser extends Loggable {
@@ -46,6 +43,7 @@ export class ASTNodeTraverser extends Loggable {
 
   /**
    * Create an AST Node Traverser
+   * @constructor
    * @param options
    */
   constructor(options: any) {
@@ -53,19 +51,31 @@ export class ASTNodeTraverser extends Loggable {
     this.init(options)
   }
 
+  /**
+   * Set traversal mode
+   * @param modeLabel { string } 'child' or 'ancestor' | 'parent'
+   */
   setMode(modeLabel: string): any {
     this.mode = this.resolveMode(modeLabel)
   }
 
+  /**
+   * Resolve mode label to mode enum
+   * @param modeLabel
+   */
   protected resolveMode(modeLabel: string): TraverseMode | undefined {
     if (/child/.test(modeLabel)) return TraverseMode.Children
-    if (/parent/.test(modeLabel) || /ancestor/.test(modeLabel)) return TraverseMode.Ancestor
+    if (/parent/.test(modeLabel) || /ancestor/.test(modeLabel))
+      return TraverseMode.Ancestor
     this.error('Traverse mode could not be resolved', {
-      mode: modeLabel
+      mode: modeLabel,
     })
     return undefined
   }
 
+  /**
+   * Reset all internal state used to track visited nodes
+   */
   reset() {
     this.nestingLevel = 0
     this._lastVisitedNode = undefined
@@ -91,7 +101,8 @@ export class ASTNodeTraverser extends Loggable {
     this.factory = new VisitorFactory(options)
     this.visitorIteratorMethodName = options.visitorIteratorMethodName || 'map'
     this.registry = options.visitors || {}
-    const createVisitorIterator = options.createVisitorIterator || this._createVisitorIterator
+    const createVisitorIterator =
+      options.createVisitorIterator || this._createVisitorIterator
     this._createVisitorIterator = createVisitorIterator.bind(this)
   }
 
@@ -127,7 +138,6 @@ export class ASTNodeTraverser extends Loggable {
     return foundNode
   }
 
-
   /**
    * query:
    * query:
@@ -140,7 +150,6 @@ export class ASTNodeTraverser extends Loggable {
   parseQuery(query: any = {}) {
     return this
   }
-
 
   /**
    * Determine kind of node based on categorical tests
@@ -193,7 +202,7 @@ export class ASTNodeTraverser extends Loggable {
   protected onInvalidVisitorRegistration(name: any, visitor: any): any {
     this.error('Invalid visitor registration', {
       name,
-      visitor
+      visitor,
     })
   }
 
@@ -237,7 +246,7 @@ export class ASTNodeTraverser extends Loggable {
    */
   nodeDisplayInfo(node: any) {
     return {
-      kind: this.kindOf(node)
+      kind: this.kindOf(node),
     }
   }
 
@@ -248,7 +257,7 @@ export class ASTNodeTraverser extends Loggable {
   protected kindOf(node: any): string {
     if (!node) {
       this.error('kindOf: Invalid node', {
-        node
+        node,
       })
     }
     return enumKey(ts.SyntaxKind, node.kind) || 'unknown'
@@ -285,23 +294,25 @@ export class ASTNodeTraverser extends Loggable {
    *
    * @param node
    */
-  protected onVisited(node: any) {
+  protected onVisited(node: any) {}
 
-  }
-
+  /**
+   * Retrieve list of visited nodes for specific type of node
+   * @param nodeType
+   */
   visitedNodesFor(nodeType: string) {
     return this.visitedNodesMap[nodeType] || []
   }
 
+  /**
+   * Visit a node type
+   * @param nodeType
+   * @param node
+   */
   protected visitNodeType(nodeType: string, node: any) {
     if (!nodeType) return
     const list = this.visitedNodesFor(nodeType)
     if (Array.isArray(list)) {
-      // this.log('visitNodeType', {
-      //   nodeType,
-      //   node,
-      //   list
-      // })
       list.push(node)
       this.visitedNodesMap[nodeType] = list
     }
@@ -325,7 +336,7 @@ export class ASTNodeTraverser extends Loggable {
       this.onVisited(node)
     } else {
       this.log('mysterious node!!', {
-        node
+        node,
       })
     }
     return this
@@ -335,8 +346,7 @@ export class ASTNodeTraverser extends Loggable {
    * Handler for just before node is visited
    * @param node
    */
-  protected willVisit(node: any) {
-  }
+  protected willVisit(node: any) {}
 
   /**
    * Check if node was visited before
@@ -347,17 +357,19 @@ export class ASTNodeTraverser extends Loggable {
   }
 
   /**
-   *
+   * Retreive total number of visited nodes
    */
   get visitedNodesCount(): number {
     return this.visitedNodes.length
   }
 
   /**
-   *
+   * Get last visited node
    */
   get lastVisitedNode() {
-    return this._lastVisitedNode || this.visitedNodes[this.visitedNodesCount - 1]
+    return (
+      this._lastVisitedNode || this.visitedNodes[this.visitedNodesCount - 1]
+    )
   }
 
   /**
@@ -411,8 +423,13 @@ export class ASTNodeTraverser extends Loggable {
     return !this.wasVisitedBefore(node)
   }
 
+  /**
+   * Resolve method to use to traverse to next node, depending on traverse mode
+   */
   protected get traverseNextMethod() {
-    return this.mode === TraverseMode.Children ? 'traverseChildNodes' : 'traverseAncestor'
+    return this.mode === TraverseMode.Children
+      ? 'traverseChildNodes'
+      : 'traverseAncestor'
   }
 
   /**

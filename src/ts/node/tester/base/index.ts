@@ -1,1 +1,6 @@
-export { BaseNodeTester, INodeTester } from './base'
+export { IBaseNodeTester, BaseNodeTester } from './base'
+export { INodeTester, NodeTester } from './node-tester'
+export { createQueryEngine, QueryEngine } from './query-engine'
+export { createTesterFactory, TesterFactory } from './tester-factory'
+export { createTesterRegistry, TesterRegistry } from './tester-registry'
+export { createNodeCounter, NodeCounter } from './node-counter'

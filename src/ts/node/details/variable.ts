@@ -1,16 +1,24 @@
 import * as ts from 'typescript'
-import { BaseDetailsTester } from './base';
+import { BaseDetailsTester } from './base'
 
 export function createVariableTester(options: any) {
   return new VariableTester(options)
 }
 
 export class VariableTester extends BaseDetailsTester {
+  /**
+   * Create variable details tester
+   * @constructor
+   * @param options
+   */
   constructor(options: any) {
     super(options)
     this.modifierKey = 'type'
   }
 
+  /**
+   * flag map
+   */
   get flagMap() {
     return {
       let: ts.NodeFlags.Let,

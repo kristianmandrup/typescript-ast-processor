@@ -12,19 +12,9 @@ export interface IBaseNodeTester extends INodeTester {
 }
 
 export class BaseNodeTester extends NodeTester {
-  // properties to test, query and gather info for
-  infoProps: any
-  _props: string[] = []
-  qprops: string[] = []
-  queries: any
-  queryResult: any
-  factory: any
-  testerRegistry: any
-  queryEngine: any
-  nodeCounter: any
-
   /**
-   * Create BaseTester
+   * Create Base Node Tester
+   * @constructor
    * @param node
    * @param options
    */
@@ -32,6 +22,10 @@ export class BaseNodeTester extends NodeTester {
     super(node, options)
   }
 
+  /**
+   * Count occurrences of specific types of nodes
+   * @param opts
+   */
   countOccurrence(opts: any = {}) {
     return this.nodeCounter.countOccurrence(opts)
   }
@@ -44,17 +38,6 @@ export class BaseNodeTester extends NodeTester {
     return isDefined(query)
   }
 
-  get testerMap() {
-    return {}
-  }
-
-  /**
-   * Get property keys
-   */
-  get propKeys() {
-    return this.props
-  }
-
   /**
    * Init info props
    */
@@ -65,6 +48,9 @@ export class BaseNodeTester extends NodeTester {
     }
   }
 
+  /**
+   * Get map of properties to use for node info
+   */
   get infoPropsMap() {
     return {}
   }
@@ -82,10 +68,19 @@ export class BaseNodeTester extends NodeTester {
     }, {})
   }
 
+  /**
+   * Test node based on query
+   * @param query
+   * @returns { boolean} result of query (if node matches query)
+   */
   test(query: any): boolean {
     return this.queryEngine.test(query)
   }
 
+  /**
+   * Query node and return full query result
+   * @param query
+   */
   query(query: any): boolean {
     return this.queryEngine.query(query)
   }

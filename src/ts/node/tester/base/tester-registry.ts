@@ -172,7 +172,7 @@ export class TesterRegistry extends Loggable {
 
   /**
    * Get a property of a tester
-   * @param opts { String | Object }
+   * @param opts { string | object }
    */
   getProp(opts: any = {}) {
     if (isStr(opts)) {

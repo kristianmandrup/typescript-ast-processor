@@ -16,6 +16,7 @@ export class Loggable {
 
   /**
    * Create Loggable instance
+   * @constructor
    * @param options xtra options, such as optional logger override and logOn option
    */
   constructor(options: any) {

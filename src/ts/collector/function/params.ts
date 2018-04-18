@@ -1,16 +1,24 @@
 import * as ts from 'typescript'
-import { DataCollector } from '../base';
+import { DataCollector } from '../base'
 
 export class ParamsCollector extends DataCollector {
+  /**
+   * @constructor
+   * @param options
+   */
   constructor(options: any) {
     super(options)
   }
 
+  /**
+   * Collect data from parameter
+   * @param param
+   */
   collect(param: ts.ParameterDeclaration) {
     const fileName = this.fileName
-    const typeInsertionPos = param.name.getEnd() + (param.questionToken ? 1 : 0);
+    const typeInsertionPos = param.name.getEnd() + (param.questionToken ? 1 : 0)
     const opts = {
-      arrow: true
+      arrow: true,
     }
 
     this.data = [
@@ -19,7 +27,6 @@ export class ParamsCollector extends DataCollector {
       typeInsertionPos,
       JSON.stringify(fileName),
       JSON.stringify(opts),
-    ];
+    ]
   }
 }
-

@@ -5,13 +5,19 @@ import { Loggable } from '../../../loggable'
  * @param options
  */
 export function createNodeCounter(tester: any, options: any = {}) {
-  return new QueryNodeCounter(tester, options)
+  return new NodeCounter(tester, options)
 }
 
-export class QueryNodeCounter extends Loggable {
+export class NodeCounter extends Loggable {
   tester: any
   occurrenceTester: any
 
+  /**
+   * Query node counter
+   * @constructor
+   * @param tester
+   * @param options
+   */
   constructor(tester: any, options: any = {}) {
     super(options)
     this.tester = tester

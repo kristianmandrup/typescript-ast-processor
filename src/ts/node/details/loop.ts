@@ -1,21 +1,25 @@
 import * as ts from 'typescript'
-import { BaseDetailsTester } from './base';
+import { BaseDetailsTester } from './base'
 
 export function createLoopTester(options: any) {
   return new LoopTester(options)
 }
 
 export class LoopTester extends BaseDetailsTester {
+  /**
+   * Create loop details tester
+   * @constructor
+   * @param options
+   */
   constructor(options: any) {
     super(options)
   }
 
+  /**
+   * Names of check methods
+   */
   get checkerNames() {
-    return [
-      'for',
-      'while',
-      'loop'
-    ]
+    return ['for', 'while', 'loop']
   }
 
   /**
@@ -24,7 +28,11 @@ export class LoopTester extends BaseDetailsTester {
    */
   for(node: any) {
     node = this.nodeOf({ node })
-    return ts.isForStatement(node) || ts.isForInStatement(node) || ts.isForOfStatement(node)
+    return (
+      ts.isForStatement(node) ||
+      ts.isForInStatement(node) ||
+      ts.isForOfStatement(node)
+    )
   }
 
   /**

@@ -1,11 +1,16 @@
 import * as ts from 'typescript'
-import { BaseDetailsTester } from './base';
+import { BaseDetailsTester } from './base'
 
 export function createAccessTester(options: any) {
   return new AccessTester(options)
 }
 
 export class AccessTester extends BaseDetailsTester {
+  /**
+   * Create Access details tester
+   * @constructor
+   * @param options
+   */
   constructor(options: any) {
     super(options)
   }
@@ -15,7 +20,7 @@ export class AccessTester extends BaseDetailsTester {
       private: ts.SyntaxKind.PrivateKeyword,
       protected: ts.SyntaxKind.ProtectedKeyword,
       public: ts.SyntaxKind.PublicKeyword,
-      static: ts.SyntaxKind.StaticKeyword
+      static: ts.SyntaxKind.StaticKeyword,
     }
   }
 

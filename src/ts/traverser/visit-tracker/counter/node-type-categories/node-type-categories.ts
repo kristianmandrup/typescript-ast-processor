@@ -1,13 +1,7 @@
 import { Loggable } from '../../../../loggable'
-import {
-  isEmpty,
-  isObject,
-} from '../../../../util'
+import { isEmpty, isObject } from '../../../../util'
 
-import {
-  defaults,
-  flattenObjToList
-} from './utils'
+import { defaults, flattenObjToList } from './utils'
 
 export function createNodeTypeCategories(categories: any, options: any = {}) {
   return new NodeTypeCategories(categories, options)
@@ -16,16 +10,25 @@ export function createNodeTypeCategories(categories: any, options: any = {}) {
 export class NodeTypeCategories extends Loggable {
   categoryMap: any
 
+  /**
+   * Create node type category resolver
+   * @constructor
+   * @param categories
+   * @param options
+   */
   constructor(public categories: any, options: any = {}) {
     super(options)
 
     if (isEmpty(categories)) {
       this.log('Warning: no categories', {
-        categories
+        categories,
       })
     }
   }
 
+  /**
+   * Initialize category map
+   */
   init() {
     this.categoryMap = defaults.categoryMap
   }
@@ -38,10 +41,11 @@ export class NodeTypeCategories extends Loggable {
     const keyPaths = key.split('.')
     const categories = this.categories
 
-    let category: any[] = keyPaths.reduce((acc, path) => {
-      acc = isObject(acc) ? acc[path] || [] : []
-      return acc
-    }, categories) || []
+    let category: any[] =
+      keyPaths.reduce((acc, path) => {
+        acc = isObject(acc) ? acc[path] || [] : []
+        return acc
+      }, categories) || []
 
     if (isEmpty(category)) return []
 
@@ -55,7 +59,7 @@ export class NodeTypeCategories extends Loggable {
     const categories = this.categories
     if (isEmpty(categories)) return
     const categoryNames = Object.keys(categories)
-    return categoryNames.map(key => {
+    return categoryNames.map((key) => {
       const resolvedList = this.resolveCategoryKey(key)
       if (isEmpty(resolvedList)) {
         return {}
@@ -64,7 +68,7 @@ export class NodeTypeCategories extends Loggable {
       nodeTypes[key].concat(resolvedList)
       const keyList = nodeTypes[key]
       return {
-        [key]: keyList
+        [key]: keyList,
       }
     })
   }

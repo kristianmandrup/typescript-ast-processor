@@ -1,24 +1,35 @@
 import * as ts from 'typescript'
-import { BaseDetailsTester } from './base';
+import { BaseDetailsTester } from './base'
 
 export function createClassDetailsTester(options: any) {
   return new ClassDetailsTester(options)
 }
 
 export class ClassDetailsTester extends BaseDetailsTester {
+  /**
+   * Create class details tester
+   * @constructor
+   * @param options
+   */
   constructor(options: any) {
     super(options)
   }
 
+  /**
+   * syntax map
+   */
   get syntaxMap() {
     return {
       extends: ts.SyntaxKind.ExtendsKeyword,
       implements: ts.SyntaxKind.ImplementsKeyword,
-      abstract: ts.SyntaxKind.AbstractKeyword
+      abstract: ts.SyntaxKind.AbstractKeyword,
     }
   }
 
-  // alias
+  /**
+   * Test if class node has extends another class
+   * @param node
+   */
   subclass(node?: any) {
     return this.has('extends', { node })
   }

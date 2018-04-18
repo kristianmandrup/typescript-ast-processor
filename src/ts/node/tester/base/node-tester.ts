@@ -46,6 +46,20 @@ export abstract class NodeTester extends Loggable implements INodeTester {
   }
 
   /**
+   * Map of tester configurations
+   */
+  get testerMap() {
+    return {}
+  }
+
+  /**
+   * Get property keys
+   */
+  get propKeys() {
+    return this.props
+  }
+
+  /**
    * Many node tests are on modifiers collection
    * Used a lot in node details testers
    */
@@ -182,7 +196,7 @@ export abstract class NodeTester extends Loggable implements INodeTester {
 
   /**
    * Get a property of a tester
-   * @param opts { String | Object }
+   * @param opts { string | object }
    */
   getProp(opts: any = {}) {
     return this.testerRegistry.getProp(opts)

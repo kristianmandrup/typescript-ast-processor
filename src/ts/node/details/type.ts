@@ -1,16 +1,24 @@
 import * as ts from 'typescript'
-import { BaseDetailsTester } from './base';
+import { BaseDetailsTester } from './base'
 
 export function createTypeTester(options: any) {
   return new TypeTester(options)
 }
 
 export class TypeTester extends BaseDetailsTester {
+  /**
+   * Create type details tester
+   * @constructor
+   * @param options
+   */
   constructor(options: any) {
     super(options)
     this.modifierKey = 'kind'
   }
 
+  /**
+   * syntax map
+   */
   get syntaxMap() {
     return {
       void: ts.SyntaxKind.VoidKeyword,
@@ -21,7 +29,7 @@ export class TypeTester extends BaseDetailsTester {
       array: ts.SyntaxKind.ArrayType,
       union: ts.SyntaxKind.UnionType,
       boolean: ts.SyntaxKind.BooleanKeyword,
-      any: ts.SyntaxKind.AnyKeyword
+      any: ts.SyntaxKind.AnyKeyword,
     }
   }
 

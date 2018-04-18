@@ -3,26 +3,29 @@ import {
   isEmpty,
   isFunction,
   isNonEmptyStr,
-  lowercaseFirst
+  lowercaseFirst,
 } from '../../../../util'
-import { Loggable } from '../../../../loggable';
-import { createNodeTypeCategories, NodeTypeCategories } from '../node-type-categories';
+import { Loggable } from '../../../../loggable'
+import {
+  createNodeTypeCategories,
+  NodeTypeCategories,
+} from '../node-type-categories'
 
 export function createNodeTypeCounter(nodeTypes: any[], options: any = {}) {
   return new NodeTypeCounter(nodeTypes, options)
 }
 
 export interface INodeVisitCounter {
-  visited: number,
-  skipped: number,
+  visited: number
+  skipped: number
   types: any
 }
 
 export class NodeTypeCounter extends Loggable {
   protected _nodeTypes: {
-    toCount?: string[],
-    fnToCount?: Function,
-    toExcludeFromVisit?: string[],
+    toCount?: string[]
+    fnToCount?: Function
+    toExcludeFromVisit?: string[]
     categories?: any
   }
 
@@ -36,9 +39,15 @@ export class NodeTypeCounter extends Loggable {
   constructor(nodeTypes: any, options: any = {}) {
     super(options)
     this.nodeTypes = nodeTypes
-    this.categoryNodeTypes = createNodeTypeCategories(nodeTypes.categories, options)
+    this.categoryNodeTypes = createNodeTypeCategories(
+      nodeTypes.categories,
+      options,
+    )
   }
 
+  /**
+   * Reset
+   */
   reset() {
     this._nodeTypes = {
       categories: {
@@ -46,29 +55,41 @@ export class NodeTypeCounter extends Loggable {
           // always count:
           'statement',
           'declaration',
-          'expression'
+          'expression',
           // 'condition'
-        ]
-      }
+        ],
+      },
     }
     this.counter = {
       visited: 0,
       skipped: 0,
       // types of node visited
-      types: {
-      }
+      types: {},
     }
   }
 
+  /**
+   * Initialize
+   */
   init() {
     this.reset()
   }
 
+  /**
+   * Set node types:
+   * - to be counted
+   * - to be excluded from counting
+   * @param nodeTypes
+   */
   setNodeTypes(nodeTypes: any = {}) {
     this._nodeTypes = deepmerge(this._nodeTypes || {}, nodeTypes)
     this.resolveTypeCategories(nodeTypes)
   }
 
+  /**
+   * Resolve node types from categories
+   * @param nodeTypes
+   */
   resolveTypeCategories(nodeTypes: any) {
     this.categoryNodeTypes.resolveTypeCategories(nodeTypes)
   }
@@ -96,6 +117,10 @@ export class NodeTypeCounter extends Loggable {
     return toCount.includes(nodeType)
   }
 
+  /**
+   * Check if node (type) should be counted
+   * @param node
+   */
   shouldCountNode(node: any): boolean {
     return this.checkIfNodeToBeCounted(node)
   }
@@ -129,7 +154,7 @@ export class NodeTypeCounter extends Loggable {
   counterKeyFor(key: string) {
     if (!isNonEmptyStr(key)) {
       this.error('Invalid counter key', {
-        key
+        key,
       })
     }
     return lowercaseFirst(key)

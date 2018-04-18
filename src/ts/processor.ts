@@ -1,13 +1,8 @@
-import {
-  SourceFile
-} from 'typescript'
-import { SrcFile } from './src-file';
-import {
-  createASTNodeTraverser,
-  ASTNodeTraverser
-} from './traverser'
-import { RootDataCollector } from './collector';
-import { Instrumentor } from './instrumentor/base';
+import { SourceFile } from 'typescript'
+import { SrcFile } from './src-file'
+import { createASTNodeTraverser, ASTNodeTraverser } from './traverser'
+import { RootDataCollector } from './collector'
+import { Instrumentor } from './instrumentor/base'
 
 export class Processor {
   options: any
@@ -18,6 +13,7 @@ export class Processor {
 
   /**
    * Create a Processor instance
+   * @constructor
    * @param srcFile
    */
   constructor(srcFile: SrcFile) {
@@ -27,9 +23,7 @@ export class Processor {
     const createCollector = options.createCollector || this.createCollector
     this.collector = createCollector(options)
     this.options.collector = this.collector
-    this
-      .intializeVisitor()
-      .intializeInstrumentor()
+    this.intializeVisitor().intializeInstrumentor()
   }
 
   /**
@@ -49,7 +43,7 @@ export class Processor {
    * @param nestedFunctionMap
    */
   registerMap(nestedFunctionMap: any) {
-    Object.keys(nestedFunctionMap).map(label => {
+    Object.keys(nestedFunctionMap).map((label) => {
       const functionMap = nestedFunctionMap[label]
       this.register(label, functionMap)
     })
@@ -60,14 +54,16 @@ export class Processor {
    */
   intializeVisitor() {
     const { options } = this
-    const createNodeTraverser = options.createNodeTraverser || this.createNodeTraverser
+    const createNodeTraverser =
+      options.createNodeTraverser || this.createNodeTraverser
     this.nodeTraverser = createNodeTraverser(options)
     return this
   }
 
   intializeInstrumentor() {
     const { options } = this
-    const createInstrumentor = options.createInstrumentor || this.createInstrumentor
+    const createInstrumentor =
+      options.createInstrumentor || this.createInstrumentor
     this.instrumentor = createInstrumentor(options)
     return this
   }

@@ -1,5 +1,5 @@
 import * as ts from 'typescript'
-import { BaseDetailsTester } from './base';
+import { BaseDetailsTester } from './base'
 
 export function createCallTester(options: any) {
   return new CallTester(options)
@@ -9,13 +9,21 @@ export class CallTester extends BaseDetailsTester {
   literal: any
   node: any
 
+  /**
+   * Function call (invocation) details tester
+   * @constructor
+   * @param options
+   */
   constructor(options: any) {
     super(options)
   }
 
+  /**
+   * syntax map
+   */
   get syntaxMap() {
     return {
-      await: ts.SyntaxKind.AwaitExpression
+      await: ts.SyntaxKind.AwaitExpression,
     }
   }
 

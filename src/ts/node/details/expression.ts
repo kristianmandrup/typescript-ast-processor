@@ -1,20 +1,28 @@
 import * as ts from 'typescript'
-import { BaseDetailsTester } from './base';
+import { BaseDetailsTester } from './base'
 
 export function createExpressionTester(options: any) {
   return new ExpressionTester(options)
 }
 
 export class ExpressionTester extends BaseDetailsTester {
+  /**
+   * Create expression details tester
+   * @constructor
+   * @param options
+   */
   constructor(options: any) {
     super(options)
   }
 
+  /**
+   * syntax map
+   */
   get syntaxMap() {
     return {
       typeof: ts.SyntaxKind.TypeOfKeyword,
       not: ts.SyntaxKind.ExclamationToken,
-      delete: ts.SyntaxKind.DeleteKeyword
+      delete: ts.SyntaxKind.DeleteKeyword,
     }
   }
 

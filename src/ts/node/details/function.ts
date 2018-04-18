@@ -1,17 +1,29 @@
 import * as ts from 'typescript'
-import {BaseDetailsTester} from './base'
+import { BaseDetailsTester } from './base'
 
-export function createFunctionTester(options : any) {
+export function createFunctionTester(options: any) {
   return new FunctionTester(options)
 }
 
 export class FunctionTester extends BaseDetailsTester {
-  constructor(options : any) {
+  /**
+   * Create function details tester
+   * @constructor
+   * @param options
+   */
+  constructor(options: any) {
     super(options)
   }
 
+  /**
+   * syntax map
+   */
   get syntaxMap() {
-    return {async: ts.SyntaxKind.AsyncKeyword, arrow: ts.SyntaxKind.ArrowFunction, generator: ts.SyntaxKind.AsteriskToken}
+    return {
+      async: ts.SyntaxKind.AsyncKeyword,
+      arrow: ts.SyntaxKind.ArrowFunction,
+      generator: ts.SyntaxKind.AsteriskToken,
+    }
   }
 
   /**
@@ -19,7 +31,7 @@ export class FunctionTester extends BaseDetailsTester {
    * @param node function node to test
    */
   async(node?: any) {
-    return this.has('async', {node})
+    return this.has('async', { node })
   }
 
   /**
@@ -36,7 +48,7 @@ export class FunctionTester extends BaseDetailsTester {
    * @param node function node to test
    */
   generator(node?: any) {
-    this.has('generator', {node, modifierKey: 'asteriskToken'})
+    this.has('generator', { node, modifierKey: 'asteriskToken' })
   }
 
   // generator(node?: any) {   node = node || this.node   return
@@ -46,9 +58,15 @@ export class FunctionTester extends BaseDetailsTester {
    * Utility to determine if arrow function has parenthesis around arguments
    * @param node
    */
-  hasParensAroundArguments(node : ts.FunctionLike) {
+  hasParensAroundArguments(node: ts.FunctionLike) {
     if (ts.isArrowFunction(node)) {
-      return (node.parameters.length !== 1 || node.getText().substr(0, node.equalsGreaterThanToken.getStart() - node.getStart()).includes('('))
+      return (
+        node.parameters.length !== 1 ||
+        node
+          .getText()
+          .substr(0, node.equalsGreaterThanToken.getStart() - node.getStart())
+          .includes('(')
+      )
     } else {
       return true
     }

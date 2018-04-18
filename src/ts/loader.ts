@@ -1,7 +1,4 @@
-import {
-  SrcFile,
-  createSrcFile
-} from './src-file'
+import { SrcFile, createSrcFile } from './src-file'
 
 export function createLoader(options: any = {}) {
   return new Loader(options)
@@ -13,6 +10,7 @@ export class Loader {
 
   /**
    * Create a Loader instance
+   * @constructor
    * @param options extra options, passed to SrcFile
    */
   constructor(options: any = {}) {

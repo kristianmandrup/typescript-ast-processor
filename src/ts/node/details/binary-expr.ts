@@ -1,16 +1,24 @@
 import * as ts from 'typescript'
-import { BaseDetailsTester } from './base';
+import { BaseDetailsTester } from './base'
 
 export function createBinaryExprTester(options: any) {
   return new BinaryExprTester(options)
 }
 
 export class BinaryExprTester extends BaseDetailsTester {
+  /**
+   * Create binary expression details tester
+   * @constructor
+   * @param options
+   */
   constructor(options: any) {
     super(options)
     this.modifierKey = 'operatorToken'
   }
 
+  /**
+   * types of assignments
+   */
   get assignments() {
     return {
       assignment: ts.SyntaxKind.EqualsToken,
@@ -23,6 +31,9 @@ export class BinaryExprTester extends BaseDetailsTester {
     }
   }
 
+  /**
+   * Types of binary comparisons
+   */
   get comparisons() {
     return {
       lt: ts.SyntaxKind.LessThanToken,
@@ -38,6 +49,9 @@ export class BinaryExprTester extends BaseDetailsTester {
     }
   }
 
+  /**
+   * binary logic tolens
+   */
   get binaryLogic() {
     return {
       binaryOr: ts.SyntaxKind.BarToken,
@@ -45,12 +59,18 @@ export class BinaryExprTester extends BaseDetailsTester {
     }
   }
 
+  /**
+   * special binary tokens
+   */
   get special() {
     return {
-      instanceOf: ts.SyntaxKind.InstanceOfKeyword
+      instanceOf: ts.SyntaxKind.InstanceOfKeyword,
     }
   }
 
+  /**
+   * math application tokens
+   */
   get applyCalc() {
     return {
       applyPlus: ts.SyntaxKind.PlusPlusToken,
@@ -59,13 +79,16 @@ export class BinaryExprTester extends BaseDetailsTester {
     }
   }
 
+  /**
+   * full syntax map
+   */
   get syntaxMap() {
     return {
       ...this.assignments,
       ...this.applyCalc,
       ...this.comparisons,
       ...this.binaryLogic,
-      ...this.special
+      ...this.special,
     }
   }
 
@@ -119,7 +142,6 @@ export class BinaryExprTester extends BaseDetailsTester {
   applyPower(node?: any) {
     return this.has('applyPower', { node })
   }
-
 
   /**
    * Test if node is an assignment with eq token = between left and right side

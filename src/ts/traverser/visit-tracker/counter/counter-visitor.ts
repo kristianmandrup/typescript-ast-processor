@@ -1,14 +1,8 @@
-import {
-  ASTNodeTraverser
-} from '../../base'
+import { ASTNodeTraverser } from '../../base'
 
-import {
-  NodeTypeCounter
-} from './node-type-counter'
+import { NodeTypeCounter } from './node-type-counter'
 
-import {
-  isEmpty,
-} from '../../../util'
+import { isEmpty } from '../../../util'
 
 export function createCountingASTNodeTraverser(options: any) {
   return new CountingASTNodeTraverser(options)
@@ -19,10 +13,18 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
   nodeTypeCounter: NodeTypeCounter
   nodeTypesToCheckFor: string[]
 
+  /**
+   * Create AST node traverser that counts and tracks nodes of each type
+   * @constructor
+   * @param options
+   */
   constructor(options: any) {
     super(options)
   }
 
+  /**
+   * Reset traverser
+   */
   reset() {
     super.reset()
     this.fns = {}
@@ -68,9 +70,7 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
    * @param query
    */
   parseQuery(query: any = {}) {
-    let {
-      nodeTypes
-    } = query
+    let { nodeTypes } = query
     nodeTypes = nodeTypes || {}
     let categories = nodeTypes.categories
     nodeTypes.categories = categories || {}
@@ -105,6 +105,10 @@ export class CountingASTNodeTraverser extends ASTNodeTraverser {
     return toCount.concat(this.nodeTypes.toExcludeFromVisit || [])
   }
 
+  /**
+   * Get a counter for a specific node type
+   * @param key
+   */
   counterFor(key: string) {
     return this.nodeTypeCounter.counterFor(key)
   }

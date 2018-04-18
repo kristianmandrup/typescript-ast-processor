@@ -1,11 +1,16 @@
 import * as ts from 'typescript'
-import { BaseDetailsTester } from './base';
+import { BaseDetailsTester } from './base'
 
 export function createConditionalTester(options: any) {
   return new ConditionalTester(options)
 }
 
 export class ConditionalTester extends BaseDetailsTester {
+  /**
+   * Create conditional details tester
+   * @constructor
+   * @param options
+   */
   constructor(options: any) {
     super(options)
   }
@@ -17,7 +22,7 @@ export class ConditionalTester extends BaseDetailsTester {
     return {
       if: ts.SyntaxKind.IfKeyword,
       else: ts.SyntaxKind.ElseKeyword,
-      switch: ts.SyntaxKind.SwitchKeyword
+      switch: ts.SyntaxKind.SwitchKeyword,
     }
   }
 
