@@ -27,3 +27,5 @@ test/snapshots
 .idea
 
 dist
+
+docs/api

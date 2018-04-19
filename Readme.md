@@ -4,35 +4,38 @@ This library is designed as a foundation for writing tools that work with the Ty
 
 To traverse the TypeScript AST:
 
-- visit nodes of interest
-- query nodes and collect node data
-- aggregate collected data via collectors
-- perform instrumentations based on collected data
-- perform any side effects such as code replacements or calling micro services etc.
+* visit nodes of interest
+* query nodes and collect node data
+* aggregate collected data via collectors
+* perform instrumentations based on collected data
+* perform any side effects such as code replacements or calling micro services etc.
 
 ## Disclaimer
-
-Still a WIP. Mostly "dream code" for now.
 
 Please help contribute to make it happen, see [Contributing](CONTRIBUTING.md)
 
 ## Resources
 
-- [TypeScript: Using-the-Compiler-API](https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API)
-- [TypeScript: Using-the-Language-Service-API](https://github.com/Microsoft/TypeScript/wiki/Using-the-Language-Service-API)
+* [TypeScript: Using-the-Compiler-API](https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API)
+* [TypeScript: Using-the-Language-Service-API](https://github.com/Microsoft/TypeScript/wiki/Using-the-Language-Service-API)
 
 See [Resources](docs/resources.md) for more
+
+## API Documentation
+
+* `tsdoc:generate` Generate API docs (static site)
+* `tsdoc:display` Open API docs in browser
 
 ## Design
 
 The design uses the following main concepts:
 
-- [Loader](#Loader)
-- [SrcFile](#SrcFile)
-- [Processor](#Processor)
-- [Visitor](#Visitor)
-- [Collector](#Collector)
-- [Instrumentor](#Instrumentor)
+* [Loader](#Loader)
+* [SrcFile](#SrcFile)
+* [Processor](#Processor)
+* [Visitor](#Visitor)
+* [Collector](#Collector)
+* [Instrumentor](#Instrumentor)
 
 PS: Would love this lib to integrate better with [ts-simple-ast](https://github.com/dsherret/ts-simple-ast) and work seamlessly with `Project` and `Program` concepts as well.
 
@@ -56,10 +59,10 @@ const loader = createLoader({
 
 A `SrcFile` represents a loaded typescript source file, including:
 
-- filename
-- compiler options
-- source text
-- ...
+* filename
+* compiler options
+* source text
+* ...
 
 ```js
 // load a source file
@@ -175,7 +178,7 @@ class ASTNodeTraverser extends Loggable {
 
 #### Visitor factories
 
-It can be difficult and messy to build your own visitor functions using the TypeScript AST API directly. This is where *Visitor factories* come in.
+It can be difficult and messy to build your own visitor functions using the TypeScript AST API directly. This is where _Visitor factories_ come in.
 
 The factories make it much easier to build complex visitors.
 
@@ -218,12 +221,12 @@ const visitors = Object.assign(visitors, {
 
 When figuring out what to query for or what data to collect, use [AST explorer](https://astexplorer.net/) or [ts-ast-viewer](http://ts-ast-viewer.com/)
 
-For details on how to *efficiently* query nodes and collect data (information) see [AST Query engine](docs/query/engine.md)
+For details on how to _efficiently_ query nodes and collect data (information) see [AST Query engine](docs/query/engine.md)
 
 The query engine can:
 
-- query nodes matching complex nested conditions
-- collect nested node data in an easy to work with structure
+* query nodes matching complex nested conditions
+* collect nested node data in an easy to work with structure
 
 #### Visitor flow
 
@@ -231,9 +234,9 @@ Each visitor function is called with `(node, state, options)`
 
 The core visitor (traverser) logic:
 
-- iterate through all registered visitors and call each one
-- each visitor will have one or more type checks as guards f.ex `ts.isFunctionDeclaration(node)` and possibly more guards such as name check and more detailed inspection guards (checking for modifiers, flags etc)
-- when done iterating, proceed to traverse each child node
+* iterate through all registered visitors and call each one
+* each visitor will have one or more type checks as guards f.ex `ts.isFunctionDeclaration(node)` and possibly more guards such as name check and more detailed inspection guards (checking for modifiers, flags etc)
+* when done iterating, proceed to traverse each child node
 
 You can see this logic playing out in the `ASTNodeTraverser` class show above, mainly using the `visit` and `traverseChildNodes` methods.
 
@@ -260,8 +263,8 @@ You can have multiple collectors collect data into a data aggregator. For comple
 function functionHello(node, state = {}) {
   this.data = {
     hello: {
-      name: node.name.getText()
-    }
+      name: node.name.getText(),
+    },
   }
 }
 

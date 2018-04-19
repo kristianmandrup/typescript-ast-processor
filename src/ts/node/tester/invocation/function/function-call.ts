@@ -1,4 +1,4 @@
-import { BaseNodeTester, INodeTester } from '../../base'
+import { BaseNodeTester, IBaseNodeTester } from '../../base'
 
 export function createFunctionCallNodeTester(node: any, options: any = {}) {
   return new FunctionCallNodeTester(node, options)
@@ -8,7 +8,7 @@ export function createFunctionCallNodeTester(node: any, options: any = {}) {
  * For function call
  */
 export class FunctionCallNodeTester extends BaseNodeTester {
-  argumentsTester: INodeTester
+  argumentsTester: IBaseNodeTester
   identifierNodeTester: any // INodeTester
 
   constructor(node: any, options: any) {

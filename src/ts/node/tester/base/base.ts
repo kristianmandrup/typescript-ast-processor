@@ -1,5 +1,6 @@
 import { isDefined } from '../../../util'
 import { NodeTester, INodeTester } from './node-tester'
+import { IDetailsTester } from '../../details/base'
 
 export interface IBaseNodeTester extends INodeTester {
   parentBlocks?: any[]
@@ -83,5 +84,60 @@ export class BaseNodeTester extends NodeTester {
    */
   query(query: any): boolean {
     return this.queryEngine.query(query)
+  }
+
+  /**
+   * Run test on tester
+   * @param opts
+   */
+  runTest(opts: any = {}) {
+    return this.queryEngine.runTest(opts)
+  }
+
+  /**
+   * Run tests on multiple testers
+   * @param opts
+   */
+  runTests(opts: any = {}) {
+    return this.queryEngine.runTests(opts)
+  }
+
+  /**
+   * Query on a name like property
+   * @param name
+   * @param query
+   */
+  queryName(name: string, query: any) {
+    return this.queryEngine.queryName(name, query)
+  }
+
+  /**
+   * Query list of items (nodes)
+   * @param items
+   * @param query
+   * @param options
+   */
+  queryItems(items: any[], query: any, options: any = {}) {
+    return this.queryEngine.queryItems(items, query, options)
+  }
+
+  /**
+   * Create a node tester
+   * @param name
+   * @param node
+   * @param options
+   */
+  createNodeTester(name: string, node?: any, options?: any): IBaseNodeTester {
+    return this.factory.createNodeTester(name, node, options)
+  }
+
+  /**
+   * Create a details tester
+   * @param name
+   * @param node
+   * @param options
+   */
+  createDetailsTester(name: string, node?: any, options?: any): IDetailsTester {
+    return this.factory.createDetailsTester(name, node, options)
   }
 }

@@ -57,7 +57,7 @@ export class MemberTester extends DeclarationNodeTester {
    * @param query
    */
   testAccess(query: any) {
-    return this.doTest({
+    return this.runTest({
       query,
       name: 'access',
     })

@@ -6,7 +6,9 @@
   "main": "dist",
   "scripts": {
     "test": "jest",
-    "tsdoc": "typedoc --out docs/api --readme Readme.md --name 'AST Processor'"
+    "tsdoc:generate":
+      "typedoc --out docs/api --readme Readme.md --name 'AST Processor'",
+    "tsdoc:display": "open docs/api/index.html"
   },
   "keywords": ["typescript", "exported", "refs"],
   "repository": {
@@ -29,6 +31,7 @@
     "eslint-traverser": "^1.5.2",
     "estree-walker": "^0.5.1",
     "find-derived": "^0.1.0",
+    "gulp": "^3.9.1",
     "inversify": "^4.11.1",
     "json-query": "^2.2.2",
     "reflect-metadata": "^0.1.12",
@@ -42,6 +45,7 @@
     "@types/jest": "^22.1.4",
     "@types/node": "^9.4.7",
     "fs-extra": "^5.0.0",
+    "gulp-typedoc": "^2.2.0",
     "jest": "^22.4.2",
     "jest-cli": "^23.0.0-alpha.0",
     "jest-plugin-context": "^2.7.0",

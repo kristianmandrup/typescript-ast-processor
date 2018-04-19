@@ -1,6 +1,6 @@
 import * as ts from 'typescript'
-import { createPropertyAssignmentTester } from './assignment';
-import { BaseNodeTester } from '../../../base';
+import { createPropertyAssignmentTester } from './assignment'
+import { BaseNodeTester } from '../../../base'
 
 /**
  * Factory to create a statement tester
@@ -18,7 +18,11 @@ export class PropertyNodesTester extends BaseNodeTester {
   constructor(properties: any, options: any) {
     super(properties, options)
     this.properties = properties
-    this.propertiesTester = this.createNodeTester('list', this.properties, this.options)
+    this.propertiesTester = this.createNodeTester(
+      'list',
+      this.properties,
+      this.options,
+    )
   }
 
   /**
@@ -45,16 +49,17 @@ export class PropertyNodesTester extends BaseNodeTester {
     }, {})
   }
 
-
   info() {
     return {
       count: this.propertiesCount,
       propertyNames: this.propertyNames,
-      // properties: this.propertiesInfo
+      properties: this.propertiesInfo,
     }
   }
 
   /**
+   * TODO: use testMethodMap instead!
+   *
    * Example:
    * {
    *   count: {
@@ -64,11 +69,24 @@ export class PropertyNodesTester extends BaseNodeTester {
    * }
    * @param query
    */
-  test(query: any) {
+  test(query: any): boolean {
     query = query.count || query
-    return this.testCount(query, this.propertiesCount) &&
-      this.testProperties(query) &&
-      this.testPropertyItems(query)
+    return Boolean(
+      this.testCount(query, this.propertiesCount) &&
+        this.testProperties(query) &&
+        this.testPropertyItems(query),
+    )
+  }
+
+  /**
+   * map of test methods to generate
+   */
+  get testMethodMap(): any {
+    return {
+      count: (query: any) => this.testCount(query, this.propertiesCount),
+      properties: 'properties',
+      propertyItems: this.testPropertyItems,
+    }
   }
 
   /**

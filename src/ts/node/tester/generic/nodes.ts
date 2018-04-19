@@ -1,7 +1,5 @@
 import { BaseNodeTester } from '../base'
-import {
-  resolveArrayIteratorFindMethod
-} from '../util'
+import { resolveArrayIteratorFindMethod } from '../util'
 
 export interface IItemTester {
   forNode(node: any): IItemTester
@@ -36,7 +34,7 @@ export class NodesTester extends BaseNodeTester {
     if (!this.nodes) {
       this.error(`ListTester: No nodes to iterate`, {
         options,
-        node
+        node,
       })
     }
 
@@ -47,18 +45,15 @@ export class NodesTester extends BaseNodeTester {
    * Query list using query
    * @param query
    */
-  test(query: any) {
+  test(query: any): any {
     const resolved = resolveArrayIteratorFindMethod(query)
     if (!resolved) return true
-    const {
-      queryKey,
-      iteratorMethod
-    } = resolved
+    const { queryKey, iteratorMethod } = resolved
 
     const queryExpr = query[queryKey]
     if (!queryExpr) return false
 
-    return this.nodes.map(node => {
+    return this.nodes.map((node) => {
       return queryExpr[iteratorMethod]((query: any) => {
         return this.testItem(node, query)
       })
@@ -71,6 +66,8 @@ export class NodesTester extends BaseNodeTester {
    * @param queryExpr the query to execute on item node
    */
   testItem(node: any, query: any) {
-    return this.itemTester ? this.itemTester.forNode(node).test(query) : this.tester(node, query)
+    return this.itemTester
+      ? this.itemTester.forNode(node).test(query)
+      : this.tester(node, query)
   }
 }
