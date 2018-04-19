@@ -7,13 +7,13 @@ import { createNodeCounter } from './node-counter'
 export interface INodeTester {
   caption: string
   category: string
+  qprops: string[]
 }
 
 export abstract class NodeTester extends Loggable implements INodeTester {
   // properties to test, query and gather info for
   infoProps: any
   _props: string[] = []
-  qprops: string[] = []
   queries: any
   queryResult: any
   factory: any
@@ -29,6 +29,13 @@ export abstract class NodeTester extends Loggable implements INodeTester {
   constructor(public node: any, options: any) {
     super(options)
     this.init(node)
+  }
+
+  /**
+   * Query props
+   */
+  get qprops(): string[] {
+    return []
   }
 
   /**
@@ -230,5 +237,6 @@ export abstract class NodeTester extends Loggable implements INodeTester {
     this.factory = createTesterFactory(node, options)
     this.testerRegistry = createTesterRegistry(options)
     this.queryEngine = createQueryEngine(this, options)
+    return this
   }
 }
