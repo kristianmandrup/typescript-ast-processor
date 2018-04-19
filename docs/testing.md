@@ -107,7 +107,16 @@ NodeTester is composed of:
 * `NodeCounter`
 * `TesterFactory`
 
-We need to test these classes first! Then we can move on to:
+The Jest commands:
+
+* `$ jest __tests__/ts/node/tester/base/tester-factory.test.ts`
+* `$ jest __tests__/ts/node/tester/base/tester-registry.test.ts`
+* `$ jest __tests__/ts/node/tester/base/query-engine.test.ts`
+* `$ jest __tests__/ts/node/tester/base/node-counter.test.ts` (later)
+
+We need to test these classes first! Note that `node-counter` relies on the AST counter traverser working (or you can mock a fake traverser).
+
+Then we can move on to:
 
 * `NodeTester` node tester base class
 * `BaseNodeTester` node tester base class
