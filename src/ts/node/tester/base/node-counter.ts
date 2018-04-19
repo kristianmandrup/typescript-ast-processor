@@ -10,7 +10,6 @@ export function createNodeCounter(tester: any, options: any = {}) {
 
 export class NodeCounter extends Loggable {
   tester: any
-  occurrenceTester: any
 
   /**
    * Query node counter
@@ -21,7 +20,10 @@ export class NodeCounter extends Loggable {
   constructor(tester: any, options: any = {}) {
     super(options)
     this.tester = tester
-    this.occurrenceTester = tester.factory.occurrenceTester
+  }
+
+  get occurrenceTester() {
+    return this.tester.getTester('occurrence')
   }
 
   /**

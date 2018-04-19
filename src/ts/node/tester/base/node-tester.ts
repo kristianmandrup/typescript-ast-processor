@@ -20,13 +20,14 @@ export abstract class NodeTester extends Loggable implements INodeTester {
   testerRegistry: any
   queryEngine: any
   nodeCounter: any
+  node: any
 
   /**
    * Create BaseTester
    * @param node
    * @param options
    */
-  constructor(public node: any, options: any) {
+  constructor(node: any, options: any) {
     super(options)
     this.init(node)
   }
@@ -79,15 +80,16 @@ export abstract class NodeTester extends Loggable implements INodeTester {
    * @param node
    */
   init(node?: any) {
-    this.configure()
     this.validateInit(node)
-
     this.node = node
+    this.configure()
 
-    this.initProps()
-    this.testerRegistry.init()
-    this.queryEngine.init()
-    this.initInfoProps()
+    this.factory.init()
+    // this.initProps()
+
+    // this.testerRegistry.init()
+    // this.queryEngine.init()
+    // this.initInfoProps()
   }
 
   /**
@@ -136,12 +138,10 @@ export abstract class NodeTester extends Loggable implements INodeTester {
    */
   validateInit(node?: any) {
     node = node || this.node
-    this.factory.init()
     if (!node) {
-      this.error(`BaseTester: Missing node to test`, {
+      this.error(`validateInit: missing node`, {
         node,
         options: this.options,
-        constructor: this.constructor.name,
       })
     }
   }
@@ -183,7 +183,7 @@ export abstract class NodeTester extends Loggable implements INodeTester {
    * @param opts
    */
   setTester(opts: any) {
-    return this.factory.setTester(opts)
+    return this.testerRegistry.setTester(opts)
   }
 
   /**
@@ -233,9 +233,9 @@ export abstract class NodeTester extends Loggable implements INodeTester {
   configure() {
     const { options, node } = this
 
-    this.nodeCounter = createNodeCounter(this, options)
     this.factory = createTesterFactory(node, options)
     this.testerRegistry = createTesterRegistry(options)
+    this.nodeCounter = createNodeCounter(this, options)
     this.queryEngine = createQueryEngine(this, options)
     return this
   }

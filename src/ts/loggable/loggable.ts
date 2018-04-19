@@ -1,4 +1,4 @@
-import { Logger } from './logger'
+import { createLogger } from './logger'
 
 interface ILogger {
   log: Function
@@ -25,14 +25,14 @@ export class Loggable {
     this.logger = this.createLogger()
   }
 
-  get defaultCreateLogger() {
-    return new Logger(this, this.options)
+  defaultCreateLogger() {
+    return createLogger(this, this.options)
   }
 
   createLogger() {
     const { logger, createLogger } = this.options
     if (createLogger) return createLogger(this, this.options)
-    if (this.defaultCreateLogger) return this.defaultCreateLogger
+    if (this.defaultCreateLogger) return this.defaultCreateLogger()
     return logger || console
   }
 

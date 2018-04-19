@@ -1,17 +1,8 @@
 import * as path from 'path'
 import context from 'jest-plugin-context'
-import {
-  node,
-  createSrcFile,
-  traverser
-} from '../../src/ts'
+import { node, createSrcFile, traverser, loggable } from '../../src/ts'
 
-export {
-  node,
-  context,
-  createSrcFile,
-  traverser
-}
+export { node, loggable, context, createSrcFile, traverser }
 
 export const fixturesPath = path.join(__dirname, '../fixtures')
 
@@ -35,9 +26,7 @@ export function loadAstNode(filePath: string, traverse?: Function): any {
 
 const { log } = console
 
-export {
-  log
-}
+export { log }
 
 export function logObj(msg: string, obj: any) {
   log(msg, JSON.stringify(obj, null, 2))

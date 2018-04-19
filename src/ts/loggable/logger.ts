@@ -1,3 +1,7 @@
+export function createLogger(target: any, options: any) {
+  return new Logger(target, options)
+}
+
 export class Logger {
   /**
    * @constructor
@@ -32,7 +36,7 @@ export class Logger {
     return data
   }
 
-  prefix() {
+  get prefix() {
     const caption = this.caption
     return this.caption ? `[${caption}]` : ''
   }

@@ -23,6 +23,7 @@ export class IndentifierNodeTester extends BaseNodeTester {
   }
 
   init(node: any) {
+    super.init(node)
     this.idNode = this.idNodeFor(node)
     this.setTester({
       name: 'exported',

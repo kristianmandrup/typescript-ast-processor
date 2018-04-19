@@ -140,4 +140,19 @@ export class BaseNodeTester extends NodeTester {
   createDetailsTester(name: string, node?: any, options?: any): IDetailsTester {
     return this.factory.createDetailsTester(name, node, options)
   }
+
+  /**
+   * Convenience factory for creating a node tester
+   * @param name
+   * @param node
+   * @param options
+   */
+  createCategoryTester(
+    category: string,
+    name: string,
+    node?: any,
+    options?: any,
+  ): any {
+    return this.factory.createCategoryTester(category, name, node, options)
+  }
 }

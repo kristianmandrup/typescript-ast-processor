@@ -20,15 +20,29 @@ export class TesterRegistry extends Loggable {
     details: {},
   }
   node: any
-  createCategoryTester: Function
   testerMap: any
   factoryMap = factoryMap
 
   constructor(tester: any, node: any, options: any = {}) {
     super(options)
+    if (!tester) {
+      this.error('Invalid tester', {
+        tester,
+        node,
+        options,
+      })
+    }
+
     this.tester = tester
-    this.createCategoryTester = tester.createCategoryTester.bind(tester)
     this.testerMap = tester.testerMap
+  }
+
+  /**
+   * Create node or details tester using category name
+   * @param args
+   */
+  createCategoryTester(...args: any[]) {
+    return this.tester.createCategoryTester(...args)
   }
 
   /**
@@ -90,6 +104,8 @@ export class TesterRegistry extends Loggable {
    */
   setTester(opts: any = {}) {
     let { type = 'node', name, factory, when, node, options } = opts
+    this.log('setTester', opts)
+
     node = node || this.node
     options = options || this.options
     factory = factory || name
@@ -98,6 +114,13 @@ export class TesterRegistry extends Loggable {
     name = resolved.name
     type = resolved.type || type
     factory = resolved.factory
+
+    if (!node) {
+      this.error('setTester: Missing node', {
+        node,
+        opts,
+      })
+    }
 
     node = node[name] || node
     if (when) {
