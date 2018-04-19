@@ -23,8 +23,23 @@ See [Resources](docs/resources.md) for more
 
 ## API Documentation
 
-* `tsdoc:generate` Generate API docs (static site)
-* `tsdoc:display` Open API docs in browser
+API documentation is generated via [type doc](http://typedoc.org/) using [gulp-typedoc](https://www.npmjs.com/package/gulp-typedoc)
+The following npm scripts are available
+
+* `typedoc:generate`
+* `typedoc:display`
+
+### Generate docs
+
+Generate API docs (static site)
+
+`npm run typedoc:generate`
+
+### Display generated docs
+
+Open API docs in browser
+
+`npm run typedoc:display`
 
 ## Design
 

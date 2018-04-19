@@ -6,9 +6,8 @@
   "main": "dist",
   "scripts": {
     "test": "jest",
-    "tsdoc:generate":
-      "typedoc --out docs/api --readme Readme.md --name 'AST Processor'",
-    "tsdoc:display": "open docs/api/index.html"
+    "typedoc:generate": "gulp typedoc",
+    "typedoc:display": "open docs/api/index.html"
   },
   "keywords": ["typescript", "exported", "refs"],
   "repository": {
