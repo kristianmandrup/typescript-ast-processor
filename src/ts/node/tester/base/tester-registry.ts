@@ -6,8 +6,8 @@ import { isStr } from '../../../util'
  * @param node
  * @param options
  */
-export function createTesterRegistry(node: any, options: any = {}) {
-  return new TesterRegistry(node, options)
+export function createTesterRegistry(tester: any, options: any = {}) {
+  return new TesterRegistry(tester, options)
 }
 
 import { factoryMap } from './factory-map'
@@ -22,33 +22,49 @@ export class TesterRegistry extends Loggable {
   node: any
   testerMap: any
   factoryMap = factoryMap
+  factory: any
 
-  constructor(tester: any, node: any, options: any = {}) {
+  constructor(tester: any, options: any = {}) {
     super(options)
-    if (!tester) {
+    this.tester = tester
+    this.factory = tester.factory // ideally avoid this
+    this.node = tester.node
+    this.init()
+  }
+
+  /**
+   * Initialize and validate
+   * @param tester
+   * @param node
+   */
+  init() {
+    if (!this.tester) {
       this.error('Invalid tester', {
-        tester,
-        node,
-        options,
+        tester: this.tester,
+        options: this.options,
       })
     }
-
-    this.tester = tester
-    this.testerMap = tester.testerMap
+    this.testerMap = this.tester.testerMap
+    this.configure()
   }
 
   /**
    * Create node or details tester using category name
    * @param args
    */
-  createCategoryTester(...args: any[]) {
-    return this.tester.createCategoryTester(...args)
+  createCategoryTester(
+    category: string,
+    name: string,
+    node?: any,
+    options?: any,
+  ): any {
+    return this.factory.createCategoryTester(category, name, node, options)
   }
 
   /**
    * Initialize all testers to be used
    */
-  init() {
+  configure() {
     this.setTesters()
   }
 
@@ -104,8 +120,6 @@ export class TesterRegistry extends Loggable {
    */
   setTester(opts: any = {}) {
     let { type = 'node', name, factory, when, node, options } = opts
-    this.log('setTester', opts)
-
     node = node || this.node
     options = options || this.options
     factory = factory || name
@@ -128,8 +142,11 @@ export class TesterRegistry extends Loggable {
       if (!when(node)) return
     }
 
+    /**
+     * Create the tester
+     */
     const tester = this.createCategoryTester(type, factory, node, options)
-    this.testers[type][factory] = tester
+    this.testers[type][name] = tester
     return this
   }
 
@@ -177,8 +194,10 @@ export class TesterRegistry extends Loggable {
     const namedTester = typeTesters[name]
     if (!namedTester) {
       this.log('getTester: invalid name', {
+        type,
         name,
-        testers: typeTesters,
+        typeTesters,
+        opts,
       })
     }
 

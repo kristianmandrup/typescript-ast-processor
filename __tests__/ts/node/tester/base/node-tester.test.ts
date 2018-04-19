@@ -1,7 +1,11 @@
-import { context, testerFor } from '../_imports'
+import { log, context, testerFor } from '../_imports'
 import { BaseNodeTester } from '../../../../../src/ts/node/tester/base'
 
-class MyNodeTester extends BaseNodeTester {}
+class MyNodeTester extends BaseNodeTester {
+  constructor(node: any, options: any) {
+    super(node, options)
+  }
+}
 
 describe('NodeTester', () => {
   context('identifier file', () => {
@@ -9,11 +13,17 @@ describe('NodeTester', () => {
       fileName: 'identifier',
       type: 'identifier',
       traverse: (statements: any[]) => {
-        return statements[0] //.declarationList.declarations[0]
+        const node = statements[0]
+        return node //.declarationList.declarations[0]
       },
     })
 
-    const tester = new MyNodeTester(idTester.node, {})
+    const node = idTester.node
+    const factories = idTester.options.factories
+
+    const tester = new MyNodeTester(node, {
+      factories,
+    })
 
     describe('init', () => {
       it('inits props', () => {
@@ -71,7 +81,7 @@ describe('NodeTester', () => {
           y: false,
         }
         tester.props = props
-        expect(tester._props).toEqual(['x'])
+        expect(tester._props).toEqual(['x', 'y'])
       })
     })
 
@@ -114,9 +124,9 @@ describe('NodeTester', () => {
       })
     })
 
-    describe('getTester', () => {
+    describe.only('getTester', () => {
       it('retrieves nothing', () => {
-        expect(tester.testMethodMap).toBeUndefined()
+        expect(tester.testMethodMap).toEqual({})
       })
 
       context('id tester registered', () => {
@@ -128,14 +138,22 @@ describe('NodeTester', () => {
         })
 
         it('retrieves id tester', () => {
+          log({
+            registry: tester.testerRegistry,
+            testers: tester.testerRegistry.testers,
+          })
+
           expect(tester.getTester('id')).toBeDefined()
         })
       })
     })
 
-    describe('createTester', () => {
+    describe.only('createTester', () => {
       it('creates a named tester', () => {
         const idTester = tester.createTester('identifier', tester.node)
+        log('test: createTester', {
+          idTester,
+        })
         expect(idTester).toBeDefined()
       })
     })

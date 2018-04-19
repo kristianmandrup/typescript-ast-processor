@@ -8,6 +8,11 @@ function resolveStatementIndex(opts: any = {}): number {
   return opts.statementIndex || 0
 }
 
+function error(msg: any, data: any) {
+  console.error(msg, data)
+  throw new Error(msg)
+}
+
 /**
  * Retrieve the node to use
  * @param sourceFile
@@ -17,7 +22,12 @@ function getNode(sourceFile: any, opts: any = {}) {
   const { index, traverse } = opts
   const statements = sourceFile.statements
   const node = traverse ? traverse(statements) : statements[index]
-  // console.log('using node:', { node, traverse })
+  if (!node) {
+    error('getNode: could not resolve node for tester', {
+      sourceFile,
+      opts,
+    })
+  }
   return node
 }
 
@@ -28,10 +38,12 @@ function getNode(sourceFile: any, opts: any = {}) {
  */
 function resolveNodeTester(srcFile: string, opts: any = {}) {
   const node = getNode(srcFile, opts)
-  return opts.factory(node, {
+  const factory = opts.factory
+  const tester = factory(node, {
     logging: true,
     factories: factoryMap, // factories.map
   })
+  return tester
 }
 
 /**
@@ -63,7 +75,10 @@ function resolveFactory(opts: any = {}) {
   factoryName = factoryName || type
   factory = factory || factories.testerFactoryFor(factoryName, factories.map)
   if (!factory) {
-    throw new Error(`No such factory in map: ${type}`)
+    error(`No such factory in map: ${type}`, {
+      type,
+      factories,
+    })
   }
   return factory
 }
@@ -116,8 +131,8 @@ export function testerFor(opts: any = {}): any {
     })
   }
 
-  console.error({ opts })
-  throw new Error(
-    'Invalid options. Missing: statementIndex, traverse or indexMap',
+  error(
+    'testerFor: Invalid options. Missing: statementIndex, traverse or indexMap',
+    { opts },
   )
 }

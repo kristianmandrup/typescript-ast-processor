@@ -2,6 +2,7 @@ import { createLogger } from './logger'
 
 interface ILogger {
   log: Function
+  warn: Function
   error: Function
 }
 
@@ -25,6 +26,10 @@ export class Loggable {
     this.logger = this.createLogger()
   }
 
+  get caption() {
+    return this.constructor.name
+  }
+
   defaultCreateLogger() {
     return createLogger(this, this.options)
   }
@@ -41,7 +46,8 @@ export class Loggable {
    * @param msg info message
    * @param data context data
    */
-  protected error(msg: string, data?: any): void {
+  // protected
+  error(msg: string, data?: any): void {
     data ? this.logger.error(msg, data) : this.logger.error(msg)
     throw new Error(msg)
   }
@@ -51,7 +57,19 @@ export class Loggable {
    * @param msg info message
    * @param data context data
    */
-  protected log(msg: string, data?: any): void {
+  // protected
+  warn(msg: string, data?: any): void {
+    if (!this.logOn) return
+    data ? this.logger.warn(msg, data) : this.logger.warn(msg)
+  }
+
+  /**
+   * Log an info message with context data
+   * @param msg info message
+   * @param data context data
+   */
+  // protected
+  log(msg: string, data?: any): void {
     if (!this.logOn) return
     data ? this.logger.log(msg, data) : this.logger.log(msg)
   }

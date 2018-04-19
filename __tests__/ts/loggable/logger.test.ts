@@ -1,6 +1,6 @@
 import { loggable, context } from '../'
 
-const { Logger, createLogger } = loggable
+const { createLogger } = loggable
 
 describe('Logger', () => {
   context('logger', () => {

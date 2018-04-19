@@ -30,7 +30,7 @@ describe('Loggable', () => {
     describe('error', () => {
       it('logs error', () => {
         const error = () => logger['error']('x', {})
-        expect(error).not.toThrow()
+        expect(error).toThrow()
       })
     })
   })

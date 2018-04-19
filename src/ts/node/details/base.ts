@@ -39,14 +39,6 @@ export class BaseDetailsTester extends Loggable {
   }
 
   /**
-   * Caption for class using name of constructor
-   * Used for logging
-   */
-  get caption() {
-    return this.constructor.name
-  }
-
-  /**
    * instance category
    */
   get category() {
@@ -58,7 +50,7 @@ export class BaseDetailsTester extends Loggable {
    * Override to add custom checker names (See loop.ts for example)
    */
   get checkerNames() {
-    return Object.keys(this.maps)
+    return Object.keys(this.maps || {})
   }
 
   /**
@@ -82,7 +74,8 @@ export class BaseDetailsTester extends Loggable {
    * @param msg error message
    * @param data error context
    */
-  protected error(msg: string, data: any): boolean {
+  // protected
+  error(msg: string, data: any): boolean {
     super.error(msg, data)
     return false
   }
@@ -257,12 +250,6 @@ export class BaseDetailsTester extends Loggable {
     const defaultFind = (name: string) => {
       return this.is(name, options)
     }
-    // this.log('matches', {
-    //   maps: this.maps,
-    //   syntaxMap: this.syntaxMap,
-    //   checkerNames: this.checkerNames,
-    //   options
-    // })
     const findFn = options.test || defaultFind
     return this.checkerNames[filterMethod](findFn)
   }

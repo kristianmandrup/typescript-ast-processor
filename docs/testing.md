@@ -100,6 +100,15 @@ Make sure base class for details node testers works
 
 ### Node tester
 
+NodeTester is composed of:
+
+* `TesterRegistry`
+* `QueryEngine`
+* `NodeCounter`
+* `TesterFactory`
+
+We need to test these classes first! Then we can move on to:
+
 * `NodeTester` node tester base class
 * `BaseNodeTester` node tester base class
 

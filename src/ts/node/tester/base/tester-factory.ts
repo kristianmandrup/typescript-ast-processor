@@ -15,7 +15,7 @@ export function createTesterFactory(node: any, options: any = {}) {
 export class TesterFactory extends Loggable {
   node: any
   factories: any
-  occurrenceTester: any
+  _occurrenceTester: any
 
   constructor(node: any, options: any = {}) {
     super(options)
@@ -32,7 +32,12 @@ export class TesterFactory extends Loggable {
         options: this.options,
       })
     }
-    this.occurrenceTester = this.createNodeTester('occurrences')
+  }
+
+  get occurrenceTester() {
+    this._occurrenceTester =
+      this._occurrenceTester || this.createNodeTester('occurrences')
+    return this._occurrenceTester
   }
 
   /**

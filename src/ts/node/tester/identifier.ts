@@ -28,11 +28,7 @@ export class IndentifierNodeTester extends BaseNodeTester {
     this.setTester({
       name: 'exported',
       factory: 'identifier',
-    })
-    this.setTester({
-      name: 'id',
-      factory: 'identifier',
-      node: this.idNode,
+      type: 'details',
     })
   }
 
@@ -111,6 +107,11 @@ export class IndentifierNodeTester extends BaseNodeTester {
    * Whether identifier is exported
    */
   get isExported(): boolean {
-    return Boolean(this.exportTester.is('exported'))
+    return Boolean(
+      this.getProp({
+        name: 'exported',
+        is: 'exported',
+      }),
+    )
   }
 }

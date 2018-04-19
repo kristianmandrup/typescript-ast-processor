@@ -21,6 +21,14 @@ export function createTester(
   options: any = {},
 ): INodeTester | undefined {
   options.factories = options.factories || {}
+
+  if (!options.factories.node) {
+    console.error('missing node factories', {
+      factories: options.factories,
+    })
+    throw Error('oops')
+  }
+
   const factoryMap = options.factories.node.map
   const testerFactory = testerFactoryFor(factoryName, factoryMap)
   // console.log('createTester', {
@@ -38,5 +46,6 @@ export function createTester(
   }
 
   const tester = callFun(testerFactory, node, options)
+  // tester.init()
   return tester
 }
