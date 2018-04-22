@@ -1,7 +1,7 @@
 import { context, testerFor } from '../_imports'
-import { TesterFactory } from '../../../../../src/ts/node/tester/base/tester-factory'
+import { createTesterFactory } from '../../../../../src/ts/node/tester/base/tester-factory'
 
-describe('TestersRegistry', () => {
+describe('TesterFactory', () => {
   context('identifier file', () => {
     const tester: any = testerFor({
       fileName: 'identifier',
@@ -11,38 +11,13 @@ describe('TestersRegistry', () => {
       },
     })
 
-    const factory = new TesterFactory(tester.node, tester.options)
-
-    describe('createTester', () => {
-      // TODO: include sth in both type of testers to make them easy to distinquish when testing,
-      // such as testerCategory or similar
-      // also add a caption, such as the constructor.name for error logging and testing
-
-      it('creates a node tester when no prefix specified (default)', () => {
-        const funcTester = factory.createTester('decl.function', tester.node)
-        expect(funcTester).toBeDefined()
-        expect(funcTester.category).toBe('NodeTester')
-      })
-
-      it('creates a details tester when details: prefix', () => {
-        const funcTester = factory.createTester('details:function', tester.node)
-        expect(funcTester).toBeDefined()
-        expect(funcTester.category).toBe('NodeDetailsTester')
-      })
-
-      it('creates a node tester when node: prefix', () => {
-        const typeTester = factory.createTester('node:type', tester.node)
-        expect(typeTester).toBeDefined()
-        expect(typeTester.category).toBe('NodeTester')
-        expect(typeTester.caption).toBe('TypeNodeTester')
-      })
-    })
+    const factory = createTesterFactory(tester.node, tester.options)
 
     describe('createCategoryTester', () => {
       it('creates a details tester', () => {
         const funcTester = factory.createCategoryTester(
           'details',
-          'function',
+          'identifier',
           tester.node,
         )
         expect(funcTester).toBeDefined()
@@ -52,7 +27,7 @@ describe('TestersRegistry', () => {
       it('creates a node tester', () => {
         const funcTester = factory.createCategoryTester(
           'node',
-          'decl.function',
+          'identifier',
           tester.node,
         )
         expect(funcTester).toBeDefined()
@@ -62,10 +37,7 @@ describe('TestersRegistry', () => {
 
     describe('createNodeTester', () => {
       it('creates a node tester', () => {
-        const funcTester = factory.createNodeTester(
-          'decl.function',
-          tester.node,
-        )
+        const funcTester = factory.createNodeTester('identifier', tester.node)
         expect(funcTester).toBeDefined()
         expect(funcTester.category).toBe('NodeTester')
       })
@@ -74,7 +46,7 @@ describe('TestersRegistry', () => {
     describe('createDetailsTester', () => {
       it('creates a details tester', () => {
         const funcTester: any = factory.createDetailsTester(
-          'function',
+          'identifier',
           tester.node,
         )
         expect(funcTester).toBeDefined()
@@ -82,7 +54,35 @@ describe('TestersRegistry', () => {
       })
     })
 
-    describe('createListTester', () => {
+    describe('createTester', () => {
+      // TODO: include sth in both type of testers to make them easy to distinquish when testing,
+      // such as testerCategory or similar
+      // also add a caption, such as the constructor.name for error logging and testing
+
+      it('creates a node tester when no prefix specified (default)', () => {
+        const funcTester = factory.createTester('identifier', tester.node)
+        expect(funcTester).toBeDefined()
+        expect(funcTester.category).toBe('NodeTester')
+      })
+
+      it('creates a details tester when details: prefix', () => {
+        const funcTester = factory.createTester(
+          'details:identifier',
+          tester.node,
+        )
+        expect(funcTester).toBeDefined()
+        expect(funcTester.category).toBe('NodeDetailsTester')
+      })
+
+      it('creates a node tester when node: prefix', () => {
+        const typeTester = factory.createTester('node:identifier', tester.node)
+        expect(typeTester).toBeDefined()
+        expect(typeTester.category).toBe('NodeTester')
+        expect(typeTester.caption).toBe('IndentifierNodeTester')
+      })
+    })
+
+    describe.skip('createListTester', () => {
       it('creates a details tester', () => {
         const listTester: any = factory.createListTester(tester.node)
         expect(listTester).toBeDefined()
@@ -91,7 +91,7 @@ describe('TestersRegistry', () => {
       })
     })
 
-    describe('createListTesterFor', () => {
+    describe.skip('createListTesterFor', () => {
       it('creates a list tester', () => {
         const node = tester.node
         const listTester: any = factory.createListTesterFor({

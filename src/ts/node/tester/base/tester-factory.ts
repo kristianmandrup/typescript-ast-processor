@@ -2,6 +2,7 @@ import { Loggable } from '../../../loggable'
 import { INodeTester } from '.'
 import { IDetailsTester } from '../../details/base'
 import { testNames } from '../util'
+import { isFunction } from '../../../util'
 
 /**
  * Factory to create class tester to query and collect data for class node
@@ -21,6 +22,7 @@ export class TesterFactory extends Loggable {
     super(options)
     this.node = node
     this.factories = options.factories
+    this.init()
   }
 
   /**
@@ -90,7 +92,28 @@ export class TesterFactory extends Loggable {
     node = node || this.node
     options = options || this.options
     const { testerName, factory } = this.resolveFactoryName(name)
-    return this[factory](testerName, node, options)
+    const resolvedFactory = this[factory].bind(this)
+    if (!isFunction(resolvedFactory)) {
+      this.error('No such factory method', {
+        factory,
+      })
+    }
+    // this.log('createTester', {
+    //   resolvedFactory,
+    // })
+    return resolvedFactory(testerName, node, options)
+  }
+
+  /**
+   * Resolve a factory category map
+   * @param category
+   */
+  resolveFactoryMapCategory(category: string) {
+    // this.log('resolveFactoryMapCategory', {
+    //   category,
+    //   factories: this.factories,
+    // })
+    return this.factories[category]
   }
 
   /**
@@ -107,13 +130,29 @@ export class TesterFactory extends Loggable {
   ): any {
     node = node || this.node
     options = options || this.options
-    const factoryCategory = this.factories[category]
+    const factoryCategory = this.resolveFactoryMapCategory(category)
     if (!factoryCategory) {
       this.error('Invalid factory category', {
         factories: this.factories,
         category,
         factoryCategory,
       })
+    }
+    const createTester = factoryCategory.createTester
+    // this.log('createCategoryTester', {
+    //   category,
+    //   factories: this.factories,
+    //   factoryCategory,
+    //   name,
+    //   createTester,
+    // })
+    if (!isFunction(createTester)) {
+      this.error(
+        'createCategoryTester: factory category missing createTester',
+        {
+          factoryCategory,
+        },
+      )
     }
     return factoryCategory.createTester(name, node, options)
   }

@@ -9,47 +9,26 @@ const {
   invocation,
   occurrences,
   identifier,
-  generic
+  generic,
 } = tester
 
-const {
-  statement,
-  conditional,
-  loop,
-  error,
-  block,
-  expression
-} = statements
+const { statement, conditional, loop, error, block, expression } = statements
 
-const {
-  functionCall,
-  argument,
-  decorator
-} = invocation
+const { functionCall, argument, decorator } = invocation
 
-const {
-  classDecl,
-  functionDecl,
-  variables
-} = declarations
+const { classDecl, functionDecl, variables } = declarations
 
 const funCall = functionCall
 const funDecl = functionDecl
 
-const {
-  heritage,
-  members
-} = classDecl
+const { heritage, members } = classDecl
 
-const {
-  accessors
-} = members
-
+const { accessors } = members
 
 export const factories = {
   // generic
-  'list': generic.createNodesTester,
-  'nodes': generic.createNodesTester, // alias
+  list: generic.createNodesTester,
+  nodes: generic.createNodesTester, // alias
 
   // class
   'decl.class': classDecl.createClassTester,
@@ -71,6 +50,7 @@ export const factories = {
 
   // - decl
   'function.decl': funDecl.functionLike.createFunctionLikeNodeTester,
+  'decl.function': funDecl.functionLike.createFunctionLikeNodeTester,
   'function.parameters': funDecl.parameters.createParametersTester,
   'function.parameter': funDecl.parameters.createParameterTester,
 
@@ -111,8 +91,8 @@ export const factories = {
   'lit.array': literals.createArrayLiteralTester,
   'lit.object': literals.createObjectLiteralTester,
   'object.properties': literals.object.properties.createPropertyNodesTester,
-  'object.propAssign': literals.object.properties.createPropertyAssignmentTester,
-
+  'object.propAssign':
+    literals.object.properties.createPropertyAssignmentTester,
 
   // expressions
   'expr.binary': expressions.binary.createBinaryExpressionNodeTester,
@@ -124,5 +104,5 @@ export const factories = {
   'decorator.param': decorator.parameter.createParameterDecoratorTester,
 
   occurrences: occurrences.createNodeOccurrenceTester,
-  identifier: identifier.createIndentifierNodeTester
+  identifier: identifier.createIndentifierNodeTester,
 }

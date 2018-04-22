@@ -1,5 +1,5 @@
 import { factories } from './map'
-import { callFun } from '../../../util'
+import { callFun, isFunction } from '../../../util'
 
 import { INodeTester } from '../base'
 
@@ -36,11 +36,13 @@ export function createTester(
   //   factoryName,
   //   factoryMap
   // })
-  if (!testerFactory) {
-    const msg = 'Could not find or create tester via factory'
+  if (!isFunction(testerFactory)) {
+    const msg =
+      'createTester: testerFactory not a function. Could not find or create tester via factory'
     console.error(msg, {
       factory: factoryName,
       factoryMap,
+      testerFactory,
     })
     throw new Error('Could not find or create tester via factory')
   }

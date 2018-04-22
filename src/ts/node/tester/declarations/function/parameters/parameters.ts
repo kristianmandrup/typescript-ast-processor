@@ -1,17 +1,9 @@
 import * as ts from 'typescript'
 import { BaseNodeTester } from '../../../base'
-import {
-  ParameterTester,
-  isParameter
-} from './parameter';
-import {
-  idDetails,
-  typeName,
-  nameOf,
-} from '../../../util'
-import {
-  decoratorName
-} from '../../../util/name'
+import { ParameterTester, isParameter } from './parameter'
+import { idDetails, typeName, nameOf } from '../../../util'
+import { decoratorName } from '../../../util/name'
+import { isArray } from '../../../../../util'
 
 /**
  * Test if every node in the collection is a parameter node
@@ -19,17 +11,25 @@ import {
  * @param options extra options such as error handler
  */
 export function isParameters(nodes: any[], options: any = {}) {
-  const {
-    error
-  } = options
+  const { error } = options
+  if (!isArray(nodes)) {
+    error &&
+      error('invalid function declaration node: nodes not available', {
+        nodes,
+      })
+  }
   if (!nodes.every(isParameter)) {
-    error && error('All nodes must be parameters', {
-      nodes
-    })
+    error &&
+      error('All nodes must be parameters', {
+        nodes,
+      })
   }
 }
 
-export function createParametersTester(node: any, options: any = {}): ParametersTester | undefined {
+export function createParametersTester(
+  node: any,
+  options: any = {},
+): ParametersTester | undefined {
   if (!isParameters(node, options)) return
   return new ParametersTester(node, options)
 }
@@ -55,9 +55,11 @@ export class ParametersTester extends BaseNodeTester {
    * @param query the query to perform
    */
   test(query: any) {
-    return this.testNames(query.names) &&
+    return (
+      this.testNames(query.names) &&
       this.testTypes(query.types) &&
       this.testDecorators(query.decorators)
+    )
   }
 
   /**
@@ -76,7 +78,7 @@ export class ParametersTester extends BaseNodeTester {
     return {
       names: this.names,
       types: this.types,
-      items: this.items
+      items: this.items,
     }
   }
 
@@ -138,7 +140,11 @@ export class ParametersTester extends BaseNodeTester {
    * @param query
    */
   testItems(query: any, options: any = {}) {
-    return this.queryItems(this.items, query, this.createItemTesterOpts(options))
+    return this.queryItems(
+      this.items,
+      query,
+      this.createItemTesterOpts(options),
+    )
   }
 
   /**
@@ -154,8 +160,7 @@ export class ParametersTester extends BaseNodeTester {
       }
     }
     return Object.assign(options, {
-      createTester
+      createTester,
     })
   }
-
 }

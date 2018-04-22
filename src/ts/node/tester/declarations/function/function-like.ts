@@ -6,7 +6,14 @@ export function isFunctionLike(node: any) {
 }
 
 export function createFunctionLikeNodeTester(node: any, options: any = {}) {
-  if (!isFunctionLike(node)) return
+  if (!isFunctionLike(node)) {
+    const msg = 'createFunctionLikeNodeTester: not a function like node'
+    console.error(msg, {
+      node,
+    })
+    throw new Error(msg)
+    // return
+  }
   return new FunctionLikeNodeTester(node, options)
 }
 
