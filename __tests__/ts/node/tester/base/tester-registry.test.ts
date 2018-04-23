@@ -1,7 +1,8 @@
 import { context, testerFor } from '../_imports'
 import { isEmpty } from '../../../../../src/ts/util'
+import { createTesterRegistry } from '../../../../../src/ts/node/tester/base/tester-registry'
 
-describe('TestersRegistry', () => {
+describe('TesterRegistry', () => {
   context('identifier file', () => {
     const tester: any = testerFor({
       fileName: 'identifier',
@@ -11,36 +12,39 @@ describe('TestersRegistry', () => {
       },
     })
 
+    const registry = createTesterRegistry(tester, tester.options)
+
     describe('resolveFactoryName(name)', () => {
       it('sets the named tester in registry', () => {
-        const resolved = tester.resolveFactoryName('class')
+        const resolved = registry.resolveFactoryName('class')
         expect(resolved).toBeDefined()
       })
     })
     describe('resolveTypeAndName(name)', () => {
       it('sets the named tester in registry', () => {
-        const resolved = tester.resolveTypeAndName('details:function')
+        const resolved = registry.resolveTypeAndName('details:function')
         expect(resolved.type).toBe('details')
         expect(resolved.name).toBe('function')
       })
     })
-    describe('resolveTypeNameAndFactory(name, factory)', () => {
+
+    describe.only('resolveTypeNameAndFactory(name, factory)', () => {
       it('resolves to: details, function, decl.function ', () => {
-        const resolved = tester.resolveTypeNameAndFactory('function')
+        const resolved = registry.resolveTypeNameAndFactory('function')
         expect(resolved.type).toBe('details')
         expect(resolved.name).toBe('function')
         expect(resolved.factory).toBe('decl.function')
       })
     })
 
-    describe('setTester', () => {
+    describe.only('setTester', () => {
       context('set identifier tester', () => {
-        tester.setTester({
+        registry.setTester({
           name: 'identifier',
         })
 
         it('sets the named tester in registry', () => {
-          expect(tester.testers['identifier']).toBeDefined()
+          expect(registry.testers['identifier']).toBeDefined()
         })
       })
     })
@@ -48,25 +52,25 @@ describe('TestersRegistry', () => {
     describe('setTesters', () => {
       context('no testerMap', () => {
         beforeAll(() => {
-          tester.testerMap = {}
-          tester.setTesters()
+          registry.testerMap = {}
+          registry.setTesters()
         })
 
         it('no testers set', () => {
-          expect(isEmpty(tester.testers)).toBeTruthy()
+          expect(isEmpty(registry.testers)).toBeTruthy()
         })
       })
 
       context('has testerMap', () => {
         beforeAll(() => {
-          tester.testerMap = {
+          registry.testerMap = {
             id: 'identifier',
           }
-          tester.setTesters()
+          registry.setTesters()
         })
 
         it('sets the tester named id in registry', () => {
-          expect(tester.testers['id']).toBeDefined()
+          expect(registry.testers['id']).toBeDefined()
         })
       })
     })
@@ -74,25 +78,25 @@ describe('TestersRegistry', () => {
     describe('getTester', () => {
       context('no testers', () => {
         beforeAll(() => {
-          tester.testerMap = {}
-          tester.setTesters()
+          registry.testerMap = {}
+          registry.setTesters()
         })
 
         it('tester named id can NOT be retrieved', () => {
-          expect(tester.getTester('id')).toBeFalsy()
+          expect(registry.getTester('id')).toBeFalsy()
         })
       })
 
       context('has tester id registered', () => {
         beforeAll(() => {
-          tester.testerMap = {
+          registry.testerMap = {
             id: 'identifier',
           }
-          tester.setTesters()
+          registry.setTesters()
         })
 
         it('tester named id can be retrieved', () => {
-          expect(tester.getTester('id')).toBeDefined()
+          expect(registry.getTester('id')).toBeDefined()
         })
       })
     })
@@ -100,25 +104,25 @@ describe('TestersRegistry', () => {
     describe('hasTester', () => {
       context('no testers', () => {
         beforeAll(() => {
-          tester.testerMap = {}
-          tester.setTesters()
+          registry.testerMap = {}
+          registry.setTesters()
         })
 
         it('tester id: false', () => {
-          expect(tester.hasTester('id')).toBeFalsy()
+          expect(registry.hasTester('id')).toBeFalsy()
         })
       })
 
       context('has tester id registered', () => {
         beforeAll(() => {
-          tester.testerMap = {
+          registry.testerMap = {
             id: 'identifier',
           }
-          tester.setTesters()
+          registry.setTesters()
         })
 
         it('tester id: true', () => {
-          expect(tester.hasTester('id')).toBeTruthy()
+          expect(registry.hasTester('id')).toBeTruthy()
         })
       })
     })
@@ -126,7 +130,7 @@ describe('TestersRegistry', () => {
     describe('getProp(opts)', () => {
       it('gets the tester prop', () => {
         expect(
-          tester.getProp({
+          registry.getProp({
             name: 'identifier',
           }),
         ).toBeDefined()

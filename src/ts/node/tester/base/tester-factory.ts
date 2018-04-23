@@ -98,9 +98,6 @@ export class TesterFactory extends Loggable {
         factory,
       })
     }
-    // this.log('createTester', {
-    //   resolvedFactory,
-    // })
     return resolvedFactory(testerName, node, options)
   }
 
@@ -109,10 +106,6 @@ export class TesterFactory extends Loggable {
    * @param category
    */
   resolveFactoryMapCategory(category: string) {
-    // this.log('resolveFactoryMapCategory', {
-    //   category,
-    //   factories: this.factories,
-    // })
     return this.factories[category]
   }
 
@@ -139,13 +132,6 @@ export class TesterFactory extends Loggable {
       })
     }
     const createTester = factoryCategory.createTester
-    // this.log('createCategoryTester', {
-    //   category,
-    //   factories: this.factories,
-    //   factoryCategory,
-    //   name,
-    //   createTester,
-    // })
     if (!isFunction(createTester)) {
       this.error(
         'createCategoryTester: factory category missing createTester',
