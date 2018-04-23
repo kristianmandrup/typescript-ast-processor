@@ -26,14 +26,23 @@ export class Loggable {
     this.logger = this.createLogger()
   }
 
+  /**
+   * Caption of target instance for logger
+   */
   get caption() {
     return this.constructor.name
   }
 
+  /**
+   * Default logger factory using Logger factory
+   */
   defaultCreateLogger() {
     return createLogger(this, this.options)
   }
 
+  /**
+   * create the logger
+   */
   createLogger() {
     const { logger, createLogger } = this.options
     if (createLogger) return createLogger(this, this.options)

@@ -11,6 +11,7 @@ export function createTesterRegistry(tester: any, options: any = {}) {
 }
 
 import { factoryMap } from './factory-map'
+import { createTesterIdResolver } from './tester-id-resolver'
 
 export class TesterRegistry extends Loggable {
   tester: any
@@ -65,7 +66,7 @@ export class TesterRegistry extends Loggable {
    * Initialize all testers to be used
    */
   configure() {
-    this.setTesters()
+    // this.setTesters()
   }
 
   /**
@@ -76,23 +77,8 @@ export class TesterRegistry extends Loggable {
     return this.factoryMap[factory] || factory
   }
 
-  /**
-   * Resolve type and name
-   * @param name
-   */
-  resolveTypeAndName(name: string): any {
-    const names = name.split(':')
-    let facPrefix = names[0]
-    if (['node', 'details'].includes(facPrefix)) {
-      name = names[1]
-      return {
-        type: facPrefix,
-        name,
-      }
-    }
-    return {
-      name: names[1] || name,
-    }
+  resolveTypeAndName(value: string): any {
+    return createTesterIdResolver(this.options).resolve(value)
   }
 
   /**
@@ -100,12 +86,12 @@ export class TesterRegistry extends Loggable {
    * @param name
    * @param factory
    */
-  resolveTypeNameAndFactory(name: string, factory?: string) {
-    factory = factory || name
-    const $name = this.resolveTypeAndName(name)
+  resolveTypeNameAndFactory(value: string, factory?: string) {
+    factory = factory || value
+    const $name = this.resolveTypeAndName(value)
     const $factory = this.resolveTypeAndName(factory)
     const type = $name.type || $factory.type
-    name = $name.name
+    const name = $name.name
     factory = this.resolveFactoryName($factory.name)
     return {
       name,
@@ -126,7 +112,7 @@ export class TesterRegistry extends Loggable {
     name = name || factory
     const resolved = this.resolveTypeNameAndFactory(name, factory)
     name = resolved.name
-    type = resolved.type || type
+    type = type || resolved.type
     factory = resolved.factory
 
     if (!node) {

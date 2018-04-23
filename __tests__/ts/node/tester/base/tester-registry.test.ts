@@ -20,24 +20,64 @@ describe('TesterRegistry', () => {
         expect(resolved).toBeDefined()
       })
     })
-    describe('resolveTypeAndName(name)', () => {
-      it('sets the named tester in registry', () => {
+
+    describe.only('resolveTypeAndName(name)', () => {
+      context('details:function', () => {
         const resolved = registry.resolveTypeAndName('details:function')
-        expect(resolved.type).toBe('details')
-        expect(resolved.name).toBe('function')
+
+        it('resolves type to: details', () => {
+          expect(resolved.type).toBe('details')
+        })
+        it('resolves name to: function', () => {
+          expect(resolved.name).toBe('function')
+        })
+      })
+
+      context('function', () => {
+        const resolved = registry.resolveTypeAndName('function')
+
+        it('resolves type to: node', () => {
+          expect(resolved.type).toBe('node')
+        })
+        it('resolves name to: function', () => {
+          expect(resolved.name).toBe('function')
+        })
       })
     })
 
     describe.only('resolveTypeNameAndFactory(name, factory)', () => {
-      it('resolves to: details, function, decl.function ', () => {
+      context('details:function', () => {
+        const resolved = registry.resolveTypeNameAndFactory('details:function')
+
+        it('resolves type to: details', () => {
+          expect(resolved.type).toBe('details')
+        })
+        it('resolves name to: function', () => {
+          expect(resolved.name).toBe('function')
+        })
+        it('resolves factory to: function.decl', () => {
+          // 'decl.function'
+          expect(resolved.factory).toBe('function.decl')
+        })
+      })
+
+      context('function', () => {
         const resolved = registry.resolveTypeNameAndFactory('function')
-        expect(resolved.type).toBe('details')
-        expect(resolved.name).toBe('function')
-        expect(resolved.factory).toBe('decl.function')
+
+        it('resolves type to: node', () => {
+          expect(resolved.type).toBe('node')
+        })
+        it('resolves name to: function', () => {
+          expect(resolved.name).toBe('function')
+        })
+        it('resolves factory to: function.decl', () => {
+          // decl.function
+          expect(resolved.factory).toBe('function.decl')
+        })
       })
     })
 
-    describe.only('setTester', () => {
+    describe('setTester', () => {
       context('set identifier tester', () => {
         registry.setTester({
           name: 'identifier',
