@@ -50,6 +50,13 @@ export class TesterRegistry extends Loggable {
   }
 
   /**
+   * Names of registered testers
+   */
+  testerNames() {
+    return Object.keys(this.testers)
+  }
+
+  /**
    * Create node or details tester using category name
    * @param args
    */

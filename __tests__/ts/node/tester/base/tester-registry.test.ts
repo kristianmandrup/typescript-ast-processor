@@ -115,6 +115,21 @@ describe('TesterRegistry', () => {
       })
     })
 
+    describe('testerNames', () => {
+      context('has tester id registered', () => {
+        beforeAll(() => {
+          registry.testerMap = {
+            id: 'identifier',
+          }
+          registry.setTesters()
+        })
+
+        it('tester named id can be retrieved', () => {
+          expect(registry.testerNames).toContain('id')
+        })
+      })
+    })
+
     describe('getTester', () => {
       context('no testers', () => {
         beforeAll(() => {
