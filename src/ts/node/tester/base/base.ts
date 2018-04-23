@@ -13,6 +13,8 @@ export interface IBaseNodeTester extends INodeTester {
 }
 
 export class BaseNodeTester extends NodeTester {
+  _shortName: string
+
   /**
    * Create Base Node Tester
    * @constructor
@@ -128,6 +130,7 @@ export class BaseNodeTester extends NodeTester {
    * @param options
    */
   createNodeTester(name: string, node?: any, options?: any): IBaseNodeTester {
+    this.validateCircular('node', name, 'createNodeTester')
     return this.factory.createNodeTester(name, node, options)
   }
 
@@ -142,6 +145,45 @@ export class BaseNodeTester extends NodeTester {
   }
 
   /**
+   * short name
+   */
+  get shortName() {
+    this._shortName =
+      this._shortName ||
+      this.caption
+        .replace(/NodeTester$/, '')
+        .replace(/Tester$/, '')
+        .toLowerCase()
+    return this._shortName
+  }
+
+  /**
+   * Test if tester to be created is circular
+   * @param category
+   * @param name
+   */
+  isCircular(category: string, name: string) {
+    return category === 'node' && name === this.shortName
+  }
+
+  /**
+   * Validate and warn if creating this (node) tester is circular
+   * ie. potentially creating self in infinite loop
+   * @param category
+   * @param name
+   * @param method
+   */
+  validateCircular(category: string, name: string, method: string) {
+    if (this.isCircular(category, name)) {
+      this.warn('${method}: circular', {
+        category,
+        name,
+        method,
+      })
+    }
+  }
+
+  /**
    * Convenience factory for creating a node tester
    * @param name
    * @param node
@@ -153,6 +195,7 @@ export class BaseNodeTester extends NodeTester {
     node?: any,
     options?: any,
   ): any {
+    this.validateCircular(category, name, 'createCategoryTester')
     return this.factory.createCategoryTester(category, name, node, options)
   }
 }
