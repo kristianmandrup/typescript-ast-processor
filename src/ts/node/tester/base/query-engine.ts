@@ -1,5 +1,5 @@
 import { Loggable } from '../../../loggable'
-import { capitalize, isFunction } from '../../../util'
+import { capitalize, isFunction, isEmpty, lowercaseFirst } from '../../../util'
 import { findDerived } from 'find-derived'
 import {
   camelize,
@@ -24,8 +24,8 @@ export class QueryEngine extends Loggable {
   queries: any
   queryResult: any
   testMethodMap: any
-  testMethods: any
-  propKeys: any
+  testMethods: any = {}
+  _propKeys: any
   isQuery: Function
   testers: any
   props: any
@@ -34,7 +34,7 @@ export class QueryEngine extends Loggable {
     super(options)
     this.tester = tester
     this.testMethodMap = tester.testMethodMap
-    this.propKeys = tester.propKeys
+    this._propKeys = tester.propKeys
     this.isQuery = tester.isQuery
     this.testers = tester.testers
     this.props = tester.props
@@ -56,27 +56,55 @@ export class QueryEngine extends Loggable {
   }
 
   /**
+   * Property keys to use for generating tester info object
+   */
+  get propKeys() {
+    return this._propKeys || []
+  }
+
+  /**
    * Initialize prop testers (query methods)
    */
   initPropTesters() {
-    const testMethodMap = this.testMethodMap
-    this.propKeys.map((key: string) => {
-      const fnName = `test${capitalize(key)}`
-      const test = testMethodMap[key]
-      let fn
-      if (typeof test === 'function') {
-        fn = test.bind(this)
-      } else {
-        fn = (query: any) => {
-          this.runTest({
-            ...test,
-            query,
-          })
-        }
+    if (isEmpty(this.propKeys)) {
+      // this.warn('no prop keys', {
+      //   propKeys: this.propKeys,
+      // })
+      return
+    }
+    const initPropTester = this.initPropTester.bind(this)
+    this.propKeys.map(initPropTester)
+  }
+
+  testMethodName(name: string) {
+    // return `test${capitalize(name)}`
+    return lowercaseFirst(name)
+  }
+
+  /**
+   * Resolve a prop tester function
+   * @param testFn
+   */
+  resolvePropTesterFn(testFn: Function) {
+    if (typeof test === 'function') {
+      return test.bind(this)
+    } else {
+      return (query: any) => {
+        this.runTest({
+          ...test,
+          query,
+        })
       }
-      this.testMethods = this.testMethods || {}
-      this.testMethods[fnName] = fn
-    })
+    }
+  }
+
+  initPropTester(key: string) {
+    const testMethodMap = this.testMethodMap
+    const fnName = this.testMethodName(key)
+    const testFn = testMethodMap[key]
+    let resolvedFn = this.resolvePropTesterFn(testFn)
+    this.testMethods[fnName] = resolvedFn
+    return this
   }
 
   /**

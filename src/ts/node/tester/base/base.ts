@@ -64,9 +64,8 @@ export class BaseNodeTester extends NodeTester {
    * @returns { Object } node information
    */
   info(): any {
-    const infoProps = this.infoProps
     return this.propKeys.reduce((acc: any, propName: string) => {
-      acc[propName] = infoProps[propName] || this[propName]
+      acc[propName] = this.infoProps[propName] || this[propName]
       return acc
     }, {})
   }

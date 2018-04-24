@@ -1,5 +1,5 @@
 import { context, testerFor } from '../_imports'
-import { QueryEngine } from '../../../../../src/ts/node/tester/base/query-engine'
+import { createQueryEngine } from '../../../../../src/ts/node/tester/base/query-engine'
 
 describe('QueryEngine', () => {
   context('identifier file', () => {
@@ -11,12 +11,56 @@ describe('QueryEngine', () => {
       },
     })
 
-    const engine = new QueryEngine(tester, {})
+    const engine = createQueryEngine(tester, {})
+
+    describe('testMethodName', () => {
+      context('lowercase name', () => {
+        it('returns lowercase camelized name', () => {
+          expect(engine.testMethodName('name')).toBe('name')
+        })
+      })
+
+      context('uppercase name', () => {
+        it('returns lowercase camelized name', () => {
+          expect(engine.testMethodName('Hello')).toBe('hello')
+        })
+      })
+
+      context('mixed case name', () => {
+        it('returns lowercase camelized name', () => {
+          expect(engine.testMethodName('HelloBilly')).toBe('helloBilly')
+        })
+      })
+    })
+
+    describe('initPropTester', () => {
+      context('has testMethodMap', () => {
+        beforeAll(() => {
+          engine._propKeys = ['name']
+          engine.testMethodMap = () => {
+            return {
+              name() {
+                return 'named'
+              },
+            }
+          }
+          engine.initPropTester('name')
+        })
+
+        it('testMethods is an object', () => {
+          expect(typeof engine.testMethods).toBe('object')
+        })
+
+        it('creates testName method', () => {
+          expect(engine.testMethods['name']).toBeDefined()
+        })
+      })
+    })
 
     describe('initPropTesters', () => {
       context('empty testMethodMap', () => {
         beforeAll(() => {
-          tester.initInfoProps()
+          engine.initPropTesters()
         })
 
         it('does not create any test method', () => {
@@ -26,6 +70,7 @@ describe('QueryEngine', () => {
 
       context('has testMethodMap', () => {
         beforeAll(() => {
+          engine._propKeys = ['name']
           engine.testMethodMap = () => {
             return {
               name() {
@@ -36,8 +81,12 @@ describe('QueryEngine', () => {
           engine.initPropTesters()
         })
 
+        it('testMethods is an object', () => {
+          expect(typeof engine.testMethods).toBe('object')
+        })
+
         it('creates testName method', () => {
-          expect(engine['testName']).toBeDefined()
+          expect(engine.testMethods['name']).toBeDefined()
         })
       })
     })
@@ -48,7 +97,7 @@ describe('QueryEngine', () => {
       context('queries to be resolved', () => {})
     })
 
-    describe('queryItems(items: any[], query: any, options)', () => {
+    describe.only('queryItems(items: any[], query: any, options)', () => {
       it('queries for items', () => {
         const items = ['x']
         const query = {
@@ -63,7 +112,21 @@ describe('QueryEngine', () => {
       })
     })
 
-    describe('resolvePropTester', () => {
+    describe.only('resolvePropTesterFn', () => {
+      context('resolved test function', () => {
+        const testFn = (query: any) => {
+          return 'x'
+        }
+
+        const resolvedFn = engine.resolvePropTesterFn(testFn)
+
+        it('is a function', () => {
+          expect(typeof resolvedFn).toBe('function')
+        })
+      })
+    })
+
+    describe.only('resolvePropTester', () => {
       it('resolves a propery tester', () => {
         engine.tester.testName = (query: any) => {
           return 'x'
