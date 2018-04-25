@@ -1,5 +1,5 @@
 import { Loggable } from '../../../loggable'
-import { capitalize, isFunction, isEmpty, lowercaseFirst } from '../../../util'
+import { isFunction, isEmpty, lowercaseFirst } from '../../../util'
 import { findDerived } from 'find-derived'
 import {
   camelize,
@@ -76,6 +76,11 @@ export class QueryEngine extends Loggable {
     this.propKeys.map(initPropTester)
   }
 
+  /**
+   * TODO: use proper camelize
+   * resolve test method name
+   * @param name
+   */
   testMethodName(name: string) {
     // return `test${capitalize(name)}`
     return lowercaseFirst(name)
@@ -98,6 +103,10 @@ export class QueryEngine extends Loggable {
     }
   }
 
+  /**
+   * Initialize property tester
+   * @param key
+   */
   initPropTester(key: string) {
     const testMethodMap = this.testMethodMap
     const fnName = this.testMethodName(key)
@@ -127,14 +136,29 @@ export class QueryEngine extends Loggable {
     return tester.test(query)
   }
 
+  /**
+   * Query for a name match (ie. string value match )
+   * @param name
+   * @param query
+   */
   queryName(name: string, query: any) {
     return testName(name, query)
   }
 
+  /**
+   * Query for a name match over a list of names (ie. string values match )
+   * @param names { string[] } list of strings to be matched/queried
+   * @param query { object } the query object with query expressions
+   */
   queryNames(names: string[], query: any) {
     return testNames(names, query)
   }
 
+  /**
+   * Query on a value for a match
+   * @param value
+   * @param query
+   */
   queryValue(value: any, query: any) {
     return testValue(value, query)
   }
@@ -253,6 +277,12 @@ export class QueryEngine extends Loggable {
     }, {})
   }
 
+  /**
+   * Perform a bool test on a property (matching true|false)
+   * @param bool
+   * @param propQuery
+   * @param opts
+   */
   evalBoolTest(bool: any, propQuery: any, opts: any = {}) {
     if (typeof bool !== 'string') {
       this.error('Invalid bool: must be a method name', {
