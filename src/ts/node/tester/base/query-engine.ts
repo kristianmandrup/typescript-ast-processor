@@ -119,7 +119,12 @@ export class QueryEngine extends Loggable {
    */
   queryItems(items: any[], query: any, options: any = {}) {
     options = Object.assign(options, { items })
-    return this.tester.factory.createTesterFor(options).test(query)
+    this.log('queryItems', {
+      factory: this.tester.factory,
+      options,
+    })
+    const tester = this.tester.factory.createListTesterFor(options)
+    return tester.test(query)
   }
 
   queryName(name: string, query: any) {

@@ -11,7 +11,7 @@ describe('TesterFactory', () => {
       },
     })
 
-    const factory = createTesterFactory(tester.node, tester.options)
+    const factory = createTesterFactory(tester, tester.node, tester.options)
 
     describe('createCategoryTester', () => {
       it('creates a details tester', () => {

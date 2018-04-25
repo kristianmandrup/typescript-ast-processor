@@ -112,7 +112,7 @@ describe('QueryEngine', () => {
       })
     })
 
-    describe.only('resolvePropTesterFn', () => {
+    describe('resolvePropTesterFn', () => {
       context('resolved test function', () => {
         const testFn = (query: any) => {
           return 'x'
@@ -126,7 +126,7 @@ describe('QueryEngine', () => {
       })
     })
 
-    describe.only('resolvePropTester', () => {
+    describe.skip('resolvePropTester', () => {
       it('resolves a propery tester', () => {
         engine.tester.testName = (query: any) => {
           return 'x'

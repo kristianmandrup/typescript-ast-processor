@@ -2,24 +2,33 @@ import { Loggable } from '../../../loggable'
 import { INodeTester } from '.'
 import { IDetailsTester } from '../../details/base'
 import { testNames } from '../util'
-import { isFunction } from '../../../util'
+import { isFunction, isStr } from '../../../util'
 
 /**
  * Factory to create class tester to query and collect data for class node
+ * @param tester { INodeTester }
  * @param node
  * @param options
  */
-export function createTesterFactory(node: any, options: any = {}) {
-  return new TesterFactory(node, options)
+export function createTesterFactory(tester: any, node: any, options: any = {}) {
+  return new TesterFactory(tester, node, options)
 }
 
 export class TesterFactory extends Loggable {
   node: any
   factories: any
   _occurrenceTester: any
+  tester: INodeTester
 
-  constructor(node: any, options: any = {}) {
+  /**
+   * Create testr factory
+   * @param tester
+   * @param node
+   * @param options
+   */
+  constructor(tester: INodeTester, node: any, options: any = {}) {
     super(options)
+    this.tester = tester
     this.node = node
     this.factories = options.factories
     this.init()
@@ -62,11 +71,19 @@ export class TesterFactory extends Loggable {
     const createTester = options.createTester || createNamesTester
     const node = options.node || this.node
     return this.createListTester(node, {
+      ...this.options,
       ...options,
       createTester,
     })
   }
 
+  protected validateName(name: string, method: string): void {
+    if (!isStr(name)) {
+      this.error('resolveFactoryName: invalid name', {
+        name,
+      })
+    }
+  }
   /**
    * Resolve factory name
    * May use a prefix of the form node:class or details:function
@@ -75,11 +92,38 @@ export class TesterFactory extends Loggable {
    * @param name
    */
   resolveFactoryName(name: string) {
+    this.validateName(name, 'resolveFactoryName')
     const factory = /details:/.test(name)
       ? 'createDetailsTester'
       : 'createNodeTester'
     const testerName = name.replace(/\w+:/, '')
     return { testerName, factory }
+  }
+
+  /**
+   * Test if tester to be created is circular
+   * @param category
+   * @param name
+   */
+  isCircular(category: string, name: string) {
+    return category === 'node' && name === this.tester.shortName
+  }
+
+  /**
+   * Validate and warn if creating this (node) tester is circular
+   * ie. potentially creating self in infinite loop
+   * @param category
+   * @param name
+   * @param method
+   */
+  validateCircular(category: string, name: string, method: string) {
+    if (this.isCircular(category, name)) {
+      this.warn('${method}: circular', {
+        category,
+        name,
+        method,
+      })
+    }
   }
 
   /**
@@ -91,6 +135,7 @@ export class TesterFactory extends Loggable {
   createTester(name: string, node?: any, options?: any): any {
     node = node || this.node
     options = options || this.options
+    this.validateName(name, 'createTester')
     const { testerName, factory } = this.resolveFactoryName(name)
     const resolvedFactory = this[factory].bind(this)
     if (!isFunction(resolvedFactory)) {
@@ -106,6 +151,7 @@ export class TesterFactory extends Loggable {
    * @param category
    */
   resolveFactoryMapCategory(category: string) {
+    this.validateName(category, 'resolveFactoryMapCategory')
     return this.factories[category]
   }
 
@@ -123,6 +169,8 @@ export class TesterFactory extends Loggable {
   ): any {
     node = node || this.node
     options = options || this.options
+    this.validateName(category, 'createCategoryTester')
+
     const factoryCategory = this.resolveFactoryMapCategory(category)
     if (!factoryCategory) {
       this.error('Invalid factory category', {
@@ -131,6 +179,7 @@ export class TesterFactory extends Loggable {
         factoryCategory,
       })
     }
+
     const createTester = factoryCategory.createTester
     if (!isFunction(createTester)) {
       this.error(
@@ -150,6 +199,7 @@ export class TesterFactory extends Loggable {
    * @param options
    */
   createNodeTester(name: string, node?: any, options?: any): INodeTester {
+    this.validateCircular('node', name, 'createNodeTester')
     return this.createCategoryTester('node', name, node, options)
   }
 

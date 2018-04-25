@@ -5,6 +5,7 @@ import { createQueryEngine } from './query-engine'
 import { createNodeCounter } from './node-counter'
 
 export interface INodeTester {
+  shortName: string
   caption: string
   category: string
   qprops: string[]
@@ -21,6 +22,7 @@ export abstract class NodeTester extends Loggable implements INodeTester {
   queryEngine: any
   nodeCounter: any
   node: any
+  _shortName: string
 
   /**
    * Create BaseTester
@@ -30,6 +32,19 @@ export abstract class NodeTester extends Loggable implements INodeTester {
   constructor(node: any, options: any) {
     super(options)
     this.init(node)
+  }
+
+  /**
+   * short name
+   */
+  get shortName() {
+    this._shortName =
+      this._shortName ||
+      this.caption
+        .replace(/NodeTester$/, '')
+        .replace(/Tester$/, '')
+        .toLowerCase()
+    return this._shortName
   }
 
   /**
@@ -226,7 +241,7 @@ export abstract class NodeTester extends Loggable implements INodeTester {
    */
   configure() {
     const { options, node } = this
-    this.factory = createTesterFactory(node, options)
+    this.factory = createTesterFactory(this, node, options)
     this.testerRegistry = createTesterRegistry(this, options)
     this.nodeCounter = createNodeCounter(this, options)
     this.queryEngine = createQueryEngine(this, options)
