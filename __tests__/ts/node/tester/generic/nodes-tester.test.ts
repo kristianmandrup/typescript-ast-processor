@@ -30,6 +30,17 @@ describe('NodesTester', () => {
       },
     }
 
+    const queryMap = {
+      empty: {},
+      one: {
+        anyOf: 'x',
+      },
+      many: {
+        anyOf: 'x',
+        allOf: ['y', /z/],
+      },
+    }
+
     describe('node', () => {
       it('has a node', () => {
         expect(node).toBeDefined()
@@ -150,6 +161,58 @@ describe('NodesTester', () => {
           })
         })
 
+        // resolveIteratorFn(node: any, queryDetails: any): any[]
+        describe('resolveQueryExpList(node, queryDetails)', () => {
+          context('empty queryExpr', () => {
+            const resolved = tester.resolveQueryExpList(node, {
+              queryExpr: queryMap.empty,
+            })
+
+            it('is a list of 0', () => {
+              expect(resolved.length).toBe(0)
+            })
+          })
+
+          context('queryExpr has one expr', () => {
+            const resolved = tester.resolveQueryExpList(node, {
+              queryExpr: queryMap.one,
+            })
+
+            it('is a list of 1', () => {
+              expect(resolved.length).toBe(1)
+            })
+          })
+
+          context('queryExpr has multiple exprs', () => {
+            const resolved = tester.resolveQueryExpList(node, {
+              queryExpr: queryMap.many,
+            })
+
+            it('is a list of 2', () => {
+              expect(resolved.length).toBe(2)
+            })
+          })
+        })
+
+        // testNode(node: any, queryDetails: any): boolean
+        describe('testNode(node, queryDetails)', () => {
+          context('matching result', () => {
+            const tn = tester.testNode(node, { queryExpr: queryMap.one })
+
+            it('is truthy', () => {
+              expect(tn).toBeTruthy()
+            })
+          })
+
+          context('no matching result', () => {
+            const tn = tester.testNode(node, { queryExpr: queryMap.empty })
+
+            it('is falsy', () => {
+              expect(tn).toBeFalsy()
+            })
+          })
+        })
+
         describe('testItem(node, query)', () => {
           context('matching result', () => {
             const ti = tester.testItem(nodesMap.matching, query)
@@ -162,7 +225,7 @@ describe('NodesTester', () => {
           context('no matching result', () => {
             const ti = tester.testItem(nodesMap.nomatch, query)
 
-            it('is truthy', () => {
+            it('is falsy', () => {
               expect(ti).toBeFalsy()
             })
           })

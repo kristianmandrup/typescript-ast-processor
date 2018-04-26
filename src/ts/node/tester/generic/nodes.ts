@@ -1,6 +1,6 @@
 import { BaseNodeTester } from '../base'
 import { resolveArrayIteratorFindMethod } from '../util'
-import { isFunction } from 'util'
+import { isFunction, isArray } from 'util'
 
 export interface IItemTester {
   nodeQuery(node: any, query: any): any
@@ -83,7 +83,7 @@ export class NodesTester extends BaseNodeTester {
    * @param node
    * @param queryDetails
    */
-  resolveIteratorFn(node: any, queryDetails: any): any[] {
+  resolveQueryExpList(node: any, queryDetails: any): any[] {
     const { queryExpr } = queryDetails
     const queryList = Object.keys(queryExpr).map((key) => {
       const matchExprs = queryExpr[key]
@@ -102,15 +102,15 @@ export class NodesTester extends BaseNodeTester {
    */
   testNode(node: any, queryDetails: any): boolean {
     const { queryExpr, iteratorMethod } = queryDetails
-    const iteratorFn = this.resolveIteratorFn(node, queryDetails)
-    if (!isFunction(iteratorFn)) {
-      this.error('test: iteratorFn must be a function', {
-        iteratorFn,
+    const queryExpList = this.resolveQueryExpList(node, queryDetails)
+    if (!isArray(queryExpList)) {
+      this.error('test: queryExpList must be a list', {
+        queryExpList,
         queryExpr,
         iteratorMethod,
       })
     }
-    return iteratorFn[iteratorMethod]((itemQueryExpr: any) => {
+    return queryExpList[iteratorMethod]((itemQueryExpr: any) => {
       return this.testItem(node, itemQueryExpr)
     })
   }
