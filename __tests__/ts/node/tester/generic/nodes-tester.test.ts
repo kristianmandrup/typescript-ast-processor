@@ -20,6 +20,14 @@ describe('NodesTester', () => {
 
     const node = declsTester.node
     const factories = declsTester.options.factories
+    const nodesMap = {
+      matching: {
+        name: 'x',
+      },
+      nomatch: {
+        name: 'unknown',
+      },
+    }
 
     describe('init', () => {
       context('with no itemTester', () => {
@@ -80,52 +88,98 @@ describe('NodesTester', () => {
         })
       })
 
-      describe('test(query)', () => {
+      context('query', () => {
         const query = {
           names: {
             anyOf: 'x',
           },
         }
+        const nodes: any[] = []
+        const tester = new MyNodesTester(nodes, {
+          factories,
+        })
 
-        context('empty nodes', () => {
-          const nodes: any[] = []
-          const tester = new MyNodesTester(nodes, {
-            factories,
-          })
-          const test = () => tester.test(query)
+        describe('iteratorDetails(query)', () => {
+          context('details', () => {
+            // queryExpr,
+            // iteratorMethod,
+            const details = tester.iteratorDetails(query)
 
-          it('does not throw', () => {
-            expect(test).not.toThrow()
-          })
+            it('has queryExpr', () => {
+              expect(details.queryExpr).toBeDefined()
+            })
 
-          it('returns empty result', () => {
-            const result = test()
-            expect(result).toEqual({})
+            it('has iteratorMethod', () => {
+              expect(details.iteratorMethod).toBeDefined()
+            })
           })
         })
 
-        context('has matching nodes', () => {
-          const nodes: any[] = [
-            {
-              name: 'x',
-            },
-            {
-              name: 'y',
-            },
-          ]
-          const tester = new MyNodesTester(nodes, {
-            factories,
-          })
-          const test = () => tester.test(query)
+        describe('testItem(node, query)', () => {
+          context('matching result', () => {
+            const ti = tester.testItem(nodesMap.matching, query)
 
-          it('does not throw', () => {
-            expect(test).not.toThrow()
+            it('is truthy', () => {
+              expect(ti).toBeTruthy()
+            })
           })
 
-          it('returns match result', () => {
-            const result = test()
-            expect(result).toEqual({
-              name: 'x',
+          context('no matching result', () => {
+            const ti = tester.testItem(nodesMap.nomatch, query)
+
+            it('is truthy', () => {
+              expect(ti).toBeFalsy()
+            })
+          })
+        })
+
+        describe('test(query)', () => {
+          const query = {
+            names: {
+              anyOf: 'x',
+            },
+          }
+
+          context('empty nodes', () => {
+            const nodes: any[] = []
+            const tester = new MyNodesTester(nodes, {
+              factories,
+            })
+            const test = () => tester.test(query)
+
+            it('does not throw', () => {
+              expect(test).not.toThrow()
+            })
+
+            it('returns empty result', () => {
+              const result = test()
+              expect(result).toEqual({})
+            })
+          })
+
+          context('has matching nodes', () => {
+            const nodes: any[] = [
+              {
+                name: 'x',
+              },
+              {
+                name: 'y',
+              },
+            ]
+            const tester = new MyNodesTester(nodes, {
+              factories,
+            })
+            const test = () => tester.test(query)
+
+            it('does not throw', () => {
+              expect(test).not.toThrow()
+            })
+
+            it('returns match result', () => {
+              const result = test()
+              expect(result).toEqual({
+                name: 'x',
+              })
             })
           })
         })

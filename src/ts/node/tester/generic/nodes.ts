@@ -49,19 +49,31 @@ export class NodesTester extends BaseNodeTester {
   }
 
   /**
+   *
+   * @param query
+   */
+  iteratorDetails(query: any): any {
+    const resolved = resolveArrayIteratorFindMethod(query)
+    if (!resolved) return true
+    const { queryKey, iteratorMethod } = resolved
+    const queryExpr = query[queryKey]
+    return {
+      queryExpr,
+      iteratorMethod,
+    }
+  }
+
+  /**
    * Query list using query
    * @param query
    */
   test(query: any): any {
-    const resolved = resolveArrayIteratorFindMethod(query)
-    if (!resolved) return true
-    const { queryKey, iteratorMethod } = resolved
-
-    const queryExpr = query[queryKey]
+    const { queryExpr, iteratorMethod } = this.iteratorDetails(query)
     if (!queryExpr) return false
 
     return this.nodes.map((node) => {
-      return queryExpr[iteratorMethod]((query: any) => {
+      const iteratorFn = queryExpr[iteratorMethod]
+      return iteratorFn((query: any) => {
         return this.testItem(node, query)
       })
     })
