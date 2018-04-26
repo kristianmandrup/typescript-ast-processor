@@ -129,6 +129,20 @@ Then make tests pass for `BaseNodeTester`
 
 `$ jest __tests__/ts/node/tester/base/base.test.ts`
 
+### Factories
+
+`testerFactoryFor` - finds the node tester factory function to be used
+`createTester` - creates/builds a node tester
+
+`$ jest __tests__/ts/node/tester/factories/node-factories.test.ts`
+
+### Generic list of nodes tester
+
+Some nodes contain one or more lists of child nodes that can be matched by a query.
+The `NodesTester` is designed to query such node lists with a (generic) query expression
+
+`$ jest __tests__/ts/node/tester/generic/nodes-tester.test.ts`
+
 ### Occurrence node tester
 
 Make sure tests pass for occurrence node tester

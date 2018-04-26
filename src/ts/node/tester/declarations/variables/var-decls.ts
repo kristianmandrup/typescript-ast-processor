@@ -15,7 +15,6 @@ export class VariableDeclarationNodesTester extends BaseNodeTester {
 
   constructor(node: any, options: any) {
     super(node, options)
-    this.init(node)
   }
 
   /**
@@ -23,6 +22,7 @@ export class VariableDeclarationNodesTester extends BaseNodeTester {
    * @param node
    */
   init(node: any) {
+    super.init(node)
     this.declarations = node.declarations || node.parent.declarations || node
     this.varDeclarationTesters = this.declarations.map(
       this.createVariableDeclarationTester.bind(this),

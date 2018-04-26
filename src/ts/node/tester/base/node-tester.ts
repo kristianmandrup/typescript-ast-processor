@@ -147,11 +147,14 @@ export abstract class NodeTester extends Loggable implements INodeTester {
   validateInit() {
     const { node } = this
     if (!node) {
-      this.error(`validateInit: missing node`, {
-        node,
-        options: this.options,
-        ctx: this,
-      })
+      this.error(
+        `validateInit: missing node (note: init must take node argument and please call super.init(node) )`,
+        {
+          node,
+          options: this.options,
+          ctx: this,
+        },
+      )
     }
   }
 

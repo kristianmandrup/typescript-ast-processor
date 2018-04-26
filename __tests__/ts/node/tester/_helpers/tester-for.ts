@@ -1,4 +1,6 @@
 import { node, loadAstNode } from '../../'
+import { isStr } from '../../../../../src/ts/util'
+import { isFunction } from 'util'
 
 const { factories } = node.tester
 
@@ -72,8 +74,13 @@ function resolveCategory(type: string): string | undefined {
  */
 function resolveFactory(opts: any = {}) {
   let { factory, factoryName, type } = opts
+  if (isStr(factory)) {
+    factoryName = factory
+  }
   factoryName = factoryName || type
-  factory = factory || factories.testerFactoryFor(factoryName, factories.map)
+  factory = isFunction(factory)
+    ? factory
+    : factories.testerFactoryFor(factoryName, factories.map)
   if (!factory) {
     error(`No such factory in map: ${type}`, {
       type,

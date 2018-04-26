@@ -27,9 +27,9 @@ export class NodesTester extends BaseNodeTester {
     super(node, options)
   }
 
-  init() {
-    super.init()
-    const { options, node } = this
+  init(node: any) {
+    super.init(node)
+    const { options } = this
     const key = options.key
     const items = Array.isArray(node) ? node : options.items
     if (items) {
@@ -39,9 +39,10 @@ export class NodesTester extends BaseNodeTester {
       this.nodes = this.node[key]
     }
     if (!this.nodes) {
-      this.error(`ListTester: No nodes to iterate`, {
+      this.error(`init: No nodes to iterate`, {
         options,
         node,
+        nodes: this.nodes,
       })
     }
     this.itemTester = options.itemTester

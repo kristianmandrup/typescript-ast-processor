@@ -2,19 +2,20 @@ import { log, context, testerFor } from '../_imports'
 import { NodesTester } from '../../../../../src/ts/node/tester/generic'
 
 class MyNodesTester extends NodesTester {
-  constructor(node: any, options: any) {
-    super(node, options)
-  }
+  // constructor(node: any, options: any) {
+  //   super(node, options)
+  // }
 }
 
 describe('NodesTester', () => {
   context('identifier file', () => {
     const declsTester: any = testerFor({
       fileName: 'identifier',
-      type: 'delc.vars',
+      type: 'identifier',
+      factory: 'decl.vars',
       traverse: (statements: any[]) => {
         const node = statements[0]
-        return node.declarationList.declarations
+        return node.declarationList
       },
     })
 
@@ -29,10 +30,43 @@ describe('NodesTester', () => {
       },
     }
 
+    describe('node', () => {
+      it('has a node', () => {
+        expect(node).toBeDefined()
+      })
+    })
+
+    describe('factories', () => {
+      it('has a factories map', () => {
+        expect(typeof factories).toBe('object')
+      })
+    })
+
     describe('init', () => {
-      context('with no itemTester', () => {
+      const node = declsTester.node
+      const items = [{ name: 'x' }]
+
+      describe.only('node', () => {
+        it('has a node', () => {
+          expect(node).toBeDefined()
+        })
+      })
+
+      context.only('node not a list and no items', () => {
+        it('fails on initialization', () => {
+          const createTester = () =>
+            new MyNodesTester(node, {
+              factories,
+            })
+
+          expect(createTester).toThrow()
+        })
+      })
+
+      context.only('with items but no itemTester', () => {
         const tester = new MyNodesTester(node, {
           factories,
+          items,
         })
 
         it('inits props', () => {
@@ -51,6 +85,7 @@ describe('NodesTester', () => {
       context('with itemTester', () => {
         const tester = new MyNodesTester(node, {
           factories,
+          items,
         })
 
         it('inits props', () => {
