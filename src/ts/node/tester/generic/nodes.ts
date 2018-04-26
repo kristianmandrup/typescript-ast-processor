@@ -1,10 +1,12 @@
 import { BaseNodeTester } from '../base'
 import { resolveArrayIteratorFindMethod } from '../util'
+import { isFunction } from 'util'
 
 export interface IItemTester {
   nodeQuery(node: any, query: any): any
   forNode(node: any): IItemTester
   test(item: any): boolean
+  testNode(node: any, queryDetails: any): boolean
 }
 
 /**
@@ -58,6 +60,11 @@ export class NodesTester extends BaseNodeTester {
     if (!resolved) return true
     const { queryKey, iteratorMethod } = resolved
     const queryExpr = query[queryKey]
+    this.log('iteratorDetails', {
+      resolved,
+      queryKey,
+      queryExpr,
+    })
     return {
       queryExpr,
       iteratorMethod,
@@ -65,27 +72,73 @@ export class NodesTester extends BaseNodeTester {
   }
 
   /**
+   * Turns query of the form: { anyOf: 'x', allOf: [ 'y', /z/ ] } }
+   * Into: [{
+   *   key: 'anyOf',
+   *   matchExprs: 'x',
+   * }, {
+   *   key: 'anyOf',
+   *   matchExprs: ['y', /z/],
+   * }]
+   * @param node
+   * @param queryDetails
+   */
+  resolveIteratorFn(node: any, queryDetails: any): any[] {
+    const { queryExpr } = queryDetails
+    const queryList = Object.keys(queryExpr).map((key) => {
+      const matchExprs = queryExpr[key]
+      return {
+        key,
+        matchExprs,
+      }
+    })
+    return queryList
+  }
+
+  /**
+   * Test a single node using query details
+   * @param node
+   * @param queryDetails
+   */
+  testNode(node: any, queryDetails: any): boolean {
+    const { queryExpr, iteratorMethod } = queryDetails
+    const iteratorFn = this.resolveIteratorFn(node, queryDetails)
+    if (!isFunction(iteratorFn)) {
+      this.error('test: iteratorFn must be a function', {
+        iteratorFn,
+        queryExpr,
+        iteratorMethod,
+      })
+    }
+    return iteratorFn[iteratorMethod]((itemQueryExpr: any) => {
+      return this.testItem(node, itemQueryExpr)
+    })
+  }
+
+  /**
    * Query list using query
    * @param query
    */
   test(query: any): any {
-    const { queryExpr, iteratorMethod } = this.iteratorDetails(query)
-    if (!queryExpr) return false
-
+    const queryDetails = this.iteratorDetails(query)
+    if (!queryDetails.queryExpr) return false
     return this.nodes.map((node) => {
-      const iteratorFn = queryExpr[iteratorMethod]
-      return iteratorFn((query: any) => {
-        return this.testItem(node, query)
-      })
+      return this.testNode(node, queryDetails)
     })
   }
 
   /**
    * Test a single item of the list using an itemTester or custom tester function
+   *
+   * Query of the form:
+   * {
+   *   key: 'anyOf',
+   *   matchExprs: ['y', /z/],
+   * }
    * @param node the item node to test
    * @param queryExpr the query to execute on item node
    */
-  testItem(node: any, query: any) {
-    return this.itemNodeQueryFn(node, query)
+  testItem(node: any, itemQueryExpr: any) {
+    return this.itemNodeQueryFn(node, itemQueryExpr)
   }
 }

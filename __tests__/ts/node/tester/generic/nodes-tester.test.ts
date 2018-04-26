@@ -46,13 +46,13 @@ describe('NodesTester', () => {
       const node = declsTester.node
       const items = [{ name: 'x' }]
 
-      describe.only('node', () => {
+      describe('node', () => {
         it('has a node', () => {
           expect(node).toBeDefined()
         })
       })
 
-      context.only('node not a list and no items', () => {
+      context('node not a list and no items', () => {
         it('fails on initialization', () => {
           const createTester = () =>
             new MyNodesTester(node, {
@@ -63,7 +63,7 @@ describe('NodesTester', () => {
         })
       })
 
-      context.only('with items but no itemTester', () => {
+      context('with items but no itemTester', () => {
         const tester = new MyNodesTester(node, {
           factories,
           items,
@@ -172,6 +172,7 @@ describe('NodesTester', () => {
           const query = {
             names: {
               anyOf: 'x',
+              allOf: ['y'],
             },
           }
 
