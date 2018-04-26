@@ -1,6 +1,5 @@
+import { isArray } from 'util'
 import { BaseNodeTester } from '../base'
-import { resolveArrayIteratorFindMethod } from '../util'
-import { isFunction, isArray } from 'util'
 
 export interface IItemTester {
   nodeQuery(node: any, query: any): any
@@ -14,61 +13,24 @@ export interface IItemTester {
  * @param node
  * @param options
  */
-export function createNodesTester(node: any, options: any) {
-  return new NodesTester(node, options)
+export function createSingleNodeTester(tester: any, node: any, options: any) {
+  return new SingleNodeTester(tester, node, options)
 }
 
-export class NodesTester extends BaseNodeTester {
-  itemTester: IItemTester
-  tester: Function
-  key: string
-  nodes: any[]
-  itemNodeQueryFn: any // Function
+export class SingleNodeTester extends BaseNodeTester {
+  tester: any
 
-  constructor(node: any, options: any) {
+  constructor(tester: any, node: any, options: any) {
     super(node, options)
+    this.tester = tester
   }
 
   init(node: any) {
     super.init(node)
-    const { options } = this
-    const key = options.key
-    const items = Array.isArray(node) ? node : options.items
-    if (items) {
-      this.nodes = items
-    } else if (key) {
-      this.key = key
-      this.nodes = this.node[key]
-    }
-    if (!this.nodes) {
-      this.error(`init: No nodes to iterate`, {
-        options,
-        node,
-        nodes: this.nodes,
-      })
-    }
-    this.itemTester = options.itemTester
-    this.itemNodeQueryFn = this.itemTester || this.tester
   }
 
-  /**
-   *
-   * @param query
-   */
-  iteratorDetails(query: any): any {
-    const resolved = resolveArrayIteratorFindMethod(query)
-    if (!resolved) return true
-    const { queryKey, iteratorMethod } = resolved
-    const queryExpr = query[queryKey]
-    this.log('iteratorDetails', {
-      resolved,
-      queryKey,
-      queryExpr,
-    })
-    return {
-      queryExpr,
-      iteratorMethod,
-    }
+  get itemNodeQueryFn(): Function {
+    return this.tester.itemTester || this.tester.tester
   }
 
   /**
@@ -100,7 +62,8 @@ export class NodesTester extends BaseNodeTester {
    * @param node
    * @param queryDetails
    */
-  testNode(node: any, queryDetails: any): boolean {
+  test(queryDetails: any): boolean {
+    const { node } = this
     const { queryExpr, iteratorMethod } = queryDetails
     const queryExpList = this.resolveQueryExpList(node, queryDetails)
     if (!isArray(queryExpList)) {
@@ -112,18 +75,6 @@ export class NodesTester extends BaseNodeTester {
     }
     return queryExpList[iteratorMethod]((itemQueryExpr: any) => {
       return this.testItem(node, itemQueryExpr)
-    })
-  }
-
-  /**
-   * Query list using query
-   * @param query
-   */
-  test(query: any): any {
-    const queryDetails = this.iteratorDetails(query)
-    if (!queryDetails.queryExpr) return false
-    return this.nodes.map((node) => {
-      return this.testNode(node, queryDetails)
     })
   }
 

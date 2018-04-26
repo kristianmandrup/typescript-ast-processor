@@ -1,7 +1,10 @@
-import { log, context, testerFor } from '../_imports'
-import { NodesTester } from '../../../../../src/ts/node/tester/generic'
+import { context, testerFor } from '../_imports'
+import {
+  // createNodeListTester,
+  NodeListTester,
+} from '../../../../../src/ts/node/tester/generic'
 
-class MyNodesTester extends NodesTester {
+class MyNodesTester extends NodeListTester {
   // constructor(node: any, options: any) {
   //   super(node, options)
   // }
@@ -21,14 +24,6 @@ describe('NodesTester', () => {
 
     const node = declsTester.node
     const factories = declsTester.options.factories
-    const nodesMap = {
-      matching: {
-        name: 'x',
-      },
-      nomatch: {
-        name: 'unknown',
-      },
-    }
 
     const queryMap = {
       empty: {},
@@ -87,16 +82,15 @@ describe('NodesTester', () => {
         it('has itemTester function', () => {
           expect(tester.itemTester).toBeUndefined()
         })
-
-        it('itemNodeQueryFn is tester function', () => {
-          expect(tester.itemNodeQueryFn).toBe(tester.tester)
-        })
       })
 
       context('with itemTester', () => {
         const tester = new MyNodesTester(node, {
           factories,
           items,
+          itemTester(node: any, query: any) {
+            return true
+          },
         })
 
         it('inits props', () => {
@@ -105,10 +99,6 @@ describe('NodesTester', () => {
 
         it('has itemTester function', () => {
           expect(typeof tester.itemTester).toBe('function')
-        })
-
-        it('itemNodeQueryFn is itemTester function', () => {
-          expect(tester.itemNodeQueryFn).toBe(tester.itemTester)
         })
       })
 
@@ -161,39 +151,6 @@ describe('NodesTester', () => {
           })
         })
 
-        // resolveIteratorFn(node: any, queryDetails: any): any[]
-        describe('resolveQueryExpList(node, queryDetails)', () => {
-          context('empty queryExpr', () => {
-            const resolved = tester.resolveQueryExpList(node, {
-              queryExpr: queryMap.empty,
-            })
-
-            it('is a list of 0', () => {
-              expect(resolved.length).toBe(0)
-            })
-          })
-
-          context('queryExpr has one expr', () => {
-            const resolved = tester.resolveQueryExpList(node, {
-              queryExpr: queryMap.one,
-            })
-
-            it('is a list of 1', () => {
-              expect(resolved.length).toBe(1)
-            })
-          })
-
-          context('queryExpr has multiple exprs', () => {
-            const resolved = tester.resolveQueryExpList(node, {
-              queryExpr: queryMap.many,
-            })
-
-            it('is a list of 2', () => {
-              expect(resolved.length).toBe(2)
-            })
-          })
-        })
-
         // testNode(node: any, queryDetails: any): boolean
         describe('testNode(node, queryDetails)', () => {
           context('matching result', () => {
@@ -212,25 +169,6 @@ describe('NodesTester', () => {
             })
           })
         })
-
-        describe('testItem(node, query)', () => {
-          context('matching result', () => {
-            const ti = tester.testItem(nodesMap.matching, query)
-
-            it('is truthy', () => {
-              expect(ti).toBeTruthy()
-            })
-          })
-
-          context('no matching result', () => {
-            const ti = tester.testItem(nodesMap.nomatch, query)
-
-            it('is falsy', () => {
-              expect(ti).toBeFalsy()
-            })
-          })
-        })
-
         describe('test(query)', () => {
           const query = {
             names: {
