@@ -5,6 +5,7 @@ import { queryNode } from '../tester/util/query'
 
 export interface IDetailsTester {
   forNode(node: any): IDetailsTester
+  nodeQuery(node: any, query: any): any
   matches(options?: any): any
   is(name: string, options?: any): boolean
   test(query: any, options?: any): any // boolean ??
@@ -67,6 +68,15 @@ export class BaseDetailsTester extends Loggable {
   forNode(node: any) {
     this.node = node
     return this
+  }
+
+  /**
+   * Perform node query
+   * @param node
+   * @param query
+   */
+  nodeQuery(node: any, query: any) {
+    return this.forNode(node).test(query)
   }
 
   /**

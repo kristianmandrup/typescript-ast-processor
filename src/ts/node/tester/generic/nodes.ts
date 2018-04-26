@@ -2,6 +2,7 @@ import { BaseNodeTester } from '../base'
 import { resolveArrayIteratorFindMethod } from '../util'
 
 export interface IItemTester {
+  nodeQuery(node: any, query: any): any
   forNode(node: any): IItemTester
   test(item: any): boolean
 }
@@ -20,9 +21,15 @@ export class NodesTester extends BaseNodeTester {
   tester: Function
   key: string
   nodes: any[]
+  itemNodeQueryFn: any // Function
 
   constructor(node: any, options: any) {
     super(node, options)
+  }
+
+  init() {
+    super.init()
+    const { options, node } = this
     const key = options.key
     const items = Array.isArray(node) ? node : options.items
     if (items) {
@@ -37,8 +44,8 @@ export class NodesTester extends BaseNodeTester {
         node,
       })
     }
-
     this.itemTester = options.itemTester
+    this.itemNodeQueryFn = this.itemTester || this.tester
   }
 
   /**
@@ -66,8 +73,6 @@ export class NodesTester extends BaseNodeTester {
    * @param queryExpr the query to execute on item node
    */
   testItem(node: any, query: any) {
-    return this.itemTester
-      ? this.itemTester.forNode(node).test(query)
-      : this.tester(node, query)
+    return this.itemNodeQueryFn(node, query)
   }
 }
