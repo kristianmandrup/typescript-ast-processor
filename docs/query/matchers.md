@@ -1,6 +1,7 @@
 # Matchers
 
-See `node/query/matcher` folder
+* For code, see `src/node/query/matcher` folder
+* For usage examples, see tests in `__tests__/node/query/matcher` folder
 
 ## Factory functions
 

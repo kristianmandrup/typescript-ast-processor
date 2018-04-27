@@ -1,6 +1,7 @@
 # Query
 
-See `node/query` folder
+* For code, see `src/node/query` folder
+* For usage examples, see tests in `__tests__/node/query` folder
 
 ## Boolean query combinators
 
