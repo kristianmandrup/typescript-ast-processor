@@ -1,25 +1,9 @@
-import {
-  createFunctionMatcher,
-  createStringMatcher,
-  createNumberMatcher,
-  createListMatcher,
-  createRangeMatcher,
-  createRegExprMatcher,
-} from './exports'
 import { toList, isArray } from '../../../util'
 import { findDerived } from 'find-derived'
 import { Loggable } from '../../../loggable'
 import { isRegExp } from 'util'
-import { BaseMatcher } from './base'
-
-const matcherTypeFactoryMap = {
-  string: createStringMatcher,
-  function: createFunctionMatcher,
-  number: createNumberMatcher,
-  range: createRangeMatcher,
-  regexp: createRegExprMatcher,
-  array: createListMatcher,
-}
+import { IValueMatcher } from './base'
+import { matcherTypeFactoryMap } from './factory-map'
 
 export function createMatcherSelector(options: any = {}) {
   return new MatcherSelector(options)
@@ -52,7 +36,7 @@ export class MatcherSelector extends Loggable {
    * determine type, then try to create each matcher for that type until one is valid
    * @param value
    */
-  select(value: any) {
+  select(value: any): IValueMatcher {
     const type = this.resolveType(value)
     const typeMatcherFactories = this.matcherTypeFactoryMap[type]
     if (!typeMatcherFactories) {
@@ -84,9 +68,9 @@ export class MatcherSelector extends Loggable {
    * @param factoryFn
    * @param value
    */
-  testMatcherFactory(factoryFn: Function, value: any): BaseMatcher | boolean {
+  testMatcherFactory(factoryFn: Function, value: any): IValueMatcher | boolean {
     try {
-      return factoryFn(value)
+      return factoryFn(value, this.options)
     } catch (e) {
       return false
     }

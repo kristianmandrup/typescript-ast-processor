@@ -1,6 +1,10 @@
 import { Loggable } from '../../../loggable'
 
-export class BaseMatcher extends Loggable {
+export interface IValueMatcher {
+  match(value: any): boolean
+}
+
+export class BaseMatcher extends Loggable implements IValueMatcher {
   expr: any
 
   constructor(expr: any, options: any = {}) {
@@ -33,7 +37,7 @@ export class BaseMatcher extends Loggable {
    * @param value the value to match
    * @returns { boolean }
    */
-  match(value: any) {
+  match(value: any): boolean {
     return true
   }
 }
