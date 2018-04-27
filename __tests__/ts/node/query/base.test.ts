@@ -1,7 +1,13 @@
 import { node, context } from '../'
 
 const { query } = node
-const { createAnyQueryMatcher } = query
+const { BaseQueryMatcher } = query
+
+function createMyQueryMatcher(opts = {}) {
+  return new MyQueryMatcher(opts)
+}
+
+class MyQueryMatcher extends BaseQueryMatcher {}
 
 describe('node query', () => {
   describe('createAnyQueryMatcher', () => {
@@ -12,7 +18,7 @@ describe('node query', () => {
       const key = 'x'
       const value = 42
 
-      const qm = createAnyQueryMatcher({
+      const qm = createMyQueryMatcher({
         value,
         key,
         node,
@@ -85,8 +91,13 @@ describe('node query', () => {
           context('node has NO matching property', () => {
             const setKey = () => qm.setKey('unknown')
 
-            it('throws', () => {
-              expect(setKey).toThrow()
+            it('does not throw', () => {
+              expect(setKey).not.toThrow()
+            })
+
+            it('does not set key', () => {
+              setKey()
+              expect(qm.key).toBeUndefined()
             })
           })
         })
@@ -101,10 +112,10 @@ describe('node query', () => {
           })
 
           context('value without matcher', () => {
-            const matcher = qm.selectMatcher({})
+            const select = () => qm.selectMatcher({})
 
-            it('is selected', () => {
-              expect(matcher).toBeUndefined()
+            it('throws', () => {
+              expect(select).toThrow()
             })
           })
         })
@@ -137,7 +148,10 @@ describe('node query', () => {
         describe('normalizeQuery(query)', () => {
           it('normalizes query', () => {
             const normalized = qm.normalizeQuery(query)
-            expect(normalized).toEqual('x')
+            expect(normalized).toEqual({
+              matchers: 'x',
+              name: 'matches',
+            })
           })
         })
 

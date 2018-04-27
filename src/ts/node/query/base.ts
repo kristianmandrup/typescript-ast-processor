@@ -86,7 +86,7 @@ export class BaseQueryMatcher extends Loggable implements IQueryMatcher {
    */
   selectMatcher(value?: any): IValueMatcher | undefined {
     value = value || this.value
-    return createMatcherSelector(this.options).select(this.value)
+    return createMatcherSelector(this.options).select(value)
   }
 
   validateMatcher(matcher: any, ctx: any = {}): any {
@@ -114,7 +114,12 @@ export class BaseQueryMatcher extends Loggable implements IQueryMatcher {
    * @param query
    */
   normalizeQuery(query: any): IQuery {
-    return query[this.queryProp] || query
+    const matchers = query[this.queryProp] || query.matchers
+    const name = query.name || this.queryProp
+    return {
+      name,
+      matchers,
+    }
   }
 
   /**
