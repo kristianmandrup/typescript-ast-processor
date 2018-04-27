@@ -58,12 +58,18 @@ export class BaseQueryMatcher extends Loggable implements IQueryMatcher {
     return this
   }
 
+  resolveKey(key: string): any {
+    const value = this.node[key]
+    return isFunction(value) ? value() : value
+  }
+
   /**
    * Set key for node to be used to determine value to be used for query
    * @param value
    */
   setKey(key: any): IQueryMatcher {
-    this.setValue(this.node[key])
+    const value = this.resolveKey(key)
+    this.setValue(value)
     return this
   }
 

@@ -1,18 +1,18 @@
 import { node, context } from '../'
 
 const { query } = node
-const { createAnyQueryMatcher } = query
+const { createExactQueryMatcher } = query
 
 describe('node query', () => {
-  describe('createAnyQueryMatcher', () => {
+  describe('createExactQueryMatcher', () => {
     context('value: 42', () => {
-      const qm = createAnyQueryMatcher({
+      const qm = createExactQueryMatcher({
         value: 42,
       })
 
-      context('query all of: 42, 42', () => {
+      context('query exactly: 42', () => {
         const query = {
-          allOf: [42, 42],
+          exactly: 42,
         }
 
         it('matches', () => {
@@ -21,9 +21,9 @@ describe('node query', () => {
         })
       })
 
-      context('query all of: 39, 42', () => {
+      context('query exactly: 39', () => {
         const query = {
-          allOf: [39, 42],
+          exactly: 39,
         }
 
         it('does not match', () => {
