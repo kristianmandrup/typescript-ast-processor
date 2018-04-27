@@ -2,8 +2,8 @@ import { isRegExp } from '../../../util'
 
 import { BaseMatcher } from './base'
 
-export function createRegExprMatcher(expr: any, options: any = {}) {
-  return new RegExprMatcher(expr, options)
+export function createRegExprMatcher(options: any = {}, expr?: any) {
+  return new RegExprMatcher(options, expr)
 }
 
 export class RegExprMatcher extends BaseMatcher {

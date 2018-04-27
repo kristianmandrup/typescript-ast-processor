@@ -75,7 +75,7 @@ export class MatcherSelector extends Loggable {
    */
   testMatcherFactory(factoryFn: Function, value: any): IValueMatcher | boolean {
     try {
-      return factoryFn(value, this.options)
+      return factoryFn(this.options)
     } catch (e) {
       return false
     }

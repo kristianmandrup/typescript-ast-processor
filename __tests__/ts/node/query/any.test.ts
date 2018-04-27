@@ -10,25 +10,36 @@ describe('node query', () => {
         value: 42,
       })
 
-      context('query any of: 39, 42', () => {
+      context('query: anyOf: [39, 42]', () => {
         const query = {
           anyOf: [39, 42],
         }
 
-        it('matches', () => {
-          const result = qm.query(query)
-          expect(result).toBeTruthy()
+        describe('match', () => {
+          it('matches', () => {
+            const result = qm.match(query)
+            expect(result).toBeTruthy()
+          })
+        })
+
+        describe('match with value: 45', () => {
+          it('does not match', () => {
+            const result = qm.match(query, 45)
+            expect(result).toBeFalsy()
+          })
         })
       })
 
-      context('query any of: 39, 38', () => {
+      context('query anyOf: [39, 38]', () => {
         const query = {
           anyOf: [39, 38],
         }
 
-        it('does not match', () => {
-          const result = qm.query(query)
-          expect(result).toBeFalsy()
+        describe('match', () => {
+          it('does not match', () => {
+            const result = qm.match(query)
+            expect(result).toBeFalsy()
+          })
         })
       })
     })

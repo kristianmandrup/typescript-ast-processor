@@ -1,12 +1,26 @@
-import { BaseMatcher } from './base'
-import { isFunction } from 'util'
+import { BaseMatcher, IValueMatcher } from './base'
+import { createMatcherSelector } from './selector'
 
-export function createListMatcher(expr: any, options: any = {}) {
-  return new ListMatcher(expr, options)
+export function createListMatcher(options: any = {}, matcher?: any) {
+  return new ListMatcher(options, matcher)
 }
 
 export class ListMatcher extends BaseMatcher {
-  matcher: BaseMatcher
+  matcher: IValueMatcher | undefined
+
+  init() {
+    super.init()
+    this.matcher = this.selectMatcher(this.expr)
+  }
+
+  /**
+   * Select matcher to be used for query, based on type of expr
+   * @param expr
+   */
+  selectMatcher(expr?: any): IValueMatcher | undefined {
+    expr = expr || this.expr
+    return createMatcherSelector(this.options).select(expr)
+  }
 
   /**
    * Check if valid list iterator
@@ -41,7 +55,7 @@ export class ListMatcher extends BaseMatcher {
    * Determine if expression is valid for this matcher
    */
   isValid() {
-    return isFunction(this.expr)
+    return true
   }
 
   /**
@@ -49,8 +63,10 @@ export class ListMatcher extends BaseMatcher {
    * @param list
    */
   match(list: any[]) {
+    const { matcher } = this
+    if (!matcher) return false
     return list[this.iterator]((value: any) => {
-      return this.matcher.match(value)
+      return matcher.match(value)
     })
   }
 }

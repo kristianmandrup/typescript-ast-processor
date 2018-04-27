@@ -8,7 +8,7 @@ describe('value query', () => {
     context('match: x with /x/', () => {
       const expr = /x/
 
-      const matcher = createListMatcher(expr, {})
+      const matcher = createListMatcher({ expr })
       const result = matcher.match(['x', 'y'])
 
       it('matches', () => {
@@ -19,7 +19,7 @@ describe('value query', () => {
     context('match: x with /xa/', () => {
       const expr = /xa/
 
-      const matcher = createListMatcher(expr, {})
+      const matcher = createListMatcher({ expr })
       const result = matcher.match(['x', 'y'])
 
       it('no match', () => {

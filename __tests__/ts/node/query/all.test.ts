@@ -1,34 +1,37 @@
 import { node, context } from '../'
 
 const { query } = node
-const { createAnyQueryMatcher } = query
+const { createAllQueryMatcher } = query
 
 describe('node query', () => {
-  describe('createAnyQueryMatcher', () => {
+  describe('createAllQueryMatcher', () => {
     context('value: 42', () => {
-      const qm = createAnyQueryMatcher({
+      const qm = createAllQueryMatcher({
         value: 42,
       })
 
-      context('query all of: 42, 42', () => {
+      context('match: allOf: [42, 42]', () => {
         const query = {
           allOf: [42, 42],
         }
 
-        it('matches', () => {
-          const result = qm.query(query)
-          expect(result).toBeTruthy()
+        describe('match', () => {
+          it('matches', () => {
+            const result = qm.match(query)
+            expect(result).toBeTruthy()
+          })
         })
       })
 
-      context('query all of: 39, 42', () => {
+      context('match: all of: 39, 42', () => {
         const query = {
           allOf: [39, 42],
         }
-
-        it('does not match', () => {
-          const result = qm.query(query)
-          expect(result).toBeFalsy()
+        describe('match', () => {
+          it('does not match', () => {
+            const result = qm.match(query)
+            expect(result).toBeFalsy()
+          })
         })
       })
     })

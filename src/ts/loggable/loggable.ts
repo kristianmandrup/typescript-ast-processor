@@ -1,4 +1,5 @@
 import { createLogger } from './logger'
+import { isObject } from '../util'
 
 interface ILogger {
   log: Function
@@ -8,6 +9,11 @@ interface ILogger {
 
 const defaults = {
   logOn: true,
+}
+
+function error(msg: string, data: any) {
+  data ? console.error(msg, data) : console.error(msg)
+  throw new Error(msg)
 }
 
 export interface ILoggable {
@@ -24,7 +30,12 @@ export class Loggable implements ILoggable {
    * @constructor
    * @param options xtra options, such as optional logger override and logOn option
    */
-  constructor(options: any) {
+  constructor(options: any = {}) {
+    if (!isObject(options)) {
+      error('invalid loggable options', {
+        options,
+      })
+    }
     this.options = options
     this.logOn = options.logOn || defaults.logOn
     this.logger = this.createLogger()

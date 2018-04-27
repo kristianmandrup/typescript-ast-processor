@@ -8,7 +8,9 @@ describe('value query', () => {
     context('match: x with /x/', () => {
       const expr = /x/
 
-      const matcher = createRegExprMatcher(expr, {})
+      const matcher = createRegExprMatcher({
+        expr,
+      })
       const result = matcher.match('x')
 
       it('matches', () => {
@@ -19,7 +21,9 @@ describe('value query', () => {
     context('match: x with /xa/', () => {
       const expr = /xa/
 
-      const matcher = createRegExprMatcher(expr, {})
+      const matcher = createRegExprMatcher({
+        expr,
+      })
       const result = matcher.match('x')
 
       it('no match', () => {

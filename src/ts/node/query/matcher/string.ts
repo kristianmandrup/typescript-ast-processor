@@ -1,7 +1,8 @@
 import { BaseMatcher } from './base'
 import { isStr } from '../../../util'
-export function createStringMatcher(expr: any, options: any = {}) {
-  return new StringMatcher(expr, options)
+
+export function createStringMatcher(options: any = {}, expr?: any) {
+  return new StringMatcher(options, expr)
 }
 
 export class StringMatcher extends BaseMatcher {

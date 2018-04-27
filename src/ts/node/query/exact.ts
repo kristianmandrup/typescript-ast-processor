@@ -20,7 +20,11 @@ export class ExactQueryMatcher extends BaseQueryMatcher {
    * @param query
    * @param value
    */
-  match(matcher: IValueMatcher, value?: any): boolean {
-    return matcher.match(value)
+  match(query: any, value?: any): boolean {
+    query = this.normalizeQuery(query)
+    value = value || this.value
+    const { matchers } = query
+    const result = this.resolveMatchResult(matchers, value)
+    return Boolean(result)
   }
 }

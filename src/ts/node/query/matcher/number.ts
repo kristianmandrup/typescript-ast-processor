@@ -1,7 +1,7 @@
 import { BaseMatcher } from './base'
 
-export function createNumberMatcher(expr: any, options: any = {}) {
-  return new NumberMatcher(expr, options)
+export function createNumberMatcher(options: any = {}, expr?: any) {
+  return new NumberMatcher(options, expr)
 }
 
 export class NumberMatcher extends BaseMatcher {
@@ -21,10 +21,6 @@ export class NumberMatcher extends BaseMatcher {
    */
   match(value: any, expr?: any) {
     expr = expr || this.expr
-    this.log('match', {
-      value,
-      expr,
-    })
     return this.expr === value
   }
 }

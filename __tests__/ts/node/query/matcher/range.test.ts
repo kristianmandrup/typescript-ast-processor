@@ -10,7 +10,9 @@ describe('value query', () => {
         min: 42,
       }
 
-      const matcher = createRangeMatcher(expr, {})
+      const matcher = createRangeMatcher({
+        expr,
+      })
       const result = matcher.match(42)
 
       it('matches', () => {
@@ -24,7 +26,9 @@ describe('value query', () => {
         max: 45,
       }
 
-      const matcher = createRangeMatcher(expr, {})
+      const matcher = createRangeMatcher({
+        expr,
+      })
       const result = matcher.match(42)
 
       it('matches', () => {
@@ -38,7 +42,9 @@ describe('value query', () => {
         max: 41,
       }
 
-      const matcher = createRangeMatcher(expr, {})
+      const matcher = createRangeMatcher({
+        expr,
+      })
       const result = matcher.match(42)
 
       it('no match', () => {

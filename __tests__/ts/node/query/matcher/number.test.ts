@@ -8,7 +8,9 @@ describe('value query', () => {
     context('match: 42 with 42', () => {
       const expr = 42
 
-      const matcher = createNumberMatcher(expr, {})
+      const matcher = createNumberMatcher({
+        expr,
+      })
       const result = matcher.match(42)
 
       it('matches', () => {
@@ -19,7 +21,7 @@ describe('value query', () => {
     context('match: 43 with 42', () => {
       const expr = 43
 
-      const matcher = createNumberMatcher(expr, {})
+      const matcher = createNumberMatcher({}, expr)
       const result = matcher.match(42)
 
       it('no match', () => {

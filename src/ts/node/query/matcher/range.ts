@@ -1,8 +1,8 @@
 import { BaseMatcher } from './base'
 import { isObject } from '../../../util'
 
-export function createRangeMatcher(expr: any, options: any = {}) {
-  return new RangeMatcher(expr, options)
+export function createRangeMatcher(options: any = {}, expr?: any) {
+  return new RangeMatcher(options, expr)
 }
 
 export class RangeMatcher extends BaseMatcher {
@@ -12,7 +12,7 @@ export class RangeMatcher extends BaseMatcher {
    * Determine if expression is valid for this matcher
    */
   isValid() {
-    return (isObject(this.expr) && this.expr.min) || this.expr.max
+    return isObject(this.expr) && (this.expr.min || this.expr.max)
   }
 
   /**
@@ -21,6 +21,6 @@ export class RangeMatcher extends BaseMatcher {
    */
   match(value: any, expr?: any) {
     const { min, max } = expr || this.expr
-    return value >= min && value <= max
+    return value >= (min || 0) && value <= (max || 9999)
   }
 }

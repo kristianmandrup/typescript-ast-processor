@@ -6,13 +6,11 @@ const { createFunctionMatcher } = query.matcher
 describe('value query', () => {
   describe('createFunctionMatcher', () => {
     context('match function: always true', () => {
-      const expr = {
-        matches() {
-          return true
-        },
+      const expr = () => {
+        return true
       }
 
-      const matcher = createFunctionMatcher(expr, {})
+      const matcher = createFunctionMatcher({ expr })
       const result = matcher.match(1)
 
       it('matches', () => {
@@ -25,7 +23,7 @@ describe('value query', () => {
         return undefined
       }
 
-      const matcher = createFunctionMatcher(expr, {})
+      const matcher = createFunctionMatcher({ expr })
       const result = matcher.match(1)
 
       it('no match', () => {
