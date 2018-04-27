@@ -8,6 +8,9 @@ export function createListMatcher(expr: any, options: any = {}) {
 export class ListMatcher extends BaseMatcher {
   matcher: BaseMatcher
 
+  /**
+   * Check if valid list iterator
+   */
   get isValidIterator(): boolean {
     return ['find', 'every'].includes(this.iterator)
   }

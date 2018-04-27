@@ -110,6 +110,10 @@ Used by queries to match on individual values
 
 ### Basic Queries
 
+Base query (ie. test base class methods used by all other query classes!)
+
+`jest __tests__/ts/node/query/base.test.ts`
+
 Match `allOf` query
 
 `jest __tests__/ts/node/query/all.test.ts`

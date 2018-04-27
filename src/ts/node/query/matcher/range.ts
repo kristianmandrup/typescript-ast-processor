@@ -15,15 +15,12 @@ export class RangeMatcher extends BaseMatcher {
     return (isObject(this.expr) && this.expr.min) || this.expr.max
   }
 
-  get min() {
-    return this.expr.min
-  }
-
-  get max() {
-    return this.expr.min
-  }
-
-  match(value: any) {
-    return value >= this.min && value <= this.max
+  /**
+   * Match range (min, max)
+   * @param value
+   */
+  match(value: any, expr?: any) {
+    const { min, max } = expr || this.expr
+    return value >= min && value <= max
   }
 }

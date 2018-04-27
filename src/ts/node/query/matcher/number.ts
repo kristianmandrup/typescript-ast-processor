@@ -14,7 +14,17 @@ export class NumberMatcher extends BaseMatcher {
     return !isNaN(this.expr)
   }
 
-  match(value: any) {
+  /**
+   * match number
+   * @param value
+   * @param expr
+   */
+  match(value: any, expr?: any) {
+    expr = expr || this.expr
+    this.log('match', {
+      value,
+      expr,
+    })
     return this.expr === value
   }
 }

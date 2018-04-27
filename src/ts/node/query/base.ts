@@ -17,6 +17,7 @@ export interface IQueryMatcher {
 export class BaseQueryMatcher extends Loggable implements IQueryMatcher {
   node: any
   value: any
+  key: string
 
   constructor(options: any = {}) {
     super(options)
@@ -30,9 +31,10 @@ export class BaseQueryMatcher extends Loggable implements IQueryMatcher {
   init(): IQueryMatcher {
     const { options, node } = this
     const { key, value } = options
-    if (key) this.setKey(key)
     const testValue = isFunction(value) ? value(node) : value
     if (testValue) this.setValue(testValue)
+
+    if (key && !this.value) this.setKey(key)
     return this
   }
 
@@ -67,9 +69,14 @@ export class BaseQueryMatcher extends Loggable implements IQueryMatcher {
    * Set key for node to be used to determine value to be used for query
    * @param value
    */
-  setKey(key: any): IQueryMatcher {
+  setKey(key: any, override?: boolean): IQueryMatcher {
+    if (this.value || !override) return this
     const value = this.resolveKey(key)
-    this.setValue(value)
+    if (value) {
+      this.setValue(value)
+      this.key = key
+    }
+
     return this
   }
 
@@ -82,10 +89,17 @@ export class BaseQueryMatcher extends Loggable implements IQueryMatcher {
     return createMatcherSelector(this.options).select(this.value)
   }
 
-  validateMatcher(matcher: any, ctx: any): any {
+  validateMatcher(matcher: any, ctx: any = {}): any {
     if (!matcher) {
       this.error('query: no matcher could be found for', ctx)
     }
+  }
+
+  /**
+   * Default query property
+   */
+  get queryProp() {
+    return 'matches'
   }
 
   /**
@@ -100,7 +114,7 @@ export class BaseQueryMatcher extends Loggable implements IQueryMatcher {
    * @param query
    */
   normalizeQuery(query: any): IQuery {
-    return query
+    return query[this.queryProp] || query
   }
 
   /**
@@ -114,6 +128,11 @@ export class BaseQueryMatcher extends Loggable implements IQueryMatcher {
     this.validateMatcher(matcher, {
       value,
       query,
+    })
+    this.log('query', {
+      query,
+      value,
+      matcher: (matcher as IValueMatcher).caption,
     })
     // TODO: fix args...
     return matcher ? matcher.match(query) : false

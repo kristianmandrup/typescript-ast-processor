@@ -5,6 +5,10 @@ export function createAnyQueryMatcher(options: any = {}) {
 }
 
 export class AnyQueryMatcher extends BaseQueryMatcher {
+  get queryProp() {
+    return 'anyOf'
+  }
+
   get matcherIterator() {
     return 'find'
   }

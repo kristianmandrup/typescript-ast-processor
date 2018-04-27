@@ -14,7 +14,12 @@ export class StringMatcher extends BaseMatcher {
     return isStr(this.expr)
   }
 
-  match(value: any) {
-    return this.expr === value
+  /**
+   *
+   * @param value
+   */
+  match(value: any, expr?: any) {
+    expr = expr || this.expr
+    return expr === value
   }
 }

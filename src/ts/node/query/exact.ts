@@ -6,6 +6,10 @@ export function createExactQueryMatcher(options: any = {}) {
 }
 
 export class ExactQueryMatcher extends BaseQueryMatcher {
+  get queryProp() {
+    return 'exactly'
+  }
+
   query(query: any) {
     return true
   }

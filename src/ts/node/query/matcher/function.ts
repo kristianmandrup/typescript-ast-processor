@@ -15,7 +15,12 @@ export class FunctionMatcher extends BaseMatcher {
     return isFunction(this.expr)
   }
 
-  match(value: any) {
-    return Boolean(this.expr(value))
+  /**
+   *
+   * @param value
+   */
+  match(value: any, matchFn?: Function): boolean {
+    matchFn = matchFn || this.expr
+    return Boolean(matchFn(value))
   }
 }
