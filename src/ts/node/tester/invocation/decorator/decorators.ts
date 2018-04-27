@@ -1,10 +1,13 @@
-import { NodesTester } from '../../generic'
+import { NodeListTester } from '../../generic'
 
-export function createClassDecoratorsTester(node: any, options: any = {}): ClassDecoratorsTester {
+export function createClassDecoratorsTester(
+  node: any,
+  options: any = {},
+): ClassDecoratorsTester {
   return new ClassDecoratorsTester(node, options)
 }
 
-export class ClassDecoratorsTester extends NodesTester {
+export class ClassDecoratorsTester extends NodeListTester {
   constructor(node: any, options: any) {
     super(node, options)
   }

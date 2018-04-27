@@ -6,7 +6,7 @@ export {
   createRangeMatcher,
   createListMatcher,
   createMatcherSelector,
+  IMatcherSelector,
 } from './exports'
-export { IMatcherSelector } from './selector'
 export { matcherTypeFactoryMap } from './factory-map'
 export { BaseMatcher, IValueMatcher } from './base'

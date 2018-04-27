@@ -21,5 +21,5 @@ export {
   type,
   expressions,
   occurrences,
-  invocation
+  invocation,
 }

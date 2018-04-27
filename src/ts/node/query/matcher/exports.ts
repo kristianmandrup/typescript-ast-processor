@@ -4,4 +4,8 @@ export { createStringMatcher, StringMatcher } from './string'
 export { createRegExprMatcher, RegExprMatcher } from './regexp'
 export { createRangeMatcher, RangeMatcher } from './range'
 export { createListMatcher, ListMatcher } from './list'
-export { createMatcherSelector, MatcherSelector } from './selector'
+export {
+  createMatcherSelector,
+  MatcherSelector,
+  IMatcherSelector,
+} from './selector'

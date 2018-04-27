@@ -98,6 +98,36 @@ Make sure base class for details node testers works
 
 `$ jest __tests__/ts/node/details/base.test.ts`
 
+## Node value queries
+
+### Matchers
+
+Used by queries to match on individual values
+
+* String matcher: `jest __tests__/ts/node/query/matcher/string.test.ts`
+* Number matcher: `jest __tests__/ts/node/query/matcher/number.test.ts`
+* ...
+
+### Basic Queries
+
+Match `allOf` query
+
+`jest __tests__/ts/node/query/all.test.ts`
+
+Match `anyOf` query
+
+`jest __tests__/ts/node/query/any.test.ts`
+
+Match `exactly` query
+
+`jest __tests__/ts/node/query/exactly.test.ts`
+
+### Boolean
+
+* `not` query: `jest __tests__/ts/node/query/boolean/not.test.ts`
+* `and` query: `jest __tests__/ts/node/query/boolean/and.test.ts`
+* `or` query: `jest __tests__/ts/node/query/boolean/or.test.ts`
+
 ### Node tester
 
 NodeTester is composed of:
