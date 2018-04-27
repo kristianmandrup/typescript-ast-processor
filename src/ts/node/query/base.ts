@@ -7,20 +7,27 @@ export interface IQuery {
   matchers: any[]
 }
 
-export class BaseNodeQuery extends Loggable {
+type IValueMatch = IValueMatcher | IValueMatcher[]
+
+export interface IQueryMatcher {
+  query(query: any, value?: any): boolean
+  match(matchers: IValueMatch, value?: any): boolean
+}
+
+export class BaseQueryMatcher extends Loggable implements IQueryMatcher {
   node: any
   value: any
 
-  constructor(node: any, options: any = {}) {
+  constructor(options: any = {}) {
     super(options)
-    this.node = node
+    this.node = options.node || {}
     this.init()
   }
 
   /**
    * Initialize
    */
-  init(): BaseNodeQuery {
+  init(): IQueryMatcher {
     const { options, node } = this
     const { key, value } = options
     if (key) this.setKey(key)
@@ -46,7 +53,7 @@ export class BaseNodeQuery extends Loggable {
    * Set value to be used for query
    * @param value
    */
-  setValue(value: any): BaseNodeQuery {
+  setValue(value: any): IQueryMatcher {
     this.value = this.validateValue(value)
     return this
   }
@@ -55,7 +62,7 @@ export class BaseNodeQuery extends Loggable {
    * Set key for node to be used to determine value to be used for query
    * @param value
    */
-  setKey(key: any): BaseNodeQuery {
+  setKey(key: any): IQueryMatcher {
     this.setValue(this.node[key])
     return this
   }
@@ -119,7 +126,7 @@ export class BaseNodeQuery extends Loggable {
    * @param query
    * @param value
    */
-  match(matchers: IValueMatcher | IValueMatcher[], value?: any): boolean {
+  match(matchers: IValueMatch, value?: any): boolean {
     return matchers[this.matcherIterator]((matcher: IValueMatcher) => {
       return matcher.match(value)
     })

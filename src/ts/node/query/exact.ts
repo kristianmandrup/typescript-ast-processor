@@ -1,7 +1,11 @@
-import { BaseNodeQuery } from './base'
+import { BaseQueryMatcher } from './base'
 import { IValueMatcher } from './matcher'
 
-export class ExactlyNodeQuery extends BaseNodeQuery {
+export function createExactQueryMatcher(options: any = {}) {
+  return new ExactQueryMatcher(options)
+}
+
+export class ExactQueryMatcher extends BaseQueryMatcher {
   query(query: any) {
     return true
   }

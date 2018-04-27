@@ -1,6 +1,10 @@
-import { BaseNodeQuery } from './base'
+import { BaseQueryMatcher } from './base'
 
-export class AllNodeQuery extends BaseNodeQuery {
+export function createAllQueryMatcher(options: any = {}) {
+  return new AllQueryMatcher(options)
+}
+
+export class AllQueryMatcher extends BaseQueryMatcher {
   get matcherIterator() {
     return 'every'
   }
