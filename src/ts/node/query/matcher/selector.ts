@@ -4,9 +4,14 @@ import { Loggable } from '../../../loggable'
 import { isRegExp } from 'util'
 import { IValueMatcher } from './base'
 import { matcherTypeFactoryMap } from './factory-map'
+import { ILoggable } from '../../../loggable/loggable'
 
 export function createMatcherSelector(options: any = {}) {
   return new MatcherSelector(options)
+}
+
+export interface IMatcherSelector extends ILoggable {
+  select(value: any): IValueMatcher
 }
 
 export class MatcherSelector extends Loggable {

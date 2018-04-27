@@ -1,6 +1,7 @@
 import { Loggable } from '../../../loggable'
+import { ILoggable } from '../../../loggable/loggable'
 
-export interface IValueMatcher {
+export interface IValueMatcher extends ILoggable {
   match(value: any): boolean
 }
 

@@ -7,7 +7,7 @@ export class BooleanQuery extends Loggable implements IBooleanQuery {
 
   constructor(options: any = {}, tester?: Function) {
     super(options)
-    this.tester = tester
+    this.tester = tester || options.tester
   }
 
   /**

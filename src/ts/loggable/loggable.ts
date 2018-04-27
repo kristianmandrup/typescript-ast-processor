@@ -10,7 +10,11 @@ const defaults = {
   logOn: true,
 }
 
-export class Loggable {
+export interface ILoggable {
+  caption: string
+}
+
+export class Loggable implements ILoggable {
   options: any
   logger: ILogger
   logOn: boolean
