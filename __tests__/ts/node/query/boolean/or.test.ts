@@ -7,51 +7,185 @@ describe('node query', () => {
   describe('createOrQuery', () => {
     context('tester: always true', () => {
       const tester = (expr: any) => {
-        return expr === 'x'
+        return true
       }
 
-      const boolQuery = createOrQuery({
-        tester,
-      })
-
-      context('or - anyof: x, y', () => {
-        const query = {
-          or: [
-            {
-              anyOf: ['x'],
-            },
-            // alternative query expression
-            {
-              name: 'anyOf',
-              matchers: ['y'],
-            },
-          ],
-        }
-
-        const result = boolQuery.query(query)
-
-        it('is true since x matches in tester', () => {
-          expect(result).toBeTruthy()
+      context('query: empty', () => {
+        const boolQuery = createOrQuery({
+          tester,
         })
-      })
 
-      context('or - anyof: z, y', () => {
-        const query = {
-          or: [
-            {
-              anyOf: ['z'],
+        const query = {}
+
+        describe('test', () => {
+          const doQuery = () => boolQuery.test(query)
+
+          it('throws', () => {
+            expect(doQuery).toThrow()
+          })
+        })
+
+        context('or: undefined', () => {
+          const boolQuery = createOrQuery({
+            tester,
+          })
+
+          const query = {
+            or: undefined,
+          }
+
+          describe('match', () => {
+            const doQuery = () => boolQuery.query(query)
+
+            it('throws', () => {
+              expect(doQuery).toThrow()
+            })
+          })
+        })
+
+        context('or: empty object', () => {
+          const boolQuery = createOrQuery({
+            tester,
+          })
+
+          const query = {
+            or: {},
+          }
+
+          describe('match', () => {
+            const doQuery = () => boolQuery.match(query)
+
+            it('throws', () => {
+              expect(doQuery).toThrow()
+            })
+          })
+        })
+
+        context('or: invalid (42)', () => {
+          const boolQuery = createOrQuery({
+            tester,
+          })
+
+          const query = {
+            or: 42,
+          }
+
+          describe('match', () => {
+            const doQuery = () => boolQuery.match(query)
+
+            it('throws', () => {
+              expect(doQuery).toThrow()
+            })
+          })
+        })
+
+        context('or: object: single anyOf', () => {
+          const boolQuery = createOrQuery({
+            tester,
+          })
+
+          const query = {
+            or: {
+              anyOf: 'x',
             },
-            {
-              name: 'anyOf',
-              matchers: ['y'],
+          }
+
+          describe('match', () => {
+            const doQuery = () => boolQuery.match(query)
+
+            it('does not throws', () => {
+              expect(doQuery).not.toThrow()
+            })
+
+            it('is true', () => {
+              expect(doQuery()).toBeTruthy()
+            })
+          })
+        })
+
+        context('or: object: anyOf and allOf', () => {
+          const boolQuery = createOrQuery({
+            tester,
+          })
+
+          const query = {
+            or: {
+              anyOf: 'x',
+              allOf: 'y',
             },
-          ],
-        }
+          }
 
-        const result = boolQuery.query(query)
+          describe('match', () => {
+            const doQuery = () => boolQuery.match(query)
 
-        it('is false since none matched by tester', () => {
-          expect(result).toBeFalsy()
+            it('does not throws', () => {
+              expect(doQuery).not.toThrow()
+            })
+
+            it('is true', () => {
+              expect(doQuery()).toBeTruthy()
+            })
+          })
+        })
+
+        context('or: object: single anyOf in list', () => {
+          const boolQuery = createOrQuery({
+            tester,
+          })
+
+          const query = {
+            or: [
+              {
+                anyOf: 'x',
+              },
+            ],
+          }
+
+          describe('match', () => {
+            const doQuery = () => boolQuery.match(query)
+
+            it('does not throws', () => {
+              expect(doQuery).not.toThrow()
+            })
+
+            it('is true', () => {
+              expect(doQuery()).toBeTruthy()
+            })
+          })
+        })
+
+        context('or: list with two anyof objects: x, y', () => {
+          const boolQuery = createOrQuery({
+            tester,
+          })
+
+          const query = {
+            or: [
+              {
+                anyOf: ['x'],
+              },
+              {
+                anyOf: ['y'],
+              },
+            ],
+          }
+
+          describe('match', () => {
+            const result = boolQuery.match(query)
+
+            it('returns combined query result using AND', () => {
+              expect(result).toBeTruthy()
+            })
+          })
+
+          describe('query', () => {
+            const result = boolQuery.query(query)
+
+            it('returns combined query result using AND', () => {
+              // what to expect: {or: true} ??
+              expect(result).toEqual({ anyOf: true })
+            })
+          })
         })
       })
     })

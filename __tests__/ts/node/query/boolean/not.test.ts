@@ -6,15 +6,14 @@ const { createNotQuery } = query.boolean
 describe('node query', () => {
   describe('createNotQuery', () => {
     context('tester: always true', () => {
-      const tester = (expr: any) => {
-        return expr === 'x'
-      }
-
-      const boolQuery = createNotQuery({
-        tester,
-      })
-
       context('not - anyof: x, y', () => {
+        const tester = (expr: any) => {
+          return true
+        }
+        const boolQuery = createNotQuery({
+          tester,
+        })
+
         const query = {
           not: [
             {
@@ -27,12 +26,23 @@ describe('node query', () => {
             },
           ],
         }
+        describe('match', () => {
+          const result = boolQuery.match(query)
 
-        const result = boolQuery.query(query)
-
-        it('is false since x matches in tester', () => {
-          expect(result).toBeFalsy()
+          it('is false since x matches in tester', () => {
+            expect(result).toBeFalsy()
+          })
         })
+      })
+    })
+
+    context('tester: always false', () => {
+      const tester = (expr: any) => {
+        return false
+      }
+
+      const boolQuery = createNotQuery({
+        tester,
       })
 
       context('not - anyof: z, y', () => {
@@ -48,10 +58,12 @@ describe('node query', () => {
           ],
         }
 
-        const result = boolQuery.query(query)
+        describe('match', () => {
+          const result = boolQuery.match(query)
 
-        it('is true since none matched by tester', () => {
-          expect(result).toBeTruthy()
+          it('is true since none matched by tester', () => {
+            expect(result).toBeTruthy()
+          })
         })
       })
     })
