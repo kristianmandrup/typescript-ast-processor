@@ -15,9 +15,13 @@ export function createOrQuery(options: any = {}) {
 }
 
 export class OrQuery extends BooleanQuery {
+  get iterator() {
+    return 'find'
+  }
+
   query(query: any, tester?: Function) {
+    if (!super.query(query)) return false
     const matcherFn = tester || this.tester
-    if (!query) return true
     return query.or ? orQuery(query.or, matcherFn) : matcherFn(query)
   }
 }

@@ -6,8 +6,8 @@ export function createNotQuery(options: any = {}) {
 
 export class NotQuery extends BooleanQuery {
   query(query: any, tester?: Function) {
+    if (!super.query(query)) return false
     const matcherFn = tester || this.tester
-    if (!query) return true
     return query.not ? !Boolean(matcherFn(query.not)) : matcherFn(query)
   }
 }
