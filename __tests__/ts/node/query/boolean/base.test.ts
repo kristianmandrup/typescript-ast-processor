@@ -2,6 +2,7 @@ import { node, context } from '../..'
 
 const { query } = node
 const { BooleanQuery } = query.boolean
+const { log } = console
 
 describe('node query', () => {
   describe('createNotQuery', () => {
@@ -22,22 +23,29 @@ describe('node query', () => {
         },
       }
 
-      const boolQuery = new BooleanQuery({
-        tester,
-      })
-
       describe('combinedLogic(query: any, tester: Function)', () => {
+        const boolQuery = new BooleanQuery({
+          tester,
+        })
+
         context('valid query', () => {
           const query = $query.valid.single
           const result = boolQuery.combinedLogic(query, tester)
+          log({
+            result,
+          })
 
-          it('makes combined logic result', () => {
-            expect(result).toBeTruthy()
+          it('combined logic is false since no results', () => {
+            expect(result).toBeFalsy()
           })
         })
       })
 
       describe('singleQuery(acc: any, key: string, query: any, tester: Function)', () => {
+        const boolQuery = new BooleanQuery({
+          tester,
+        })
+
         context('valid query', () => {
           const query = $query.valid.single
           const result = boolQuery.singleQuery({}, 'anyOf', query, tester)
@@ -49,10 +57,14 @@ describe('node query', () => {
       })
 
       describe('combined(query: any, tester: Function): any', () => {
+        const boolQuery = new BooleanQuery({
+          tester,
+        })
+
         context('valid query', () => {
           const query = $query.valid.single
 
-          const result = boolQuery.combined(query, tester)
+          const result = boolQuery.combinedQuery(query, tester)
 
           it('combines results', () => {
             expect(result).toBeDefined()
@@ -61,6 +73,10 @@ describe('node query', () => {
       })
 
       describe('validateQuery(query: any): boolean', () => {
+        const boolQuery = new BooleanQuery({
+          tester,
+        })
+
         context('invalid query', () => {
           const query = $query.invalid
 
@@ -75,18 +91,22 @@ describe('node query', () => {
           const query = $query.valid
           const valid = boolQuery.validateQuery(query)
 
-          it('is invalid', () => {
-            expect(valid).toBeFalsy()
+          it('is valid', () => {
+            expect(valid).toBeTruthy()
           })
         })
       })
 
       describe('query(query: any, tester?: Function): any', () => {
+        const boolQuery = new BooleanQuery({
+          tester,
+        })
+
         context('valid query', () => {
           const query = $query.valid
           const valid = boolQuery.query(query, tester)
 
-          it('is invalid', () => {
+          it('is an object', () => {
             expect(valid).toEqual({})
           })
         })

@@ -5,20 +5,17 @@ export function createAndQuery(options: any = {}) {
 }
 
 export class AndQuery extends BooleanQuery {
+  /**
+   * iterator
+   */
   get iterator() {
     return 'every'
   }
 
   /**
-   *
-   * @param query
-   * @param tester
+   * query key
    */
-  test(query: any, tester?: Function): boolean {
-    if (!super.query(query)) return false
-    const matcherFn = tester || this.tester
-    return query.and
-      ? this.combinedLogic(query.and, matcherFn)
-      : matcherFn(query)
+  get queryKey(): string {
+    return 'and'
   }
 }

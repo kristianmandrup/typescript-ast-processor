@@ -5,9 +5,10 @@ export function createNotQuery(options: any = {}) {
 }
 
 export class NotQuery extends BooleanQuery {
-  query(query: any, tester?: Function) {
-    if (!super.query(query)) return false
-    const matcherFn = tester || this.tester
-    return query.not ? !Boolean(matcherFn(query.not)) : matcherFn(query)
+  /**
+   * query key
+   */
+  get queryKey(): string {
+    return 'not'
   }
 }
