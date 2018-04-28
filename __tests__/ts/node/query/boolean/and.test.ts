@@ -17,7 +17,7 @@ describe('node query', () => {
 
         const query = {}
 
-        describe('match', () => {
+        describe('test', () => {
           const doQuery = () => boolQuery.test(query)
 
           it('throws', () => {
@@ -40,14 +40,6 @@ describe('node query', () => {
             it('throws', () => {
               expect(doQuery).toThrow()
             })
-
-            // it('is false', () => {
-            //   expect(doQuery()).toBeFalsy()
-            // })
-
-            // it.skip('is true', () => {
-            //   expect(doQuery()).toBe({ and: true })
-            // })
           })
         })
 
@@ -61,20 +53,11 @@ describe('node query', () => {
           }
 
           describe('match', () => {
-            const doQuery = () => boolQuery.query(query)
+            const doQuery = () => boolQuery.match(query)
 
-            it('does not throws', () => {
-              expect(doQuery).not.toThrow()
+            it('throws', () => {
+              expect(doQuery).toThrow()
             })
-
-            it('is false', () => {
-              expect(doQuery()).toBeFalsy()
-            })
-
-            // TODO: should this really return true??
-            // it.skip('is true', () => {
-            //   expect(doQuery()).toBe({ and: true })
-            // })
           })
         })
 
@@ -88,15 +71,11 @@ describe('node query', () => {
           }
 
           describe('match', () => {
-            const doQuery = () => boolQuery.query(query)
+            const doQuery = () => boolQuery.match(query)
 
-            it('is false', () => {
-              expect(doQuery()).toBeFalsy()
+            it('throws', () => {
+              expect(doQuery).toThrow()
             })
-
-            // it('throws', () => {
-            //   expect(doQuery).toThrow()
-            // })
           })
         })
 
@@ -112,7 +91,7 @@ describe('node query', () => {
           }
 
           describe('match', () => {
-            const doQuery = () => boolQuery.query(query)
+            const doQuery = () => boolQuery.match(query)
 
             it('does not throws', () => {
               expect(doQuery).not.toThrow()
@@ -137,7 +116,7 @@ describe('node query', () => {
           }
 
           describe('match', () => {
-            const doQuery = () => boolQuery.query(query)
+            const doQuery = () => boolQuery.match(query)
 
             it('does not throws', () => {
               expect(doQuery).not.toThrow()
@@ -163,7 +142,7 @@ describe('node query', () => {
           }
 
           describe('match', () => {
-            const doQuery = () => boolQuery.query(query)
+            const doQuery = () => boolQuery.match(query)
 
             it('does not throws', () => {
               expect(doQuery).not.toThrow()
@@ -192,7 +171,7 @@ describe('node query', () => {
           }
 
           describe('match', () => {
-            const result = boolQuery.query(query)
+            const result = boolQuery.match(query)
 
             it('returns combined query result using AND', () => {
               expect(result).toBeTruthy()
@@ -204,7 +183,7 @@ describe('node query', () => {
 
             it('returns combined query result using AND', () => {
               // what to expect: {and: true} ??
-              expect(result).toEqual({ and: true })
+              expect(result).toEqual({ anyOf: true })
             })
           })
         })

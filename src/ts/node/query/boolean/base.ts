@@ -1,5 +1,5 @@
 import { Loggable } from '../../../loggable'
-import { isObject, isEmpty } from '../../../util'
+import { isObject, isEmpty, isArray } from '../../../util'
 
 interface IBooleanQuery {}
 
@@ -28,13 +28,6 @@ export class BooleanQuery extends Loggable implements IBooleanQuery {
   combinedLogic(query: any, tester: Function): boolean {
     const resultObj = this.combinedQuery(query, tester)
     const combinedResults = Object.values(resultObj)
-    this.log('combinedLogic', {
-      query,
-      iterator: this.iterator,
-      combinedResults,
-      resultObj,
-    })
-
     return Boolean(
       combinedResults[this.iterator]((result: any) => Boolean(result)),
     )
@@ -55,6 +48,37 @@ export class BooleanQuery extends Loggable implements IBooleanQuery {
     return acc
   }
 
+  /** */
+  objKey(obj: any) {
+    return obj.name || Object.keys(obj)[0]
+  }
+
+  /**
+   * Keys of query object
+   * @param query
+   */
+  objKeys(query: any) {
+    if (!isObject(query)) return
+    return Object.keys(query)
+  }
+
+  /**
+   * Keys of query list
+   * @param query
+   */
+  listKeys(query: any) {
+    if (!isArray(query)) return
+    return query.map((item: any) => this.objKey(item))
+  }
+
+  /**
+   * keys of query
+   * @param query
+   */
+  keysOf(query: any) {
+    return this.listKeys(query) || this.objKeys(query) || 'undefined'
+  }
+
   /**
    * Combined query, combining all tests
    * @param query
@@ -62,12 +86,8 @@ export class BooleanQuery extends Loggable implements IBooleanQuery {
    */
   combinedQuery(query: any, tester: Function): any {
     if (!query) return false
-    const keys = Object.keys(query)
-    // this.log('combinedQuery', {
-    //   query,
-    //   keys,
-    // })
-    return keys.reduce((acc, key: string) => {
+    const keys = this.keysOf(query)
+    return keys.reduce((acc: any, key: string) => {
       return this.singleQuery(acc, key, query, tester)
     }, {})
   }
@@ -91,10 +111,13 @@ export class BooleanQuery extends Loggable implements IBooleanQuery {
    */
   _validateQuery(query: any): boolean {
     if (!query) {
-      return this.invalidQuery('query: missing query', query)
+      return this.invalidQuery('validateQuery: missing query', query)
     }
     if (!isObject(query) || isEmpty(query)) {
-      return this.invalidQuery('query: invalid query', query)
+      return this.invalidQuery('validateQuery: invalid query', query)
+    }
+    if (isEmpty(query)) {
+      return this.invalidQuery('validateQuery: empty query', query)
     }
     return query
   }
@@ -105,8 +128,8 @@ export class BooleanQuery extends Loggable implements IBooleanQuery {
    * @param tester
    */
   query(query: any, tester?: Function): any {
-    const valid = this.validateQuery(query)
-    if (!valid) return {}
+    query = this.validateQuery(query)
+    if (!query) return {}
     const matcherFn = tester || this.tester
     return this.combinedQuery(query, matcherFn)
   }
@@ -133,6 +156,7 @@ export class BooleanQuery extends Loggable implements IBooleanQuery {
    * @param query
    */
   resolveQuery(query: any): any {
+    if (!query) return {}
     return query[this.queryKey]
   }
 
@@ -142,8 +166,17 @@ export class BooleanQuery extends Loggable implements IBooleanQuery {
    * @param tester
    */
   test(query: any, tester?: Function): boolean {
+    query = this.validateQuery(query)
     const matcherFn = tester || this.tester
-    query = query[this.queryKey]
     return query ? this.combinedLogic(query, matcherFn) : matcherFn(query)
+  }
+
+  /**
+   * Alias to test
+   * @param query
+   * @param tester
+   */
+  match(query: any, tester?: Function): boolean {
+    return this.test(query, tester)
   }
 }
