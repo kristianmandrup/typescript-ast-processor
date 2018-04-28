@@ -1,6 +1,6 @@
 import { node, loadAstNode } from '../../'
 import { isStr } from '../../../../../src/ts/util'
-import { isFunction } from 'util'
+import { isFunction, isNumber } from 'util'
 
 const { factories } = node.tester
 
@@ -130,7 +130,7 @@ export function testerFor(opts: any = {}): any {
     }, {})
   }
 
-  if (!isNaN(statementIndex) || traverse) {
+  if (isNumber(statementIndex) || traverse) {
     return resolveNodeTester(srcFile, {
       factory,
       index: statementIndex,

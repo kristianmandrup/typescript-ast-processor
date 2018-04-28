@@ -16,12 +16,7 @@ export class RegExprMatcher extends BaseMatcher {
     return isRegExp(this.expr)
   }
 
-  /**
-   * Match RegExp query expr
-   * @param value
-   */
-  match(value: any, expr?: any) {
-    expr = expr || this.expr
+  test(value: any, expr: any) {
     return expr.test(value)
   }
 }

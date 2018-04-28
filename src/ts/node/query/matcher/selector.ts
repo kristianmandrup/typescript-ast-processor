@@ -38,8 +38,10 @@ export class MatcherSelector extends Loggable {
   }
 
   /**
-   * determine type, then try to create each matcher for that type until one is valid
+   * Determine type of the value to be testerd, then try to create each matcher for that type until one is valid
+   * Return matcher if one is found to be valid
    * @param value
+   * @returns IValueMatcher
    */
   select(value: any): IValueMatcher {
     const type = this.resolveType(value)

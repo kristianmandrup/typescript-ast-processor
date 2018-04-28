@@ -1,5 +1,6 @@
 import { BaseMatcher } from './base'
 import { isFunction } from 'util'
+import { isDefined } from '../../../util'
 
 export function createFunctionMatcher(options: any = {}, expr?: any) {
   return new FunctionMatcher(options, expr)

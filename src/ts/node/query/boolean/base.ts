@@ -1,14 +1,25 @@
 import { Loggable } from '../../../loggable'
 import { isObject, isEmpty, isArray } from '../../../util'
+import { createListTester } from '../matcher/list'
 
 interface IBooleanQuery {}
 
 export class BooleanQuery extends Loggable implements IBooleanQuery {
   tester: any
+  value: any
 
   constructor(options: any = {}, tester?: Function) {
     super(options)
-    this.tester = tester || options.tester
+    this.tester = tester || this.createTester()
+    this.value = options.value
+  }
+
+  /**
+   * Create tester to use
+   */
+  createTester() {
+    const { options } = this
+    return options.tester || createListTester(options)
   }
 
   /**
@@ -41,9 +52,12 @@ export class BooleanQuery extends Loggable implements IBooleanQuery {
    * @param tester
    */
   singleQuery(acc: any, key: string, query: any, tester: Function) {
-    const result = tester({
-      [key]: query[key],
-    })
+    const result = tester(
+      {
+        [key]: query[key],
+      },
+      this.value,
+    )
     if (result) acc[key] = result
     return acc
   }

@@ -11,16 +11,11 @@ export class StringMatcher extends BaseMatcher {
   /**
    * Determine if expression is valid for this matcher
    */
-  isValid() {
+  isValidExpr() {
     return isStr(this.expr)
   }
 
-  /**
-   *
-   * @param value
-   */
-  match(value: any, expr?: any) {
-    expr = expr || this.expr
-    return expr === value
+  isValidValue(value: string) {
+    return isStr(value)
   }
 }

@@ -1,5 +1,15 @@
 import { BaseMatcher, IValueMatcher } from './base'
 import { createMatcherSelector } from './selector'
+import { toList } from '../../../util'
+
+export function createListTester(options: any) {
+  return (expr: any, value: any) => {
+    return createListMatcher({
+      ...options,
+      expr,
+    }).match(value)
+  }
+}
 
 export function createListMatcher(options: any = {}, matcher?: any) {
   return new ListMatcher(options, matcher)
@@ -8,6 +18,9 @@ export function createListMatcher(options: any = {}, matcher?: any) {
 export class ListMatcher extends BaseMatcher {
   matcher: IValueMatcher | undefined
 
+  /**
+   * Initialize
+   */
   init() {
     super.init()
     this.matcher = this.selectMatcher(this.expr)
@@ -54,8 +67,16 @@ export class ListMatcher extends BaseMatcher {
   /**
    * Determine if expression is valid for this matcher
    */
-  isValid() {
+  isValidExpr() {
     return true
+  }
+
+  /**
+   * normalize value
+   * @param value
+   */
+  normalizeValue(value: any): any[] {
+    return toList(value)
   }
 
   /**

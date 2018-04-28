@@ -1,4 +1,5 @@
 import { BaseMatcher } from './base'
+import { isNumber, isArray } from 'util'
 
 export function createNumberMatcher(options: any = {}, expr?: any) {
   return new NumberMatcher(options, expr)
@@ -10,17 +11,15 @@ export class NumberMatcher extends BaseMatcher {
   /**
    * Determine if expression is valid for this matcher
    */
-  isValid() {
-    return !isNaN(this.expr)
+  isValidExpr() {
+    return isNumber(this.expr)
   }
 
   /**
-   * match number
+   * Test if valid value to be matched by this matcher
    * @param value
-   * @param expr
    */
-  match(value: any, expr?: any) {
-    expr = expr || this.expr
-    return this.expr === value
+  isValidValue(value: any) {
+    return isArray(value)
   }
 }
