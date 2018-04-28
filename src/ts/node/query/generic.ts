@@ -25,7 +25,8 @@ export class GenericQuery extends BaseQueryMatcher {
    * @param query
    * @param value
    */
-  match(query: any, value: any): boolean {
+  match(query: any, value?: any): boolean {
+    value = value || this.value
     return this.$query.match(query, value)
   }
 
@@ -35,6 +36,7 @@ export class GenericQuery extends BaseQueryMatcher {
    * @returns { boolean } result of matching via matcher (or false if no matcher)
    */
   query(query: any, value?: any): boolean {
+    value = value || this.value
     return this.$query.query(query, value)
   }
 }

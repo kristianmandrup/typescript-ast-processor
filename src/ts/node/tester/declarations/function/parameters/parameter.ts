@@ -1,7 +1,5 @@
 import * as ts from 'typescript'
 import {
-  testName,
-  testNames,
   testValue,
   initializerDetails,
   IInitializerDetails,
@@ -167,7 +165,7 @@ export class ParameterTester extends BaseNodeTester {
    */
   testDecorators(query: any) {
     query = query.decorators || query
-    return testNames(this.decorators, query)
+    return this.queryValue(query, this.decorators)
   }
 
   /**

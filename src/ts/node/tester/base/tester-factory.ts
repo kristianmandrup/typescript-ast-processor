@@ -51,32 +51,6 @@ export class TesterFactory extends Loggable {
     return this._occurrenceTester
   }
 
-  /**
-   * Create a tester object to test a list of nodes
-   * @param node
-   * @param options
-   */
-  createListTester(node: any, options: any = {}) {
-    return this.createNodeTester('list', node, options)
-  }
-
-  /**
-   * Create a tester object using ListTester to test a collection for matching names
-   * @param options
-   */
-  createListTesterFor(options: any) {
-    const createNamesTester = (nodes: any[]) => {
-      return (queryExpr: any) => testNames(nodes, queryExpr)
-    }
-    const createTester = options.createTester || createNamesTester
-    const node = options.node || this.node
-    return this.createListTester(node, {
-      ...this.options,
-      ...options,
-      createTester,
-    })
-  }
-
   protected validateName(name: string, method: string): void {
     if (!isStr(name)) {
       this.error('resolveFactoryName: invalid name', {

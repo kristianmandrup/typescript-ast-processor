@@ -1,15 +1,8 @@
 import { Loggable } from '../../../loggable'
 import { isFunction, isEmpty, lowercaseFirst } from '../../../util'
 import { findDerived } from 'find-derived'
-import {
-  camelize,
-  testOr,
-  testAnd,
-  testNot,
-  testName,
-  testNames,
-  testValue,
-} from '../util'
+import { camelize } from '../util'
+import { createGenericQuery } from '../../query'
 
 /**
  * Factory to create query engine
@@ -17,6 +10,11 @@ import {
  */
 export function createQueryEngine(tester: any, options: any = {}) {
   return new QueryEngine(tester, options)
+}
+
+interface IQueryApi {
+  match(query: any, value?: any): boolean
+  query(query: any, value?: any): boolean
 }
 
 export class QueryEngine extends Loggable {
@@ -29,6 +27,7 @@ export class QueryEngine extends Loggable {
   isQuery: Function
   testers: any
   props: any
+  $queryApi: IQueryApi
 
   constructor(tester: any, options: any = {}) {
     super(options)
@@ -46,6 +45,11 @@ export class QueryEngine extends Loggable {
   init() {
     this.initPropTesters()
     this.initQueries()
+    this.$queryApi = this.createQueryApi()
+  }
+
+  createQueryApi(): IQueryApi {
+    return createGenericQuery(this.options)
   }
 
   /**
@@ -117,77 +121,13 @@ export class QueryEngine extends Loggable {
   }
 
   /**
-   * Create tester for testing items and test using query
-   * By default creates a name tester
-   * You can override by passing a createTester factory function
-   * A custom factory function must take a nodes collection as argument
-   * the function must return a function that takes a query expression argument
-   * and returns a query result on the nodes
-   * @param items set of nodes to query
-   * @param query the query expression
-   */
-  queryItems(items: any[], query: any, options: any = {}) {
-    options = Object.assign(options, { items })
-    this.log('queryItems', {
-      factory: this.tester.factory,
-      options,
-    })
-    const tester = this.tester.factory.createListTesterFor(options)
-    return tester.test(query)
-  }
-
-  /**
+   * NOTE: Replaces queryName, queryNames etc. using generic query
    * Query for a name match (ie. string value match )
    * @param name
    * @param query
    */
-  queryName(name: string, query: any) {
-    return testName(name, query)
-  }
-
-  /**
-   * Query for a name match over a list of names (ie. string values match )
-   * @param names { string[] } list of strings to be matched/queried
-   * @param query { object } the query object with query expressions
-   */
-  queryNames(names: string[], query: any) {
-    return testNames(names, query)
-  }
-
-  /**
-   * Query on a value for a match
-   * @param value
-   * @param query
-   */
   queryValue(value: any, query: any) {
-    return testValue(value, query)
-  }
-
-  /**
-   * Boolean NOT condition on query (or result)
-   * @param query
-   * @param tester
-   */
-  testNot(query: any, tester: Function) {
-    return testNot(query, tester)
-  }
-
-  /**
-   * Boolean AND condition on query
-   * @param query
-   * @param tester
-   */
-  testAnd(query: any, tester: Function) {
-    return testAnd(query, tester)
-  }
-
-  /**
-   * Boolean OR condition on one or more queries (or results)
-   * @param query
-   * @param tester
-   */
-  testOr(query: any, tester: Function) {
-    return testOr(query, tester)
+    return this.$queryApi.query(value, query)
   }
 
   /**
