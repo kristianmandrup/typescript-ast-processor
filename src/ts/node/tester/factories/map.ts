@@ -27,8 +27,8 @@ const { accessors } = members
 
 export const factories = {
   // generic
-  list: generic.createNodesTester,
-  nodes: generic.createNodesTester, // alias
+  list: generic.createNodeListTester,
+  nodes: generic.createNodeListTester, // alias
 
   // class
   'decl.class': classDecl.createClassTester,
