@@ -1,9 +1,4 @@
-import {
-  testerFor,
-  context,
-  logObj,
-  log
-} from './_imports'
+import { testerFor, context, logObj, log } from './_imports'
 
 describe('occurrence', () => {
   context('occurrence file', () => {
@@ -11,7 +6,7 @@ describe('occurrence', () => {
       fileName: 'occurrence',
       type: 'occurrences',
       factoryName: 'occurrences',
-      statementIndex: 0
+      statementIndex: 0,
       // traverse: (statements: any[]) => {
       //   return statements[0] //.declarationList.declarations[0]
       // }
@@ -22,7 +17,7 @@ describe('occurrence', () => {
     const opts = {
       node: tester.node,
       query,
-      options
+      options,
     }
     const token = 'continue'
 
@@ -93,13 +88,12 @@ describe('occurrence', () => {
       })
     })
 
-    describe.only('countOccurenceOf(token, options)', () => {
+    describe('countOccurenceOf(token, options)', () => {
       context('has 2 continue tokens', () => {
         it('counts exactly 2 occurences', () => {
-          const occurrences = tester.countOccurenceOf(token, {
-          })
+          const occurrences = tester.countOccurenceOf(token, {})
           log({
-            occurrences
+            occurrences,
           })
           expect(occurrences).toBe(2)
         })

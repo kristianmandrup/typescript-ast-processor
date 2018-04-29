@@ -1,9 +1,4 @@
-import {
-  context,
-  loadAstNode,
-  traverser,
-  log
-} from './_imports'
+import { context, loadAstNode, traverser, log } from './_imports'
 
 // - resolveTypeCategories
 //   - can be resolved
@@ -50,7 +45,6 @@ describe('traverser: count-traverser', () => {
       })
     })
 
-
     // parseQuery(query)
     describe('parseQuery(query)', () => {
       context('empty query', () => {
@@ -73,10 +67,8 @@ describe('traverser: count-traverser', () => {
           ctx.nodeTypes = new Object(countTraverser['nodeTypes'])
           countTraverser.parseQuery({
             nodetypes: {
-              x: [
-                'x'
-              ]
-            }
+              x: ['x'],
+            },
           })
         })
 
@@ -89,11 +81,12 @@ describe('traverser: count-traverser', () => {
 
     // resolveTypeCategory(categoryName)
     // TODO: What should it do!?
-    describe.skip('resolveTypeCategory(categoryName)', () => {
+    describe('resolveTypeCategory(categoryName)', () => {
       context('category can be resolved', () => {
         it('resolves category', () => {
           const categoryName = 'loop'
-          const resolve = () => countTraverser['resolveTypeCategory'](categoryName)
+          const resolve = () =>
+            countTraverser['resolveTypeCategory'](categoryName)
           expect(resolve).not.toThrow()
         })
       })
@@ -101,10 +94,9 @@ describe('traverser: count-traverser', () => {
       context('category can NOT be resolved', () => {
         it('throws', () => {
           const categoryName = 'loop'
-          const resolve = () => countTraverser['resolveTypeCategory'](categoryName)
-          const expected = [
-            'IterationStatement'
-          ]
+          const resolve = () =>
+            countTraverser['resolveTypeCategory'](categoryName)
+          const expected = ['IterationStatement']
 
           expect(resolve).not.toThrow()
           expect(resolve()).toEqual(expected)
@@ -159,7 +151,7 @@ describe('traverser: count-traverser', () => {
           const result = countTraverser['resolveTypeCategories']()
           const expected = {}
           log({
-            result
+            result,
           })
           expect(result).toEqual(expected)
         })
@@ -204,7 +196,7 @@ describe('traverser: count-traverser', () => {
           const key = 'loop'
 
           const before = {
-            counter: countTraverser.counterFor(key)
+            counter: countTraverser.counterFor(key),
           }
 
           const increased = () => countTraverser['inc'](key)
@@ -229,7 +221,8 @@ describe('traverser: count-traverser', () => {
       context('to be counted', () => {
         it('returns true', () => {
           const node = astNode.statements[0]
-          const toBeCounted = () => countTraverser['checkIfNodeToBeCounted'](node)
+          const toBeCounted = () =>
+            countTraverser['checkIfNodeToBeCounted'](node)
           expect(toBeCounted).toBeTruthy()
         })
       })
@@ -237,7 +230,8 @@ describe('traverser: count-traverser', () => {
       context('NOT to be counted', () => {
         it('returns false', () => {
           const node = astNode.statements[1]
-          const toBeCounted = () => countTraverser['checkIfNodeToBeCounted'](node)
+          const toBeCounted = () =>
+            countTraverser['checkIfNodeToBeCounted'](node)
           expect(toBeCounted).toBeFalsy()
         })
       })
@@ -255,12 +249,12 @@ describe('traverser: count-traverser', () => {
       context('with extra node types', () => {
         it('returns default node types and extra types to check for', () => {
           const extraTypes = [
-            'loop' // should resolve to list of NodeTypes from category
+            'loop', // should resolve to list of NodeTypes from category
           ]
           countTraverser.parseQuery({
             nodeTypes: {
-              toBeCounted: extraTypes
-            }
+              toBeCounted: extraTypes,
+            },
           })
           const toBeCounted = countTraverser['resolveNodeTypesToCheckFor']
           expect(toBeCounted).toContain('loop')
@@ -279,13 +273,11 @@ describe('traverser: count-traverser', () => {
 
       context.only('NOT to be counted', () => {
         it('returns default and extra node types to check for', () => {
-          const extraTypes = [
-            'loop'
-          ]
+          const extraTypes = ['loop']
           countTraverser.parseQuery({
             nodeTypes: {
-              x: extraTypes
-            }
+              x: extraTypes,
+            },
           })
           const toCheckFor = countTraverser['nodeTypesToCheckFor']
           expect(toCheckFor).toContain('x')
@@ -307,13 +299,11 @@ describe('traverser: count-traverser', () => {
 
       context('NOT to be counted', () => {
         it('returns default and extra node types to check for', () => {
-          const extraTypes = [
-            'loop'
-          ]
+          const extraTypes = ['loop']
           countTraverser.parseQuery({
             nodeTypes: {
-              toBeCounted: extraTypes
-            }
+              toBeCounted: extraTypes,
+            },
           })
           const toCheckFor = () => countTraverser['nodeTypesToCheckFor']
           expect(toCheckFor).toBeFalsy()
@@ -325,19 +315,21 @@ describe('traverser: count-traverser', () => {
     describe('shouldCountNode(node)', () => {
       const node = {
         toBeCounted: astNode.statements[0],
-        notToBeCounted: astNode.statements[1]
+        notToBeCounted: astNode.statements[1],
       }
 
       context('node that should be counted', () => {
         it('returns true', () => {
-          const result = () => countTraverser['shouldCountNode'](node.toBeCounted)
+          const result = () =>
+            countTraverser['shouldCountNode'](node.toBeCounted)
           expect(result).toBeTruthy()
         })
       })
 
       context('node that should NOT be counted', () => {
         it('returns true', () => {
-          const result = () => countTraverser['shouldCountNode'](node.notToBeCounted)
+          const result = () =>
+            countTraverser['shouldCountNode'](node.notToBeCounted)
           expect(result).toBeFalsy()
         })
       })
@@ -351,7 +343,7 @@ describe('traverser: count-traverser', () => {
 
       let before = {
         count: countTraverser.visitedNodesCount,
-        list: [...countTraverser.visitedNodes]
+        list: [...countTraverser.visitedNodes],
       }
 
       context('node that should be counted', () => {
@@ -381,7 +373,7 @@ describe('traverser: count-traverser', () => {
       const types: any = {}
       let before = {
         count: countTraverser.visitedNodesCount,
-        list: [...countTraverser.visitedNodes]
+        list: [...countTraverser.visitedNodes],
       }
 
       beforeEach(() => {
@@ -399,7 +391,8 @@ describe('traverser: count-traverser', () => {
       })
 
       it('adds node to visitedNodes list', () => {
-        const lastNode = countTraverser.visitedNodes[countTraverser.visitedNodesCount - 1]
+        const lastNode =
+          countTraverser.visitedNodes[countTraverser.visitedNodesCount - 1]
         types.lastAdded = typeOf(lastNode)
         expect(types.lastAdded).not.toBe(node)
       })
@@ -413,9 +406,7 @@ describe('traverser: count-traverser', () => {
         it('is true', () => {
           const type = typeOf(node)
           node.nodeType = type
-          const exclude = [
-            type
-          ]
+          const exclude = [type]
           countTraverser.reset()
           countTraverser['nodeTypes'].toExcludeFromVisit = exclude
           const result = countTraverser['shouldExcludeNodeFromVisit'](node)
@@ -443,9 +434,7 @@ describe('traverser: count-traverser', () => {
         it('is false', () => {
           const type = typeOf(node)
           node.nodeType = type
-          const exclude = [
-            type
-          ]
+          const exclude = [type]
           countTraverser.reset()
           countTraverser['nodeTypes'].toExcludeFromVisit = exclude
           const result = countTraverser['shouldVisitNode'](node)
