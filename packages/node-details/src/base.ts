@@ -40,6 +40,16 @@ export class BaseDetailsTester extends Loggable {
   }
 
   /**
+   * Whether node matches any in map
+   * @param node
+   * @param map
+   */
+  protected _anyMatch(node: any, map: any): boolean {
+    const keys = Object.keys(map)
+    return Boolean(this.matchesAny(keys, { node }))
+  }
+
+  /**
    * instance category
    */
   get category() {

@@ -5,6 +5,13 @@ export function createAccessTester(options: any) {
   return new AccessTester(options)
 }
 
+export interface IAccessTester {
+  private(node?: any): boolean
+  protected(node?: any): boolean
+  public(node?: any): boolean
+  static(node?: any): boolean
+}
+
 export class AccessTester extends BaseDetailsTester {
   /**
    * Create Access details tester
@@ -15,6 +22,9 @@ export class AccessTester extends BaseDetailsTester {
     super(options)
   }
 
+  /**
+   * Syntax map
+   */
   get syntaxMap() {
     return {
       private: ts.SyntaxKind.PrivateKeyword,
@@ -27,32 +37,36 @@ export class AccessTester extends BaseDetailsTester {
   /**
    * Test if class member node has private access modifier
    * @param node function node to test
+   * @returns { boolean } whether node is private
    */
-  private(node?: any) {
+  private(node?: any): boolean {
     return this.has('private', { node })
   }
 
   /**
    * Test if class member node has protected access modifier
    * @param node function node to test
+   * @returns { boolean } whether node is protected
    */
-  protected(node?: any) {
+  protected(node?: any): boolean {
     return this.has('protected', { node })
   }
 
   /**
    * Test if class member has public access modifier
    * @param node function node to test
+   * @returns { boolean } whether node is public
    */
-  public(node?: any) {
+  public(node?: any): boolean {
     return this.has('public', { node })
   }
 
   /**
    * Test if class member has static access modifier
    * @param node function node to test
+   * @returns { boolean } whether node is static
    */
-  static(node?: any) {
+  static(node?: any): boolean {
     return this.has('static', { node })
   }
 }

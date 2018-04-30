@@ -54,7 +54,9 @@ The design uses the following main concepts:
 * [Collector](#Collector)
 * [Instrumentor](#Instrumentor)
 
-PS: Would love this lib to integrate better with [ts-simple-ast](https://github.com/dsherret/ts-simple-ast) and work seamlessly with `Project` and `Program` concepts as well.
+It should be pretty simple to make this lib integrate with [ts-simple-ast](https://github.com/dsherret/ts-simple-ast) or any other AST for that matter ;)
+
+The processor will be designed around TypeScript interfaces to avoid hard coupling.
 
 ### Loader
 

@@ -2,7 +2,11 @@ import { DataCollector } from './base'
 
 export { DataCollector }
 import { createCollector } from './base'
-import { isEmpty } from '../util'
+import { isEmpty } from '@tecla5/qast-util'
+
+export interface IDataCollector {
+  collectData(names?: string[]): any
+}
 
 export class RootDataCollector extends DataCollector {
   registry: any = {}
@@ -14,7 +18,7 @@ export class RootDataCollector extends DataCollector {
    */
   constructor(options: any) {
     super(options)
-    this.collectorOpts = Object.assign(this.options, { parent: this })
+    this.collectorOpts = Object.assign(options, { parent: this })
   }
 
   /**
