@@ -1,0 +1,27 @@
+{
+  "name": "@tecla5/qast-node-matcher",
+  "version": "0.1.0",
+  "description": "QAST node matcher API",
+  "main": "dist",
+  "scripts": {
+    "test": "jest",
+    "typedoc:generate": "gulp typedoc",
+    "typedoc:display": "open docs/api/index.html"
+  },
+  "keywords": ["typescript", "exported", "refs"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kristianmandrup/typescript-ast-traverser.git"
+  },
+  "author": "Kristian Mandrup <kmandrup@gmail.com>",
+  "jest": {
+    "moduleFileExtensions": ["ts", "tsx", "js"],
+    "transform": {
+      "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "/__tests__/.*\\.(ts|tsx|js)$"
+  },
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
+}

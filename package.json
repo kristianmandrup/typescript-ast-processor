@@ -1,27 +1,15 @@
 {
-  "name": "typescript-ast-traverser",
+  "name": "ast-processor",
   "version": "0.1.0",
   "description":
-    "Traverse a TypeScript AST using visitors, collect data and take action",
-  "main": "dist",
-  "scripts": {
-    "test": "jest",
-    "typedoc:generate": "gulp typedoc",
-    "typedoc:display": "open docs/api/index.html"
-  },
+    "Process an AST using visitors, collect data and act, including instrumenting the code or AST",
+  "workspaces": ["packages/*"],
   "keywords": ["typescript", "exported", "refs"],
   "repository": {
     "type": "git",
-    "url": "https://github.com/kristianmandrup/typescript-ast-traverser.git"
+    "url": "https://github.com/kristianmandrup/ast-processor.git"
   },
   "author": "Kristian Mandrup <kmandrup@gmail.com>",
-  "jest": {
-    "moduleFileExtensions": ["ts", "tsx", "js"],
-    "transform": {
-      "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
-    },
-    "testRegex": "/__tests__/.*\\.(ts|tsx|js)$"
-  },
   "license": "MIT",
   "dependencies": {
     "astravel": "^0.4.1",
@@ -49,6 +37,7 @@
     "jest-cli": "^23.0.0-alpha.0",
     "jest-plugin-context": "^2.7.0",
     "jest-plugin-fs": "^2.7.0",
+    "lerna": "^2.11.0",
     "ts-jest": "^22.4.1",
     "tslint-config-prettier": "^1.10.0",
     "typedoc": "^0.11.1"

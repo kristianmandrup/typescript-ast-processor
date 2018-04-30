@@ -1,6 +1,8 @@
-# TypeScript AST Processor
+# AST Processor
 
-This library is designed as a foundation for writing tools that work with the TypeScript AST. It aims to provide a higher level API, helpers etc. so you avoid the "pain" of working with the AST directly in most cases.
+[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
+
+AST Processor is designed as a foundation for writing tools that work with the TypeScript AST. It aims to provide a higher level API, helpers etc. so you avoid the "pain" of working with the AST directly in most cases.
 
 To traverse the TypeScript AST:
 
