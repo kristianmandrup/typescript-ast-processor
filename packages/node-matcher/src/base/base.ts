@@ -1,6 +1,6 @@
-import { isDefined } from '../../../util'
+import { isDefined } from '../_util'
 import { NodeTester, INodeTester } from './node-tester'
-import { IDetailsTester } from '../../details/base'
+import { IDetailsTester } from '@tecla5/qast-node-details'
 
 export interface IBaseNodeTester extends INodeTester {
   parentBlocks?: any[]

@@ -1,10 +1,11 @@
 import * as ts from 'typescript'
-import { Loggable } from '../../loggable'
-import { callFun } from '../../util'
-import { DataCollector } from '../../collector'
+import { Loggable } from '@tecla5/qast-loggable'
+import { callFun } from '@tecla5/qast-util'
+
+export interface IDataCollector {}
 
 export class BaseFactory extends Loggable {
-  collector: DataCollector
+  collector: IDataCollector
 
   /**
    * Create base visitor factory

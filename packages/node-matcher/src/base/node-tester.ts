@@ -1,4 +1,4 @@
-import { Loggable } from '../../../loggable'
+import { Loggable } from '../_loggable'
 import { createTesterFactory } from './tester-factory'
 import { createTesterRegistry } from './tester-registry'
 import { createQueryEngine } from './query-engine'

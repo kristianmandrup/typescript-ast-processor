@@ -1,6 +1,4 @@
-import { Loggable } from '../../../loggable'
-import { ILoggable } from '../../../loggable/loggable'
-import { isDefined } from '../../../util'
+import { Loggable, ILoggable } from '../loggable'
 
 export interface IValueMatcher extends ILoggable {
   match(value: any): boolean

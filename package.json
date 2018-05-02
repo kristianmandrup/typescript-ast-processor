@@ -1,5 +1,6 @@
 {
-  "name": "ast-processor",
+  "private": true,
+  "name": "@tecla5/ast-processor",
   "version": "0.1.0",
   "description":
     "Process an AST using visitors, collect data and act, including instrumenting the code or AST",

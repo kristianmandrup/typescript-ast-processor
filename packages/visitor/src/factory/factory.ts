@@ -1,5 +1,5 @@
 import { BaseFactory } from './base'
-import { toList } from '../../util'
+import { toList } from '@tecla5/qast-util'
 
 const defaults = {
   registry: {

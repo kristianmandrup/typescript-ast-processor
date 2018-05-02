@@ -1,14 +1,14 @@
 import * as ts from 'typescript'
-import { Loggable } from '../../loggable'
-import { What } from '../../node/what'
-import { VisitorFactory } from '../../visitor/factory'
-import { Typer } from '../../node/typer'
+import { Loggable } from '../_loggable'
+import { What, Typer } from '@tecla5/qast-node-types'
+import { VisitorFactory } from '@tecla5/qast-visitor'
 import {
   // assignKeyDefined,
+  isFunction,
+  isNonEmptyStr,
   enumKey,
-} from '../../util'
-import { isFunction, isNonEmptyStr } from '../../../../src/ts/util'
-import { isRegExp } from 'util'
+  isRegExp,
+} from '../_util'
 
 export function createASTNodeTraverser(options: any) {
   return new ASTNodeTraverser(options)

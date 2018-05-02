@@ -1,6 +1,9 @@
 import * as path from 'path'
 import context from 'jest-plugin-context'
-import { node, createSrcFile, traverser, loggable } from '../../src/ts'
+import { node } from '@tecla5/qast-node'
+import { createSrcFile } from '@tecla5/qast-core'
+import { traverser } from '@tecla5/qast-traverser'
+import { loggable } from '@tecla5/qast-loggable'
 
 export { node, loggable, context, createSrcFile, traverser }
 

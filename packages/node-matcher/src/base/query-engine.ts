@@ -1,5 +1,5 @@
-import { Loggable } from '../../../loggable'
-import { isFunction, isEmpty, lowercaseFirst } from '../../../util'
+import { Loggable } from '../_loggable'
+import { isFunction, isEmpty, lowercaseFirst } from '../_util'
 import { findDerived } from 'find-derived'
 import { camelize } from '../util'
 import { createGenericQuery } from '../../query'

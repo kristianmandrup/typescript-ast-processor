@@ -1,8 +1,6 @@
 import { ASTNodeTraverser } from '../../base'
-
 import { NodeTypeCounter } from './node-type-counter'
-
-import { isEmpty } from '../../../util'
+import { isEmpty } from '../../_util'
 
 export function createCountingASTNodeTraverser(options: any) {
   return new CountingASTNodeTraverser(options)

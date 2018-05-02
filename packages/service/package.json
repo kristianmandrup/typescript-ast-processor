@@ -22,6 +22,8 @@
     "testRegex": "/__tests__/.*\\.(ts|tsx|js)$"
   },
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "fs-extra": "^6.0.0"
+  },
   "devDependencies": {}
 }

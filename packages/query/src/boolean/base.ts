@@ -1,5 +1,5 @@
-import { Loggable } from '../../../loggable'
-import { isObject, isEmpty, isArray } from '../../../util'
+import { Loggable } from '../loggable'
+import { isObject, isEmpty, isArray } from '../util'
 import { createListTester } from '../matcher/list'
 
 interface IBooleanQuery {}

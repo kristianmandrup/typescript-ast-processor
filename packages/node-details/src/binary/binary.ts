@@ -79,7 +79,7 @@ export class BinaryExprTester extends BaseDetailsTester {
    * @param node node to test
    */
   anyComparison(node?: any): boolean {
-    return this._anyMatch(node, this.comparison.map)
+    return this._anyMatch(node, this.comparison.mapGetters)
   }
 
   /**

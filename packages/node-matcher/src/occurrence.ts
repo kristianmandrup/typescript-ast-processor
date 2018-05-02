@@ -1,5 +1,5 @@
-import { createCountingASTNodeTraverser } from '../../traverser'
-import { isNonEmptyStr, isEmpty } from '../../util'
+import { createCountingASTNodeTraverser } from '@tecla5/qast-traverser'
+import { isNonEmptyStr, isEmpty } from './_util'
 import { BaseNodeTester } from './base'
 
 export interface INodeOccurrenceTester {

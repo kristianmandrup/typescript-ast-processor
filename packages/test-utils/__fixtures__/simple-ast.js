@@ -77,7 +77,7 @@ export const ast = {
               type: 'string',
             },
           ],
-          returns: 'string',
+          returnType: 'string',
         },
       },
     },

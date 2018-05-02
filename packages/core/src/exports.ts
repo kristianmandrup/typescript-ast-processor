@@ -1,10 +1,10 @@
-import * as loggable from './loggable'
-import * as node from './node'
-import * as collector from './collector'
-import * as instrumentor from './instrumentor'
-import * as visitor from './visitor'
-import * as languageService from './service'
-import * as traverser from './traverser'
+import * as loggable from '@tecla5/qast-loggable'
+import * as node from '@tecla5/qast-node'
+import * as collector from '@tecla5/qast-collector'
+import * as instrumentor from '@tecla5/qast-instrumentor'
+import * as visitor from '@tecla5/qast-visitor'
+import * as languageService from '@tecla5/qast-service'
+import * as traverser from '@tecla5/qast-traverser'
 
 export {
   loggable,

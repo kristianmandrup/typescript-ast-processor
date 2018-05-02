@@ -4,8 +4,8 @@ import {
   isFunction,
   isNonEmptyStr,
   lowercaseFirst,
-} from '../../../../util'
-import { Loggable } from '../../../../loggable'
+} from '../../../_util'
+import { Loggable } from '../../../_loggable'
 import {
   createNodeTypeCategories,
   NodeTypeCategories,

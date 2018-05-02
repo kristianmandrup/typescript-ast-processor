@@ -1,5 +1,5 @@
-import { Loggable } from '../../../../loggable'
-import { isEmpty, isObject } from '../../../../util'
+import { Loggable } from '../../../_loggable'
+import { isEmpty, isObject } from '../../../_util'
 
 import { defaults, flattenObjToList } from './utils'
 

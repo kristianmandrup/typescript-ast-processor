@@ -1,4 +1,4 @@
-import { Loggable } from '../../../loggable'
+import { Loggable } from '../_loggable'
 
 /**
  * Factory to create query engine

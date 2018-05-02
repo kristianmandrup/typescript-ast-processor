@@ -1,6 +1,6 @@
-import { Loggable } from '../../loggable'
+import { Loggable } from './loggable'
 import { IValueMatcher, createMatcherSelector } from './matcher'
-import { isFunction } from 'util'
+import { isFunction } from '../util'
 
 export interface IQuery {
   name: string

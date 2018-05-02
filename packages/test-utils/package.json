@@ -1,15 +1,16 @@
 {
-  "name": "@tecla5/qast-collector",
+  "name": "@tecla5/qast-traverser",
   "version": "0.1.0",
-  "description": "QAST collector API",
+  "description": "QAST traverser api",
   "main": "dist",
   "scripts": {
     "test": "jest",
     "typedoc:generate": "gulp typedoc",
     "typedoc:display": "open docs/api/index.html",
-    "lerna:bootstrap": "lerna bootstrap --scope @tecla5/qast-collector",
+    "lerna:update": "npm run lerna:clean && npm run lerna:bootstrap",
+    "lerna:bootstrap": "lerna bootstrap --scope @tecla5/qast-traverser",
     "lerna:clean":
-      "rm -f package.json.lock 2> /dev/null && echo y | lerna clean --scope @tecla5/qast-collector"
+      "rm -f package.json.lock 2> /dev/null && echo y | lerna clean --scope @tecla5/qast-traverser"
   },
   "keywords": ["typescript", "exported", "refs"],
   "repository": {
@@ -26,7 +27,11 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@tecla5/qast-util": "^0.1.0"
+    "@tecla5/qast-node": "^0.1.0",
+    "@tecla5/qast-core": "^0.1.0",
+    "@tecla5/qast-traverser": "^0.1.0",
+    "@tecla5/qast-loggable": "^0.1.0",
+    "jest-plugin-context": "^2.9.0"
   },
   "devDependencies": {}
 }

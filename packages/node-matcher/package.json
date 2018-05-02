@@ -6,7 +6,10 @@
   "scripts": {
     "test": "jest",
     "typedoc:generate": "gulp typedoc",
-    "typedoc:display": "open docs/api/index.html"
+    "typedoc:display": "open docs/api/index.html",
+    "lerna:bootstrap": "lerna bootstrap --scope @tecla5/qast-node-matcher",
+    "lerna:clean":
+      "rm -f package.json.lock 2> /dev/null && echo y | lerna clean --scope @tecla5/qast-node-matcher"
   },
   "keywords": ["typescript", "exported", "refs"],
   "repository": {
@@ -22,6 +25,10 @@
     "testRegex": "/__tests__/.*\\.(ts|tsx|js)$"
   },
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "@tecla5/qast-traverser": "^0.1.0",
+    "@tecla5/qast-node-details": "^0.1.0",
+    "find-derived": "^0.1.0"
+  },
   "devDependencies": {}
 }
