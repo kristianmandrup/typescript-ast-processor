@@ -1,8 +1,8 @@
 import * as ts from 'typescript'
-import { Loggable } from '../loggable'
-import { SrcFile } from '../src-file'
+import { Loggable } from '@tecla5/qast-loggable'
+import { SrcFile } from '@tecla5/qast-core'
 import * as utils from 'tsutils'
-import { INodeTester } from '../node/tester/base'
+import { INodeTester } from '@tecla5/qast-node-matcher'
 
 export function createCollector(
   name: string,

@@ -1962,6 +1962,14 @@ fs-extra@^5.0.0:
     jsonfile "^4.0.0"
     universalify "^0.1.0"
 
+fs-extra@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-6.0.0.tgz#0f0afb290bb3deb87978da816fcd3c7797f3a817"
+  dependencies:
+    graceful-fs "^4.1.2"
+    jsonfile "^4.0.0"
+    universalify "^0.1.0"
+
 fs-monkey@^0.3.0:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/fs-monkey/-/fs-monkey-0.3.1.tgz#69edd8420e04da04d4d3ea200da1ccdc444eecd0"
@@ -3250,7 +3258,7 @@ jest-mock@^23.0.0-charlie.0:
   version "23.0.0-charlie.0"
   resolved "https://registry.yarnpkg.com/jest-mock/-/jest-mock-23.0.0-charlie.0.tgz#675ddae2202c32be60c7f47daa2d2df9053b72ed"
 
-jest-plugin-context@^2.7.0:
+jest-plugin-context@^2.7.0, jest-plugin-context@^2.9.0:
   version "2.9.0"
   resolved "https://registry.yarnpkg.com/jest-plugin-context/-/jest-plugin-context-2.9.0.tgz#602aacbe61213a3bb229067db0eee9e003eb1931"
 

@@ -9,12 +9,13 @@
     "typedoc:display": "open docs/api/index.html",
     "lerna:update": "npm run lerna:clean && npm run lerna:bootstrap",
     "lerna:bootstrap": "lerna bootstrap --scope @tecla5/qast-visitor",
-    "lerna:clean": "rm -f package.json.lock 2> /dev/null && echo y | lerna clean --scope @tecla5/qast-visitor"
+    "lerna:clean":
+      "rm -f package.json.lock 2> /dev/null && echo y | lerna clean --scope @tecla5/qast-visitor"
   },
   "keywords": ["typescript", "exported", "refs"],
   "repository": {
     "type": "git",
-    "url": "https://github.com/kristianmandrup/typescript-ast-traverser.git"
+    "url": "https://github.com/kristianmandrup/ast-processor.git"
   },
   "author": "Kristian Mandrup <kmandrup@gmail.com>",
   "jest": {

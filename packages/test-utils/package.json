@@ -1,5 +1,5 @@
 {
-  "name": "@tecla5/qast-traverser",
+  "name": "@tecla5/qast-test-utils",
   "version": "0.1.0",
   "description": "QAST traverser api",
   "main": "dist",
@@ -15,7 +15,7 @@
   "keywords": ["typescript", "exported", "refs"],
   "repository": {
     "type": "git",
-    "url": "https://github.com/kristianmandrup/typescript-ast-traverser.git"
+    "url": "https://github.com/kristianmandrup/ast-processor.git"
   },
   "author": "Kristian Mandrup <kmandrup@gmail.com>",
   "jest": {
@@ -27,10 +27,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@tecla5/qast-node": "^0.1.0",
     "@tecla5/qast-core": "^0.1.0",
-    "@tecla5/qast-traverser": "^0.1.0",
-    "@tecla5/qast-loggable": "^0.1.0",
     "jest-plugin-context": "^2.9.0"
   },
   "devDependencies": {}

@@ -1,5 +1,5 @@
 {
-  "name": "@tecla5/qast-query-api",
+  "name": "@tecla5/qast-query",
   "version": "0.1.0",
   "description": "QAST query API",
   "main": "dist",
@@ -11,7 +11,7 @@
   "keywords": ["typescript", "exported", "refs"],
   "repository": {
     "type": "git",
-    "url": "https://github.com/kristianmandrup/typescript-ast-traverser.git"
+    "url": "https://github.com/kristianmandrup/ast-processor.git"
   },
   "author": "Kristian Mandrup <kmandrup@gmail.com>",
   "jest": {
