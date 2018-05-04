@@ -7,6 +7,8 @@ QAST is designed as a foundation for writing tools that work with the TypeScript
 QAST should alleviate much of the pain when working with the AST directly.
 It lets you work at a higher abstraction level than with the "bare metal" AST, while still making it available when necessary.
 
+Also see [additional docs](docs/index.md)
+
 ## Mono repo
 
 QAST is currently structured as a mono repo, using [lerna](https://lernajs.io/) with [yarn workspaces](https://yarnpkg.com/blog/2017/08/02/introducing-workspaces/)
